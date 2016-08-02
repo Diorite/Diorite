@@ -45,7 +45,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataMaterialEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataStringEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataUUIDEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataVector3FEntry;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;

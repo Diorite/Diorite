@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent boat entity.
+ */
 public interface Boat extends Entity, ObjectEntity
 {
 }

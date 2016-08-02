@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 /**
  * Fired when player interact

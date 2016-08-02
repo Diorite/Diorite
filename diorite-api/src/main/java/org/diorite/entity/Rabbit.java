@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent rabbit entity.
+ */
 public interface Rabbit extends AnimalEntity
 {
     RabbitType getRabbitType();

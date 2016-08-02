@@ -22,14 +22,16 @@
  * SOFTWARE.
  */
 
-package org.diorite;
+package org.diorite.block;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.ILocation;
+import org.diorite.ImmutableLocation;
+import org.diorite.Location;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.math.DioriteMathUtils;
-import org.diorite.world.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.ChunkPos;
 

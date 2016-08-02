@@ -25,7 +25,7 @@
 package org.diorite.scheduler;
 
 import org.diorite.Core;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 /**
  * Objects implementing this interface can be used when creating task, to be always synchronized with this object. <br>
@@ -36,7 +36,7 @@ import org.diorite.world.Block;
  * - {@link org.diorite.entity.Entity} <br>
  * - {@link org.diorite.world.chunk.Chunk} <br>
  * - {@link Core} (default value, task will be executed before world ticking) <br>
- * Also {@link org.diorite.world.Block} is partially supported by scheduler, but {@link Block#getChunk()} is used.
+ * Also {@link Block} is partially supported by scheduler, but {@link Block#getChunk()} is used.
  */
 public interface Synchronizable
 {

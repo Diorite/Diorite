@@ -26,7 +26,7 @@ package org.diorite.impl.entity.pathfinder;
 
 import java.util.Queue;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.entity.pathfinder.Path;
 
 public class PathImpl implements Path

@@ -38,6 +38,9 @@ import org.diorite.scheduler.Synchronizable;
 import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.world.World;
 
+/**
+ * Represent entity.
+ */
 public interface Entity extends GameObject, Synchronizable
 {
     EntityType getType();

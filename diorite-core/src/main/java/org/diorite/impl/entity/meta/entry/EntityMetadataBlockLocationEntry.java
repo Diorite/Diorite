@@ -26,7 +26,7 @@ package org.diorite.impl.entity.meta.entry;
 
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.entity.meta.EntityMetadataType;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 
 public class EntityMetadataBlockLocationEntry extends EntityMetadataObjectEntry<BlockLocation>
 {

@@ -24,6 +24,22 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent falling block entity.
+ */
 public interface FallingBlock extends ObjectEntity
 {
+    /**
+     * Returns position of the falling block
+     *
+     * @return position of the falling block
+     */
+    //BlockLocation getSpawnPosition();
+
+    /**
+     * Sets location of the falling block
+     *
+     * @param location defines location of the falling block
+     */
+    //void setSpawnPosition(BlockLocation location);
 }

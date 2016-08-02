@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent fireball entity.
+ */
 public interface Fireball extends Projectile, ObjectEntity
 {
 }

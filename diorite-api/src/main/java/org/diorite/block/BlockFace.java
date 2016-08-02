@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite;
+package org.diorite.block;
 
 /**
  * Represents the face of a block.

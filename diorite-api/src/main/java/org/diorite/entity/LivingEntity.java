@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent living entity.
+ */
 public interface LivingEntity extends AttributableEntity
 {
 }

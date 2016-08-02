@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent egg entity.
+ */
 public interface Egg extends Projectile, ObjectEntity
 {
 }

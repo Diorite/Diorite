@@ -24,10 +24,23 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent skeleton entity.
+ */
 public interface Skeleton extends MonsterEntity
 {
+    /**
+     * Returns skeleton's type
+     *
+     * @return skeleton's type
+     */
     Type getSkeletonType();
 
+    /**
+     * Sets skeleton's type
+     *
+     * @param skeletonType defines skeleton's type
+     */
     void setSkeletonType(Type skeletonType);
 
     enum Type

@@ -24,9 +24,22 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent polar bear entity.
+ */
 public interface PolarBear extends AnimalEntity
 {
+    /**
+     * Returns true if a polar bear is standing
+     *
+     * @return true if a polar bear is standing
+     */
     boolean isStanding();
 
+    /**
+     * Sets if polar bear is standing
+     *
+     * @param standing if polar bear is standing
+     */
     void setStanding(boolean standing);
 }

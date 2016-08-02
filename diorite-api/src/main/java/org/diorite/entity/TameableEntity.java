@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent tameable entity.
+ */
 public interface TameableEntity extends AnimalEntity
 {
 }

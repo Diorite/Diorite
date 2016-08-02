@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent snowman entity.
+ */
 public interface Snowman extends AnimalEntity
 {
 }

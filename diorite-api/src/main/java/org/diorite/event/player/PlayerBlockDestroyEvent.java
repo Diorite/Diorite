@@ -27,10 +27,10 @@ package org.diorite.event.player;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.World;
 
 public class PlayerBlockDestroyEvent extends PlayerEvent

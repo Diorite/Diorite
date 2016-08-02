@@ -24,6 +24,27 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent ocelot entity.
+ */
 public interface Ocelot extends AnimalEntity
 {
+    /**
+     * Returns ocelot's type
+     *
+     * @return ocelot's type
+     */
+    OcelotType getOcelotType();
+
+    /**
+     * Sets ocelot's type
+     *
+     * @param type defines ocelot's type
+     */
+    void setOcelotType(OcelotType type);
+
+    enum OcelotType
+    {
+        WILD_OCELOT, TUXEDO, TABBY, SIAMESE
+    }
 }

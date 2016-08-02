@@ -26,7 +26,7 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 

@@ -24,6 +24,10 @@
 
 package org.diorite.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +47,17 @@ import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.world.WorldImpl;
+import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerJoinEvent;
+import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
+import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTag;
+import org.diorite.nbt.NbtTagCompound;
 
 public class PlayersManagerImpl implements Tickable
 {
@@ -66,7 +77,77 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        return this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, new ImmutableLocation(4, 255, - 4, 0, 0, this.core.getWorldsManager().getDefaultWorld()));
+        WorldImpl defaultWorld = this.core.getWorldsManager().getDefaultWorld();
+
+        ImmutableLocation destLocation = defaultWorld.getSpawn();
+        GameMode destGameMode = GameMode.SURVIVAL;
+
+        File playerDataFile = new File("players" + File.separator + gameProfile.getId().toString() + ".dat");
+
+        if(!playerDataFile.exists() || !playerDataFile.isFile())
+        {
+            try
+            {
+                playerDataFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(playerDataFile)))
+            {
+                final NbtTagCompound nbt = new NbtTagCompound();
+                nbt.setString("WorldGroup", this.core.getWorldsManager().getDefaultWorld().getWorldGroup().getName());
+                nbt.setString("World", this.core.getWorldsManager().getDefaultWorld().getName());
+
+                nbtStream.write(nbt);
+                nbtStream.flush();
+                nbtStream.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else if(playerDataFile.exists() || playerDataFile.isFile())
+        {
+            try(final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(playerDataFile)))
+            {
+                NbtTagCompound nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
+
+                final String groupName = nbt.getString("WorldGroup");
+                final String worldName = nbt.getString("World");
+
+                WorldImpl destWorld = this.core.getWorldsManager().getWorld(worldName);
+
+                if(destWorld != null)
+                {
+                    File worldPlayerDataFile = new File("worlds" + File.separator + groupName + File.separator + "_PlayerData_" + File.separator + worldName + "_" + gameProfile.getId().toString() + ".dat");
+
+                    try(final NbtInputStream nbtStream2 = new NbtInputStream(new FileInputStream(worldPlayerDataFile)))
+                    {
+                        NbtTagCompound nbt2 = (NbtTagCompound) nbtStream2.readTag(NbtLimiter.getUnlimited());
+
+                        destLocation = new ImmutableLocation(nbt2.getDouble("PosX"), nbt2.getDouble("PosY"), nbt2.getDouble("PosZ"), nbt2.getFloat("Yaw"), nbt2.getFloat("Pitch"), destWorld);
+                        destGameMode = GameMode.getByEnumName(nbt2.getString("GameMode"));
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        IPlayer player = this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, destLocation);
+        player.setGameMode(destGameMode);
+
+        return player;
     }
 
     public void playerJoin(final IPlayer player)

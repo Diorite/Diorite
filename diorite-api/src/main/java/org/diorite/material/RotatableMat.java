@@ -24,7 +24,7 @@
 
 package org.diorite.material;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 
 /**
  * Represent blocks that can be placed in one axis, like NORTH-SOUTH

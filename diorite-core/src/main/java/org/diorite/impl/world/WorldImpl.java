@@ -25,6 +25,8 @@
 package org.diorite.impl.world;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +58,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -68,16 +70,19 @@ import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtNamedTagContainer;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.tileentity.TileEntity;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
@@ -719,6 +724,12 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
+    public Block getBlock(final BlockLocation location)
+    {
+        return this.getBlock(location.getX(), location.getY(), location.getZ());
+    }
+
+    @Override
     public int getHighestBlockY(final int x, final int z)
     {
         return this.getChunkAt(x >> 4, z >> 4).getHighestBlockY(x & CHUNK_FLAG, z & CHUNK_FLAG);
@@ -965,6 +976,66 @@ public class WorldImpl implements World, Tickable
         {
             final IPlayer playerEntity = (IPlayer) entity;
 
+            File playerDataFile = new File("players" + File.separator + playerEntity.getUniqueID().toString() + ".dat");
+            File worldPlayerDataFile = new File("worlds" + File.separator + this.getWorldGroup().getName() + File.separator + "_PlayerData_" + File.separator + this.getName() + "_" + playerEntity.getUniqueID().toString() + ".dat");
+
+            /*try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(playerDataFile)))
+            {
+
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }*/
+
+            if(!worldPlayerDataFile.exists() || !worldPlayerDataFile.isFile())
+            {
+                try
+                {
+                    worldPlayerDataFile.createNewFile();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(worldPlayerDataFile)))
+                {
+                    final NbtTagCompound nbt = new NbtTagCompound();
+
+                    ImmutableLocation spawnLocation = getSpawn();
+
+                    nbt.setDouble("PosX", spawnLocation.getX());
+                    nbt.setDouble("PosY", spawnLocation.getY());
+                    nbt.setDouble("PosZ", spawnLocation.getZ());
+                    nbt.setFloat("Yaw", spawnLocation.getYaw());
+                    nbt.setFloat("Pitch", spawnLocation.getPitch());
+                    nbt.setString("GameMode", playerEntity.getGameMode().getName());
+
+                    nbtStream.write(nbt);
+                    nbtStream.flush();
+                    nbtStream.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            else if(!isSpawn)
+            {
+                try(final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(worldPlayerDataFile)))
+                {
+                    NbtTagCompound nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
+
+                    playerEntity.teleport(new ImmutableLocation(nbt.getDouble("PosX"), nbt.getDouble("PosY"), nbt.getDouble("PosZ"), nbt.getFloat("Yaw"), nbt.getFloat("Pitch")));
+                    playerEntity.setGameMode(GameMode.getByEnumName(nbt.getString("GameMode")));
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
             tracker = this.entityTrackers.addTracked(playerEntity);
             this.players.add(playerEntity);
         }
@@ -986,6 +1057,37 @@ public class WorldImpl implements World, Tickable
         {
             final IPlayer playerEntity = (IPlayer) entity;
 
+            File worldPlayerDataFile = new File("worlds" + File.separator + this.getWorldGroup().getName() + File.separator + "_PlayerData_" + File.separator + this.getName() + "_" + playerEntity.getUniqueID().toString() + ".dat");
+
+            NbtTagCompound nbt = null;
+
+            try(final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(worldPlayerDataFile)))
+            {
+                nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(worldPlayerDataFile)))
+            {
+                nbt.setDouble("PosX", playerEntity.getX());
+                nbt.setDouble("PosY", playerEntity.getY());
+                nbt.setDouble("PosZ", playerEntity.getZ());
+                nbt.setFloat("Yaw", playerEntity.getYaw());
+                nbt.setFloat("Pitch", playerEntity.getPitch());
+                nbt.setString("GameMode", playerEntity.getGameMode().getName());
+
+                nbtStream.write(nbt);
+                nbtStream.flush();
+                nbtStream.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
             this.players.remove(playerEntity);
         }
         this.entityTrackers.removeTracked(entity);
@@ -995,5 +1097,10 @@ public class WorldImpl implements World, Tickable
     public void broadcastPacketInWorld(final Packet<?> packet)
     {
         this.players.stream().map(IPlayer::getNetworkManager).forEach(net -> net.sendPacket(packet));
+    }
+
+    public TileEntity getTileEntity(final BlockLocation location)
+    {
+        return null; //TODO
     }
 }

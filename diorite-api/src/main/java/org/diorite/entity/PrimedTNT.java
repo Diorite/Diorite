@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent primed TNT entity.
+ */
 public interface PrimedTNT extends ObjectEntity
 {
 }

@@ -24,6 +24,7 @@
 
 package org.diorite.entity.pathfinder;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.diorite.ILocation;
@@ -39,10 +40,12 @@ public interface PathfinderService<T extends Pathfinder>
      * @param goal     The point what will be reached by entity
      * @param callback you should send here results of your calculations. <br />
      *                 Entity will intermeditaly go on this Path.
+     *                 If you send here empty optional Pathfinding will
+     *                 be cancelled.
      *
-     * @return
+     * @return pathfinder instance
      */
-    T initPathfinding(Entity entity, ILocation goal, Consumer<Path> callback);
+    T initPathfinding(Entity entity, ILocation goal, Consumer<Optional<Path>> callback);
 
     /**
      * That method is invoked every tick and signals that pathfinder

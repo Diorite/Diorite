@@ -24,6 +24,7 @@
 
 package org.diorite.impl.entity.pathfinder;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.diorite.impl.entity.IEntity;
@@ -38,7 +39,7 @@ import org.diorite.entity.pathfinder.PathfinderService;
 public class DefaultPathfinderService implements PathfinderService<PathfinderImpl>
 {
     @Override
-    public PathfinderImpl initPathfinding(final Entity entity, final ILocation goal, final Consumer<Path> callback)
+    public PathfinderImpl initPathfinding(final Entity entity, final ILocation goal, final Consumer<Optional<Path>> callback)
     {
         return new PathfinderImpl(goal, (IEntity) entity, callback);
     }
@@ -46,6 +47,7 @@ public class DefaultPathfinderService implements PathfinderService<PathfinderImp
     @Override
     public void processPathfinding(final PathfinderImpl pathfinder)
     {
+        // Process synchronously calculations
         pathfinder.process();
     }
 }

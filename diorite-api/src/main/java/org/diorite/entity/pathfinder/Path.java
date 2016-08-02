@@ -26,7 +26,7 @@ package org.diorite.entity.pathfinder;
 
 import java.util.Queue;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 
 /**
  * Represents a path that entity will travel

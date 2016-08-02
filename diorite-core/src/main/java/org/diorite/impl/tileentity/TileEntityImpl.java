@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.world;
+package org.diorite.impl.tileentity;
 
 import java.util.UUID;
 
@@ -31,12 +31,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.GameObjectImpl;
 import org.diorite.impl.Tickable;
-import org.diorite.BlockLocation;
-import org.diorite.world.TileEntity;
+import org.diorite.block.BlockLocation;
+import org.diorite.nbt.NbtTagCompound;
+import org.diorite.tileentity.TileEntity;
 
 public abstract class TileEntityImpl extends GameObjectImpl implements TileEntity, Tickable
 {
-    private final BlockLocation location;
+    private BlockLocation location;
 
     public TileEntityImpl(final UUID uuid, final BlockLocation location)
     {
@@ -54,6 +55,20 @@ public abstract class TileEntityImpl extends GameObjectImpl implements TileEntit
     public BlockLocation getLocation()
     {
         return this.location;
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbtTileEntity)
+    {
+        location = new BlockLocation(nbtTileEntity.getInt("LocationX"), nbtTileEntity.getInt("LocationY"), nbtTileEntity.getInt("LocationZ"));
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbtTileEntity)
+    {
+        nbtTileEntity.setInt("LocationX", location.getX());
+        nbtTileEntity.setInt("LocationY", location.getY());
+        nbtTileEntity.setInt("LocationZ", location.getZ());
     }
 
     @Override

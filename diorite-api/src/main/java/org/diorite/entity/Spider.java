@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent spider entity.
+ */
 public interface Spider extends MonsterEntity
 {
 }

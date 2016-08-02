@@ -27,6 +27,7 @@ package org.diorite;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.block.BlockLocation;
 import org.diorite.world.World;
 
 public class Location implements ILocation

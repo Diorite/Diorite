@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent snowball entity.
+ */
 public interface Snowball extends Projectile, ObjectEntity
 {
 }

@@ -33,9 +33,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.DioriteCore;
+import org.diorite.impl.block.BlockImpl;
 import org.diorite.impl.entity.IEntity;
 import org.diorite.impl.entity.IPlayer;
-import org.diorite.impl.world.TileEntityImpl;
+import org.diorite.impl.tileentity.TileEntityImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.palette.PaletteImpl;
 import org.diorite.event.EventType;
@@ -47,7 +48,7 @@ import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.collections.arrays.NibbleArray;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkPos;
@@ -325,7 +326,7 @@ public class ChunkImpl implements Chunk
     public Block getBlock(final int x, final int y, final int z)
     {
         // TODO change when meta-data of block will be added
-        return new org.diorite.impl.world.BlockImpl(x, y, z, this);
+        return new BlockImpl(x, y, z, this);
     }
 
     @Override

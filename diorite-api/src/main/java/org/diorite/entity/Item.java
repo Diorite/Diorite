@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent item entity.
+ */
 public interface Item extends Entity, ObjectEntity
 {
     /**

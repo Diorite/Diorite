@@ -25,11 +25,12 @@
 package org.diorite.impl.entity.pathfinder;
 
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.entity.IEntity;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.entity.Entity;
 import org.diorite.entity.pathfinder.EntityController;
@@ -134,9 +135,16 @@ public class EntityControllerImpl implements EntityController
         this.entity.move(x, y, z);
     }
 
-    private void receivePath(final Path path)
+    private void receivePath(final Optional<Path> path)
     {
-        this.currentPath.addAll(path.getPath());
+        if (path.isPresent())
+        {
+            this.currentPath.addAll(path.get().getPath());
+        }
+        else
+        {
+            this.cancelNavigation(); // Pathfinder cancelled the pathfinding by sending null path
+        }
     }
 
     private PathfinderService<Pathfinder> getService()

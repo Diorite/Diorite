@@ -33,7 +33,7 @@ import org.diorite.impl.entity.IEnderCrystal;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBlockLocationEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataBooleanEntry;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.EntityType;
 

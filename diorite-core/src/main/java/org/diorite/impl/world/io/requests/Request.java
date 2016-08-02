@@ -26,6 +26,7 @@ package org.diorite.impl.world.io.requests;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -35,7 +36,7 @@ import org.diorite.impl.world.io.ChunkIO;
 
 public abstract class Request<OUT> implements Comparable<Request<?>>
 {
-    protected final Object lock = new Object();
+    protected final CountDownLatch latch = new CountDownLatch(1);
 
     private volatile OUT                         result;
     private volatile boolean                     finished;
@@ -55,10 +56,7 @@ public abstract class Request<OUT> implements Comparable<Request<?>>
         {
             this.onEnd.forEach(r -> r.accept(this));
         }
-        synchronized (this.lock)
-        {
-            this.lock.notifyAll();
-        }
+        this.latch.countDown();
     }
 
     public synchronized void addOnEnd(final Consumer<Request<OUT>> onEnd)
@@ -78,22 +76,19 @@ public abstract class Request<OUT> implements Comparable<Request<?>>
 
     public OUT await()
     {
-        if (this.finished)
-        {
-            return this.result;
-        }
-        while (! this.finished)
+        if (! this.finished)
         {
             try
             {
-                synchronized (this.lock)
-                {
-                    this.lock.wait();
-                }
-            } catch (final InterruptedException e)
+                this.latch.await();
+            } catch (InterruptedException e)
             {
                 e.printStackTrace();
             }
+        }
+        if (! this.finished)
+        {
+            throw new IllegalStateException("Not finished after unlock! " + this);
         }
         return this.result;
     }

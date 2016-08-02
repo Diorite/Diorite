@@ -34,7 +34,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayServerboundListener;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 
 @PacketClass(id = 0x01, protocol = EnumProtocol.PLAY, direction = EnumProtocolDirection.SERVERBOUND, size = 141)
 public class PacketPlayServerboundTabComplete extends PacketPlayServerbound

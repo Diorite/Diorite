@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent wither skull entity.
+ */
 public interface WitherSkull extends Projectile, ObjectEntity
 {
     /**

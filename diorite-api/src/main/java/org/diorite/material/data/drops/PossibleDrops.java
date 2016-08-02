@@ -40,7 +40,7 @@ import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.Material;
 import org.diorite.utils.math.DioriteRandom;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 public class PossibleDrops implements Iterable<PossibleDrop>
 {

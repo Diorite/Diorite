@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent armor stand entity.
+ */
 public interface ArmorStand extends LivingEntity, ObjectEntity
 {
 }

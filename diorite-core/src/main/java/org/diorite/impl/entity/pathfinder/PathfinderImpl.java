@@ -27,13 +27,14 @@ package org.diorite.impl.entity.pathfinder;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.entity.IEntity;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.entity.Entity;
 import org.diorite.entity.pathfinder.Path;
@@ -41,14 +42,14 @@ import org.diorite.entity.pathfinder.Pathfinder;
 
 public class PathfinderImpl implements Pathfinder
 {
-    private final BlockLocation  goal;
-    private final IEntity        entity;
-    private final Consumer<Path> callback;
+    private final BlockLocation            goal;
+    private final IEntity                  entity;
+    private final Consumer<Optional<Path>> callback;
 
     private boolean       isCompleted;
     private BlockLocation currentBlock;
 
-    public PathfinderImpl(final ILocation goal, final IEntity entity, final Consumer<Path> callback)
+    public PathfinderImpl(final ILocation goal, final IEntity entity, final Consumer<Optional<Path>> callback)
     {
         this.goal = goal.toBlockLocation();
         this.entity = entity;
@@ -75,6 +76,11 @@ public class PathfinderImpl implements Pathfinder
 
     private boolean isMoveOk(final BlockLocation blockLocation)
     {
+        if (blockLocation.getY() < 0)
+        {
+            return false; // Outside world
+        }
+
         if (blockLocation.getBlock().getType().isSolid())
         {
             return false;
@@ -125,6 +131,12 @@ public class PathfinderImpl implements Pathfinder
         double near = Integer.MAX_VALUE;
         BlockLocation candidate = null;
         final List<BlockLocation> candidates = this.getMoveCandidates();
+        if (candidates.size() == 0)
+        {
+            CoreMain.debug("Cancelling Pathfinding due to no move candidates! (outside of the world?)");
+            this.callback.accept(Optional.empty());
+            return;
+        }
         for (final BlockLocation blockLocation : candidates)
         {
             final double nearThis;
@@ -139,7 +151,7 @@ public class PathfinderImpl implements Pathfinder
         final Queue<BlockLocation> path = new LinkedBlockingQueue<>();
         path.add(candidate);
 
-        this.callback.accept(new PathImpl(path));
+        this.callback.accept(Optional.of(new PathImpl(path)));
 
         if (this.goal.equals(candidate))
         {

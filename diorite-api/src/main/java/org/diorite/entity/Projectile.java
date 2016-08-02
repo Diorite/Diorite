@@ -24,6 +24,9 @@
 
 package org.diorite.entity;
 
+/**
+ * Represent projectile entity.
+ */
 public interface Projectile extends Entity
 {
 }

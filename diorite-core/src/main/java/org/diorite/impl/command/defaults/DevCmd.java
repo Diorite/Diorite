@@ -107,6 +107,14 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "tp":
+                {
+                    final Location location = new Location(args.asDouble(0), args.asDouble(1), args.asDouble(2));
+                    sender.sendSimpleColoredMessage("&cOld: " + p.getLocation());
+                    p.teleport(location);
+                    sender.sendSimpleColoredMessage("&cNew: " + location);
+                    break;
+                }
                 case "playersinworld":
                 {
                     final World world;
@@ -136,6 +144,10 @@ public class DevCmd extends SystemCommandImpl
                     }
                     for (final IEntity entity : p.getNearbyEntities(size, size, size, LookupShape.RECTANGLE))
                     {
+                        if (entity instanceof IPlayer)
+                        {
+                            continue;
+                        }
                         p.sendMessage(entity.getType() + " - x:" + entity.getX() + ", y:" + entity.getY() + ", z:" + entity.getZ());
                         entity.remove(true);
                     }
