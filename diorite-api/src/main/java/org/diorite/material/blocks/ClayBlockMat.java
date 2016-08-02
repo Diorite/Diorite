@@ -26,6 +26,8 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -39,7 +41,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * Blast Resistance 3
  */
 @SuppressWarnings("JavaDoc")
-public class ClayBlockMat extends EarthMat
+public class ClayBlockMat extends EarthMat implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -72,6 +74,12 @@ public class ClayBlockMat extends EarthMat
     public ClayBlockMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return HARDENED_CLAY;
     }
 
     /**

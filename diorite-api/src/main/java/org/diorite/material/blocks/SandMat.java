@@ -26,6 +26,8 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -57,7 +59,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * </ol>
  */
 @SuppressWarnings("JavaDoc")
-public class SandMat extends LooseMat
+public class SandMat extends LooseMat implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -96,6 +98,12 @@ public class SandMat extends LooseMat
     public SandMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return GLASS;
     }
 
     /**

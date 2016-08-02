@@ -26,7 +26,9 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.material.OreItemMat;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -40,7 +42,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * Blast Resistance 15
  */
 @SuppressWarnings("JavaDoc")
-public class DiamondOreMat extends OreMat
+public class DiamondOreMat extends OreMat implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -73,6 +75,12 @@ public class DiamondOreMat extends OreMat
     public DiamondOreMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return DIAMOND;
     }
 
     /**

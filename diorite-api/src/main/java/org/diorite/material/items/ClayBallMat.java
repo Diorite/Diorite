@@ -27,6 +27,7 @@ package org.diorite.material.items;
 import java.util.Map;
 
 import org.diorite.material.ItemMaterialData;
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -39,7 +40,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
  * Max item stack size: 64
  */
 @SuppressWarnings("JavaDoc")
-public class ClayBallMat extends ItemMaterialData
+public class ClayBallMat extends ItemMaterialData implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -77,6 +78,12 @@ public class ClayBallMat extends ItemMaterialData
     public ClayBallMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return BRICK;
     }
 
     /**
