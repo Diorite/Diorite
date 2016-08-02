@@ -11,12 +11,14 @@ import org.diorite.inventory.item.ItemStack;
 public class FurnaceImpl extends BlockStateImpl implements Furnace
 {
     private final TileEntityFurnaceImpl furnace;
+    private final FurnaceInventory      inventory;
 
     public FurnaceImpl(final Block block)
     {
         super(block);
 
         furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
+        inventory = new FurnaceInventoryImpl(this);
     }
 
     @Override
@@ -60,6 +62,6 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
     @Override
     public FurnaceInventory getInventory()
     {
-        return new FurnaceInventoryImpl(this);
+        return inventory;
     }
 }
