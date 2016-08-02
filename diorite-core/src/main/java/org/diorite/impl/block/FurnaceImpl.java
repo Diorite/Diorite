@@ -1,9 +1,12 @@
 package org.diorite.impl.block;
 
+import org.diorite.impl.inventory.block.FurnaceInventoryImpl;
 import org.diorite.impl.tileentity.TileEntityFurnaceImpl;
+import org.diorite.impl.world.WorldImpl;
 import org.diorite.block.Block;
 import org.diorite.block.Furnace;
 import org.diorite.inventory.block.FurnaceInventory;
+import org.diorite.inventory.item.ItemStack;
 
 public class FurnaceImpl extends BlockStateImpl implements Furnace
 {
@@ -13,7 +16,20 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
     {
         super(block);
 
-        furnace = null; //TODO: entity getter
+        furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
+    }
+
+    @Override
+    public boolean update(boolean force, boolean applyPhysics)
+    {
+        boolean result = super.update(force, applyPhysics);
+
+        if(result)
+        {
+            //TODO update tentity
+        }
+
+        return result;
     }
 
     //TODO: all methods below
@@ -44,6 +60,6 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
     @Override
     public FurnaceInventory getInventory()
     {
-        return null;
+        return new FurnaceInventoryImpl(this);
     }
 }

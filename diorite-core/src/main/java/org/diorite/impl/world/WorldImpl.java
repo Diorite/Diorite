@@ -75,6 +75,7 @@ import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtNamedTagContainer;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.tileentity.TileEntity;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
@@ -1096,5 +1097,10 @@ public class WorldImpl implements World, Tickable
     public void broadcastPacketInWorld(final Packet<?> packet)
     {
         this.players.stream().map(IPlayer::getNetworkManager).forEach(net -> net.sendPacket(packet));
+    }
+
+    public TileEntity getTileEntity(final BlockLocation location)
+    {
+        return null; //TODO
     }
 }

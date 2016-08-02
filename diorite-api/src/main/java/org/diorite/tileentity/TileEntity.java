@@ -29,6 +29,7 @@ import java.util.Set;
 import org.diorite.block.Block;
 import org.diorite.block.BlockLocation;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteRandom;
 
 public interface TileEntity
@@ -48,4 +49,8 @@ public interface TileEntity
      * @param drops drop list, add drops here.
      */
     void simulateDrop(DioriteRandom rand, Set<ItemStack> drops);
+
+    void loadFromNbt(NbtTagCompound nbtTileEntity);
+
+    void saveToNbt(NbtTagCompound nbtTileEntity);
 }

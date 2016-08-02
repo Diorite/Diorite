@@ -56,42 +56,46 @@ public class FurnaceInventoryImpl extends InventoryImpl<Furnace> implements Furn
     @Override
     public ItemStackImplArray getArray()
     {
+        //TODO
         return null;
     }
 
     @Override
     public Slot getSlot(final int slot)
     {
+        //TODO
         return null;
     }
 
     @Override
     public void update(final Player player) throws IllegalArgumentException
     {
-
+        //TODO
     }
 
     @Override
     public void update()
     {
-
+        //TODO
     }
 
     @Override
     public InventoryType getType()
     {
+        //TODO
         return null;
     }
 
     @Override
     public Furnace getHolder()
     {
-        return (Furnace) super.getHolder();
+        return super.getHolder();
     }
 
     @Override
     public int getWindowId()
     {
+        //TODO
         return 0;
     }
 }
