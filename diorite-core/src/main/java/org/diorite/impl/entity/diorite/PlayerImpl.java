@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -357,8 +358,10 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void openInventory(final Inventory inv)
     {
+        Validate.notNull(inv, "Inventory can't be null");
         this.inventoryView = new InventoryViewImpl(this, inv);
-        this.networkManager.sendPacket(new PacketPlayClientboundOpenWindow(0, inv.getType(), new TextComponent(""), inv.size()));
+        this.networkManager.sendPacket(new PacketPlayClientboundOpenWindow(inv.getWindowId(), inv.getType(), new TextComponent(""), inv.size()));
+        CoreMain.debug("Inventory view: " + this.inventoryView);
     }
 
     @Override
@@ -370,6 +373,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void closeInventory(final int id)
     {
+        CoreMain.debug("Closing inventory with ID " + id);
         if (this.inventoryView.getId() != id)
         {
             CoreMain.debug("InventoryView ID != Close Inventory ID. Sync loosed?");

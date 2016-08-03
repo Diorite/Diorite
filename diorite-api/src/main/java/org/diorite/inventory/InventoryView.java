@@ -71,7 +71,7 @@ public interface InventoryView
      */
     default boolean isUpperInventory(final int slotId)
     {
-        return this.hasUpperInventory() && this.getUpperInventory().size() < slotId;
+        return this.hasUpperInventory() && this.getUpperInventory().size() > slotId;
 
     }
 
@@ -81,7 +81,7 @@ public interface InventoryView
         {
             return slotId;
         }
-        return this.getUpperInventory().size() - slotId;
+        return slotId - this.getUpperInventory().size();
     }
 
     default Slot getSlot(final int slotId)

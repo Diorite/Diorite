@@ -24,6 +24,9 @@
 
 package org.diorite.impl.inventory;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.block.BlockContainer;
 import org.diorite.inventory.Inventory;
@@ -93,5 +96,11 @@ public class InventoryViewImpl implements InventoryView
             return this.getPlayer().getInventory().getFullEqInventory();
         }
         return this.getPlayer().getInventory();
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("player", this.player).append("upperInventory", this.upperInventory).toString();
     }
 }
