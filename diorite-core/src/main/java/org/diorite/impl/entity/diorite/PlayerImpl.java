@@ -88,7 +88,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     private final PlayerChunksImpl   playerChunks;
     private       byte               viewDistance;
     private       byte               renderDistance;
-    private       Locale             preferedLocale;
+    private       Locale             preferredLocale;
     private       InventoryViewImpl  inventoryView;
 
     // TODO: add saving/loading data to/from NBT
@@ -107,13 +107,13 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public Locale getPreferredLocale()
     {
-        return this.preferedLocale;
+        return this.preferredLocale;
     }
 
     @Override
-    public void setPreferedLocale(final Locale locale)
+    public void setPreferredLocale(final Locale locale)
     {
-        this.preferedLocale = locale;
+        this.preferredLocale = locale;
     }
 
     @Override

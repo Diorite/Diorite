@@ -442,11 +442,11 @@ public interface MessageOutput
     }
 
     /**
-     * Set prefered locale for this sender, may not do anything to sender if it don't support locales.
+     * Set preferred locale for this sender, may not do anything to sender if it don't support locales.
      *
-     * @param locale new prefered locale.
+     * @param locale new preferred locale.
      */
-    default void setPreferedLocale(final Locale locale)
+    default void setPreferredLocale(final Locale locale)
     {
     }
 }

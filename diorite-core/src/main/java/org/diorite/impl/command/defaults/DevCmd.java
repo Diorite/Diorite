@@ -501,7 +501,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "setlocale":
                 {
-                    p.setPreferedLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
+                    p.setPreferredLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
                     System.out.println("Done: " + p.getPreferredLocale());
                     break;
                 }
@@ -513,7 +513,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msg":
                 {
-                    p.setPreferedLocale(Locale.forLanguageTag("pl-PL"));
+                    p.setPreferredLocale(Locale.forLanguageTag("pl-PL"));
                     DioriteMessages.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
                     break;
                 }
