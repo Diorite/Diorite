@@ -27,7 +27,7 @@ public class TileEntityChestImpl extends TileEntityImpl implements TileEntityChe
     @Override
     public Block getBlock()
     {
-        return block;
+        return this.block;
     }
 
     @Override

@@ -171,6 +171,6 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).append("burnTime", this.burnTime).append("cookTime", this.cookTime).append("fuelTime", this.fuelTime).append("items", this.items).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).append("burnTime", this.burnTime).append("cookTime", this.cookTime).append("items", this.items).toString();
     }
 }

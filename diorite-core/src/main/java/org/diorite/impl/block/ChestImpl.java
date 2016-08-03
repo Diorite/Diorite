@@ -10,19 +10,19 @@ import org.diorite.inventory.block.ChestInventory;
 public class ChestImpl extends BlockStateImpl implements Chest
 {
     private final TileEntityChestImpl chest;
-    private final ChestInventory inventory;
+    private final ChestInventory      inventory;
 
     public ChestImpl(final Block block)
     {
         super(block);
 
-        chest = (TileEntityChestImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
-        inventory = new ChestInventoryImpl(this);
+        this.chest = (TileEntityChestImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
+        this.inventory = new ChestInventoryImpl(this);
     }
 
     @Override
     public ChestInventory getInventory()
     {
-        return inventory;
+        return this.inventory;
     }
 }
