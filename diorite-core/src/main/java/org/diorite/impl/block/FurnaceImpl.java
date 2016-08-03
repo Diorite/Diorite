@@ -18,7 +18,7 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
         super(block);
 
         furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
-        inventory = new FurnaceInventoryImpl(this);
+        inventory = new FurnaceInventoryImpl(this, 0); //TODO: Window ID
     }
 
     @Override
