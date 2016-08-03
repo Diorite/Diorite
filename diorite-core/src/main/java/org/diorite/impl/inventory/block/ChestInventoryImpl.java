@@ -1,5 +1,7 @@
 package org.diorite.impl.inventory.block;
 
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
+import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.InventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
 import org.diorite.block.Chest;
@@ -10,38 +12,48 @@ import org.diorite.inventory.slot.Slot;
 
 public class ChestInventoryImpl extends InventoryImpl<Chest> implements ChestInventory
 {
+    private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.CHEST.getSize());
+    private final Slot[]             slots   = new Slot[InventoryType.CHEST.getSize()];
+
     public ChestInventoryImpl(final Chest holder)
     {
         super(holder);
+
+        //TODO: set slots
     }
 
     @Override
     public ItemStackImplArray getArray()
     {
-        return null; //TODO
+        return this.content;
     }
 
     @Override
     public Slot getSlot(final int slot)
     {
-        return null; //TODO
+        return this.slots[slot];
     }
 
     @Override
     public void update(final Player player) throws IllegalArgumentException
     {
-        //TODO
+        if (! this.viewers.contains(player))
+        {
+            throw new IllegalArgumentException("Player must be a viewer of inventory.");
+        }
+
+        ((IPlayer) player).getNetworkManager().sendPacket(new PacketPlayClientboundWindowItems(this.windowId, this.content));
     }
 
     @Override
     public void update()
     {
-        //TODO
+        this.viewers.stream().filter(h -> h instanceof Player).map(h -> (Player) h).forEach(this::update);
     }
 
     @Override
     public InventoryType getType()
     {
-        return null; //TODO
+        return InventoryType.CHEST;
     }
 }
