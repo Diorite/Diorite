@@ -6,7 +6,6 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.block.Block;
 import org.diorite.block.Furnace;
 import org.diorite.inventory.block.FurnaceInventory;
-import org.diorite.inventory.item.ItemStack;
 
 public class FurnaceImpl extends BlockStateImpl implements Furnace
 {
@@ -17,16 +16,16 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
     {
         super(block);
 
-        furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
-        inventory = new FurnaceInventoryImpl(this, 0); //TODO: Window ID
+        this.furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
+        this.inventory = new FurnaceInventoryImpl(this, 0); //TODO: Window ID
     }
 
     @Override
-    public boolean update(boolean force, boolean applyPhysics)
+    public boolean update(final boolean force, final boolean applyPhysics)
     {
-        boolean result = super.update(force, applyPhysics);
+        final boolean result = super.update(force, applyPhysics);
 
-        if(result)
+        if (result)
         {
             //TODO update tentity
         }
@@ -34,34 +33,33 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
         return result;
     }
 
-    //TODO: all methods below
     @Override
     public short getBurnTime()
     {
-        return 0;
+        return this.furnace.getBurnTime();
     }
 
     @Override
     public void setBurnTime(final short burnTime)
     {
-
+        this.furnace.setBurnTime(burnTime);
     }
 
     @Override
     public short getCookTime()
     {
-        return 0;
+        return this.furnace.getCookTime();
     }
 
     @Override
     public void setCookTime(final short cookTime)
     {
-
+        this.furnace.setCookTime(cookTime);
     }
 
     @Override
     public FurnaceInventory getInventory()
     {
-        return inventory;
+        return this.inventory;
     }
 }

@@ -53,9 +53,9 @@ import org.diorite.impl.entity.pathfinder.EntityControllerImpl;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
-import org.diorite.block.BlockLocation;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.entity.Entity;
 import org.diorite.entity.EntityType;
 import org.diorite.nbt.NbtTagCompound;
@@ -114,7 +114,8 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         this.controller = new EntityControllerImpl(this);
         this.initMetadata();
 
-        this.lazyOnGround = new BooleanLazyValue(this.values, () -> {
+        this.lazyOnGround = new BooleanLazyValue(this.values, () ->
+        {
             if ((this.y <= 0) || (this.y > Chunk.CHUNK_FULL_HEIGHT))
             {
                 return false; // we're outside world
@@ -808,7 +809,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         }
 
         this.updateChunk(chunk, this.getChunk());
-        this.getTracker().forceLocationUpdate();
+        this.tracker.forceLocationUpdate();
     }
 
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
