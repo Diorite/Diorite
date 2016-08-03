@@ -36,44 +36,53 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     public void doTick(final int tps)
     {
         //TODO check if logic is correct
+        if (this.fuelTime > 0)
+        {
+            this.fuelTime--;
+        }
+        else if (! isFuel(this.items[1]))
+        {
+            return;
+        }
+
+        if ((this.items[0] == null) || this.items[0].isAir() || (this.items[0].getAmount() < 1))
+        {
+            return;
+        }
+
         if (! (this.items[0].getMaterial() instanceof SmeltableMat))
         {
             return;
         }
 
-        if (this.items[0].getMaterial().equals(this.items[2].getMaterial()))
+        if (this.items[2] != null)
         {
-            return;
-        }
+            if (! this.items[0].isSimilar(this.items[2]))
+            {
+                return;
+            }
 
-        if ((this.fuelTime < 1) && ! isFuel(this.items[2]))
-        {
-            return;
-        }
-
-        final SmeltableMat mat = (SmeltableMat) this.items[0].getMaterial();
-
-        if (this.fuelTime > 0)
-        {
-            this.fuelTime--;
+            if (this.items[2].getAmount() >= this.items[2].getMaterial().getMaxStack())
+            {
+                return;
+            }
         }
         else
         {
-            this.fuelTime = (short) getFuelTime(this.items[1]);
-            this.items[1].setAmount(this.items[1].getAmount() - 1);
+            this.items[2] = new BaseItemStack(((SmeltableMat) this.items[0].getMaterial()).getSmeltResult(), 0);
         }
 
-        if (this.cookTime++ == SMELT_DURATION)
+        if (this.fuelTime < 1)
         {
+            this.items[2].setAmount(this.items[2].getAmount() - 1);
+            this.fuelTime = (short) getFuelTime(this.items[2]);
+        }
+
+        if (this.cookTime++ >= SMELT_DURATION)
+        {
+            this.items[2].setAmount(this.items[2].getAmount() + 1);
             this.items[0].setAmount(this.items[0].getAmount() - 1);
-            if ((this.items[2] == null) || this.items[2].isAir())
-            {
-                this.items[2] = new BaseItemStack(mat.getSmeltResult(), 1);
-            }
-            else
-            {
-                this.items[2].setAmount(this.items[2].getAmount() + 1);
-            }
+            this.cookTime = 0;
         }
     }
 
@@ -87,6 +96,30 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     public void simulateDrop(final DioriteRandom rand, final Set<ItemStack> drops)
     {
         //TODO
+    }
+
+    @Override
+    public short getBurnTime()
+    {
+        return this.burnTime;
+    }
+
+    @Override
+    public void setBurnTime(final short burnTime)
+    {
+        this.burnTime = burnTime;
+    }
+
+    @Override
+    public short getCookTime()
+    {
+        return this.cookTime;
+    }
+
+    @Override
+    public void setCookTime(final short cookTime)
+    {
+        this.cookTime = cookTime;
     }
 
     public static int getFuelTime(final ItemStack fuel)
