@@ -131,7 +131,7 @@ public class PathfinderImpl implements Pathfinder
         double near = Integer.MAX_VALUE;
         BlockLocation candidate = null;
         final List<BlockLocation> candidates = this.getMoveCandidates();
-        if (candidates.size() == 0)
+        if (candidates.isEmpty())
         {
             CoreMain.debug("Cancelling Pathfinding due to no move candidates! (outside of the world?)");
             this.callback.accept(Optional.empty());
