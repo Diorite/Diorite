@@ -22,8 +22,7 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     private static final int SMELT_DURATION = 200;
     private final Block block;
     private       short burnTime;
-    private       short cookTime;
-    private       short fuelTime; //AS TICKS
+    private       short cookTime; //AS TICKS
     private ItemStack[] items = new ItemStack[3];
 
     public TileEntityFurnaceImpl(final Block block)
@@ -36,9 +35,9 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     public void doTick(final int tps)
     {
         //TODO check if logic is correct
-        if (this.fuelTime > 0)
+        if (this.burnTime > 0)
         {
-            this.fuelTime--;
+            this.burnTime--;
         }
         else if (! isFuel(this.items[1]))
         {
@@ -72,10 +71,10 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
             this.items[2] = new BaseItemStack(((SmeltableMat) this.items[0].getMaterial()).getSmeltResult(), 0);
         }
 
-        if (this.fuelTime < 1)
+        if (this.burnTime < 1)
         {
             this.items[2].setAmount(this.items[2].getAmount() - 1);
-            this.fuelTime = (short) getFuelTime(this.items[2]);
+            this.burnTime = (short) getFuelTime(this.items[2]);
         }
 
         if (this.cookTime++ >= SMELT_DURATION)
