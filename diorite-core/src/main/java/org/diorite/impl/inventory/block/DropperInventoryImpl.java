@@ -19,7 +19,7 @@ public class DropperInventoryImpl extends InventoryImpl<Dropper> implements Drop
     private final Slot[]             slots   = new Slot[InventoryType.DROPPER.getSize()];
 
     {
-        for (int i = 0; i < InventoryType.DROPPER.getSize(); i++)
+        for (int i = 0; i < this.slots.length; i++)
         {
             this.slots[i] = Slot.BASE_CONTAINER_SLOT;
         }

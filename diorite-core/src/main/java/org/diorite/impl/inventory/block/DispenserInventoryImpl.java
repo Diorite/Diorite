@@ -19,7 +19,7 @@ public class DispenserInventoryImpl extends InventoryImpl<Dispenser> implements 
     private final Slot[]             slots   = new Slot[InventoryType.DISPENSER.getSize()];
 
     {
-        for (int i = 0; i < InventoryType.DISPENSER.getSize(); i++)
+        for (int i = 0; i < this.slots.length; i++)
         {
             this.slots[i] = Slot.BASE_CONTAINER_SLOT;
         }
