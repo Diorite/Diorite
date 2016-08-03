@@ -29,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.entity.Player;
 import org.diorite.entity.data.HandType;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 public class PlayerBlockPlaceEvent extends PlayerEvent
 {

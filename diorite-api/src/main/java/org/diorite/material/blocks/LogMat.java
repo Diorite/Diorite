@@ -29,7 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.material.FuelMat;
 import org.diorite.material.Material;
 import org.diorite.material.RotatableMat;

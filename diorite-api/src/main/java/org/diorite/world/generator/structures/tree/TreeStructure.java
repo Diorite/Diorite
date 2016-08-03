@@ -32,7 +32,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 import org.diorite.material.RotateAxisMat;

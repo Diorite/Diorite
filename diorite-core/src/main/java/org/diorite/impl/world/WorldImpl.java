@@ -58,7 +58,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -75,13 +75,14 @@ import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtNamedTagContainer;
 import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.tileentity.TileEntity;
 import org.diorite.utils.collections.sets.ConcurrentSet;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
@@ -723,6 +724,12 @@ public class WorldImpl implements World, Tickable
     }
 
     @Override
+    public Block getBlock(final BlockLocation location)
+    {
+        return this.getBlock(location.getX(), location.getY(), location.getZ());
+    }
+
+    @Override
     public int getHighestBlockY(final int x, final int z)
     {
         return this.getChunkAt(x >> 4, z >> 4).getHighestBlockY(x & CHUNK_FLAG, z & CHUNK_FLAG);
@@ -996,12 +1003,14 @@ public class WorldImpl implements World, Tickable
                 {
                     final NbtTagCompound nbt = new NbtTagCompound();
 
-                    //TODO
-                    nbt.setDouble("PosX", 0.0);
-                    nbt.setDouble("PosY", 0.0);
-                    nbt.setDouble("PosZ", 0.0);
-                    nbt.setFloat("Yaw", 0.0f);
-                    nbt.setFloat("Pitch", 0.0f);
+                    ImmutableLocation spawnLocation = getSpawn();
+
+                    nbt.setDouble("PosX", spawnLocation.getX());
+                    nbt.setDouble("PosY", spawnLocation.getY());
+                    nbt.setDouble("PosZ", spawnLocation.getZ());
+                    nbt.setFloat("Yaw", spawnLocation.getYaw());
+                    nbt.setFloat("Pitch", spawnLocation.getPitch());
+                    nbt.setString("GameMode", playerEntity.getGameMode().getName());
 
                     nbtStream.write(nbt);
                     nbtStream.flush();
@@ -1019,6 +1028,7 @@ public class WorldImpl implements World, Tickable
                     NbtTagCompound nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
 
                     playerEntity.teleport(new ImmutableLocation(nbt.getDouble("PosX"), nbt.getDouble("PosY"), nbt.getDouble("PosZ"), nbt.getFloat("Yaw"), nbt.getFloat("Pitch")));
+                    playerEntity.setGameMode(GameMode.getByEnumName(nbt.getString("GameMode")));
                 }
                 catch (IOException e)
                 {
@@ -1062,11 +1072,12 @@ public class WorldImpl implements World, Tickable
 
             try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(worldPlayerDataFile)))
             {
-                nbt.setDouble("PosX", playerEntity.getLocation().getX());
-                nbt.setDouble("PosY", playerEntity.getLocation().getY());
-                nbt.setDouble("PosZ", playerEntity.getLocation().getZ());
+                nbt.setDouble("PosX", playerEntity.getX());
+                nbt.setDouble("PosY", playerEntity.getY());
+                nbt.setDouble("PosZ", playerEntity.getZ());
                 nbt.setFloat("Yaw", playerEntity.getYaw());
                 nbt.setFloat("Pitch", playerEntity.getPitch());
+                nbt.setString("GameMode", playerEntity.getGameMode().getName());
 
                 nbtStream.write(nbt);
                 nbtStream.flush();
@@ -1086,5 +1097,10 @@ public class WorldImpl implements World, Tickable
     public void broadcastPacketInWorld(final Packet<?> packet)
     {
         this.players.stream().map(IPlayer::getNetworkManager).forEach(net -> net.sendPacket(packet));
+    }
+
+    public TileEntity getTileEntity(final BlockLocation location)
+    {
+        return null; //TODO
     }
 }

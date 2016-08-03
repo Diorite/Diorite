@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.entity.Entity;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.utils.math.DioriteRandom;
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 public class PossibleFixedDrop extends PossibleDrop
 {

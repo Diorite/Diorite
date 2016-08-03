@@ -47,7 +47,7 @@ import org.diorite.impl.entity.attrib.SimpleAttributeModifier;
 import org.diorite.impl.entity.meta.EntityMetadata;
 import org.diorite.impl.entity.meta.entry.EntityMetadataEntry;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.Core;
 import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;

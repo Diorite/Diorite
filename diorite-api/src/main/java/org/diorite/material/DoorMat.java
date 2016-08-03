@@ -24,7 +24,7 @@
 
 package org.diorite.material;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 
 /**
  * Used by all door-based blocks

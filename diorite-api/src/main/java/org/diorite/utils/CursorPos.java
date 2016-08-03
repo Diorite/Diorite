@@ -28,7 +28,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.entity.data.HandType;
 import org.diorite.utils.math.ByteRange;
 import org.diorite.utils.math.FloatRange;

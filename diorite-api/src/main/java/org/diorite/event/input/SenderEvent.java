@@ -68,7 +68,6 @@ public abstract class SenderEvent extends Event
 
         final SenderEvent that = (SenderEvent) o;
         return this.sender.equals(that.sender);
-
     }
 
     @Override

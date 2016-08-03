@@ -27,12 +27,15 @@ package org.diorite.material.blocks;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.material.Material;
 import org.diorite.material.WoodType;
+import org.diorite.material.items.CoalMat;
+import org.diorite.material.items.SmeltableMat;
 
 /**
  * Abstract class for all Wood-based blocks
  */
-public abstract class WoodMat extends WoodenMat
+public abstract class WoodMat extends WoodenMat implements SmeltableMat
 {
     protected final WoodType woodType;
 
@@ -80,5 +83,11 @@ public abstract class WoodMat extends WoodenMat
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("woodType", this.woodType).toString();
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return CoalMat.CHARCOAL;
     }
 }

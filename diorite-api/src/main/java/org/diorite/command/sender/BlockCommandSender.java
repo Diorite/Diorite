@@ -24,7 +24,7 @@
 
 package org.diorite.command.sender;
 
-import org.diorite.world.Block;
+import org.diorite.block.Block;
 
 /**
  * Represent block - command block sender.

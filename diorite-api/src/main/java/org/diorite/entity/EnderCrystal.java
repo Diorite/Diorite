@@ -24,7 +24,7 @@
 
 package org.diorite.entity;
 
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 
 /**
  * Represent ender crystal entity.

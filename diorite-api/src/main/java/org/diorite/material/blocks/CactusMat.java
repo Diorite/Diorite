@@ -28,6 +28,8 @@ import java.util.Map;
 
 import org.diorite.material.AgeableBlockMat;
 import org.diorite.material.Material;
+import org.diorite.material.items.DyeMat;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -157,7 +159,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * </ol>
  */
 @SuppressWarnings("JavaDoc")
-public class CactusMat extends PlantMat implements AgeableBlockMat
+public class CactusMat extends PlantMat implements AgeableBlockMat, SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -228,6 +230,12 @@ public class CactusMat extends PlantMat implements AgeableBlockMat
     public CactusMat getAge(final int age)
     {
         return getByID(age);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return DyeMat.DYE_GREEN;
     }
 
     /**

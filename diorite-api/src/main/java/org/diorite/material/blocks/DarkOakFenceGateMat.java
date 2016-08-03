@@ -26,7 +26,7 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.material.FenceGateMat;
 import org.diorite.material.Material;
 import org.diorite.material.WoodType;

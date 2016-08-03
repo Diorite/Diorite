@@ -27,7 +27,7 @@ package org.diorite.material.blocks;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.material.FuelMat;
 import org.diorite.material.StairsMat;
 import org.diorite.material.WoodType;

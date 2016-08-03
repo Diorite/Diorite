@@ -24,7 +24,7 @@
 
 package org.diorite.material.blocks;
 
-import org.diorite.BlockFace;
+import org.diorite.block.BlockFace;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.DirectionalMat;
 

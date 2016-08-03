@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.world;
+package org.diorite.impl.block;
 
 import javax.vecmath.Vector3d;
 
@@ -36,8 +36,8 @@ import org.diorite.material.BlockMaterialData;
 import org.diorite.utils.lazy.LazyValue;
 import org.diorite.utils.math.geometry.BoundingBox;
 import org.diorite.world.Biome;
-import org.diorite.world.Block;
-import org.diorite.world.TileEntity;
+import org.diorite.block.Block;
+import org.diorite.tileentity.TileEntity;
 import org.diorite.world.World;
 
 public class BlockImpl implements Block

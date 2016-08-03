@@ -83,6 +83,7 @@ public class StoneBrickMat extends StonyMat implements VariantableMat
      */
     public static final int USED_DATA_VALUES = 4;
 
+    // TODO add smeltable (normal to cracked)
     public static final StoneBrickMat STONE_BRICK          = new StoneBrickMat();
     public static final StoneBrickMat STONE_BRICK_MOSSY    = new StoneBrickMat(0x1, VariantMat.MOSSY);
     public static final StoneBrickMat STONE_BRICK_CRACKED  = new StoneBrickMat(0x2, VariantMat.CRACKED);

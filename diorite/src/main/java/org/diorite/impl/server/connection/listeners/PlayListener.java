@@ -77,8 +77,11 @@ import org.diorite.impl.input.InputActionType;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.GameMode;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.entity.Entity;
 import org.diorite.entity.data.HandType;
 import org.diorite.event.EventType;
+import org.diorite.event.entity.EntityDamageByEntityEvent;
+import org.diorite.event.entity.EntityDamageEvent.DamageCause;
 import org.diorite.event.player.PlayerArmAnimationEvent;
 import org.diorite.event.player.PlayerBlockDestroyEvent;
 import org.diorite.event.player.PlayerBlockPlaceEvent;
@@ -114,7 +117,8 @@ public class PlayListener implements PacketPlayServerboundListener
     public void handle(final PacketPlayServerboundSettings packet)
     {
 //        final byte oldViewDistance = this.player.getViewDistance();
-        this.core.sync(() -> {
+        this.core.sync(() ->
+        {
             this.player.setViewDistance(packet.getViewDistance());
             this.player.setMainHand(packet.getHandSide());
             this.player.setPreferedLocale(Locale.forLanguageTag(packet.getLocale().replace('_', '-')));
@@ -273,7 +277,8 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundUseEntity packet)
     {
-        // TODO
+        final Entity victim = this.player.getWorld().getEntityTrackers().getTracker(packet.getTargetEntity()).getTracker();
+        EventType.callEvent(new EntityDamageByEntityEvent(victim, this.player, DamageCause.ENTITY_ATTACK));
     }
 
     @Override
@@ -321,7 +326,8 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundBlockDig packet)
     {
-        this.core.sync(() -> {
+        this.core.sync(() ->
+        {
             if ((packet.getAction() == BlockDigAction.FINISH_DIG) || ((packet.getAction() == BlockDigAction.START_DIG) && this.player.getGameMode().equals(GameMode.CREATIVE)))
             {
                 EventType.callEvent(new PlayerBlockDestroyEvent(this.player, packet.getBlockLocation().setWorld(this.player.getWorld()).getBlock()));

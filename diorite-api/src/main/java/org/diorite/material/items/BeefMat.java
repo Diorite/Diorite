@@ -26,6 +26,7 @@ package org.diorite.material.items;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -38,7 +39,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
  * Max item stack size: 64
  */
 @SuppressWarnings("JavaDoc")
-public class BeefMat extends EdibleItemMat
+public class BeefMat extends EdibleItemMat implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -76,6 +77,12 @@ public class BeefMat extends EdibleItemMat
     public BeefMat getType(final String type)
     {
         return getByEnumName(type);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return COOKED_BEEF;
     }
 
     /**

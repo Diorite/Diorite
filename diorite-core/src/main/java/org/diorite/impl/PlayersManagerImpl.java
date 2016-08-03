@@ -48,6 +48,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.world.WorldImpl;
+import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
@@ -76,7 +77,10 @@ public class PlayersManagerImpl implements Tickable
     {// TODO: loading player
         //noinspection MagicNumber
 
-        ImmutableLocation destLocation = new ImmutableLocation(4, 120, -4, 0, 0, this.core.getWorldsManager().getDefaultWorld());
+        WorldImpl defaultWorld = this.core.getWorldsManager().getDefaultWorld();
+
+        ImmutableLocation destLocation = defaultWorld.getSpawn();
+        GameMode destGameMode = GameMode.SURVIVAL;
 
         File playerDataFile = new File("players" + File.separator + gameProfile.getId().toString() + ".dat");
 
@@ -126,6 +130,7 @@ public class PlayersManagerImpl implements Tickable
                         NbtTagCompound nbt2 = (NbtTagCompound) nbtStream2.readTag(NbtLimiter.getUnlimited());
 
                         destLocation = new ImmutableLocation(nbt2.getDouble("PosX"), nbt2.getDouble("PosY"), nbt2.getDouble("PosZ"), nbt2.getFloat("Yaw"), nbt2.getFloat("Pitch"), destWorld);
+                        destGameMode = GameMode.getByEnumName(nbt2.getString("GameMode"));
                     }
                     catch (IOException e)
                     {
@@ -139,7 +144,10 @@ public class PlayersManagerImpl implements Tickable
             }
         }
 
-        return this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, destLocation);
+        IPlayer player = this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, destLocation);
+        player.setGameMode(destGameMode);
+
+        return player;
     }
 
     public void playerJoin(final IPlayer player)

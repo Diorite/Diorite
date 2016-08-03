@@ -24,6 +24,7 @@
 
 package org.diorite;
 
+import org.diorite.block.BlockLocation;
 import org.diorite.utils.math.DioriteMathUtils;
 import org.diorite.world.World;
 import org.diorite.world.chunk.Chunk;

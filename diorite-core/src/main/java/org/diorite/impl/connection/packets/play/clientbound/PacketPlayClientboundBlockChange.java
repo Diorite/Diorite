@@ -34,7 +34,7 @@ import org.diorite.impl.connection.EnumProtocolDirection;
 import org.diorite.impl.connection.packets.PacketClass;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.PacketPlayClientboundListener;
-import org.diorite.BlockLocation;
+import org.diorite.block.BlockLocation;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.material.Material;
 

@@ -26,8 +26,10 @@ package org.diorite.material.blocks;
 
 import java.util.Map;
 
+import org.diorite.material.Material;
 import org.diorite.material.VariantMat;
 import org.diorite.material.VariantableMat;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -41,7 +43,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * Blast Resistance 30
  */
 @SuppressWarnings("JavaDoc")
-public class CobblestoneMat extends StonyMat implements VariantableMat
+public class CobblestoneMat extends StonyMat implements VariantableMat, SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -90,6 +92,12 @@ public class CobblestoneMat extends StonyMat implements VariantableMat
             return MossyCobblestoneMat.MOSSY_COBBLESTONE;
         }
         return this;
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return STONE;
     }
 
     /**
