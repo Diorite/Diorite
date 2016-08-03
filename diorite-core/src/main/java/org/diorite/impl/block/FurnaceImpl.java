@@ -6,7 +6,6 @@ import org.diorite.impl.world.WorldImpl;
 import org.diorite.block.Block;
 import org.diorite.block.Furnace;
 import org.diorite.inventory.block.FurnaceInventory;
-import org.diorite.inventory.item.ItemStack;
 
 public class FurnaceImpl extends BlockStateImpl implements Furnace
 {
@@ -18,7 +17,7 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
         super(block);
 
         furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
-        inventory = new FurnaceInventoryImpl(this, 0); //TODO: Window ID
+        inventory = new FurnaceInventoryImpl(this);
     }
 
     @Override

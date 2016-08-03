@@ -54,7 +54,6 @@ public class PlayerInventoryImpl extends InventoryImpl<IHuman> implements Player
     private static final short CURSOR_SLOT      = - 1;
     private static final int   CURSOR_WINDOW    = - 1;
 
-    private final int    windowId;
     private final IHuman holder;
     private final DragControllerImpl drag       = new DragControllerImpl();
     private final ItemStackImplArray content    = ItemStackImplArray.create(InventoryType.PLAYER.getSize());

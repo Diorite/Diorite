@@ -47,7 +47,7 @@ public final class Diorite
 {
     private static Core core;
 
-    //TODO: make sure that it contains all metohds
+    //TODO: make sure that it contains all methods
     private Diorite()
     {
     }

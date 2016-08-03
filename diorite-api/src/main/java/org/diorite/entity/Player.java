@@ -34,6 +34,7 @@ import org.diorite.chat.component.BaseComponent;
 import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.PlayerCommandSender;
 import org.diorite.inventory.Inventory;
+import org.diorite.inventory.InventoryView;
 import org.diorite.utils.math.DioriteRandom;
 
 /**
@@ -59,6 +60,8 @@ public interface Player extends Human, PlayerCommandSender, OfflinePlayer, BossB
      * @param inv inventory to open.
      */
     void openInventory(final Inventory inv);
+
+    InventoryView getInventoryView();
 
     /**
      * Send tab complete packet to player.

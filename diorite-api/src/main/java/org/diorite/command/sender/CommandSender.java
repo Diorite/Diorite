@@ -142,9 +142,9 @@ public interface CommandSender extends ServerOperator, MessageOutput
     }
 
     @Override
-    default void setPreferedLocale(final Locale locale)
+    default void setPreferredLocale(final Locale locale)
     {
-        this.getMessageOutput().setPreferedLocale(locale);
+        this.getMessageOutput().setPreferredLocale(locale);
     }
 
     @Override

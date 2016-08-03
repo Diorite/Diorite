@@ -49,6 +49,7 @@ import org.diorite.impl.entity.IEntityFactory;
 import org.diorite.impl.entity.ILivingEntity;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.IZombie;
+import org.diorite.impl.inventory.block.FurnaceInventoryImpl;
 import org.diorite.impl.inventory.item.meta.ItemMetaImpl;
 import org.diorite.impl.inventory.item.meta.PotionMetaImpl;
 import org.diorite.Location;
@@ -107,6 +108,12 @@ public class DevCmd extends SystemCommandImpl
             final PermissionsManager mag = serverManager.getPermissionsManager();
             switch (action.toLowerCase())
             {
+                case "showfurnace":
+                {
+                    final FurnaceInventoryImpl inventory = new FurnaceInventoryImpl(null);
+                    p.openInventory(inventory);
+                    break;
+                }
                 case "tp":
                 {
                     final Location location = new Location(args.asDouble(0), args.asDouble(1), args.asDouble(2));
@@ -501,7 +508,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "setlocale":
                 {
-                    p.setPreferedLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
+                    p.setPreferredLocale((args.length() == 0) ? null : Locale.forLanguageTag(args.asText()));
                     System.out.println("Done: " + p.getPreferredLocale());
                     break;
                 }
@@ -513,7 +520,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "msg":
                 {
-                    p.setPreferedLocale(Locale.forLanguageTag("pl-PL"));
+                    p.setPreferredLocale(Locale.forLanguageTag("pl-PL"));
                     DioriteMessages.broadcastMessage(args.asText(), MessageData.e("player", p), MessageData.e("test", "Meeeh"));
                     break;
                 }

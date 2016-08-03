@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -52,6 +53,8 @@ import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet;
 
 public abstract class InventoryImpl<T extends InventoryHolder> implements Inventory
 {
+    protected final static AtomicInteger WINDOW_ID = new AtomicInteger();
+    protected int windowId;
     protected final T holder;
     protected final Set<Human> viewers = new ConcurrentSet<>(5, 0.2f, 6);
     protected String title;
@@ -59,6 +62,7 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     protected InventoryImpl(final T holder)
     {
         this.holder = holder;
+        this.windowId = WINDOW_ID.getAndIncrement();
     }
 
     @Override
@@ -793,6 +797,12 @@ public abstract class InventoryImpl<T extends InventoryHolder> implements Invent
     public T getHolder()
     {
         return this.holder;
+    }
+
+    @Override
+    public int getWindowId()
+    {
+        return this.windowId;
     }
 
     @Override

@@ -121,7 +121,7 @@ public class PlayListener implements PacketPlayServerboundListener
         {
             this.player.setViewDistance(packet.getViewDistance());
             this.player.setMainHand(packet.getHandSide());
-            this.player.setPreferedLocale(Locale.forLanguageTag(packet.getLocale().replace('_', '-')));
+            this.player.setPreferredLocale(Locale.forLanguageTag(packet.getLocale().replace('_', '-')));
         }, this.player);
 //        if (oldViewDistance != this.player.getViewDistance())
 //        {
@@ -395,9 +395,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundCloseWindow packet)
     {
-        CoreMain.debug("Close windows: " + packet.getId());
         this.core.sync(() -> this.player.closeInventory(packet.getId()));
-        // TODO: implement
     }
 
     @Override
