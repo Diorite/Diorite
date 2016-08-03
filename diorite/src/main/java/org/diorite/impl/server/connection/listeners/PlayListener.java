@@ -395,9 +395,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundCloseWindow packet)
     {
-        CoreMain.debug("Close windows: " + packet.getId());
         this.core.sync(() -> this.player.closeInventory(packet.getId()));
-        // TODO: implement
     }
 
     @Override

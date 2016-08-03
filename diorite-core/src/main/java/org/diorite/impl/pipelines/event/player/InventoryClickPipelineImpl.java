@@ -30,13 +30,13 @@ import java.util.Objects;
 import org.diorite.impl.CoreMain;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTransaction;
 import org.diorite.impl.entity.IPlayer;
+import org.diorite.impl.inventory.InventoryViewImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImpl;
 import org.diorite.GameMode;
 import org.diorite.event.pipelines.event.player.InventoryClickPipeline;
 import org.diorite.event.player.PlayerInventoryClickEvent;
 import org.diorite.inventory.ClickType;
-import org.diorite.inventory.Inventory;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.inventory.slot.Slot;
@@ -48,11 +48,8 @@ import org.diorite.material.items.HelmetMat;
 import org.diorite.material.items.LeggingsMat;
 import org.diorite.utils.pipeline.SimpleEventPipeline;
 
-@SuppressWarnings("ObjectEquality")
 public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInventoryClickEvent> implements InventoryClickPipeline
 {
-    private static final int HOTBAR_BEGIN_ID = 36;
-
     @Override
     public void reset_()
     {
@@ -64,7 +61,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 player.getNetworkManager().sendPacket(new PacketPlayClientboundTransaction(evt.getWindowId(), evt.getActionNumber(), false));
                 return;
             }
-            final boolean accepted = this.handleClick(evt);
+            final boolean accepted = this.handleClick(evt, (IPlayer) evt.getPlayer(), evt.getClickType());
             player.getNetworkManager().sendPacket(new PacketPlayClientboundTransaction(evt.getWindowId(), evt.getActionNumber(), accepted));
 
             if (! accepted)
@@ -74,221 +71,35 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         });
     }
 
-    protected boolean handleClick(final PlayerInventoryClickEvent e)
+    protected boolean handleClick(final PlayerInventoryClickEvent e, final IPlayer player, final ClickType ct)
     {
         CoreMain.debug("InventoryClick = " + e);
-        final IPlayer player = (IPlayer) e.getPlayer();
-        final ClickType ct = e.getClickType();
         ItemStackImpl.validate(e.getCursorItem());
-        final ItemStackImpl cursor = (ItemStackImpl) e.getCursorItem();
-        final int slot = e.getClickedSlot();
-        final PlayerInventoryImpl inv = player.getInventory(); // TODO inventory view etc
 
+        final int slot = e.getClickedSlot();
+        final InventoryViewImpl inv = player.getInventoryView();
+        final Slot slotProp = inv.getSlot(slot);
+
+        final ItemStackImpl cursor  = ItemStackImpl.wrap(e.getCursorItem());
         final ItemStackImpl clicked = ItemStackImpl.wrap(e.getClickedItem());
 
-        final Slot slotProp = inv.getSlot(slot);
         try
         {
             if (Objects.equals(ct, ClickType.MOUSE_LEFT))
             {
-                if (slot == - 1) // click in non-slot place, like inventory border.
-                {
-                    return true;
-                }
-                if (slotProp.getSlotType().equals(SlotType.RESULT))
-                {
-                    inv.getCraftingInventory().confirmRecipe(false);
-                    return true;
-                }
-                if (cursor == null)
-                {
-                    if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.replaceCursorItem(null, clicked)))
-                    {
-                        return false; // item changed before we made own change
-                    }
-                }
-                else
-                {
-                    if (cursor.isSimilar(clicked))
-                    {
-                        final ItemStack newCursor = clicked.combine(cursor);
-
-                        if (! inv.replaceCursorItem(cursor, newCursor))
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        final ItemStack item = slotProp.canHoldItem(cursor);
-                        if ((item == null) && (item != cursor))
-                        {
-                            return true;
-                        }
-                        else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
-                        {
-                            return false; // item changed before we made own change
-                        }
-                    }
-                }
+                return this.handleLeftClick(slot, slotProp, inv, cursor, clicked);
             }
             else if (Objects.equals(ct, ClickType.MOUSE_RIGHT))
             {
-                if (slot == - 1) // click in non-slot place, like inventory border.
-                {
-                    return true;
-                }
-                if (slotProp.getSlotType().equals(SlotType.RESULT))
-                {
-                    inv.getCraftingInventory().confirmRecipe(false);
-                    return true;
-                }
-                if (cursor == null)
-                {
-                    if (clicked == null)
-                    {
-                        return true;
-                    }
-                    final ItemStack newCursor = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
-                    if (clicked.getAmount() == 0)
-                    {
-                        if (! inv.replace(slot, clicked, null))
-                        {
-                            return false;
-                        }
-                    }
-                    if (! inv.replaceCursorItem(/*cursor*/ null, newCursor))
-                    {
-                        return false;
-                    }
-                }
-                else // cursor != null
-                {
-                    if (clicked == null)
-                    {
-                        final ItemStack item = slotProp.canHoldItem(cursor);
-                        if (item == null)
-                        {
-                            return true;
-                        }
-                        final ItemStack splitted = cursor.split(1);
-                        if (cursor.getAmount() == 0)
-                        {
-                            if (! inv.replaceCursorItem(cursor, null))
-                            {
-                                return false;
-                            }
-                        }
-
-                        if (! inv.replace(slot,/*clicked*/ null, splitted))
-                        {
-                            return false;
-                        }
-                    }
-                    else // clicked != null
-                    {
-                        if (clicked.isSimilar(cursor))
-                        {
-                            if (clicked.getAmount() >= clicked.getMaterial().getMaxStack())
-                            {
-                                return true; // no place to add more items.
-                            }
-
-                            final ItemStack temp = new BaseItemStack(clicked);
-                            temp.setAmount(temp.getAmount() + 1);
-                            final ItemStack item = slotProp.canHoldItem(temp);
-                            if (temp != item) // this slot can't hold more items as canHold returned other stack than given when used bigger stack.
-                            {
-                                return true;
-                            }
-                            final ItemStack rest = clicked.addFrom(cursor, 1);
-                            if (cursor.getAmount() == 0)
-                            {
-                                if (! inv.replaceCursorItem(cursor, null))
-                                {
-                                    return false;
-                                }
-                            }
-                            if (rest != null)
-                            {
-                                return false; // it should never happen as we are only adding 1 item.
-                            }
-                        }
-                        else
-                        {
-                            final ItemStack item = slotProp.canHoldItem(cursor);
-                            if ((item == null) && (item != cursor))
-                            {
-                                return true;
-                            }
-                            else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                } // end cursor != null
-            } // end MOUSE_RIGHT
+                return this.handleRightClick(slot, slotProp, inv, cursor, clicked);
+            }
             else if (Objects.equals(ct, ClickType.SHIFT_MOUSE_LEFT) || Objects.equals(ct, ClickType.SHIFT_MOUSE_RIGHT))
             {
-                if (clicked == null)
+                if (inv.hasUpperInventory())
                 {
-                    return true;
+                    return false; // TODO clicking with shift in other inventories than Player must have own logic
                 }
-                if (slotProp.getSlotType().equals(SlotType.RESULT))
-                {
-                    inv.getCraftingInventory().confirmRecipe(true);
-                    return true;
-                }
-
-                final ItemStack[] rest;
-
-                if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR) || slotProp.getSlotType().equals(SlotType.SECOND_HAND)) && (clicked.getMaterial() instanceof ArmorMat))
-                {
-                    //TODO Item update animation is called even though nothing happens (ex helmet equpied but trying to equip another)
-                    ArmorMat mat = (ArmorMat) clicked.getMaterial();
-                    if (mat instanceof HelmetMat && inv.getHelmet() == null) //TODO better way ?
-                    {
-                        return inv.replaceHelmet(null, clicked) && inv.replace(slot, clicked, null);
-                    }
-                    else if (mat instanceof ChestplateMat && inv.getChestplate() == null)
-                    {
-                        return inv.replaceChestplate(null, clicked) && inv.replace(slot, clicked, null);
-                    }
-                    else if (mat instanceof LeggingsMat && inv.getLeggings() == null)
-                    {
-                        return inv.replaceLeggings(null, clicked) && inv.replace(slot, clicked, null);
-                    }
-                    else if (mat instanceof BootsMat && inv.getBoots() == null)
-                    {
-                        return inv.replaceBoots(null, clicked) && inv.replace(slot, clicked, null);
-                    }
-                    else if (e.getActionNumber() == - 2)
-                    {
-                        return false;
-                    }
-                }
-                if (slotProp.getSlotType().equals(SlotType.CONTAINER))
-                {
-                    // clicked on other slot
-                    rest = inv.getHotbarInventory().add(clicked);
-                }
-                else
-                {
-                    // clicked on hotbar
-                    rest = inv.getEqInventory().add(clicked);
-                }
-                if (rest.length == 0)
-                {
-                    if (! inv.replace(slot, clicked, null))
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    clicked.setAmount(rest[0].getAmount());
-                }
+                return this.handleShiftClickInPlayerEq(e.getActionNumber(), slot, slotProp, inv, clicked);
             }
             else if (Objects.equals(ct, ClickType.DROP_KEY))
             {
@@ -322,12 +133,13 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (ct.getMode() == 2) // 2 -> hot bar action
             {
-                if ((ct.getButton() < 0) || (ct.getButton() > 8))
+                if ((ct.getButton() < 0) || (ct.getButton() > 8) || inv.hasUpperInventory())
                 {
                     return false;
                 }
-                final ItemStack inHeldSlot = inv.getHotbarInventory().getItem(ct.getButton());
-                return inv.replace(slot, clicked, inHeldSlot) && inv.getHotbarInventory().replace(ct.getButton(), inHeldSlot, clicked);
+                final PlayerInventoryImpl playerInv = player.getInventory();
+                final ItemStack inHeldSlot = playerInv.getHotbarInventory().getItem(ct.getButton());
+                return inv.replace(slot, clicked, inHeldSlot) && playerInv.getHotbarInventory().replace(ct.getButton(), inHeldSlot, clicked);
             }
             else if (Objects.equals(ct, ClickType.MOUSE_LEFT_OUTSIDE))
             {
@@ -403,7 +215,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                 final int perSlot = isRightClick ? 1 : (cursor.getAmount() / result.size());
                 for (final int dragSlot : result)
                 {
-                    final ItemStackImpl oldItem = inv.getItem(dragSlot);
+                    final ItemStackImpl oldItem = ItemStackImpl.wrap(inv.getItem(dragSlot));
                     if ((oldItem == null) || cursor.isSimilar(oldItem))
                     {
                         final ItemStack itemStackToCombine = new BaseItemStack(cursor);
@@ -461,14 +273,14 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
                         continue;
                     }
 
-                    if (! doubleClick(inv, i, cursor))
+                    if (! this.doubleClick(inv, i, cursor))
                     {
                         return false;
                     }
                 }
                 if ((firstFullSlot != - 1) && (cursor.getAmount() < cursor.getMaterial().getMaxStack()))
                 {
-                    if (! doubleClick(inv, firstFullSlot, cursor))
+                    if (! this.doubleClick(inv, firstFullSlot, cursor))
                     {
                         return false;
                     }
@@ -476,7 +288,7 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
             }
             else if (Objects.equals(ct, ClickType.SWAP_OFF_HAND))
             {
-                final ItemStackImpl second = inv.getItem(PlayerInventoryImpl.SECOND_HAND_SLOT);
+                final ItemStackImpl second = ItemStackImpl.wrap(inv.getItem(PlayerInventoryImpl.SECOND_HAND_SLOT));
                 boolean secondSlot = inv.replace(PlayerInventoryImpl.SECOND_HAND_SLOT, second, e.getClickedItem());
                 boolean hand = inv.replace(e.getClickedSlot(), e.getClickedItem(), second);
 
@@ -505,7 +317,213 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
         }
     }
 
-    private static boolean doubleClick(final Inventory inv, final int slot, final ItemStack cursor)
+    protected boolean handleLeftClick(final int slot, final Slot slotProp, final InventoryViewImpl inv, final ItemStackImpl cursor, final ItemStackImpl clicked)
+    {
+        if (slot == - 1) // click in non-slot place, like inventory border.
+        {
+            return true;
+        }
+        if (slotProp.getSlotType().equals(SlotType.RESULT))
+        {
+            return this.confirmCraftingRecipe(inv, false);
+        }
+        if (cursor == null)
+        {
+            if ((clicked != null) && (! inv.replace(slot, clicked, null) || ! inv.replaceCursorItem(null, clicked)))
+            {
+                return false; // item changed before we made own change
+            }
+        }
+        else
+        {
+            if (cursor.isSimilar(clicked))
+            {
+                final ItemStack newCursor = clicked.combine(cursor);
+
+                if (! inv.replaceCursorItem(cursor, newCursor))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                final ItemStack item = slotProp.canHoldItem(cursor);
+                if (item == null)
+                {
+                    return true;
+                }
+                else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
+                {
+                    return false; // item changed before we made own change
+                }
+            }
+        }
+        return true;
+    }
+
+    protected boolean handleRightClick(final int slot, final Slot slotProp, final InventoryViewImpl inv, final ItemStackImpl cursor, final ItemStackImpl clicked)
+    {
+        if (slot == - 1) // click in non-slot place, like inventory border.
+        {
+            return true;
+        }
+        if (slotProp.getSlotType().equals(SlotType.RESULT))
+        {
+            return this.confirmCraftingRecipe(inv, false);
+        }
+        if (cursor == null)
+        {
+            if (clicked == null)
+            {
+                return true;
+            }
+            final ItemStack newCursor = clicked.split(this.getAmountToStayInHand(clicked.getAmount()));
+            if (clicked.getAmount() == 0)
+            {
+                if (! inv.replace(slot, clicked, null))
+                {
+                    return false;
+                }
+            }
+            if (! inv.replaceCursorItem(/*cursor*/ null, newCursor))
+            {
+                return false;
+            }
+        }
+        else // cursor != null
+        {
+            if (clicked == null)
+            {
+                final ItemStack item = slotProp.canHoldItem(cursor);
+                if (item == null)
+                {
+                    return true;
+                }
+                final ItemStack splitted = cursor.split(1);
+                if (cursor.getAmount() == 0)
+                {
+                    if (! inv.replaceCursorItem(cursor, null))
+                    {
+                        return false;
+                    }
+                }
+
+                if (! inv.replace(slot,/*clicked*/ null, splitted))
+                {
+                    return false;
+                }
+            }
+            else // clicked != null
+            {
+                if (clicked.isSimilar(cursor))
+                {
+                    if (clicked.getAmount() >= clicked.getMaterial().getMaxStack())
+                    {
+                        return true; // no place to add more items.
+                    }
+
+                    final ItemStack temp = new BaseItemStack(clicked);
+                    temp.setAmount(temp.getAmount() + 1);
+                    final ItemStack item = slotProp.canHoldItem(temp);
+                    if (temp != item) // this slot can't hold more items as canHold returned other stack than given when used bigger stack.
+                    {
+                        return true;
+                    }
+                    final ItemStack rest = clicked.addFrom(cursor, 1);
+                    if (cursor.getAmount() == 0)
+                    {
+                        if (! inv.replaceCursorItem(cursor, null))
+                        {
+                            return false;
+                        }
+                    }
+                    if (rest != null)
+                    {
+                        return false; // it should never happen as we are only adding 1 item.
+                    }
+                }
+                else
+                {
+                    final ItemStack item = slotProp.canHoldItem(cursor);
+                    if (item == null)
+                    {
+                        return true;
+                    }
+                    else if (! inv.replace(slot, clicked, cursor) || ! inv.replaceCursorItem(cursor, clicked))
+                    {
+                        return false;
+                    }
+                }
+            }
+        } // end cursor != null
+        return true;
+    }
+
+    protected boolean handleShiftClickInPlayerEq(final int actionNumber, final int slot, final Slot slotProp, final InventoryViewImpl inv, final ItemStackImpl clicked)
+    {
+        if (clicked == null)
+        {
+            return true;
+        }
+        if (slotProp.getSlotType().equals(SlotType.RESULT))
+        {
+            this.confirmCraftingRecipe(inv, true);
+            return true;
+        }
+
+        final ItemStack[] rest;
+        final PlayerInventoryImpl playerInv = (PlayerInventoryImpl) inv.getLowerInventory();
+
+        if ((slotProp.getSlotType().equals(SlotType.CONTAINER) || slotProp.getSlotType().equals(SlotType.HOTBAR) || slotProp.getSlotType().equals(SlotType.SECOND_HAND)) && (clicked.getMaterial() instanceof ArmorMat))
+        {
+            //TODO Item update animation is called even though nothing happens (ex helmet equpied but trying to equip another)
+            ArmorMat mat = (ArmorMat) clicked.getMaterial();
+            if (mat instanceof HelmetMat && playerInv.getHelmet() == null) //TODO better way ?
+            {
+                return playerInv.replaceHelmet(null, clicked) && inv.replace(slot, clicked, null);
+            }
+            else if (mat instanceof ChestplateMat && playerInv.getChestplate() == null)
+            {
+                return playerInv.replaceChestplate(null, clicked) && inv.replace(slot, clicked, null);
+            }
+            else if (mat instanceof LeggingsMat && playerInv.getLeggings() == null)
+            {
+                return playerInv.replaceLeggings(null, clicked) && inv.replace(slot, clicked, null);
+            }
+            else if (mat instanceof BootsMat && playerInv.getBoots() == null)
+            {
+                return playerInv.replaceBoots(null, clicked) && inv.replace(slot, clicked, null);
+            }
+            else if (actionNumber == - 2)
+            {
+                return false;
+            }
+        }
+        if (slotProp.getSlotType().equals(SlotType.CONTAINER))
+        {
+            // clicked on other slot
+            rest = playerInv.getHotbarInventory().add(clicked);
+        }
+        else
+        {
+            // clicked on hotbar
+            rest = playerInv.getEqInventory().add(clicked);
+        }
+        if (rest.length == 0)
+        {
+            if (! inv.replace(slot, clicked, null))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            clicked.setAmount(rest[0].getAmount());
+        }
+        return true;
+    }
+
+    protected boolean doubleClick(final InventoryViewImpl inv, final int slot, final ItemStack cursor)
     {
         final ItemStack item = inv.getItem(slot);
         final int newCursor = cursor.getAmount() + Math.min(item.getAmount(), cursor.getMaterial().getMaxStack() - cursor.getAmount());
@@ -528,5 +546,21 @@ public class InventoryClickPipelineImpl extends SimpleEventPipeline<PlayerInvent
     protected int getAmountToStayInHand(final int amount)
     {
         return ((amount % 2) == 0) ? (amount / 2) : ((amount / 2) + 1);
+    }
+
+    protected boolean confirmCraftingRecipe(final InventoryViewImpl inventoryView, final boolean all)
+    {
+        if (!inventoryView.hasUpperInventory())
+        {
+            // Crafting in player inventory
+            ((PlayerInventoryImpl) inventoryView.getLowerInventory()).getCraftingInventory().confirmRecipe(all);
+        }
+        else
+        {
+            // We has upper inventory. It means that we're crafting in Crafting Table
+            // TODO implement this
+        }
+
+        return true;
     }
 }

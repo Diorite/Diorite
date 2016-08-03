@@ -33,6 +33,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.impl.BossBarImpl;
+import org.diorite.impl.CoreMain;
 import org.diorite.impl.DioriteCore;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundChat;
@@ -40,6 +41,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityDestroy;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange.ReasonCodes;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundOpenWindow;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
@@ -50,6 +52,7 @@ import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.input.InputAction;
 import org.diorite.impl.input.InputActionType;
+import org.diorite.impl.inventory.InventoryViewImpl;
 import org.diorite.impl.world.WorldBorderImpl;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
@@ -61,6 +64,7 @@ import org.diorite.Particle;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
+import org.diorite.chat.component.TextComponent;
 import org.diorite.command.sender.MessageOutput;
 import org.diorite.entity.Entity;
 import org.diorite.entity.Player;
@@ -85,6 +89,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     private       byte               viewDistance;
     private       byte               renderDistance;
     private       Locale             preferedLocale;
+    private       InventoryViewImpl  inventoryView;
 
     // TODO: add saving/loading data to/from NBT
     PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
@@ -94,6 +99,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         this.renderDistance = core.getRenderDistance();
         this.playerChunks = new PlayerChunksImpl(this);
         this.messageOutput = new PacketMessageOutput(networkManager);
+        this.inventoryView = new InventoryViewImpl(this);
 
         this.metadata.setBoolean(0, EntityBasicFlags.ACTION, true);
     }
@@ -351,7 +357,25 @@ class PlayerImpl extends HumanImpl implements IPlayer
     @Override
     public void openInventory(final Inventory inv)
     {
+        this.inventoryView = new InventoryViewImpl(this, inv);
+        this.networkManager.sendPacket(new PacketPlayClientboundOpenWindow(0, inv.getType(), new TextComponent(""), inv.size()));
+    }
 
+    @Override
+    public InventoryViewImpl getInventoryView()
+    {
+        return this.inventoryView;
+    }
+
+    @Override
+    public void closeInventory(final int id)
+    {
+        if (this.inventoryView.getId() != id)
+        {
+            CoreMain.debug("InventoryView ID != Close Inventory ID. Sync loosed?");
+        }
+        super.closeInventory(id);
+        this.inventoryView = new InventoryViewImpl(this);
     }
 
     @Override

@@ -16,7 +16,6 @@ import org.diorite.inventory.slot.Slot;
 
 public class FurnaceInventoryImpl extends InventoryImpl<Furnace> implements FurnaceInventory
 {
-    private final int windowId;
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.FURNACE.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.FURNACE.getSize()];
 
@@ -26,10 +25,9 @@ public class FurnaceInventoryImpl extends InventoryImpl<Furnace> implements Furn
         this.slots[2] = Slot.BASE_RESULT_SLOT;
     }
 
-    public FurnaceInventoryImpl(final Furnace holder, final int windowId)
+    public FurnaceInventoryImpl(final Furnace holder)
     {
         super(holder);
-        this.windowId = windowId;
     }
 
     @Override
@@ -107,12 +105,6 @@ public class FurnaceInventoryImpl extends InventoryImpl<Furnace> implements Furn
     public Furnace getHolder()
     {
         return super.getHolder();
-    }
-
-    @Override
-    public int getWindowId()
-    {
-        return this.windowId;
     }
 
     @Override

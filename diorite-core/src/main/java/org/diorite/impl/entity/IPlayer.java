@@ -26,6 +26,7 @@ package org.diorite.impl.entity;
 
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.entity.tracker.BaseTracker;
+import org.diorite.impl.inventory.InventoryViewImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
 import org.diorite.impl.world.chunk.PlayerChunksImpl;
 import org.diorite.entity.Entity;
@@ -54,5 +55,6 @@ public interface IPlayer extends IHuman, Player
 
     void sendWorldBorderUpdate();
 
-
+    @Override
+    InventoryViewImpl getInventoryView();
 }
