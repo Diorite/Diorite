@@ -60,15 +60,15 @@ public abstract class TileEntityImpl extends GameObjectImpl implements TileEntit
     @Override
     public void loadFromNbt(final NbtTagCompound nbtTileEntity)
     {
-        location = new BlockLocation(nbtTileEntity.getInt("LocationX"), nbtTileEntity.getInt("LocationY"), nbtTileEntity.getInt("LocationZ"));
+        this.location = new BlockLocation(nbtTileEntity.getInt("x"), nbtTileEntity.getInt("y"), nbtTileEntity.getInt("z"));
     }
 
     @Override
     public void saveToNbt(final NbtTagCompound nbtTileEntity)
     {
-        nbtTileEntity.setInt("LocationX", location.getX());
-        nbtTileEntity.setInt("LocationY", location.getY());
-        nbtTileEntity.setInt("LocationZ", location.getZ());
+        nbtTileEntity.setInt("x", this.location.getX());
+        nbtTileEntity.setInt("y", this.location.getY());
+        nbtTileEntity.setInt("z", this.location.getZ());
     }
 
     @Override

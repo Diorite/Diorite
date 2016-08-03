@@ -45,6 +45,7 @@ public class CookedFishMat extends EdibleItemMat
      */
     public static final int USED_DATA_VALUES = 1;
 
+    // TODO salmon, clownfish and pufferfish
     public static final CookedFishMat COOKED_FISH = new CookedFishMat();
 
     private static final Map<String, CookedFishMat>     byName = new CaseInsensitiveMap<>(USED_DATA_VALUES, SMALL_LOAD_FACTOR);

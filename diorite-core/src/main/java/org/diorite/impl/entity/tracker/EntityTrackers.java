@@ -67,6 +67,11 @@ public class EntityTrackers implements Tickable
         return this.trackers.get(entity.getId());
     }
 
+    public BaseTracker<?> getTracker(final int id)
+    {
+        return this.trackers.get(id);
+    }
+
     public Short2IntMap getStats() // not for API use, TODO: add API for that
     {
         return this.stats;

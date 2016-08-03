@@ -27,6 +27,8 @@ package org.diorite.material.blocks;
 import java.util.Map;
 
 import org.diorite.material.BlockMaterialData;
+import org.diorite.material.Material;
+import org.diorite.material.items.SmeltableMat;
 import org.diorite.utils.collections.maps.CaseInsensitiveMap;
 
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -40,7 +42,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
  * Blast Resistance 2
  */
 @SuppressWarnings("JavaDoc")
-public class NetherrackMat extends BlockMaterialData
+public class NetherrackMat extends BlockMaterialData implements SmeltableMat
 {
     /**
      * Sub-ids used by diorite/minecraft by default
@@ -73,6 +75,12 @@ public class NetherrackMat extends BlockMaterialData
     public NetherrackMat getType(final int id)
     {
         return getByID(id);
+    }
+
+    @Override
+    public Material getSmeltResult()
+    {
+        return NETHER_BRICK;
     }
 
     /**
