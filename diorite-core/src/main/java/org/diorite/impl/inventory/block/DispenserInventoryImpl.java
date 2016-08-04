@@ -18,16 +18,14 @@ public class DispenserInventoryImpl extends InventoryImpl<Dispenser> implements 
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.DISPENSER.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.DISPENSER.getSize()];
 
+    public DispenserInventoryImpl(final Dispenser holder)
     {
+        super(holder);
+
         for (int i = 0; i < this.slots.length; i++)
         {
             this.slots[i] = Slot.BASE_CONTAINER_SLOT;
         }
-    }
-
-    public DispenserInventoryImpl(final Dispenser holder)
-    {
-        super(holder);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.diorite.block.Block;
 import org.diorite.block.BlockLocation;
 import org.diorite.inventory.item.ItemStack;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.tileentity.TileEntityBrewingStand;
 import org.diorite.utils.math.DioriteRandom;
 
@@ -43,5 +44,21 @@ public class TileEntityBrewingStandImpl extends TileEntityImpl implements TileEn
     public String toString()
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).toString();
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbtTileEntity)
+    {
+        super.loadFromNbt(nbtTileEntity);
+
+        //TODO
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbtTileEntity)
+    {
+        super.saveToNbt(nbtTileEntity);
+
+        //TODO
     }
 }

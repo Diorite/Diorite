@@ -2,6 +2,7 @@ package org.diorite.impl.tileentity;
 
 import org.diorite.block.Block;
 import org.diorite.block.BlockLocation;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.tileentity.TileEntityDropper;
 
 public class TileEntityDropperImpl extends TileEntityDispenserImpl implements TileEntityDropper
@@ -15,5 +16,17 @@ public class TileEntityDropperImpl extends TileEntityDispenserImpl implements Ti
     public void doTick(final int tps)
     {
         // TODO
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbtTileEntity)
+    {
+        super.loadFromNbt(nbtTileEntity);
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbtTileEntity)
+    {
+        super.saveToNbt(nbtTileEntity);
     }
 }

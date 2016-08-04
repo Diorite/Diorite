@@ -15,18 +15,14 @@ public class ChestInventoryImpl extends InventoryImpl<Chest> implements ChestInv
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.CHEST.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.CHEST.getSize()];
 
-    {
-        for (int i = 0; i < this.slots.length; i++)
-        {
-            this.slots[i] = Slot.BASE_CONTAINER_SLOT;
-        }
-    }
-
     public ChestInventoryImpl(final Chest holder)
     {
         super(holder);
 
-        //TODO: set slots
+        for (int i = 0; i < this.slots.length; i++)
+        {
+            this.slots[i] = Slot.BASE_CONTAINER_SLOT;
+        }
     }
 
     @Override

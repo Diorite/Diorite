@@ -1,6 +1,6 @@
 package org.diorite.block;
 
-import org.diorite.inventory.block.ChestInventory;
+import org.diorite.inventory.Inventory;
 
 /**
  * Represents a chest block.
@@ -13,5 +13,5 @@ public interface Chest extends BlockState, BlockContainer
      * @return inventory
      */
     @Override
-    ChestInventory getInventory();
+    Inventory getInventory();
 }
