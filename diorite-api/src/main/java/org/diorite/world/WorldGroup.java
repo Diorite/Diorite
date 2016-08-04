@@ -27,6 +27,8 @@ package org.diorite.world;
 import java.io.File;
 import java.util.Set;
 
+import org.diorite.auth.GameProfile;
+
 public interface WorldGroup
 {
     Set<? extends World> getWorlds();
@@ -35,5 +37,14 @@ public interface WorldGroup
 
     File getDataFolder();
 
+    /**
+     * @return folder that contains players data for specified world group
+     */
     File getPlayerDataFolder();
+
+    default File getPlayerData(GameProfile gameProfile)
+    {
+        // TODO support for switching between online and offline mode
+        return new File(this.getPlayerDataFolder(), gameProfile.getId() + ".dat");
+    }
 }

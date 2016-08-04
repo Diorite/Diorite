@@ -50,5 +50,7 @@ public interface WorldsManager
 
     World getWorld(String name);
 
+    WorldGroup getGroup(String name);
+
     Set<? extends Player> getPlayersInWorld(World world);
 }

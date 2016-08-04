@@ -59,21 +59,17 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
     public void reset_()
     {
         this.addFirst("Diorite|StartPackets", ((evt, pipeline) -> {
-            // TODO
             final IPlayer player = (IPlayer) evt.getPlayer();
-            final CoreNetworkManager networkManager = player.getNetworkManager();
+            final CoreNetworkManager net = player.getNetworkManager();
 
-            networkManager.sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
-            networkManager.sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
-            networkManager.sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
-            networkManager.sendPacket(new PacketPlayClientboundSpawnPosition(player.getWorld().getSpawn().toBlockLocation()));
-            networkManager.sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
-            networkManager.sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
-            TeleportData teleportData = new TeleportData(player.getX(), player.getY(), player.getZ());
-            teleportData.setYaw(player.getYaw());
-            teleportData.setPitch(player.getPitch());
-            networkManager.sendPacket(new PacketPlayClientboundPosition(teleportData, 5));
-            networkManager.sendPacket(new PacketPlayClientboundUpdateTime(player.getWorld()));
+            net.sendPacket(new PacketPlayClientboundLogin(player.getId(), player.getGameMode(), player.getWorld().getHardcore().isEnabled(), player.getWorld().getDimension(), player.getWorld().getDifficulty(), DioriteCore.getInstance().getPlayersManager().getRawPlayers().size(), player.getWorld().getWorldType()));
+            net.sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
+            net.sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
+            net.sendPacket(new PacketPlayClientboundSpawnPosition(player.getWorld().getSpawn().toBlockLocation()));
+            net.sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
+            net.sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
+            net.sendPacket(new PacketPlayClientboundPosition(new TeleportData(player.getLocation()), 5));
+            net.sendPacket(new PacketPlayClientboundUpdateTime(player.getWorld()));
         }));
 
         this.addAfter("Diorite|StartPackets", "Diorite|EntityStuff", ((evt, pipeline) -> {
@@ -115,9 +111,6 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             final Player player = evt.getPlayer();
             GameProfiles.addToCache(player.getGameProfile());
             DioriteMessages.broadcastMessage(DioriteMessages.MSG_PLAYER_JOIN, MessageData.e("player", player));
-//            this.core.broadcastSimpleColoredMessage(ChatPosition.ACTION, "&3&l" + player.getName() + "&7&l joined the server!"); maybe we should not make users angry with this message :D
-//            this.core.broadcastSimpleColoredMessage(ChatPosition.SYSTEM, "&3" + player.getName() + "&7 joined the server!");
-//        this.server.sendConsoleSimpleColoredMessage("&3" + player.getName() + " &7join to the server.");
 
             this.core.updatePlayerListHeaderAndFooter(TextComponent.fromLegacyText("Welcome to Diorite!"), TextComponent.fromLegacyText("http://diorite.org"), player); // TODO Tests, remove it
             player.sendTitle(TextComponent.fromLegacyText("Welcome to Diorite"), TextComponent.fromLegacyText("http://diorite.org"), 20, 60, 20); // TODO Tests, remove it

@@ -24,6 +24,8 @@
 
 package org.diorite.impl.entity;
 
+import java.io.File;
+
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.InventoryViewImpl;
@@ -43,6 +45,22 @@ public interface IPlayer extends IHuman, Player
     CoreNetworkManager getNetworkManager();
 
     PlayerChunksImpl getPlayerChunks();
+
+    /**
+     * @return file that contains player data shared between all world groups
+     */
+    default File getGlobalData()
+    {
+        return this.getCore().getPlayersManager().getGlobalPlayerData(this.getGameProfile());
+    }
+
+    /**
+     * @return file that contains player data stored in current world group
+     */
+    default File getLocalGroupData()
+    {
+        return this.getWorld().getWorldGroup().getPlayerData(this.getGameProfile());
+    }
 
     @Override
     PlayerInventoryImpl getInventory();

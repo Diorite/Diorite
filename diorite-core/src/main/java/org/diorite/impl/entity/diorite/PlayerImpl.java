@@ -24,6 +24,8 @@
 
 package org.diorite.impl.entity.diorite;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,6 +77,8 @@ import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.Inventory;
+import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.LookupShape;
@@ -95,7 +99,6 @@ class PlayerImpl extends HumanImpl implements IPlayer
     private       Locale             preferredLocale;
     private       InventoryViewImpl  inventoryView;
 
-    // TODO: add saving/loading data to/from NBT
     PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
     {
         super(core, gameProfile, id, location);
@@ -409,8 +412,30 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void onLogout()
     {
         this.remove(true);
-
         EventType.callEvent(new PlayerQuitEvent(this));
+        try (final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(this.getGlobalData()))) // save current WorldGroup in global data
+        {
+            final NbtTagCompound compound = new NbtTagCompound();
+            compound.setString("WorldGroup", this.getWorld().getWorldGroup().getName());
+            nbtStream.write(compound);
+            nbtStream.flush();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try (final NbtOutputStream nbtOutputStream = new NbtOutputStream(new FileOutputStream(this.getLocalGroupData())))
+        {
+            final NbtTagCompound nbtTagCompound = new NbtTagCompound("Player");
+            this.saveToNbt(nbtTagCompound);
+            nbtOutputStream.write(nbtTagCompound);
+            nbtOutputStream.flush();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -425,6 +450,24 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public Player getSenderEntity()
     {
         return this;
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbt)
+    {
+        super.loadFromNbt(nbt);
+        this.setGameMode(GameMode.getByEnumOrdinal(nbt.getInt("playerGameType", this.getWorld().getDefaultGameMode().ordinal())));
+        this.setHeldItemSlot(nbt.getInt("SelectedItemSlot", 0));
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbt)
+    {
+        super.saveToNbt(nbt);
+        nbt.remove("id"); // Player will not have id
+
+        nbt.setInt("playerGameType", this.getGameMode().ordinal());
+        nbt.setInt("SelectedItemSlot", this.getHeldItemSlot());
     }
 
     @Override
