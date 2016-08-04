@@ -465,6 +465,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
     {
         super.saveToNbt(nbt);
         nbt.remove("id"); // Player will not have id
+        nbt.setString("Diorite.World", this.getWorld().getName());
 
         nbt.setInt("playerGameType", this.getGameMode().ordinal());
         nbt.setInt("SelectedItemSlot", this.getHeldItemSlot());

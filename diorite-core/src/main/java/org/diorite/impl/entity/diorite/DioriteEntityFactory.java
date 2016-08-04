@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -743,8 +744,7 @@ public class DioriteEntityFactory implements IEntityFactory
         {
             playerDat = new NbtTagCompound();
         }
-        final String worldName = playerDat.getString("Diorite.World", this.core.getWorldsManager().getDefaultWorld().getName());
-        final World world = this.core.getWorldsManager().getWorld(worldName);
+        final World world = Optional.ofNullable(this.core.getWorldsManager().getWorld(playerDat.getString("Diorite.World"))).orElse(this.core.getWorldsManager().getDefaultWorld());
 
         final ImmutableLocation playerLoc;
         if (! playerDat.containsTag("Pos") || ! playerDat.containsTag("Rotation")) // If player file doesn't contain location, use world's spawn
