@@ -1,9 +1,9 @@
-package org.diorite.diorite.nbteditor;
+package org.diorite.examples.nbteditor;
 
-import static org.diorite.diorite.nbteditor.NBTEditor.AUTHOR;
-import static org.diorite.diorite.nbteditor.NBTEditor.NAME;
-import static org.diorite.diorite.nbteditor.NBTEditor.VERSION;
-import static org.diorite.diorite.nbteditor.NBTEditor.WEBSITE;
+import static org.diorite.examples.nbteditor.NBTEditor.AUTHOR;
+import static org.diorite.examples.nbteditor.NBTEditor.NAME;
+import static org.diorite.examples.nbteditor.NBTEditor.VERSION;
+import static org.diorite.examples.nbteditor.NBTEditor.WEBSITE;
 
 
 import org.apache.commons.lang3.builder.ToStringBuilder;

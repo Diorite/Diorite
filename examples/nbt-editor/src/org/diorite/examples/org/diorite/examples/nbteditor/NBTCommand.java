@@ -1,4 +1,4 @@
-package org.diorite.diorite.nbteditor;
+package org.diorite.examples.nbteditor;
 
 import java.util.regex.Matcher;
 
