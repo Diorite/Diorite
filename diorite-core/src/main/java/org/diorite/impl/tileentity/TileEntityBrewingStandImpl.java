@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.block.Block;
-import org.diorite.block.BlockLocation;
+import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.tileentity.TileEntityBrewingStand;
@@ -15,10 +15,11 @@ import org.diorite.utils.math.DioriteRandom;
 public class TileEntityBrewingStandImpl extends TileEntityImpl implements TileEntityBrewingStand
 {
     private final Block block;
+    private ItemStack[] items = new ItemStack[InventoryType.BREWING.getSize()];
 
-    public TileEntityBrewingStandImpl(final BlockLocation location, final Block block)
+    public TileEntityBrewingStandImpl(final Block block)
     {
-        super(location);
+        super(block.getLocation());
         this.block = block;
     }
 
@@ -41,12 +42,6 @@ public class TileEntityBrewingStandImpl extends TileEntityImpl implements TileEn
     }
 
     @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).toString();
-    }
-
-    @Override
     public void loadFromNbt(final NbtTagCompound nbtTileEntity)
     {
         super.loadFromNbt(nbtTileEntity);
@@ -60,5 +55,11 @@ public class TileEntityBrewingStandImpl extends TileEntityImpl implements TileEn
         super.saveToNbt(nbtTileEntity);
 
         //TODO
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).toString();
     }
 }
