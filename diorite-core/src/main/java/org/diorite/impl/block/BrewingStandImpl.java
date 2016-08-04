@@ -3,6 +3,7 @@ package org.diorite.impl.block;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.inventory.block.BrewingStandInventoryImpl;
 import org.diorite.block.Block;
 import org.diorite.block.BrewingStand;
 import org.diorite.inventory.block.BrewingStandInventory;
@@ -14,11 +15,11 @@ public class BrewingStandImpl extends BlockStateImpl implements BrewingStand
     private final TileEntityBrewingStand tileEntity;
     private final BrewingStandInventory  inventory;
 
-    public BrewingStandImpl(final Block block, final TileEntityBrewingStand tileEntity, final BrewingStandInventory inventory)
+    public BrewingStandImpl(final Block block)
     {
         super(block);
-        this.tileEntity = tileEntity;
-        this.inventory = inventory;
+        this.tileEntity = (TileEntityBrewingStand) block.getWorld().getTileEntity(block.getLocation());
+        this.inventory = new BrewingStandInventoryImpl(this);
     }
 
     @Override
