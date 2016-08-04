@@ -17,7 +17,4 @@ public interface FurnaceInventory extends Inventory
     ItemStack getResult();
 
     void setResult(ItemStack result);
-
-    @Override
-    Furnace getHolder();
 }
