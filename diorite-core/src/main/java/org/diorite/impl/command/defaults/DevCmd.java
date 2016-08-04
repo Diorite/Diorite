@@ -116,7 +116,7 @@ public class DevCmd extends SystemCommandImpl
                 }
                 case "tp":
                 {
-                    final Location location = new Location(args.asDouble(0), args.asDouble(1), args.asDouble(2));
+                    final Location location = new Location(args.asDouble(0), args.asDouble(1), args.asDouble(2), args.asWorld(3));
                     sender.sendSimpleColoredMessage("&cOld: " + p.getLocation());
                     p.teleport(location);
                     sender.sendSimpleColoredMessage("&cNew: " + location);

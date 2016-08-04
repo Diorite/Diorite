@@ -72,7 +72,6 @@ public interface InventoryView
     default boolean isUpperInventory(final int slotId)
     {
         return this.hasUpperInventory() && this.getUpperInventory().size() > slotId;
-
     }
 
     default int translateSlotToLowerInventory(final int slotId)

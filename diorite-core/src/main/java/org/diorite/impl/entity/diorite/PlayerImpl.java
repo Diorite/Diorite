@@ -43,7 +43,9 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange.ReasonCodes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundOpenWindow;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRespawn;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
@@ -62,6 +64,7 @@ import org.diorite.BossBar;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
+import org.diorite.TeleportData;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
@@ -376,7 +379,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         CoreMain.debug("Closing inventory with ID " + id);
         if (this.inventoryView.getId() != id)
         {
-            CoreMain.debug("InventoryView ID != Close Inventory ID. Sync loosed?");
+            CoreMain.debug("InventoryView ID != Close Inventory ID. Lost synchronization?");
         }
         super.closeInventory(id);
         this.inventoryView = new InventoryViewImpl(this);
@@ -455,8 +458,11 @@ class PlayerImpl extends HumanImpl implements IPlayer
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
     {
         super.worldChange(oldW, newW);
-        oldW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).removeHolder(this));
-        newW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).addHolder(this));
+        this.getNetworkManager().sendPacket(new PacketPlayClientboundRespawn(newW.getDimension(), newW.getDifficulty(), this.getGameMode(), newW.getWorldType()));
+        oldW.getBossBars(false).forEach(bossBar -> bossBar.removeHolder(this));
+        newW.getBossBars(false).forEach(bossBar -> bossBar.addHolder(this));
+        this.playerChunks.reRun(this.getLocation().getChunkPos());
+        this.networkManager.sendPacket(new PacketPlayClientboundPosition(new TeleportData(this.getLocation()), 5));
     }
 
     private static class PacketMessageOutput implements MessageOutput

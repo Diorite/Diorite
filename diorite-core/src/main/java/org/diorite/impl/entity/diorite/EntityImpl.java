@@ -814,8 +814,9 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
     {
         CoreMain.debug("Entity " + this + " moved from " + oldW + " to " + newW);
-        oldW.removeEntity(this);
-        newW.addEntity(this);
+        this.remove(true);
+        this.tracker = null; // TODO better way?
+        newW.addEntity(this, false);
         // TODO add event?
     }
 

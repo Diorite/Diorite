@@ -28,7 +28,6 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundEntityTeleport;
 import org.diorite.impl.entity.IPlayer;
 
-@SuppressWarnings({"ObjectEquality"})
 public class PlayerTracker extends BaseTracker<IPlayer>
 {
     public PlayerTracker(final IPlayer entity)
@@ -39,12 +38,11 @@ public class PlayerTracker extends BaseTracker<IPlayer>
     @Override
     public void tick(final int tps, final Iterable<IPlayer> players)
     {
-        final boolean locationUpdate = this.forceLocationUpdate;
-        super.tick(tps, players);
-        if (locationUpdate) // update client position if force update = true
+        if (this.forceLocationUpdate) // update client position if force update = true
         {
             this.tracker.getNetworkManager().sendPacket(new PacketPlayClientboundEntityTeleport(this.tracker));
         }
+        super.tick(tps, players);
         //if (this.isMoving)
         //{
         //    this.tracker.getWorld().getEntityTrackers().updatePlayer(this.tracker);
@@ -56,7 +54,6 @@ public class PlayerTracker extends BaseTracker<IPlayer>
     {
         this.tracked.stream().filter(p -> p != this.tracker).forEach(p -> p.getNetworkManager().sendPacket(packet));
     }
-
 
     @Override
     public void sendToAllExceptOwn(final PacketPlayClientbound[] packet)

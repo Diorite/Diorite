@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -58,7 +57,6 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -66,6 +64,8 @@ import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
 import org.diorite.Location;
 import org.diorite.Particle;
+import org.diorite.block.Block;
+import org.diorite.block.BlockLocation;
 import org.diorite.cfg.WorldsConfig.WorldConfig;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
@@ -82,7 +82,6 @@ import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.endian.BigEndianUtils;
 import org.diorite.world.Biome;
-import org.diorite.block.Block;
 import org.diorite.world.Dimension;
 import org.diorite.world.HardcoreSettings;
 import org.diorite.world.World;
@@ -172,7 +171,7 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.add(bossBarImpl);
-        this.getPlayersInWorld().forEach(player -> bossBarImpl.addHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(bossBarImpl::addHolder);
     }
 
     @Override
@@ -180,14 +179,14 @@ public class WorldImpl implements World, Tickable
     {
         final BossBarImpl bossBarImpl = (BossBarImpl) bossBar;
         this.bossBars.remove(bossBarImpl);
-        this.getPlayersInWorld().forEach(player -> bossBarImpl.removeHolder((IPlayer) player));
+        this.getPlayersInWorld().forEach(bossBarImpl::removeHolder);
     }
 
     @Override
-    public Collection<BossBar> getBossBars(final boolean includeParents)
+    public Collection<BossBarImpl> getBossBars(final boolean includeParents)
     {
         // TODO Server-wide bossbars
-        return new ArrayList<>(this.bossBars);
+        return Collections.unmodifiableCollection(this.bossBars);
     }
 
     static void forChunksParallel(final int r, final ChunkPos center, final Consumer<ChunkPos> action)

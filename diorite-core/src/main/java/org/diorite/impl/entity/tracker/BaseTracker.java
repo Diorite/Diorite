@@ -114,7 +114,7 @@ public abstract class BaseTracker<T extends IEntity>
         double deltaY = 0;
         double deltaZ = 0;
         this.isMoving = this.forceLocationUpdate || (this.xLoc != this.tracker.getX()) || (this.yLoc != this.tracker.getY()) || (this.zLoc != this.tracker.getZ());
-        if (this.isMoving) // TODO: rethink
+        if (this.isMoving)
         {
             this.forceLocationUpdate = false;
             deltaX = this.tracker.getX() - this.xLoc;
@@ -187,22 +187,23 @@ public abstract class BaseTracker<T extends IEntity>
 
     public void updatePlayer(final IPlayer player)
     {
-        final int range = this.getTrackRange();
-        if (player != this.tracker)
+        if (player == this.tracker)
         {
-            final double dX = player.getX() - this.xLoc;
-            final double dZ = player.getZ() - this.zLoc;
-            final boolean isInTrackedRange = ! ((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range));
-            final boolean isTracked = this.tracked.contains(player);
-            if (isTracked && ! isInTrackedRange)
-            {
-                this.remove(player);
-            }
-            else if (! isTracked && isInTrackedRange)
-            {
-                this.tracked.add(player);
-                this.spawn();
-            }
+            return;
+        }
+        final int range = this.getTrackRange();
+        final double dX = player.getX() - this.xLoc;
+        final double dZ = player.getZ() - this.zLoc;
+        final boolean isInTrackedRange = ! ((dX < - range) || (dX > range) || (dZ < - range) || (dZ > range));
+        final boolean isTracked = this.tracked.contains(player);
+        if (isTracked && ! isInTrackedRange)
+        {
+            this.remove(player);
+        }
+        else if (! isTracked && isInTrackedRange)
+        {
+            this.tracked.add(player);
+            this.spawn();
         }
     }
 

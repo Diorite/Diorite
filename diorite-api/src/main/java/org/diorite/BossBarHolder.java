@@ -49,9 +49,9 @@ public interface BossBarHolder
      *
      * @return list of player's bossbars
      */
-    Collection<BossBar> getBossBars(boolean includeParents);
+    Collection<? extends BossBar> getBossBars(boolean includeParents);
 
-    default Collection<BossBar> getBossBars()
+    default Collection<? extends BossBar> getBossBars()
     {
         return this.getBossBars(false);
     }
