@@ -6,21 +6,35 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.block.Block;
-import org.diorite.inventory.InventoryType;
+import org.diorite.block.BlockLocation;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.nbt.NbtTagCompound;
-import org.diorite.tileentity.TileEntityDropper;
+import org.diorite.tileentity.TileEntityNoteBlock;
 import org.diorite.utils.math.DioriteRandom;
 
-public class TileEntityDropperImpl extends TileEntityImpl implements TileEntityDropper
+public class TileEntityNoteBlockImpl extends TileEntityImpl implements TileEntityNoteBlock
 {
     private final Block block;
-    private ItemStack[] items = new ItemStack[InventoryType.DROPPER.getSize()];
+    private       byte  note;
 
-    public TileEntityDropperImpl(final Block block)
+    public TileEntityNoteBlockImpl(final BlockLocation location, final Block block)
     {
-        super(block.getLocation());
+        super(location);
         this.block = block;
+        this.note = 0;
+    }
+
+
+    @Override
+    public byte getNote()
+    {
+        return this.note;
+    }
+
+    @Override
+    public void setNote(final byte note)
+    {
+        this.note = note;
     }
 
     @Override
@@ -58,6 +72,6 @@ public class TileEntityDropperImpl extends TileEntityImpl implements TileEntityD
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).append("items", this.items).toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("block", this.block).append("note", this.note).toString();
     }
 }

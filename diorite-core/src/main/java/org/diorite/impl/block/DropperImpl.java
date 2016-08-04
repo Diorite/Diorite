@@ -3,6 +3,7 @@ package org.diorite.impl.block;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import org.diorite.impl.inventory.block.DropperInventoryImpl;
 import org.diorite.block.Block;
 import org.diorite.block.Dropper;
 import org.diorite.inventory.block.DropperInventory;
@@ -13,11 +14,11 @@ public class DropperImpl extends BlockStateImpl implements Dropper
     private final TileEntityDropper tileEntity;
     private final DropperInventory  inventory;
 
-    public DropperImpl(final Block block, final TileEntityDropper tileEntity, final DropperInventory inventory)
+    public DropperImpl(final Block block)
     {
         super(block);
-        this.tileEntity = tileEntity;
-        this.inventory = inventory;
+        this.tileEntity = (TileEntityDropper) block.getWorld().getTileEntity(block.getLocation());
+        this.inventory = new DropperInventoryImpl(this);
     }
 
     @Override

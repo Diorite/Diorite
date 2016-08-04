@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.block.Block;
+import org.diorite.inventory.InventoryType;
 import org.diorite.inventory.item.BaseItemStack;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.FuelMat;
@@ -23,7 +24,7 @@ public class TileEntityFurnaceImpl extends TileEntityImpl implements TileEntityF
     private final Block block;
     private       short burnTime;
     private       short cookTime; //AS TICKS
-    private ItemStack[] items = new ItemStack[3];
+    private ItemStack[] items = new ItemStack[InventoryType.FURNACE.getSize()];
 
     public TileEntityFurnaceImpl(final Block block)
     {

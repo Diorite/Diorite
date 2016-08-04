@@ -1,6 +1,9 @@
-package org.diorite.mibac.nbteditor;
+package org.diorite.diorite.nbteditor;
 
 import java.util.regex.Matcher;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.Diorite;
 import org.diorite.command.Arguments;
@@ -43,5 +46,11 @@ public class NBTCommand implements CommandExecutor
         {
             this.plugin.reloadLanguage();
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("plugin", this.plugin).append("nbt", this.nbt).append("help", this.help).append("lang", this.lang).toString();
     }
 }
