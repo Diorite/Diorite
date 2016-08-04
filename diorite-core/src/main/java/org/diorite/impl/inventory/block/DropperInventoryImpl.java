@@ -18,16 +18,14 @@ public class DropperInventoryImpl extends InventoryImpl<Dropper> implements Drop
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.DROPPER.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.DROPPER.getSize()];
 
+    public DropperInventoryImpl(final Dropper holder)
     {
+        super(holder);
+
         for (int i = 0; i < this.slots.length; i++)
         {
             this.slots[i] = Slot.BASE_CONTAINER_SLOT;
         }
-    }
-
-    public DropperInventoryImpl(final Dropper holder)
-    {
-        super(holder);
     }
 
     @Override

@@ -16,16 +16,14 @@ public class BrewingStandInventoryImpl extends InventoryImpl<BrewingStand> imple
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.BREWING.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.BREWING.getSize()];
 
+    public BrewingStandInventoryImpl(final BrewingStand holder)
     {
+        super(holder);
+
         for (int i = 0; i < this.slots.length; i++)
         {
             this.slots[i] = Slot.BASE_CONTAINER_SLOT;
         }
-    }
-
-    public BrewingStandInventoryImpl(final BrewingStand holder)
-    {
-        super(holder);
     }
 
     @Override
