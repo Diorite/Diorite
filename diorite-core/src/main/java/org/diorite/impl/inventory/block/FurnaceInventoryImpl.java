@@ -19,15 +19,13 @@ public class FurnaceInventoryImpl extends InventoryImpl<Furnace> implements Furn
     private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.FURNACE.getSize());
     private final Slot[]             slots   = new Slot[InventoryType.FURNACE.getSize()];
 
-    {
-        this.slots[0] = Slot.BASE_CONTAINER_SLOT;
-        this.slots[1] = Slot.BASE_FUEL_SLOT;
-        this.slots[2] = Slot.BASE_RESULT_SLOT;
-    }
-
     public FurnaceInventoryImpl(final Furnace holder)
     {
         super(holder);
+
+        this.slots[0] = Slot.BASE_CONTAINER_SLOT;
+        this.slots[1] = Slot.BASE_FUEL_SLOT;
+        this.slots[2] = Slot.BASE_RESULT_SLOT;
     }
 
     @Override

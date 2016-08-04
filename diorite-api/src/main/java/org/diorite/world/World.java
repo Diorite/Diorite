@@ -39,6 +39,7 @@ import org.diorite.entity.Item;
 import org.diorite.entity.Player;
 import org.diorite.inventory.item.ItemStack;
 import org.diorite.material.BlockMaterialData;
+import org.diorite.tileentity.TileEntity;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.world.chunk.Chunk;
 import org.diorite.world.chunk.ChunkManager;
@@ -185,4 +186,6 @@ public interface World extends BossBarHolder
     void save();
 
     void save(boolean async);
+
+    TileEntity getTileEntity(BlockLocation location);
 }

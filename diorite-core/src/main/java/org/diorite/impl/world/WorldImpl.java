@@ -55,6 +55,7 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
+import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -192,7 +193,8 @@ public class WorldImpl implements World, Tickable
             action.accept(center);
             return;
         }
-        IntStream.rangeClosed(- r, r).parallel().forEach(x -> {
+        IntStream.rangeClosed(- r, r).parallel().forEach(x ->
+        {
             if ((x == r) || (x == - r))
             {
                 IntStream.rangeClosed(- r, r).parallel().forEach(z -> action.accept(center.add(x, z)));
@@ -1003,6 +1005,7 @@ public class WorldImpl implements World, Tickable
         this.players.stream().map(IPlayer::getNetworkManager).forEach(net -> net.sendPacket(packet));
     }
 
+    @Override
     public TileEntity getTileEntity(final BlockLocation location)
     {
         return null; //TODO

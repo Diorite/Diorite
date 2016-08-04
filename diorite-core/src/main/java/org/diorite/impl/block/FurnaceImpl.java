@@ -1,31 +1,33 @@
 package org.diorite.impl.block;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.inventory.block.FurnaceInventoryImpl;
 import org.diorite.impl.tileentity.TileEntityFurnaceImpl;
-import org.diorite.impl.world.WorldImpl;
 import org.diorite.block.Block;
 import org.diorite.block.Furnace;
 import org.diorite.inventory.block.FurnaceInventory;
 
 public class FurnaceImpl extends BlockStateImpl implements Furnace
 {
-    private final TileEntityFurnaceImpl furnace;
+    private final TileEntityFurnaceImpl tileEntity;
     private final FurnaceInventory      inventory;
 
     public FurnaceImpl(final Block block)
     {
         super(block);
 
-        furnace = (TileEntityFurnaceImpl) ((WorldImpl) block.getWorld()).getTileEntity(block.getLocation());
-        inventory = new FurnaceInventoryImpl(this);
+        this.tileEntity = (TileEntityFurnaceImpl) block.getWorld().getTileEntity(block.getLocation());
+        this.inventory = new FurnaceInventoryImpl(this);
     }
 
     @Override
-    public boolean update(boolean force, boolean applyPhysics)
+    public boolean update(final boolean force, final boolean applyPhysics)
     {
-        boolean result = super.update(force, applyPhysics);
+        final boolean result = super.update(force, applyPhysics);
 
-        if(result)
+        if (result)
         {
             //TODO update tentity
         }
@@ -33,34 +35,39 @@ public class FurnaceImpl extends BlockStateImpl implements Furnace
         return result;
     }
 
-    //TODO: all methods below
     @Override
     public short getBurnTime()
     {
-        return 0;
+        return this.tileEntity.getBurnTime();
     }
 
     @Override
     public void setBurnTime(final short burnTime)
     {
-
+        this.tileEntity.setBurnTime(burnTime);
     }
 
     @Override
     public short getCookTime()
     {
-        return 0;
+        return this.tileEntity.getCookTime();
     }
 
     @Override
     public void setCookTime(final short cookTime)
     {
-
+        this.tileEntity.setCookTime(cookTime);
     }
 
     @Override
     public FurnaceInventory getInventory()
     {
-        return inventory;
+        return this.inventory;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("tileEntity", this.tileEntity).append("inventory", this.inventory).toString();
     }
 }

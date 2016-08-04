@@ -1,23 +1,24 @@
 package org.diorite.impl.block;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.impl.world.chunk.ChunkImpl;
 import org.diorite.block.Block;
 import org.diorite.block.BlockLocation;
 import org.diorite.block.BlockState;
-import org.diorite.cfg.magic.MagicNumber;
-import org.diorite.cfg.magic.MagicNumbers;
 import org.diorite.material.BlockMaterialData;
 import org.diorite.world.World;
 
 public class BlockStateImpl implements BlockState
 {
-    private final int x;
-    private final int y;
-    private final int z;
+    private final int               x;
+    private final int               y;
+    private final int               z;
     private final WorldImpl         world;
     private final ChunkImpl         chunk;
-    private       BlockMaterialData type;
+    private final BlockMaterialData type;
 
     public BlockStateImpl(final Block block)
     {
@@ -29,7 +30,7 @@ public class BlockStateImpl implements BlockState
         this.type = block.getType();
     }
 
-    public static BlockStateImpl getBlockState(World world, BlockLocation location)
+    public static BlockStateImpl getBlockState(final World world, final BlockLocation location)
     {
         return new BlockStateImpl(world.getBlock(location));
     }
@@ -37,31 +38,31 @@ public class BlockStateImpl implements BlockState
     @Override
     public int getX()
     {
-        return x;
+        return this.x;
     }
 
     @Override
     public int getY()
     {
-        return y;
+        return this.y;
     }
 
     @Override
     public int getZ()
     {
-        return z;
+        return this.z;
     }
 
     @Override
     public Block getBlock()
     {
-        return world.getBlock(x, y, z);
+        return this.world.getBlock(this.x, this.y, this.z);
     }
 
     @Override
     public BlockMaterialData getType()
     {
-        return type;
+        return this.type;
     }
 
     @Override
@@ -73,35 +74,35 @@ public class BlockStateImpl implements BlockState
     @Override
     public World getWorld()
     {
-        return world;
+        return this.world;
     }
 
     @Override
     public BlockLocation getLocation()
     {
-        return new BlockLocation(x, y, z);
+        return new BlockLocation(this.x, this.y, this.z);
     }
 
     @Override
     public boolean update()
     {
-        return update(false);
+        return this.update(false);
     }
 
     @Override
     public boolean update(final boolean force)
     {
-        return update(force, true);
+        return this.update(force, true);
     }
 
     @Override
     public boolean update(final boolean force, final boolean applyPhysics)
     {
-        requirePlaced();
+        this.requirePlaced();
 
-        Block block = getBlock();
+        Block block = this.getBlock();
 
-        if(block.getType() != type && !force)
+        if ((block.getType() != this.type) && ! force)
         {
             return false;
         }
@@ -114,14 +115,20 @@ public class BlockStateImpl implements BlockState
     @Override
     public boolean isPlaced()
     {
-        return world != null;
+        return this.world != null;
     }
 
     protected void requirePlaced()
     {
-        if(!isPlaced())
+        if (! this.isPlaced())
         {
             throw new IllegalStateException("Block must be placed to call this method");
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("x", this.x).append("y", this.y).append("z", this.z).append("world", this.world).append("chunk", this.chunk).append("type", this.type).toString();
     }
 }
