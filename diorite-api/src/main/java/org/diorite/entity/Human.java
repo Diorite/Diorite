@@ -36,7 +36,7 @@ import org.diorite.permissions.GroupablePermissionsContainer;
 import org.diorite.utils.others.NamedUUID;
 
 /**
- * Represent human entity, player or npc etc...
+ * Represents human entity, player or npc etc...
  */
 public interface Human extends LivingEntity, InventoryHolder, ArmoredEntity, HumanCommandSender
 {

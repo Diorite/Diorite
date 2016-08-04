@@ -35,7 +35,7 @@ import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.utils.others.Colorable;
 
 /**
- * Represent area effect entity. <br>
+ * Represents area effect entity. <br>
  * Area effect entity is a area filled up with selected type of particles
  * that can interact with other entites, like by giving them a status effect.
  */

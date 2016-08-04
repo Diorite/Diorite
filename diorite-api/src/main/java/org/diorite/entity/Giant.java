@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent giant entity.
+ * Represents giant entity.
  */
 public interface Giant extends MonsterEntity
 {

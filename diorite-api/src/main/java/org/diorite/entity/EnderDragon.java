@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent ender dragon entity.
+ * Represents ender dragon entity.
  */
 public interface EnderDragon extends MonsterEntity
 {

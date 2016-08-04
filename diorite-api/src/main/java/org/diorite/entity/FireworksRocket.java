@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent fireworks rocket entity.
+ * Represents fireworks rocket entity.
  */
 public interface FireworksRocket extends Projectile, ObjectEntity
 {

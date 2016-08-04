@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent blaze entity.
+ * Represents blaze entity.
  */
 public interface Blaze extends MonsterEntity
 {

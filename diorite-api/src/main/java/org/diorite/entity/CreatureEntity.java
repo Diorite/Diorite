@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent creature entity.
+ * Represents creature entity.
  */
 public interface CreatureEntity extends InsentientEntity
 {

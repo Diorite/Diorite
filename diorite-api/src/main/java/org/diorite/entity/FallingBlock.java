@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent falling block entity.
+ * Represents falling block entity.
  */
 public interface FallingBlock extends ObjectEntity
 {

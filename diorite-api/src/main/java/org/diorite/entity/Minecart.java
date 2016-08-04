@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent minecart entity.
+ * Represents minecart entity.
  */
 public interface Minecart extends AbstractMinecart
 {

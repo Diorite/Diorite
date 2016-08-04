@@ -27,7 +27,7 @@ package org.diorite.entity;
 import org.diorite.entity.attrib.Attributable;
 
 /**
- * Represent attributable entity.
+ * Represents attributable entity.
  */
 public interface AttributableEntity extends Attributable, Entity
 {

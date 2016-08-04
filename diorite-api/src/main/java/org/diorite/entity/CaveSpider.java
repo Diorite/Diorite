@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent cave spider entity.
+ * Represents cave spider entity.
  */
 public interface CaveSpider extends MonsterEntity
 {

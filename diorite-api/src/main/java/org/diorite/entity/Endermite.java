@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent endermite entity.
+ * Represents endermite entity.
  */
 public interface Endermite extends MonsterEntity
 {
