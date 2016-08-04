@@ -40,5 +40,6 @@ public interface Furnace extends BlockState, BlockContainer
      *
      * @return inventory
      */
+    @Override
     FurnaceInventory getInventory();
 }

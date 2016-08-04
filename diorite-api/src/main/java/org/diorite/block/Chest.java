@@ -12,5 +12,6 @@ public interface Chest extends BlockState, BlockContainer
      *
      * @return inventory
      */
+    @Override
     ChestInventory getInventory();
 }

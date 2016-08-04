@@ -1,19 +1,22 @@
 package org.diorite.impl.inventory.block;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWindowItems;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.inventory.InventoryImpl;
 import org.diorite.impl.inventory.item.ItemStackImplArray;
-import org.diorite.block.Chest;
+import org.diorite.block.Dispenser;
 import org.diorite.entity.Player;
 import org.diorite.inventory.InventoryType;
-import org.diorite.inventory.block.ChestInventory;
+import org.diorite.inventory.block.DispenserInventory;
 import org.diorite.inventory.slot.Slot;
 
-public class ChestInventoryImpl extends InventoryImpl<Chest> implements ChestInventory
+public class DispenserInventoryImpl extends InventoryImpl<Dispenser> implements DispenserInventory
 {
-    private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.CHEST.getSize());
-    private final Slot[]             slots   = new Slot[InventoryType.CHEST.getSize()];
+    private final ItemStackImplArray content = ItemStackImplArray.create(InventoryType.DISPENSER.getSize());
+    private final Slot[]             slots   = new Slot[InventoryType.DISPENSER.getSize()];
 
     {
         for (int i = 0; i < this.slots.length; i++)
@@ -22,17 +25,9 @@ public class ChestInventoryImpl extends InventoryImpl<Chest> implements ChestInv
         }
     }
 
-    public ChestInventoryImpl(final Chest holder)
+    public DispenserInventoryImpl(final Dispenser holder)
     {
         super(holder);
-
-        //TODO: set slots
-    }
-
-    @Override
-    public ItemStackImplArray getArray()
-    {
-        return this.content;
     }
 
     @Override
@@ -61,6 +56,18 @@ public class ChestInventoryImpl extends InventoryImpl<Chest> implements ChestInv
     @Override
     public InventoryType getType()
     {
-        return InventoryType.CHEST;
+        return InventoryType.DISPENSER;
+    }
+
+    @Override
+    public ItemStackImplArray getArray()
+    {
+        return this.content;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("content", this.content).append("slots", this.slots).toString();
     }
 }

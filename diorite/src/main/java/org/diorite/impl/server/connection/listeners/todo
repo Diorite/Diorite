@@ -1,0 +1,42 @@
+4 Play:
+  4.1 Clientbound:
+    4.1.3 Spawn Global Entity
+    4.1.4 Spawn Mob
+    4.1.6 Spawn Player
+    4.1.8 Statistics
+    4.1.10 Update Block Entity
+    4.1.11 Block Action
+    4.1.12 Block Change
+    4.1.17 Multi Block Change
+    4.1.18 Confirm Transaction (clientbound)
+    4.1.25 Plugin Message (clientbound)
+    4.1.26 Named Sound Effect
+    4.1.29 Explosion
+    4.1.33 Chunk Data
+    4.1.34 Effect
+    4.1.35 Particle
+    4.1.37 Map
+    4.1.41 Entity
+    4.1.42 Vehicle Move (clientbound)
+    4.1.43 Open Sign Editor
+    4.1.44 Player Abilities (clientbound)
+    4.1.45 Combat Event
+    4.1.46 Player List Item
+    4.1.47 Player Position And Look (clientbound)
+    4.1.49 Destroy Entities
+    4.1.50 Remove Entity Effect
+    4.1.55 Camera
+    4.1.57 Display Scoreboard
+    4.1.59 Attach Entity
+    4.1.60 Entity Velocity
+    4.1.61 Entity Equipment
+    4.1.62 Set Experience
+    4.1.64 Scoreboard Objective
+    4.1.65 Set Passengers
+    4.1.66 Teams
+    4.1.67 Update Score
+    4.1.68 Spawn Position
+    4.1.71 Sound Effect
+    4.1.72 Player List Header And Footer
+    4.1.75 Entity Properties
+    4.1.76 Entity Effect
