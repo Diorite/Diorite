@@ -72,11 +72,19 @@ public class TileEntityBeaconImpl extends TileEntityImpl implements TileEntityBe
 
     protected boolean checkPyramid(final BlockLocation location, final int level)
     {
-        final int size = 1 + (level << 1);
+        // TODO double check math
+        // 3x3 -- level 1
+        // 1 + 1*2 / 2 - 0.5 =
+        // 1 + 2   / 2 - 0.5 =
+        // 3       / 2 - 0.5 =
+        // 1.5         - 0.5 =
+        // 1
+        // For loop: -1, 0, 1
+        final int size = (int) (((1 + (level << 1)) / 2) - 0.5);
 
-        for (int x = 0; x < size; x++)
+        for (int x = - size; x < size; x++)
         {
-            for (int z = 0; z < size; z++)
+            for (int z = - size; z < size; z++)
             {
                 if (! this.isValidBlock(location.add(x, 0, z).getBlock().getType()))
                 {
