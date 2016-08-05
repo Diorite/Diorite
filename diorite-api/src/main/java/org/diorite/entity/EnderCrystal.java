@@ -27,7 +27,7 @@ package org.diorite.entity;
 import org.diorite.block.BlockLocation;
 
 /**
- * Represent ender crystal entity.
+ * Represents ender crystal entity.
  */
 public interface EnderCrystal extends Entity, ObjectEntity
 {

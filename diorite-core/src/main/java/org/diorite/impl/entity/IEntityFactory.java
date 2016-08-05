@@ -31,10 +31,11 @@ import org.diorite.ILocation;
 import org.diorite.auth.GameProfile;
 import org.diorite.entity.EntityType;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.world.WorldGroup;
 
 public interface IEntityFactory extends EntityFactory
 {
-    IPlayer createPlayer(GameProfile profile, CoreNetworkManager networkManager, ILocation location);
+    IPlayer createPlayer(GameProfile profile, CoreNetworkManager networkManager, WorldGroup worldGroup);
 
     @Override
     IEntity createEntity(EntityType type, ILocation location);

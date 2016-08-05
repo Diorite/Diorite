@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent bat entity.
+ * Represents bat entity.
  */
 public interface Bat extends AmbientEntity
 {

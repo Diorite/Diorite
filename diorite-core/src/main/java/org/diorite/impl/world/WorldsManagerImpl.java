@@ -59,6 +59,7 @@ import org.diorite.nbt.NbtOutputStream;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.DioriteUtils;
 import org.diorite.world.World;
+import org.diorite.world.WorldGroup;
 import org.diorite.world.WorldsManager;
 
 public class WorldsManagerImpl implements WorldsManager
@@ -90,8 +91,7 @@ public class WorldsManagerImpl implements WorldsManager
     public void addWorld(final WorldImpl world)
     {
         this.worlds.put(world.getName(), world);
-
-        DioriteCore.getInstance().getTicker().getGroups().add(new WorldTickGroup(world)); // TODO: something better?
+        this.core.getTicker().getGroups().add(new WorldTickGroup(world)); // TODO: something better?
     }
 
     public void removeWorld(final String worldName)
@@ -172,6 +172,12 @@ public class WorldsManagerImpl implements WorldsManager
     }
 
     @Override
+    public WorldGroup getGroup(final String name)
+    {
+        return this.groups.get(name);
+    }
+
+    @Override
     public Set<? extends Player> getPlayersInWorld(final World world)
     {
         return world.getPlayersInWorld();
@@ -203,7 +209,7 @@ public class WorldsManagerImpl implements WorldsManager
             }).collect(Collectors.toList()));
         }
         this.logger.info("Loading " + loaders.size() + " worlds...");
-        loaders.stream().forEach(Runnable::run);
+        loaders.forEach(Runnable::run);
         this.setDefaultWorld(this.getWorld(this.config.getDefaultWorld()));
         this.logger.info("Loaded all " + loaders.size() + " worlds!");
     }

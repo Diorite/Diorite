@@ -27,7 +27,7 @@ package org.diorite.entity;
 import org.diorite.inventory.item.ItemStack;
 
 /**
- * Represent item frame entity.
+ * Represents item frame entity.
  */
 public interface ItemFrame extends ObjectEntity
 {

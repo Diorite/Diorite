@@ -24,10 +24,13 @@
 
 package org.diorite.impl.entity.diorite;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -43,11 +46,14 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundGameStateChange.ReasonCodes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundOpenWindow;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPosition;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundResourcePackSend;
+import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundRespawn;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundTabComplete;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
@@ -62,6 +68,7 @@ import org.diorite.BossBar;
 import org.diorite.GameMode;
 import org.diorite.ImmutableLocation;
 import org.diorite.Particle;
+import org.diorite.TeleportData;
 import org.diorite.auth.GameProfile;
 import org.diorite.chat.ChatPosition;
 import org.diorite.chat.component.BaseComponent;
@@ -72,6 +79,8 @@ import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerQuitEvent;
 import org.diorite.inventory.Inventory;
+import org.diorite.nbt.NbtOutputStream;
+import org.diorite.nbt.NbtTagCompound;
 import org.diorite.utils.math.DioriteRandom;
 import org.diorite.utils.math.DioriteRandomUtils;
 import org.diorite.utils.math.geometry.LookupShape;
@@ -92,7 +101,6 @@ class PlayerImpl extends HumanImpl implements IPlayer
     private       Locale             preferredLocale;
     private       InventoryViewImpl  inventoryView;
 
-    // TODO: add saving/loading data to/from NBT
     PlayerImpl(final DioriteCore core, final GameProfile gameProfile, final CoreNetworkManager networkManager, final int id, final ImmutableLocation location)
     {
         super(core, gameProfile, id, location);
@@ -371,12 +379,20 @@ class PlayerImpl extends HumanImpl implements IPlayer
     }
 
     @Override
+    public void setAbilitiesFromClient(final PacketPlayServerboundAbilities abilities)
+    {
+        // all other abilities incoming from client will be ignored
+        this.getAbilities().setFlying(this.getAbilities().isCanFly() && abilities.isFlying());
+        this.updateAbilities();
+    }
+
+    @Override
     public void closeInventory(final int id)
     {
         CoreMain.debug("Closing inventory with ID " + id);
         if (this.inventoryView.getId() != id)
         {
-            CoreMain.debug("InventoryView ID != Close Inventory ID. Sync loosed?");
+            CoreMain.debug("InventoryView ID != Close Inventory ID. Lost synchronization?");
         }
         super.closeInventory(id);
         this.inventoryView = new InventoryViewImpl(this);
@@ -406,8 +422,30 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public void onLogout()
     {
         this.remove(true);
-
         EventType.callEvent(new PlayerQuitEvent(this));
+        try (final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(this.getGlobalData()))) // save current WorldGroup in global data
+        {
+            final NbtTagCompound compound = new NbtTagCompound();
+            compound.setString("WorldGroup", this.getWorld().getWorldGroup().getName());
+            nbtStream.write(compound);
+            nbtStream.flush();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try (final NbtOutputStream nbtOutputStream = new NbtOutputStream(new FileOutputStream(this.getLocalGroupData())))
+        {
+            final NbtTagCompound nbtTagCompound = new NbtTagCompound("Player");
+            this.saveToNbt(nbtTagCompound);
+            nbtOutputStream.write(nbtTagCompound);
+            nbtOutputStream.flush();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -422,6 +460,38 @@ class PlayerImpl extends HumanImpl implements IPlayer
     public Player getSenderEntity()
     {
         return this;
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbt)
+    {
+        super.loadFromNbt(nbt);
+        this.setGameMode(GameMode.getByEnumOrdinal(nbt.getInt("playerGameType", this.getWorld().getDefaultGameMode().ordinal())));
+        this.setHeldItemSlot(nbt.getInt("SelectedItemSlot", 0));
+
+        final NbtTagCompound abilities = Optional.ofNullable(nbt.<NbtTagCompound>getTag("abilities")).orElse(new NbtTagCompound());
+        this.setWalkSpeed(abilities.getFloat("walkSpeed", 0.1));
+        this.setCanFly(abilities.getBoolean("mayfly", false));
+        this.getAbilities().setFlying(abilities.getBoolean("flying", false));
+        this.setFlySpeed(abilities.getFloat("flySpeed", 0.05));
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbt)
+    {
+        super.saveToNbt(nbt);
+        nbt.remove("id"); // Player will not have id
+        nbt.setString("Diorite.World", this.getWorld().getName());
+
+        nbt.setInt("playerGameType", this.getGameMode().ordinal());
+        nbt.setInt("SelectedItemSlot", this.getHeldItemSlot());
+
+        final NbtTagCompound abilities = new NbtTagCompound("abilities");
+        abilities.setFloat("walkSpeed", this.getWalkSpeed());
+        abilities.setBoolean("mayfly", this.canFly());
+        abilities.setBoolean("flying", this.getAbilities().isFlying());
+        abilities.setFloat("flySpeed", this.getFlySpeed());
+        nbt.addTag(abilities);
     }
 
     @Override
@@ -455,8 +525,11 @@ class PlayerImpl extends HumanImpl implements IPlayer
     protected void worldChange(final WorldImpl oldW, final WorldImpl newW)
     {
         super.worldChange(oldW, newW);
-        oldW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).removeHolder(this));
-        newW.getBossBars(false).forEach(bossBar -> ((BossBarImpl) bossBar).addHolder(this));
+        this.getNetworkManager().sendPacket(new PacketPlayClientboundRespawn(newW.getDimension(), newW.getDifficulty(), this.getGameMode(), newW.getWorldType()));
+        oldW.getBossBars(false).forEach(bossBar -> bossBar.removeHolder(this));
+        newW.getBossBars(false).forEach(bossBar -> bossBar.addHolder(this));
+        this.playerChunks.reRun(this.getLocation().getChunkPos());
+        this.networkManager.sendPacket(new PacketPlayClientboundPosition(new TeleportData(this.getLocation()), 5));
     }
 
     private static class PacketMessageOutput implements MessageOutput

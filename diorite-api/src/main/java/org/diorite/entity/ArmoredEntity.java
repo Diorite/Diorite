@@ -27,7 +27,7 @@ package org.diorite.entity;
 import org.diorite.inventory.EntityEquipment;
 
 /**
- * Entity that can hold armor/weapon.
+ * Represents entity that can hold armor/weapon.
  */
 public interface ArmoredEntity extends LivingEntity
 {

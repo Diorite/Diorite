@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent fishing hook entity.
+ * Represents fishing hook entity.
  */
 public interface FishingHook extends ObjectEntity
 {

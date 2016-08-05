@@ -244,6 +244,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
         }
         this.gameMode = gameMode;
         this.core.getPlayersManager().forEach(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayClientboundPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.setCanFly(this.gameMode.equals(GameMode.CREATIVE) || this.gameMode.equals(GameMode.SPECTATOR));
     }
 
     @Override
@@ -328,6 +329,12 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
+    public boolean hasGravity()
+    {
+        return super.hasGravity() && !this.abilities.isFlying();
+    }
+
+    @Override
     public float getWalkSpeed()
     {
         return this.abilities.getWalkingSpeed();
@@ -354,7 +361,6 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     @Override
     public void setAbilities(final PacketPlayServerboundAbilities abilities)
     {
-        // TOOD: I should check what player want change here (cheats)
         this.abilities.setCanFly(abilities.isCanFly());
         this.abilities.setFlying(abilities.isFlying());
         this.abilities.setWalkingSpeed(abilities.getWalkingSpeed());

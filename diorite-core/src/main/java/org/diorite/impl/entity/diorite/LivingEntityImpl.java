@@ -34,6 +34,7 @@ import org.diorite.impl.entity.meta.entry.EntityMetadataByteEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataFloatEntry;
 import org.diorite.impl.entity.meta.entry.EntityMetadataIntEntry;
 import org.diorite.ImmutableLocation;
+import org.diorite.nbt.NbtTagCompound;
 
 abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivingEntity
 {
@@ -57,5 +58,19 @@ abstract class LivingEntityImpl extends AttributableEntityImpl implements ILivin
         this.metadata.add(new EntityMetadataIntEntry(META_KEY_LIVING_POTION_EFFECT_COLOR, 0));
         this.metadata.add(new EntityMetadataBooleanEntry(META_KEY_LIVING_POTION_IS_AMBIENT, false));
         this.metadata.add(new EntityMetadataIntEntry(META_KEY_LIVING_ARROWS_IN_BODY, 0));
+    }
+
+    @Override
+    public void loadFromNbt(final NbtTagCompound nbt)
+    {
+        super.loadFromNbt(nbt);
+        this.setHealth(nbt.getFloat("Health", this.getHealth()));
+    }
+
+    @Override
+    public void saveToNbt(final NbtTagCompound nbt)
+    {
+        super.saveToNbt(nbt);
+        nbt.setFloat("Health", this.getHealth()); // TODO This will be in EntityImpl?
     }
 }

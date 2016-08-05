@@ -24,7 +24,10 @@
 
 package org.diorite.impl.entity;
 
+import java.io.File;
+
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.InventoryViewImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
@@ -44,6 +47,22 @@ public interface IPlayer extends IHuman, Player
 
     PlayerChunksImpl getPlayerChunks();
 
+    /**
+     * @return file that contains player data shared between all world groups
+     */
+    default File getGlobalData()
+    {
+        return this.getCore().getPlayersManager().getGlobalPlayerData(this.getGameProfile());
+    }
+
+    /**
+     * @return file that contains player data stored in current world group
+     */
+    default File getLocalGroupData()
+    {
+        return this.getWorld().getWorldGroup().getPlayerData(this.getGameProfile());
+    }
+
     @Override
     PlayerInventoryImpl getInventory();
 
@@ -57,4 +76,6 @@ public interface IPlayer extends IHuman, Player
 
     @Override
     InventoryViewImpl getInventoryView();
+
+    void setAbilitiesFromClient(final PacketPlayServerboundAbilities abilities);
 }

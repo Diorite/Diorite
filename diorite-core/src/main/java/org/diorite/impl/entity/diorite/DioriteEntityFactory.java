@@ -24,9 +24,13 @@
 
 package org.diorite.impl.entity.diorite;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -105,7 +109,6 @@ import org.diorite.impl.entity.IZombie;
 import org.diorite.impl.world.WorldImpl;
 import org.diorite.ILocation;
 import org.diorite.ImmutableLocation;
-import org.diorite.Location;
 import org.diorite.auth.GameProfile;
 import org.diorite.entity.AreaEffectCloud;
 import org.diorite.entity.ArmorStand;
@@ -175,9 +178,13 @@ import org.diorite.entity.Wither;
 import org.diorite.entity.WitherSkull;
 import org.diorite.entity.Wolf;
 import org.diorite.entity.Zombie;
+import org.diorite.nbt.NbtInputStream;
+import org.diorite.nbt.NbtLimiter;
 import org.diorite.nbt.NbtTagCompound;
 import org.diorite.nbt.NbtTagDouble;
 import org.diorite.nbt.NbtTagFloat;
+import org.diorite.world.World;
+import org.diorite.world.WorldGroup;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
@@ -691,12 +698,8 @@ public class DioriteEntityFactory implements IEntityFactory
     @Override
     public IEntity createEntity(final NbtTagCompound nbt, final WorldImpl world)
     {
-        final Iterator<NbtTagDouble> pos = nbt.getList("Pos", NbtTagDouble.class).iterator();
-        final Iterator<NbtTagFloat> rotation = nbt.getList("Rotation", NbtTagFloat.class).iterator();
-        final ILocation entityLocation = new Location(pos.next().getValue(), pos.next().getValue(), pos.next().getValue(), rotation.next().getValue(), rotation.next().getValue(), world);
         final EntityType entityType = EntityType.getByEntityName(nbt.getString("id"));
-
-        final IEntity entity = this.createEntity(entityType, entityLocation);
+        final IEntity entity = this.createEntity(entityType, this.loadLocationFromNbt(world, nbt));
         entity.loadFromNbt(nbt);
 
         return entity;
@@ -721,9 +724,42 @@ public class DioriteEntityFactory implements IEntityFactory
     }
 
     @Override
-    public IPlayer createPlayer(final GameProfile profile, final CoreNetworkManager networkManager, final ILocation location)
+    public IPlayer createPlayer(final GameProfile profile, final CoreNetworkManager networkManager, final WorldGroup worldGroup)
     {
-        return new PlayerImpl(this.core, profile, networkManager, IEntity.getNextEntityID(), location.toImmutableLocation());
+        final NbtTagCompound playerDat;
+        final File playerDatFile = worldGroup.getPlayerData(profile);
+        if (playerDatFile.exists() && playerDatFile.isFile())
+        {
+            try (final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(playerDatFile)))
+            {
+                playerDat = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getDefault());
+            }
+            catch (final IOException e)
+            {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        else
+        {
+            playerDat = new NbtTagCompound();
+        }
+        final World world = Optional.ofNullable(this.core.getWorldsManager().getWorld(playerDat.getString("Diorite.World"))).orElse(this.core.getWorldsManager().getDefaultWorld());
+
+        final ImmutableLocation playerLoc;
+        if (! playerDat.containsTag("Pos") || ! playerDat.containsTag("Rotation")) // If player file doesn't contain location, use world's spawn
+        {
+            playerLoc = world.getSpawn();
+        }
+        else
+        {
+            playerLoc = this.loadLocationFromNbt(world, playerDat);
+        }
+
+        final PlayerImpl player = new PlayerImpl(this.core, profile, networkManager, IEntity.getNextEntityID(), playerLoc);
+        player.loadFromNbt(playerDat);
+
+        return player;
     }
 
     @Override
@@ -736,5 +772,12 @@ public class DioriteEntityFactory implements IEntityFactory
     public EntityType getEntityTypeByNetworkID(final int id, final boolean isObject)
     {
         return EntityType.getByEnumOrdinal(isObject ? this.networkToEnumObj.get(id) : this.networkToEnumEnt.get(id));
+    }
+
+    private ImmutableLocation loadLocationFromNbt(final World world, final NbtTagCompound nbt)
+    {
+        final Iterator<NbtTagDouble> pos = nbt.getList("Pos", NbtTagDouble.class).iterator();
+        final Iterator<NbtTagFloat> rotation = nbt.getList("Rotation", NbtTagFloat.class).iterator();
+        return new ImmutableLocation(pos.next().getValue(), pos.next().getValue(), pos.next().getValue(), rotation.next().getValue(), rotation.next().getValue(), world);
     }
 }

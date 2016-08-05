@@ -26,7 +26,6 @@ package org.diorite.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -47,17 +46,14 @@ import org.diorite.impl.connection.packets.Packet;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundKeepAlive;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundPlayerInfo;
 import org.diorite.impl.entity.IPlayer;
-import org.diorite.impl.world.WorldImpl;
-import org.diorite.GameMode;
-import org.diorite.ImmutableLocation;
+import org.diorite.auth.GameProfile;
 import org.diorite.entity.Player;
 import org.diorite.event.EventType;
 import org.diorite.event.player.PlayerJoinEvent;
 import org.diorite.nbt.NbtInputStream;
 import org.diorite.nbt.NbtLimiter;
-import org.diorite.nbt.NbtOutputStream;
-import org.diorite.nbt.NbtTag;
 import org.diorite.nbt.NbtTagCompound;
+import org.diorite.world.WorldGroup;
 
 public class PlayersManagerImpl implements Tickable
 {
@@ -73,81 +69,34 @@ public class PlayersManagerImpl implements Tickable
         this.keepAliveTimer = (int) TimeUnit.SECONDS.toMillis(this.core.getKeepAliveTimer());
     }
 
+    public File getGlobalPlayerData(final GameProfile gameProfile)
+    {
+        return new File("players", gameProfile.getId() + ".dat");
+    }
+
     public IPlayer createPlayer(final GameProfileImpl gameProfile, final CoreNetworkManager networkManager)
-    {// TODO: loading player
-        //noinspection MagicNumber
-
-        WorldImpl defaultWorld = this.core.getWorldsManager().getDefaultWorld();
-
-        ImmutableLocation destLocation = defaultWorld.getSpawn();
-        GameMode destGameMode = GameMode.SURVIVAL;
-
-        File playerDataFile = new File("players" + File.separator + gameProfile.getId().toString() + ".dat");
-
-        if(!playerDataFile.exists() || !playerDataFile.isFile())
+    {
+        final WorldGroup worldGroup;
+        final File playerDataFile = this.getGlobalPlayerData(gameProfile);
+        if (playerDataFile.exists() && playerDataFile.isFile())
         {
-            try
+            try (final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(playerDataFile)))
             {
-                playerDataFile.createNewFile();
+                final NbtTagCompound globalData = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
+                worldGroup = this.core.getWorldsManager().getGroup(globalData.getString("WorldGroup"));
             }
             catch (IOException e)
             {
                 e.printStackTrace();
-            }
-
-            try(final NbtOutputStream nbtStream = new NbtOutputStream(new FileOutputStream(playerDataFile)))
-            {
-                final NbtTagCompound nbt = new NbtTagCompound();
-                nbt.setString("WorldGroup", this.core.getWorldsManager().getDefaultWorld().getWorldGroup().getName());
-                nbt.setString("World", this.core.getWorldsManager().getDefaultWorld().getName());
-
-                nbtStream.write(nbt);
-                nbtStream.flush();
-                nbtStream.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
+                return null;
             }
         }
-        else if(playerDataFile.exists() || playerDataFile.isFile())
+        else
         {
-            try(final NbtInputStream nbtStream = new NbtInputStream(new FileInputStream(playerDataFile)))
-            {
-                NbtTagCompound nbt = (NbtTagCompound) nbtStream.readTag(NbtLimiter.getUnlimited());
-
-                final String groupName = nbt.getString("WorldGroup");
-                final String worldName = nbt.getString("World");
-
-                WorldImpl destWorld = this.core.getWorldsManager().getWorld(worldName);
-
-                if(destWorld != null)
-                {
-                    File worldPlayerDataFile = new File("worlds" + File.separator + groupName + File.separator + "_PlayerData_" + File.separator + worldName + "_" + gameProfile.getId().toString() + ".dat");
-
-                    try(final NbtInputStream nbtStream2 = new NbtInputStream(new FileInputStream(worldPlayerDataFile)))
-                    {
-                        NbtTagCompound nbt2 = (NbtTagCompound) nbtStream2.readTag(NbtLimiter.getUnlimited());
-
-                        destLocation = new ImmutableLocation(nbt2.getDouble("PosX"), nbt2.getDouble("PosY"), nbt2.getDouble("PosZ"), nbt2.getFloat("Yaw"), nbt2.getFloat("Pitch"), destWorld);
-                        destGameMode = GameMode.getByEnumName(nbt2.getString("GameMode"));
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            worldGroup = this.core.getWorldsManager().getDefaultWorld().getWorldGroup();
         }
 
-        IPlayer player = this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, destLocation);
-        player.setGameMode(destGameMode);
-
-        return player;
+        return this.core.getServerManager().getEntityFactory().createPlayer(gameProfile, networkManager, worldGroup);
     }
 
     public void playerJoin(final IPlayer player)
@@ -260,7 +209,7 @@ public class PlayersManagerImpl implements Tickable
 
     public void forEach(final Consumer<IPlayer> consumer)
     {
-        this.players.values().stream().forEach(consumer);
+        this.players.values().forEach(consumer);
     }
 
     public void forEachExcept(final Player except, final Predicate<IPlayer> predicate, final Consumer<IPlayer> consumer)

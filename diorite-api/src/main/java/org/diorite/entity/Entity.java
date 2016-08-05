@@ -39,7 +39,7 @@ import org.diorite.utils.math.geometry.LookupShape;
 import org.diorite.world.World;
 
 /**
- * Represent entity.
+ * Represents entity.
  */
 public interface Entity extends GameObject, Synchronizable
 {

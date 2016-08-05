@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent mooshrom cow entity.
+ * Represents mooshrom cow entity.
  */
 public interface MooshroomCow extends AnimalEntity
 {

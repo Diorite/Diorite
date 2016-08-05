@@ -25,7 +25,7 @@
 package org.diorite.entity;
 
 /**
- * Represent insentient entity.
+ * s insentient entity.
  */
 public interface InsentientEntity extends LivingEntity
 {
