@@ -30,13 +30,13 @@ import org.diorite.tileentity.TileEntityCommandBlock;
 
 public class CommandBlockImpl extends BlockStateImpl implements CommandBlock
 {
-    private final TileEntityCommandBlock commandBlock;
+    private final TileEntityCommandBlock tileEntity;
 
     public CommandBlockImpl(final Block block)
     {
         super(block);
 
-        this.commandBlock = (TileEntityCommandBlock) block.getWorld().getTileEntity(block.getLocation());
+        this.tileEntity = (TileEntityCommandBlock) block.getWorld().getTileEntity(block.getLocation());
 
         //TODO: set command and name (get values from tile entity)
     }
@@ -57,24 +57,24 @@ public class CommandBlockImpl extends BlockStateImpl implements CommandBlock
     @Override
     public String getCommand()
     {
-        return this.commandBlock.getCommand();
+        return this.tileEntity.getCommand();
     }
 
     @Override
     public void setCommand(final String command)
     {
-        this.commandBlock.setCommand(command);
+        this.tileEntity.setCommand(command);
     }
 
     @Override
     public String getName()
     {
-        return this.commandBlock.getName();
+        return this.tileEntity.getName();
     }
 
     @Override
     public void setName(final String name)
     {
-        this.commandBlock.setName(name);
+        this.tileEntity.setName(name);
     }
 }
