@@ -244,6 +244,7 @@ class HumanImpl extends LivingEntityImpl implements IHuman
         }
         this.gameMode = gameMode;
         this.core.getPlayersManager().forEach(new PacketPlayClientboundPlayerInfo(PacketPlayClientboundPlayerInfo.PlayerInfoAction.UPDATE_GAMEMODE, new PacketPlayClientboundPlayerInfo.PlayerInfoData(this.getUniqueID(), gameMode)));
+        this.setCanFly(this.gameMode.equals(GameMode.CREATIVE) || this.gameMode.equals(GameMode.SPECTATOR));
     }
 
     @Override
