@@ -236,7 +236,14 @@ public class PlayListener implements PacketPlayServerboundListener
     {
         if (this.player.getGameMode().equals(GameMode.CREATIVE))
         {
-            this.player.getInventory().setItem(packet.getSlot(), packet.getItem());
+            if (packet.getSlot() == -1)
+            {
+                this.player.dropItem(packet.getItem());
+            }
+            else
+            {
+                this.player.getInventory().setItem(packet.getSlot(), packet.getItem());
+            }
         }
 //        else
 //        {
