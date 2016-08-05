@@ -403,7 +403,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
         }
         if (this.velocityY == 0)
         {
-            if (! this.isOnGround()) // velocityY is 0, and we're not on ground. Apply gravitation
+            if (! this.isOnGround() && this.hasGravity()) // velocityY is 0, and we're not on ground. Apply gravitation if we have gravity
             {
                 this.velocityY = - 0.6F; // this is my deduced value.
             }
@@ -417,7 +417,10 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
             }
             else // we're still falling...
             {
-                this.velocityY *= 1.05F; // speed up falling?
+                if (this.hasGravity())
+                {
+                    this.velocityY *= 1.05F; // speed up falling? Only when we have gravity?
+                }
                 y = (this.velocityY * multi);
             }
         }

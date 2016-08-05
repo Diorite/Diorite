@@ -328,6 +328,12 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     }
 
     @Override
+    public boolean hasGravity()
+    {
+        return super.hasGravity() && !this.abilities.isFlying();
+    }
+
+    @Override
     public float getWalkSpeed()
     {
         return this.abilities.getWalkingSpeed();
@@ -354,7 +360,6 @@ class HumanImpl extends LivingEntityImpl implements IHuman
     @Override
     public void setAbilities(final PacketPlayServerboundAbilities abilities)
     {
-        // TOOD: I should check what player want change here (cheats)
         this.abilities.setCanFly(abilities.isCanFly());
         this.abilities.setFlying(abilities.isFlying());
         this.abilities.setWalkingSpeed(abilities.getWalkingSpeed());

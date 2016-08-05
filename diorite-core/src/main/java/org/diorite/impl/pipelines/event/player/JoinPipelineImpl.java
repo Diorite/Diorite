@@ -30,7 +30,6 @@ import org.diorite.impl.auth.GameProfiles;
 import org.diorite.impl.connection.CoreNetworkManager;
 import org.diorite.impl.connection.packets.PacketDataSerializer;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientbound;
-import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundAbilities;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundCustomPayload;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundHeldItemSlot;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundLogin;
@@ -66,7 +65,7 @@ public class JoinPipelineImpl extends SimpleEventPipeline<PlayerJoinEvent> imple
             net.sendPacket(new PacketPlayClientboundCustomPayload("MC|Brand", new PacketDataSerializer(Unpooled.buffer()).writeText(DioriteCore.getInstance().getServerModName())));
             net.sendPacket(new PacketPlayClientboundWorldDifficulty(player.getWorld().getDifficulty()));
             net.sendPacket(new PacketPlayClientboundSpawnPosition(player.getWorld().getSpawn().toBlockLocation()));
-            net.sendPacket(new PacketPlayClientboundAbilities(false, false, player.canFly(), false, Player.WALK_SPEED, Player.FLY_SPEED));
+            net.sendPacket(player.getAbilities());
             net.sendPacket(new PacketPlayClientboundHeldItemSlot(player.getHeldItemSlot()));
             net.sendPacket(new PacketPlayClientboundPosition(new TeleportData(player.getLocation()), 5));
             net.sendPacket(new PacketPlayClientboundUpdateTime(player.getWorld()));

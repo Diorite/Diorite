@@ -222,7 +222,7 @@ public class PlayListener implements PacketPlayServerboundListener
     @Override
     public void handle(final PacketPlayServerboundAbilities packet)
     {
-        this.core.sync(() -> this.player.setAbilities(packet), this.player);
+        this.core.sync(() -> this.player.setAbilitiesFromClient(packet), this.player);
     }
 
     @Override

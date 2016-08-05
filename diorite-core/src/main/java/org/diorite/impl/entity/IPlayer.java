@@ -27,6 +27,7 @@ package org.diorite.impl.entity;
 import java.io.File;
 
 import org.diorite.impl.connection.CoreNetworkManager;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.entity.tracker.BaseTracker;
 import org.diorite.impl.inventory.InventoryViewImpl;
 import org.diorite.impl.inventory.PlayerInventoryImpl;
@@ -75,4 +76,6 @@ public interface IPlayer extends IHuman, Player
 
     @Override
     InventoryViewImpl getInventoryView();
+
+    void setAbilitiesFromClient(final PacketPlayServerboundAbilities abilities);
 }

@@ -53,6 +53,7 @@ import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboun
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundUpdateAttributes;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldBorder;
 import org.diorite.impl.connection.packets.play.clientbound.PacketPlayClientboundWorldParticles;
+import org.diorite.impl.connection.packets.play.serverbound.PacketPlayServerboundAbilities;
 import org.diorite.impl.entity.IItem;
 import org.diorite.impl.entity.IPlayer;
 import org.diorite.impl.entity.tracker.BaseTracker;
@@ -378,6 +379,14 @@ class PlayerImpl extends HumanImpl implements IPlayer
     }
 
     @Override
+    public void setAbilitiesFromClient(final PacketPlayServerboundAbilities abilities)
+    {
+        // all other abilities incoming from client will be ignored
+        this.getAbilities().setFlying(this.getAbilities().isCanFly() && abilities.isFlying());
+        this.updateAbilities();
+    }
+
+    @Override
     public void closeInventory(final int id)
     {
         CoreMain.debug("Closing inventory with ID " + id);
@@ -463,6 +472,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         final NbtTagCompound abilities = Optional.ofNullable(nbt.<NbtTagCompound>getTag("abilities")).orElse(new NbtTagCompound());
         this.setWalkSpeed(abilities.getFloat("walkSpeed", 0.1));
         this.setCanFly(abilities.getBoolean("mayfly", false));
+        this.getAbilities().setFlying(abilities.getBoolean("flying", false));
         this.setFlySpeed(abilities.getFloat("flySpeed", 0.05));
     }
 
@@ -479,6 +489,7 @@ class PlayerImpl extends HumanImpl implements IPlayer
         final NbtTagCompound abilities = new NbtTagCompound("abilities");
         abilities.setFloat("walkSpeed", this.getWalkSpeed());
         abilities.setBoolean("mayfly", this.canFly());
+        abilities.setBoolean("flying", this.getAbilities().isFlying());
         abilities.setFloat("flySpeed", this.getFlySpeed());
         nbt.addTag(abilities);
     }
