@@ -442,6 +442,7 @@ abstract class EntityImpl extends GameObjectImpl implements IEntity
             throw new IllegalArgumentException("Entity was already spawned.");
         }
         this.tracker = tracker;
+        this.updateChunk(null, this.getWorld().getChunkAt(this.getLocation().getChunkPos()));
     }
 
     @Override

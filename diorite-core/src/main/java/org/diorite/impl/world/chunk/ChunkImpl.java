@@ -458,9 +458,7 @@ public class ChunkImpl implements Chunk
                 System.err.println("Failed to load entity (" + entity + ")");
                 continue;
             }
-
             this.getWorld().addEntity(dioriteEntity, false);
-            dioriteEntity.updateChunk(null, this);
         }
 
         // TODO tile entities

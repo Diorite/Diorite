@@ -55,7 +55,6 @@ import org.diorite.impl.world.chunk.ChunkManagerImpl;
 import org.diorite.impl.world.chunk.ChunkManagerImpl.ChunkLock;
 import org.diorite.impl.world.io.ChunkIOService;
 import org.diorite.impl.world.io.requests.Request;
-import org.diorite.block.BlockLocation;
 import org.diorite.BossBar;
 import org.diorite.Difficulty;
 import org.diorite.GameMode;
@@ -135,7 +134,6 @@ public class WorldImpl implements World, Tickable
 
 
     // TODO: add some method allowing to set multiple blocks without calling getChunk so often
-
     public WorldImpl(final DioriteCore core, final ChunkIOService chunkIO, final String name, final WorldGroupImpl group, final Dimension dimension, final WorldType worldType, final String generator, final Map<String, Object> generatorOptions)
     {
         this.core = core;
@@ -851,7 +849,7 @@ public class WorldImpl implements World, Tickable
         this.worldBorder.doTick(tps);
         this.entityTrackers.doTick(tps);
         this.activeChunks.clear();
-        for (final Player entity : this.getPlayersInWorld())
+        for (final Player entity : this.players)
         {
             // build a set of chunks around each player in this world, the
             // server view distance is taken here
