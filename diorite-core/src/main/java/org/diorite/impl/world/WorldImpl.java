@@ -238,7 +238,7 @@ public class WorldImpl implements World, Tickable
                 spawnX += DioriteRandomUtils.getRandomInt(- 64, 64);
                 spawnZ += DioriteRandomUtils.getRandomInt(- 64, 64);
             }
-            this.spawn = new ImmutableLocation(spawnX, spawnY, spawnZ);
+            this.spawn = new ImmutableLocation(spawnX, spawnY, spawnZ, this);
         }
     }
 
