@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -458,6 +459,11 @@ class PlayerImpl extends HumanImpl implements IPlayer
         super.loadFromNbt(nbt);
         this.setGameMode(GameMode.getByEnumOrdinal(nbt.getInt("playerGameType", this.getWorld().getDefaultGameMode().ordinal())));
         this.setHeldItemSlot(nbt.getInt("SelectedItemSlot", 0));
+
+        final NbtTagCompound abilities = Optional.ofNullable(nbt.<NbtTagCompound>getTag("abilities")).orElse(new NbtTagCompound());
+        this.setWalkSpeed(abilities.getFloat("walkSpeed", 0.1));
+        this.setCanFly(abilities.getBoolean("mayfly", false));
+        this.setFlySpeed(abilities.getFloat("flySpeed", 0.05));
     }
 
     @Override
@@ -469,6 +475,12 @@ class PlayerImpl extends HumanImpl implements IPlayer
 
         nbt.setInt("playerGameType", this.getGameMode().ordinal());
         nbt.setInt("SelectedItemSlot", this.getHeldItemSlot());
+
+        final NbtTagCompound abilities = new NbtTagCompound("abilities");
+        abilities.setFloat("walkSpeed", this.getWalkSpeed());
+        abilities.setBoolean("mayfly", this.canFly());
+        abilities.setFloat("flySpeed", this.getFlySpeed());
+        nbt.addTag(abilities);
     }
 
     @Override
