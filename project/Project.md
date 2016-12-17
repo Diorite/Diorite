@@ -624,7 +624,7 @@ ____
 ### Diorite Utils - Injections
 ____
 Something similar to Dependency Injection libraries, but with different rules.  
-Main goal is simple way to inject fields.  
+Main goal is to create some simple way to inject fields.  
 Library will edit classes to add code that will fetch missing objects.  
 
 ###### Goals
