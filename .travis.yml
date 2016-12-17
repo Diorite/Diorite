@@ -1,5 +1,7 @@
 language: java
 sudo: required
 dist: trusty
-group: edge
+group: edge1
 jdk: oraclejdk9
+env:
+- MAVEN_OPTS=""
