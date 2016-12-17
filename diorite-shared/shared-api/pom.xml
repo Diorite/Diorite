@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>diorite-shared</artifactId>
+        <groupId>ord.diorite.shared</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>shared-api</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>Diorite Shaded API</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.diorite.utils</groupId>
+            <artifactId>commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.diorite.utils</groupId>
+            <artifactId>config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.diorite.utils</groupId>
+            <artifactId>injection</artifactId>
+        </dependency>
+    </dependencies>
+</project>
