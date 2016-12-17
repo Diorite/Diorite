@@ -5,5 +5,4 @@ group: edge1
 jdk: oraclejdk9
 before_install:
 - echo "MAVEN_OPTS=''" > ~/.mavenrc
-- echo "Testing adding some stuff"
 - sh travis/testCopyright.sh
