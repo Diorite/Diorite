@@ -86,6 +86,17 @@
             - *ord.diorite:diorite-impl*
     - [ ] [**ord.diorite.extra:intellij** (*Diorite IDEA*)](#diorite-idea)
          - Addon for Intellij IDEA java ide, adds better support for diorite projects.
+    - [ ] [**ord.diorite.extra:tests** (*Diorite Tests*)](#diorite-extra---tests)
+        - Test framework for diorite.
+        - depends on: 
+            - *org.diorite.utils:commons*
+            - *org.diorite.utils:config*
+            - *org.diorite.utils:injection*
+            - *ord.diorite.shared:shared-api*
+            - *ord.diorite.shared:shared-core*
+            - *ord.diorite:diorite-api*
+            - *ord.diorite:diorite-core*
+            - *ord.diorite:diorite-impl*
     - [ ] **ord.diorite.extra:spigot** (*Diorite Spigot*)
          - Diorite implementation of spigot api.
         
@@ -1021,6 +1032,23 @@ ____
 
 ## Diorite Extra
 Epic functions for diorite that might be never created due to lack of time.
+
+### Diorite Extra - Tests
+____
+Library for testing diorite and diorite plugins, allows for creating fake server, 
+simulating player actions etc.
+
+###### Goals
+- [ ] Create server.
+- [ ] Add players to server.
+- [ ] Add entities to server.
+- [ ] Simulate basic player actions, movement.
+- [ ] Script player actions/movement.
+- [ ] Simulate basic entity actions, movement.
+- [ ] Script entity actions/movement.
+- [ ] Simulate raw packets and raw data.
+
+____
 
 ### Diorite Extra - GUI
 ____
