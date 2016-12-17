@@ -431,7 +431,9 @@ ____
     - [ ] [Effects system](#effects-system)
     - [ ] [Abstract NBT API - SSF (*Simple Storage System*)](#simple-storage-system)
 
+____
 ## Diorite Launcher
+____
 Special launcher that will download all needed dependencies, including missing plugins when possible. (diorite must have special page and plugin repository)  
 Should use CUI and GUI depending on needs.
 - [ ] Basic launcher that can start the server/game/proxy.
@@ -440,12 +442,16 @@ Should use CUI and GUI depending on needs.
 - [ ] Generic GUI configurator for plugins
 - [ ] Download missing dependencies from maven repository.
 - [ ] Plugin repository.
-
+____
 ## Diorite Utils
+
 ### Diorite Utils - Commons
+____
 Set of basic libraries, not related to minecraft/diorite etc, just plain utility code.
+____
 
 ### Diorite Utils - Config
+____
 Config framework for YAML (or maybe others, but YAML is main target), it works using interfaces and bytecode generation/proxy classes/groovy.  
 Most of features can be added later.  
 
@@ -600,15 +606,15 @@ All mapping settings works for setters and getters.
 - [ ] Support for objects with constructors by analyzing constructor params names or params annotations.
 - [ ] Support for objects with constructors by analyzing constructor params types and given data.
 - [ ] support for custom serializers and deserializers.
-
+____
 
 ### Diorite Utils - Injections
+____
 Something similar to Dependency Injection libraries, but with different rules.  
 Main goal is simple way to inject fields.  
 Library will edit classes to add code that will fetch missing objects.  
 
 ###### Goals
-
 - [ ] Basic injection bindings.
 - [ ] Dynamic injection bindings.
 - [ ] Generating Qualifier and Scope implementation classes.
@@ -617,11 +623,15 @@ Library will edit classes to add code that will fetch missing objects.
 - [ ] Shortcut annotations - one annotation works as multiple Qualifiers.
 - [ ] After/before inject methods.
 - [ ] Retransforming all classes that use injecting on load time.
+____
 
 ### Diorite Utils - Unsafe
+____
 Additional utils for bytecode libraries, like Javassist utils, or something related to sun.misc.Unsafe
+____
 
 ## GameProfile API
+____
 Simple api for creating and fetching game profiles.  
 API don't depend on any other diorite element, it's standalone library.
 
@@ -634,11 +644,15 @@ API don't depend on any other diorite element, it's standalone library.
 - [ ] Auth player from server.
 - [ ] Login into selected account.
 - [ ] Change skin of logged-in player.
+____
 
 ## Diorite Shared
+
 Set of basic classes used by client, server and proxy stuff.  
 This is mostly only API with basic abstract implementation.
+
 ##### Chat system
+____
 Easy to use chat api for diorite.
 
 ###### Goals
@@ -651,7 +665,10 @@ Easy to use chat api for diorite.
     - [ ] Split methods.
     - [ ] Clone methods.
 - [ ] Special markdown parser.
+____
+
 ##### Permissions system
+____
 Permissions system used by diorite.
 
 ###### Goals
@@ -677,7 +694,10 @@ Permissions system used by diorite.
         3. `place.6` returns false.
         4. `place.7` returns true.
 - [ ] Save/load permissions from file.
+____
+
 ##### Commands system
+____
 Advanced command system that allows for creating commands with automatically parsed arguments.
 
 ###### Goals
@@ -725,7 +745,10 @@ Advanced command system that allows for creating commands with automatically par
         2. `@path.to.message` - will get message from plugin messages.
         3. `#path.to.message` - will get message from command messages.
         4. `path.to.message` - will try to find message in all places, starting from command, then plugin, and then diorite messages.
+____
+
 ##### Plugins system
+____
 Simple but powerful plugin system, with sub-plugins and virtual/fake plugins (added on runtime, like loaded scripts).  
 
 ###### Goals
@@ -733,7 +756,10 @@ Simple but powerful plugin system, with sub-plugins and virtual/fake plugins (ad
 - [ ] Java plugin loader.
 - [ ] Dependency manager, simple way to add shared libraries.
 - [ ] Create plugin repository that allows to fetch dependencies in runtime.
+____
+
 ##### Messages system
+____
 Powerful system for handling message files using groovy scripts.  
 Each message can contains simple variables or more advanced scripts:  
 ```yaml
@@ -793,7 +819,7 @@ someMessage: |2-
     }
   $>
   was killed by $<killer.name>.
-```
+```  
 ###### Goals
 - [ ] Basic interfaces for message system.
 - [ ] Loading messages from file.
@@ -806,14 +832,20 @@ someMessage: |2-
 - [ ] Code fragments.
 - [ ] Plugin api support.
 - [ ] Api for constructing messages at runtime.
-##### Scheduler system.
+____
+
+##### Scheduler system
+____
 Simple task system with synchronizing to selected game elements, like chunks, entities etc.  
 Shared code contains mostly only API that must be implemented by engine.  
 
 ###### Goals
 - [ ] Basic interfaces for tasks ans synchronizing.
 - [ ] Task builder.
-##### Groovy scripting system.
+____
+
+##### Groovy scripting system
+____
 System for loading and executing groovy scripts as alternative for plugins.  
 This is needed to implement message system, scripting system allows for adding new variables to given types, it must be simple to use for every developer.
 
@@ -840,7 +872,7 @@ Or we can just use `@ScriptingType` annotation over Guild class and/or implement
 Now we need register that "guild" variable:
 ```java
 sm.register(Player.class, Guild.class, "guild", player -> plugin.getGuildFor(player))
-```
+```  
 ###### Using annotations:
 When using annotations you don't need to provide any special type information, diorite will get it from method signature.  
 Method must be static, first argument is always object that you want to extend, all other arguments are just arguments of method.  
@@ -868,7 +900,7 @@ public class Guild
         return plugin.getGuildFor(player);
     }
 }
-```
+```  
 ###### Using ScriptingElement interface:
 NOTE: You can use BOTH annotations and interface.
 ```java
@@ -899,7 +931,10 @@ public class Guild implements ScriptingElement
     - [ ] Register type extension using `@ScriptExtension`
     - [ ] Register static type extension using  `@ScriptExtension`
 - [ ] ScriptingElement interface.
+____
+
 ##### Scoreboard system
+____
 System for accessing scoreboards from server and proxy, should support creating special scoreboards.
 
 ###### Goals
@@ -911,8 +946,10 @@ System for accessing scoreboards from server and proxy, should support creating 
     - [ ] Variables on scoreboard. (using message system)
 - [ ] API that will work with multiple plugins, every scoreboard should have simple name and option to choose current one while other plugins can still update own ones.
 - [ ] Auto switching between scoreboards.
+____
 
 ##### Effects system
+____
 Special API for displaying particles, playing sound etc.  
 Not all actions are possible to be implemented in proxy, special bridge might be needed.
 
@@ -927,8 +964,10 @@ Not all actions are possible to be implemented in proxy, special bridge might be
 - [ ] Generating figures from particles.
 - [ ] Generating particles by mathematical formula.
 - [ ] Generating images on maps.
+____
 
 ##### Simple Storage System
+____
 API for accessing NBT data that will be independent from NBT structure.
 
 ###### Goals
@@ -936,8 +975,10 @@ API for accessing NBT data that will be independent from NBT structure.
 - [ ] Implement lists.
 - [ ] Implement maps.
 - [ ] Full api for serialization/deserialization object to/from SSF.
+____
 
 ## Stonegate
+____
 Stonegate is diorite alternative to bungeecord, it contains shared api allowing for sharing some code between server and proxy plugins.  
 
 ###### Goals
@@ -961,10 +1002,13 @@ Stonegate is diorite alternative to bungeecord, it contains shared api allowing 
     - [ ] All use this same list of servers, adding/removing server from list will remove it from all servers.
     - [ ] Every proxy see all players from all proxies, and can alert all of them.
     - [ ] Master instance - other instances with fetch basic configuration from it.
+____
 
 ## Diorite Extra
 Epic functions for diorite that might be never created due to lack of time.
+
 ### Diorite Extra - GUI
+____
 Library for creating player GUIs using maps, armorstands, and particles:
 ![Example GUI from hypixel](gui.png)  
 _(GUI on hypixel server)_  
@@ -1005,8 +1049,10 @@ Players can just click on buttons to choose some option.
     - [ ] Loading CSS files.
     - [ ] Loading all images and rending them as maps.
     - [ ] Loading groovy scripts (instead of javascript).
+____
     
 ### Diorite IDEA
+____
 Intellij IDEA plugin for easier diorite plugin development.
 
 ###### Goals
@@ -1027,3 +1073,4 @@ Intellij IDEA plugin for easier diorite plugin development.
 - [ ] Warn about unsafe operations.
 - [ ] Easy creation of listeners.
 - [ ] Easy creation of commands.
+____
