@@ -3,4 +3,6 @@ sudo: required
 dist: trusty
 group: edge1
 jdk: oraclejdk9
-before_install: echo "MAVEN_OPTS='-Xmx1536m'" > ~/.mavenrc
+before_install:
+- echo "MAVEN_OPTS=''" > ~/.mavenrc
+- sh travis/testCopyright.sh
