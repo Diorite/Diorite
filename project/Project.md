@@ -20,7 +20,7 @@
             - *org.diorite.utils:commons*
 - [ ] [**ord.diorite:gameprofile** (*GameProfile API*)](#gameprofile-api)
     Standalone API for Mojang auth services. 
-- [ ] [**ord.diorite.shared:diorite-shared** (*Diorite Shared*)](#diorie-shared)  
+- [ ] [**ord.diorite.shared:diorite-shared** (*Diorite Shared*)](#diorite-shared)  
     Shared API used by diorite server, client and proxy projects.  
     Divided to api and core modules:
     - **ord.diorite.shared:shared-api** 
@@ -31,7 +31,6 @@
         - *org.diorite.utils:injection*
         
     Main features of shared module:
-    - [ ] [**GameProfile api**](#gameprofile-api) - dependency free
     - [ ] [**Chat system**](#chat-system)
     - [ ] [**Permissions system**](#permissions-system)
     - [ ] [**Commands system**](#commands-system)
@@ -636,7 +635,7 @@ API don't depend on any other diorite element, it's standalone library.
 ## Diorite Shared
 Set of basic classes used by client, server and proxy stuff.  
 This is mostly only API with basic abstract implementation.
-##### Chat system.
+##### Chat system
 Easy to use chat api for diorite.
 
 ###### Goals
@@ -649,7 +648,7 @@ Easy to use chat api for diorite.
     - [ ] Split methods.
     - [ ] Clone methods.
 - [ ] Special markdown parser.
-##### Permissions system.
+##### Permissions system
 Permissions system used by diorite.
 
 ###### Goals
@@ -675,7 +674,7 @@ Permissions system used by diorite.
         3. `place.6` returns false.
         4. `place.7` returns true.
 - [ ] Save/load permissions from file.
-##### Commands system.
+##### Commands system
 Advanced command system that allows for creating commands with automatically parsed arguments.
 
 ###### Goals
@@ -723,7 +722,7 @@ Advanced command system that allows for creating commands with automatically par
         2. `@path.to.message` - will get message from plugin messages.
         3. `#path.to.message` - will get message from command messages.
         4. `path.to.message` - will try to find message in all places, starting from command, then plugin, and then diorite messages.
-##### Plugins system.
+##### Plugins system
 Simple but powerful plugin system, with sub-plugins and virtual/fake plugins (added on runtime, like loaded scripts).  
 
 ###### Goals
@@ -731,7 +730,7 @@ Simple but powerful plugin system, with sub-plugins and virtual/fake plugins (ad
 - [ ] Java plugin loader.
 - [ ] Dependency manager, simple way to add shared libraries.
 - [ ] Create plugin repository that allows to fetch dependencies in runtime.
-##### Messages system.
+##### Messages system
 Powerful system for handling message files using groovy scripts.  
 Each message can contains simple variables or more advanced scripts:  
 ```yaml
@@ -897,7 +896,7 @@ public class Guild implements ScriptingElement
     - [ ] Register type extension using `@ScriptExtension`
     - [ ] Register static type extension using  `@ScriptExtension`
 - [ ] ScriptingElement interface.
-##### Scoreboard system.
+##### Scoreboard system
 System for accessing scoreboards from server and proxy, should support creating special scoreboards.
 
 ###### Goals
@@ -910,7 +909,7 @@ System for accessing scoreboards from server and proxy, should support creating 
 - [ ] API that will work with multiple plugins, every scoreboard should have simple name and option to choose current one while other plugins can still update own ones.
 - [ ] Auto switching between scoreboards.
 
-##### Effects system.
+##### Effects system
 Special API for displaying particles, playing sound etc.  
 Not all actions are possible to be implemented in proxy, special bridge might be needed.
 
