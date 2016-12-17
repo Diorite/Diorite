@@ -41,7 +41,7 @@ class MethodData extends MemberData<InDefinedShape> implements org.diorite.injec
     private final Map<Class<? extends Annotation>, ? extends Annotation>                                  scopeAnnotations;
     private final Map<Class<? extends Annotation>, ? extends Annotation>                                  qualifierAnnotations;
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected MethodData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
     {
         super(controller, classType, member, name, index);
@@ -93,7 +93,6 @@ class MethodData extends MemberData<InDefinedShape> implements org.diorite.injec
         return new InjectValueDataIterator(this.values.iterator());
     }
 
-    @SuppressWarnings("unchecked")
     static class InjectValueDataIterator implements Iterator<org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic>>
     {
         private final Iterator<org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic>> iterator;

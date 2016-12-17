@@ -24,6 +24,8 @@
 
 package org.diorite.inject.controller;
 
+import javax.annotation.Nullable;
+
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -55,18 +57,23 @@ import net.bytebuddy.description.type.TypeDescription;
 
 public class ClassTransformer implements Opcodes
 {
+    //TODO
     private final ClassNode classNode;
     private final ClassData classData;
 
-    private Map<MethodNode, MethodInsnNode> inits = new LinkedHashMap<>(3);
+    private final Map<MethodNode, MethodInsnNode> inits = new LinkedHashMap<>(3);
     private MethodNode clinit;
 
     private final Map<String, MethodPair> methods = new LinkedHashMap<>(5);
     private final Map<String, FieldPair>  fields  = new LinkedHashMap<>(5);
 
+    @Nullable
     private MemberPair firstStatic = null;
+    @Nullable
     private MemberPair lastStatic  = null;
+    @Nullable
     private MemberPair firstObject = null;
+    @Nullable
     private MemberPair lastObject  = null;
 
     public ClassTransformer(byte[] bytecode, ClassData classData)
@@ -84,6 +91,7 @@ public class ClassTransformer implements Opcodes
         return cw;
     }
 
+    @SuppressWarnings("unchecked")
     public void run()
     {
         for (org.diorite.inject.controller.MemberData<?> memberData : this.classData.getMembers())
@@ -395,7 +403,7 @@ public class ClassTransformer implements Opcodes
         while (iterator.hasNext())
         {
             AbstractInsnNode next_ = iterator.next();
-            // we need to find putfield or other local method invoke
+            // we need to find put field or other local method invoke
             if (next_ instanceof MethodInsnNode)
             {
                 MethodInsnNode next = (MethodInsnNode) next_;

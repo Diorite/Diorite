@@ -24,6 +24,8 @@
 
 package org.diorite.inject.data;
 
+import javax.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +49,6 @@ public interface ClassData<GENERIC>
 
     Collection<String> getAfter();
 
-    @SuppressWarnings("unchecked")
     default <T> FieldData<T, GENERIC> getField(int index)
     {
         return (FieldData<T, GENERIC>) this.getMembers().get(index);
@@ -58,6 +59,7 @@ public interface ClassData<GENERIC>
         return (MethodData<GENERIC>) this.getMembers().get(index);
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     default <T> FieldData<T, GENERIC> getField(String name)
     {
@@ -71,6 +73,7 @@ public interface ClassData<GENERIC>
         return null;
     }
 
+    @Nullable
     default MethodData<GENERIC> getMethod(String name)
     {
         for (MethodData<GENERIC> methodData : this.getMethods())
@@ -83,6 +86,7 @@ public interface ClassData<GENERIC>
         return null;
     }
 
+    @Nullable
     default MemberData<?> getMember(String name)
     {
         for (MemberData<?> memberData : this.getMembers())

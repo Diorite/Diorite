@@ -24,6 +24,7 @@
 
 package org.diorite.inject.scopes;
 
+import javax.annotation.Nullable;
 import javax.inject.Singleton;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,6 +41,7 @@ import org.diorite.inject.binder.DynamicProvider;
 public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
 {
     private AtomicBoolean invoked = new AtomicBoolean(false);
+    @Nullable
     private T value;
 
     @Override

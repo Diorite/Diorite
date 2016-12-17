@@ -24,6 +24,8 @@
 
 package org.diorite.inject.asm;
 
+import javax.annotation.Nullable;
+
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -46,17 +48,19 @@ public abstract class AbstractClassTransformer<T extends InjectionController<?, 
         this.instrumentation = instrumentation;
     }
 
-    public abstract byte[] transform(T controller, Instrumentation instr, Module module, ClassLoader loader, String className, Class<?> clazz,
-                                     ProtectionDomain pd, byte[] bytes) throws IllegalClassFormatException;
+    @Nullable
+    public abstract byte[] transform(T controller, Instrumentation instr, Module module, @Nullable ClassLoader loader, String className,
+                                     @Nullable Class<?> clazz, ProtectionDomain pd, byte[] bytes) throws IllegalClassFormatException;
 
-    @Override
-    public byte[] transform(ClassLoader loader, String className, Class<?> clazz, ProtectionDomain pd, byte[] bytes) throws IllegalClassFormatException
+    @Nullable @Override @Deprecated
+    public byte[] transform(@Nullable ClassLoader loader, String className, @Nullable Class<?> clazz, ProtectionDomain pd,
+                            byte[] bytes) throws IllegalClassFormatException
     {
-        return this.transform(this.controller, this.instrumentation, clazz.getModule(), loader, className, clazz, pd, bytes);
+        throw new IllegalStateException("This method should not be executed.");
     }
 
-    @Override
-    public byte[] transform(Module module, ClassLoader loader, String className, Class<?> clazz, ProtectionDomain pd,
+    @Nullable @Override
+    public byte[] transform(Module module, @Nullable ClassLoader loader, String className, @Nullable Class<?> clazz, ProtectionDomain pd,
                             byte[] bytes) throws IllegalClassFormatException
     {
         return this.transform(this.controller, this.instrumentation, module, loader, className, clazz, pd, bytes);

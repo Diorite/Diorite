@@ -24,6 +24,8 @@
 
 package org.diorite.inject.data;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,6 +38,7 @@ public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC
 
     int getIndex();
 
+    @Nullable
     <T> InjectValueData<?, GENERIC> getValueData(String name);
 
     <T> InjectValueData<?, GENERIC> getValueData(int index);
@@ -67,11 +70,13 @@ public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     default <A extends Annotation> A getDeclaredScope(Class<A> type)
     {
         return (A) this.getDeclaredScopes().get(type);
     }
 
+    @SuppressWarnings("unchecked")
     default <A extends Annotation> A getDeclaredQualifier(Class<A> type)
     {
         return (A) this.getDeclaredQualifiers().get(type);

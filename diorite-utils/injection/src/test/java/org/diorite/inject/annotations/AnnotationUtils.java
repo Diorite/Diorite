@@ -30,9 +30,13 @@ import java.lang.annotation.Annotation;
 
 import org.junit.Assert;
 
-public class AnnotationUtils
+public final class AnnotationUtils
 {
     private static final StackWalker walker = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE);
+
+    private AnnotationUtils()
+    {
+    }
 
     public static <T extends Annotation> T getAnnInstance(Class<T> type, int levels)
     {

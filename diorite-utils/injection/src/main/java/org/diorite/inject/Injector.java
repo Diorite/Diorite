@@ -24,6 +24,8 @@
 
 package org.diorite.inject;
 
+import javax.annotation.Nullable;
+
 @Deprecated
 public final class Injector
 {
@@ -31,12 +33,14 @@ public final class Injector
     {
     }
 
+    @Nullable
     @Deprecated
     public static <T> T injectField(Object $this, int typeId, int memberId)
     {
         return InjectionLibrary.getController().getInjectedField($this, typeId, memberId);
     }
 
+    @Nullable
     @Deprecated
     public static <T> T injectMethod(Object $this, int typeId, int memberId, int argumentId)
     {

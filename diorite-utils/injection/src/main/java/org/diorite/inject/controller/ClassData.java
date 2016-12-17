@@ -24,6 +24,8 @@
 
 package org.diorite.inject.controller;
 
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +41,9 @@ public class ClassData implements org.diorite.inject.data.ClassData<TypeDescript
     private final List<org.diorite.inject.controller.MemberData<?>>      members;
     private final Collection<org.diorite.inject.controller.FieldData<?>> fields;
     private final Collection<org.diorite.inject.controller.MethodData>   methods;
+    @Nullable
     private Collection<String> before = null;
+    @Nullable
     private Collection<String> after  = null;
 
     @SuppressWarnings({"rawtypes", "unchecked"})

@@ -81,7 +81,7 @@ public abstract class InjectionControllerBasic<MEMBER, TYPE, GENERIC> extends In
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public <T> void applyScopes(InjectValueData<T, GENERIC> data)
     {
         Collection<? extends Annotation> scopes = data.getScopes().values();

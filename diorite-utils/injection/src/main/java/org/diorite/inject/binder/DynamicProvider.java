@@ -24,10 +24,13 @@
 
 package org.diorite.inject.binder;
 
+import javax.annotation.Nullable;
+
 import org.diorite.inject.binder.qualifier.QualifierData;
 
 public interface DynamicProvider<T>
 {
+    @Nullable
     T tryToGet(Object object, QualifierData data);
 
     @SafeVarargs

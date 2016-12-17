@@ -32,10 +32,11 @@ import net.bytebuddy.description.type.TypeDescription;
 
 public final class Constants
 {
-    public static final TypeDescription.ForLoadedType DI_LIBRARY = new TypeDescription.ForLoadedType(InjectionLibrary.class);
-    public static final TypeDescription.ForLoadedType QUALIFIERS = new TypeDescription.ForLoadedType(Qualifiers.class);
+    public static final TypeDescription.ForLoadedType DI_LIBRARY        = new TypeDescription.ForLoadedType(InjectionLibrary.class);
+    public static final TypeDescription.ForLoadedType QUALIFIERS        = new TypeDescription.ForLoadedType(Qualifiers.class);
     public static final TypeDescription.ForLoadedType INSTANCE_SUPPLIER = new TypeDescription.ForLoadedType(InstanceSupplier.class);
-    public static final TypeDescription.ForLoadedType INJECTOR = new TypeDescription.ForLoadedType(Injector.class);
+    @SuppressWarnings("deprecation")
+    public static final TypeDescription.ForLoadedType INJECTOR          = new TypeDescription.ForLoadedType(Injector.class);
 
     private Constants()
     {

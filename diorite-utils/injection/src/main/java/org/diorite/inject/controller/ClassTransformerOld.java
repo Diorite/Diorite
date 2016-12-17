@@ -83,6 +83,7 @@ public class ClassTransformerOld implements Opcodes
         return cw;
     }
 
+    @SuppressWarnings("unchecked")
     public void readData()
     {
         MemberPair firstStatic = null;

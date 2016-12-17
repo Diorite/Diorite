@@ -24,6 +24,8 @@
 
 package org.diorite.inject.controller;
 
+import javax.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,8 +40,8 @@ abstract class MemberData<B extends ByteCodeElement & NamedElement> implements o
     protected final B                             member;
     protected final String                        name;
     protected final int                           index;
-    protected Collection<String> before = null;
-    protected Collection<String> after  = null;
+    @Nullable protected Collection<String> before = null;
+    @Nullable protected Collection<String> after  = null;
 
     protected MemberData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, B member, String name, int index)
     {

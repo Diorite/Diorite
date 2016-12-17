@@ -201,6 +201,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                     mv.visitVarInsn(ALOAD, 0);
                     mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
                     mv.visitInsn(DUP);
+                    //noinspection MagicNumber
                     mv.visitIntInsn(BIPUSH, 50);
                     mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(I)V", false);
                     mv.visitIntInsn(BIPUSH, '@');
@@ -758,6 +759,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                 mv.visitLabel(l0);
                 mv.visitTypeInsn(NEW, "java/lang/StringBuilder");
                 mv.visitInsn(DUP);
+                //noinspection MagicNumber
                 mv.visitIntInsn(SIPUSH, methodsSize * 30);
                 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(I)V", false);
                 mv.visitIntInsn(BIPUSH, '@');
@@ -929,6 +931,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                 mv.visitLabel(l4);
                 mv.visitFrame(F_CHOP, 3, null, 0, null);
                 mv.visitLdcInsn(Type.getType(descriptor));
+                //noinspection deprecation
                 mv.visitInvokeDynamicInsn("apply", "()Ljava/util/function/Function;",
                                           new Handle(H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory",
                                                      "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;" +
@@ -937,6 +940,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                                           Type.getType("(Ljava/lang/Object;)Ljava/lang/Object;"),
                                           new Handle(H_NEWINVOKESPECIAL, internalImplName, "<init>", "(Ljava/util/Map;)V"),
                                           Type.getType("(Ljava/util/Map;)" + descriptor));
+                //noinspection deprecation
                 mv.visitInvokeDynamicInsn("apply", "()Ljava/util/function/Function;",
                                           new Handle(H_INVOKESTATIC, "java/lang/invoke/LambdaMetafactory", "metafactory",
                                                      "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;" +
