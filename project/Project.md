@@ -263,6 +263,9 @@ Only needed on server side, server crashing client by sending invalid packet on 
     - [ ] Skull.
     - [ ] Repairable
     - [ ] Tool.
+- [ ] Extended metadata support.
+    - [ ] LoreHandles:  
+    Lore is often used by plugins to add information about item, like they create spell item, so they add spell lore with description of it, or even use that lore to detect spell. In Diorite for detecting they just should add own nbt data, but there is problem with lores, every plugin want own lore, so if we want use 2 spell plugins on one item - nah, we can't. So in Diorite we want allow to add LoreHandlers (temp name, looking for better), every plugin can add one or more handler to each item, each handler have 2 simple values: priority (order on lore) and lore list of string. LoreHandlers can't be affected by .setLore and their text isn't returned by getLore, so multiple plugins can add own lore lines and never break each other lore.
 
 ### Inventory
 - [ ] Join inventory packet into simple operations.
