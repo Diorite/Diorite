@@ -398,9 +398,8 @@ Simple to use events, many game elements can use own small listeners.
 - [ ] Registering listeners via API.
 - [ ] Registering listeners via annotations.
 - [ ] Simple way to unregister listener.
+
 ____
-
-
 
 ###### Goals
 - [ ] Connection code.
@@ -442,7 +441,9 @@ Should use CUI and GUI depending on needs.
 - [ ] Generic GUI configurator for plugins
 - [ ] Download missing dependencies from maven repository.
 - [ ] Plugin repository.
-____
+
+____  
+
 ## Diorite Utils
 
 ### Diorite Utils - Commons
@@ -606,6 +607,7 @@ All mapping settings works for setters and getters.
 - [ ] Support for objects with constructors by analyzing constructor params names or params annotations.
 - [ ] Support for objects with constructors by analyzing constructor params types and given data.
 - [ ] support for custom serializers and deserializers.
+
 ____
 
 ### Diorite Utils - Injections
@@ -623,6 +625,7 @@ Library will edit classes to add code that will fetch missing objects.
 - [ ] Shortcut annotations - one annotation works as multiple Qualifiers.
 - [ ] After/before inject methods.
 - [ ] Retransforming all classes that use injecting on load time.
+
 ____
 
 ### Diorite Utils - Unsafe
@@ -644,6 +647,7 @@ API don't depend on any other diorite element, it's standalone library.
 - [ ] Auth player from server.
 - [ ] Login into selected account.
 - [ ] Change skin of logged-in player.
+
 ____
 
 ## Diorite Shared
@@ -665,6 +669,7 @@ Easy to use chat api for diorite.
     - [ ] Split methods.
     - [ ] Clone methods.
 - [ ] Special markdown parser.
+
 ____
 
 ##### Permissions system
@@ -694,6 +699,7 @@ Permissions system used by diorite.
         3. `place.6` returns false.
         4. `place.7` returns true.
 - [ ] Save/load permissions from file.
+
 ____
 
 ##### Commands system
@@ -745,6 +751,7 @@ Advanced command system that allows for creating commands with automatically par
         2. `@path.to.message` - will get message from plugin messages.
         3. `#path.to.message` - will get message from command messages.
         4. `path.to.message` - will try to find message in all places, starting from command, then plugin, and then diorite messages.
+
 ____
 
 ##### Plugins system
@@ -756,6 +763,7 @@ Simple but powerful plugin system, with sub-plugins and virtual/fake plugins (ad
 - [ ] Java plugin loader.
 - [ ] Dependency manager, simple way to add shared libraries.
 - [ ] Create plugin repository that allows to fetch dependencies in runtime.
+
 ____
 
 ##### Messages system
@@ -832,6 +840,7 @@ someMessage: |2-
 - [ ] Code fragments.
 - [ ] Plugin api support.
 - [ ] Api for constructing messages at runtime.
+
 ____
 
 ##### Scheduler system
@@ -842,6 +851,7 @@ Shared code contains mostly only API that must be implemented by engine.
 ###### Goals
 - [ ] Basic interfaces for tasks ans synchronizing.
 - [ ] Task builder.
+
 ____
 
 ##### Groovy scripting system
@@ -931,6 +941,7 @@ public class Guild implements ScriptingElement
     - [ ] Register type extension using `@ScriptExtension`
     - [ ] Register static type extension using  `@ScriptExtension`
 - [ ] ScriptingElement interface.
+
 ____
 
 ##### Scoreboard system
@@ -946,6 +957,7 @@ System for accessing scoreboards from server and proxy, should support creating 
     - [ ] Variables on scoreboard. (using message system)
 - [ ] API that will work with multiple plugins, every scoreboard should have simple name and option to choose current one while other plugins can still update own ones.
 - [ ] Auto switching between scoreboards.
+
 ____
 
 ##### Effects system
@@ -964,6 +976,7 @@ Not all actions are possible to be implemented in proxy, special bridge might be
 - [ ] Generating figures from particles.
 - [ ] Generating particles by mathematical formula.
 - [ ] Generating images on maps.
+
 ____
 
 ##### Simple Storage System
@@ -975,6 +988,7 @@ API for accessing NBT data that will be independent from NBT structure.
 - [ ] Implement lists.
 - [ ] Implement maps.
 - [ ] Full api for serialization/deserialization object to/from SSF.
+
 ____
 
 ## Stonegate
@@ -1002,6 +1016,7 @@ Stonegate is diorite alternative to bungeecord, it contains shared api allowing 
     - [ ] All use this same list of servers, adding/removing server from list will remove it from all servers.
     - [ ] Every proxy see all players from all proxies, and can alert all of them.
     - [ ] Master instance - other instances with fetch basic configuration from it.
+    
 ____
 
 ## Diorite Extra
@@ -1049,6 +1064,7 @@ Players can just click on buttons to choose some option.
     - [ ] Loading CSS files.
     - [ ] Loading all images and rending them as maps.
     - [ ] Loading groovy scripts (instead of javascript).
+    
 ____
     
 ### Diorite IDEA
@@ -1073,4 +1089,5 @@ Intellij IDEA plugin for easier diorite plugin development.
 - [ ] Warn about unsafe operations.
 - [ ] Easy creation of listeners.
 - [ ] Easy creation of commands.
+
 ____
