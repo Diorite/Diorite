@@ -3,5 +3,5 @@ sudo: required
 dist: trusty
 group: edge1
 jdk: oraclejdk9
-env:
-- MAVEN_OPTS=""
+before_script:
+  - echo "MAVEN_OPTS=''" > ~/.mavenrc
