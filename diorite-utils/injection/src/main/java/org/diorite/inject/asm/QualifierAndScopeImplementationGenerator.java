@@ -24,6 +24,7 @@
 
 package org.diorite.inject.asm;
 
+import javax.annotation.Nullable;
 import javax.inject.Qualifier;
 import javax.inject.Scope;
 
@@ -108,12 +109,9 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
 //    }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public static <T extends Annotation> Class<? extends T> transform(Class<T> clazz)
     {
-        if (clazz == null)
-        {
-            return null;
-        }
         if (! clazz.isAnnotation() || ! (clazz.isAnnotationPresent(Qualifier.class) || clazz.isAnnotationPresent(Scope.class)))
         {
             return null;

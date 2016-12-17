@@ -24,11 +24,6 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Qualifier;
-import javax.inject.Scope;
-
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.instrument.ClassFileTransformer;
 import java.util.function.Predicate;
 
@@ -47,7 +42,6 @@ import org.diorite.inject.data.InjectValueData;
 import org.diorite.inject.utils.Constants;
 import org.diorite.unsafe.AsmUtils;
 
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.field.FieldDescription;
@@ -55,12 +49,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodDescription.InDefinedShape;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 import net.bytebuddy.description.type.TypeDescription.Generic;
-import net.bytebuddy.dynamic.DynamicType.Loaded;
-import net.bytebuddy.dynamic.DynamicType.Unloaded;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
-import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.Implementation.Context;
 import net.bytebuddy.pool.TypePool;
 
@@ -74,32 +63,6 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
     public static final String   GENERATED_PREFIX     = InjectionLibrary.class.getPackage().getName() + ".generated.invokers";
     public static final Object[] STACK                = {};
     public static final int      HASHCODE_MULTI       = 127;
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Annotation> Class<? extends T> transform(Class<T> clazz)
-    {
-        if (clazz == null)
-        {
-            return null;
-        }
-        if (! clazz.isAnnotation() || ! (clazz.isAnnotationPresent(Qualifier.class) || clazz.isAnnotationPresent(Scope.class)))
-        {
-            return null;
-        }
-        try
-        {
-            String name = GENERATED_PREFIX + "." + clazz.getName();
-            Unloaded<Object> make = new ByteBuddy(ClassFileVersion.JAVA_V9).subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                                                                           .implement(Serializable.class, clazz).name(name)
-                                                                           .visit(new AnnotationImplementationVisitor(new ForLoadedType(clazz))).make();
-            Loaded<Object> load = make.load(ClassLoader.getSystemClassLoader(), Default.INJECTION);
-            return (Class<? extends T>) load.getLoaded();
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static final class AnnotationImplementationVisitor implements AsmVisitorWrapper
     {

@@ -142,6 +142,7 @@ public final class Qualifiers
      *
      * @return annotation instance with given values.
      */
+    @SuppressWarnings("unchecked")
     public static <T extends Annotation> T of(Class<T> type, Map<String, ?> data)
     {
         Function<Map<String, ?>, ? extends Annotation> constructor = getConstructor(type);
