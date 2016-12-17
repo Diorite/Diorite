@@ -24,25 +24,47 @@
 
 package org.diorite.inject.injections;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class InjectionTest
 {
     @Test
-    public void injectionTest()
+    public void simpleInjectionTest()
     {
-        ExampleObject exampleObject = new ExampleObject();
+        SimpleExampleObject exampleObject = new SimpleExampleObject();
         exampleObject.assertInjections();
     }
 
-    @Test
-    public void singletonTest()
-    {
-        ExampleObject exampleObject1 = new ExampleObject();
-        ExampleObject exampleObject2 = new ExampleObject();
-        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
-        Assert.assertNotEquals(exampleObject1.getModule2(), exampleObject2.getModule2());
-        Assert.assertEquals(exampleObject1.getSomeModuleProvider().get(), exampleObject2.getSomeModuleProvider().get());
-    }
+//    @Test
+//    public void injectionTest()
+//    {
+//        ExampleObject exampleObject = new ExampleObject();
+//        exampleObject.assertInjections();
+//    }
+//
+//    @Test
+//    public void advancedInjectionTest()
+//    {
+//        AdvancedExampleObject exampleObject = new AdvancedExampleObject();
+//        exampleObject.assertInjections();
+//    }
+//
+//    @Test
+//    public void singletonTest()
+//    {
+//        SimpleExampleObject exampleObject1 = new SimpleExampleObject();
+//        SimpleExampleObject exampleObject2 = new SimpleExampleObject();
+//        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
+//        Assert.assertNotEquals(exampleObject1.getModule2(), exampleObject2.getModule2());
+//    }
+//
+//    @Test
+//    public void advancedSingletonTest()
+//    {
+//        ExampleObject exampleObject1 = new ExampleObject();
+//        ExampleObject exampleObject2 = new ExampleObject();
+//        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
+//        Assert.assertNotEquals(exampleObject1.getModule2(), exampleObject2.getModule2());
+//        Assert.assertEquals(exampleObject1.getSomeModuleProvider().get(), exampleObject2.getSomeModuleProvider().get());
+//    }
 }

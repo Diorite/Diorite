@@ -35,14 +35,14 @@ import org.junit.Assert;
 
 import org.diorite.inject.AfterInject;
 import org.diorite.inject.BeforeInject;
+import org.diorite.inject.InjectionLibrary;
 import org.diorite.inject.EmptyAnn;
 import org.diorite.inject.Inject;
-import org.diorite.inject.InjectionLibrary;
 
-public class ExampleObject
+public class AdvancedExampleObject
 {
-    private static final Collection<String> invoked_pattern = List.of("beforeMoreModules", "injectMoreModules", "afterMoreModules");
-    private final        Collection<String> invoked         = new ArrayList<>(3);
+    private static final Collection<String> invoked_pattern = List.of("injectEdit", "beforeMoreModules", "injectMoreModules", "afterMoreModules");
+    private final        Collection<String> invoked         = new ArrayList<>(4);
 
     @Inject()
     @Singleton
@@ -56,6 +56,10 @@ public class ExampleObject
     @EmptyAnn
     @Singleton
     private Provider<Module> someModuleProvider;
+
+    @Inject()
+    @EmptyAnn
+    private Module edit = this.injectEdit();
 
     public Module getModule1()
     {
@@ -75,6 +79,23 @@ public class ExampleObject
     public Provider<Module> getSomeModuleProvider()
     {
         return this.someModuleProvider;
+    }
+
+    public Module getEdit()
+    {
+        return this.edit;
+    }
+
+    // this should found invoke to DILibrary.inject() in method body and replace it with proper injectField invoke
+    private Module injectEdit()
+    {
+        System.out.println("Before inject");
+        Module inject = InjectionLibrary.inject();
+        System.out.println("After inject: " + inject);
+        Assert.assertEquals(inject, "edit");
+        this.invoked.add("injectEdit");
+        return inject;
+//        return Injector.injectField(this, 0, 4);
     }
 
     @Inject
@@ -107,10 +128,11 @@ public class ExampleObject
         Assert.assertEquals(this.module2.getName(), "module2");
         Assert.assertEquals(this.module3.getName(), "essentials");
         Assert.assertEquals(this.someModuleProvider.get().getName(), "someModule");
+        Assert.assertEquals(this.edit.getName(), "edit");
     }
 
     public String toString()
     {
-        return this.module1 + " & " + this.module2 + " & " + this.module3 + " & " + this.someModuleProvider.get();
+        return this.module1 + " & " + this.module2 + " & " + this.module3 + " & " + this.someModuleProvider.get() + " & " + this.edit;
     }
 }

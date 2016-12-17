@@ -24,26 +24,16 @@
 
 package org.diorite.inject.injections;
 
-import javax.inject.Provider;
 import javax.inject.Singleton;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import org.junit.Assert;
 
-import org.diorite.inject.AfterInject;
-import org.diorite.inject.BeforeInject;
 import org.diorite.inject.EmptyAnn;
 import org.diorite.inject.Inject;
 import org.diorite.inject.InjectionLibrary;
 
-public class ExampleObject
+public class SimpleExampleObject
 {
-    private static final Collection<String> invoked_pattern = List.of("beforeMoreModules", "injectMoreModules", "afterMoreModules");
-    private final        Collection<String> invoked         = new ArrayList<>(3);
-
     @Inject()
     @Singleton
     private Module module1;
@@ -52,10 +42,6 @@ public class ExampleObject
     @Inject("essentials")
     @EmptyAnn
     private final Module module3 = InjectionLibrary.inject();
-    @Inject()
-    @EmptyAnn
-    @Singleton
-    private Provider<Module> someModuleProvider;
 
     public Module getModule1()
     {
@@ -72,45 +58,15 @@ public class ExampleObject
         return this.module3;
     }
 
-    public Provider<Module> getSomeModuleProvider()
-    {
-        return this.someModuleProvider;
-    }
-
-    @Inject
-    @Singleton
-    private void injectMoreModules(Module module1, Module module2, @EmptyAnn Module guard)
-    {
-//        System.out.println("injectMoreModules: " + module1 + " & " + module2 + " & " + guard);
-        Assert.assertEquals(module1.getName(), new Module1().getName());
-        Assert.assertEquals(module2.getName(), new Module2().getName());
-        Assert.assertEquals(guard.getName(), "guard");
-        this.invoked.add("injectMoreModules");
-    }
-
-    @AfterInject("MoreModules")
-    private void afterMoreModules()
-    {
-        this.invoked.add("afterMoreModules");
-    }
-
-    @BeforeInject("MoreModules")
-    private void beforeMoreModules()
-    {
-        this.invoked.add("beforeMoreModules");
-    }
-
     public void assertInjections()
     {
-        Assert.assertEquals(invoked_pattern, this.invoked);
         Assert.assertEquals(this.module1.getName(), "module1");
         Assert.assertEquals(this.module2.getName(), "module2");
         Assert.assertEquals(this.module3.getName(), "essentials");
-        Assert.assertEquals(this.someModuleProvider.get().getName(), "someModule");
     }
 
     public String toString()
     {
-        return this.module1 + " & " + this.module2 + " & " + this.module3 + " & " + this.someModuleProvider.get();
+        return this.module1 + " & " + this.module2 + " & " + this.module3;
     }
 }
