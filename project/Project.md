@@ -628,13 +628,13 @@ Main goal is simple way to inject fields.
 Library will edit classes to add code that will fetch missing objects.  
 
 ###### Goals
-- [ ] Basic injection bindings.
-- [ ] Dynamic injection bindings.
-- [ ] Generating Qualifier and Scope implementation classes.
-- [ ] Singleton scope.
-- [ ] Rebinding in runtime.
-- [ ] Shortcut annotations - one annotation works as multiple Qualifiers.
-- [ ] After/before inject methods.
+- [x] Basic injection bindings.
+- [x] Dynamic injection bindings.
+- [x] Generating Qualifier and Scope implementation classes.
+- [x] Singleton scope.
+- [x] Rebinding in runtime.
+- [x] Shortcut annotations - one annotation works as multiple Qualifiers.
+- [x] After/before inject methods.
 - [ ] Retransforming all classes that use injecting on load time.
 
 ____
