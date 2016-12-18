@@ -22,46 +22,14 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.scopes;
+package org.diorite.inject.controller;
 
-import javax.annotation.Nullable;
+import org.objectweb.asm.tree.MethodInsnNode;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.diorite.inject.ScopeHandler;
-import org.diorite.inject.Singleton;
-import org.diorite.inject.binder.DynamicProvider;
-
-/**
- * Implementation of {@link Singleton} scope.
- *
- * @param <T>
- *         type of object.
- */
-public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
+public class InjectTracker
 {
-    private AtomicBoolean invoked = new AtomicBoolean(false);
-    @Nullable
-    private T value;
-
-    @Override
-    public DynamicProvider<T> apply(DynamicProvider<T> dynamicProvider, Singleton scope)
+    public static void trackFromMethodCall(MethodInsnNode methodInsnNode)
     {
-        if (this.invoked.get())
-        {
-            return (object, data) -> this.value;
-        }
-        return (object, data) ->
-        {
-            if (this.invoked.getAndSet(true))
-            {
-                return this.value;
-            }
-            synchronized (this)
-            {
-                this.value = dynamicProvider.tryToGet(object, data);
-                return this.value;
-            }
-        };
+
     }
 }

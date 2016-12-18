@@ -24,8 +24,6 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Provider;
-
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.diorite.inject.Provider;
 import org.diorite.inject.binder.Binder;
 import org.diorite.inject.binder.BinderInstance;
 import org.diorite.inject.binder.DynamicProvider;

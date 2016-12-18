@@ -44,7 +44,6 @@
         <version.library.log4j>2.7</version.library.log4j>
         <version.library.asm>6.0_ALPHA</version.library.asm>
         <version.library.jsr305>3.0.1</version.library.jsr305>
-        <version.library.inject>1</version.library.inject>
         <version.library.junit>6.0_ALPHA</version.library.junit>
 
         <build>unspecified</build>
@@ -152,11 +151,6 @@
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-all</artifactId>
                 <version>${version.library.asm}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${version.library.inject}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>

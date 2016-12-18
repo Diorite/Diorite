@@ -24,9 +24,6 @@
 
 package org.diorite.inject.injections;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,29 +32,31 @@ import org.junit.Assert;
 
 import org.diorite.inject.AfterInject;
 import org.diorite.inject.BeforeInject;
-import org.diorite.inject.InjectionLibrary;
 import org.diorite.inject.EmptyAnn;
-import org.diorite.inject.Inject;
+import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.NamedInject;
+import org.diorite.inject.Provider;
+import org.diorite.inject.Singleton;
 
 public class AdvancedExampleObject
 {
     private static final Collection<String> invoked_pattern = List.of("injectEdit", "beforeMoreModules", "injectMoreModules", "afterMoreModules");
     private final        Collection<String> invoked         = new ArrayList<>(4);
 
-    @Inject()
+    @NamedInject()
     @Singleton
     private Module module1;
-    @Inject()
+    @NamedInject()
     private Module module2;
-    @Inject("essentials")
+    @NamedInject("essentials")
     @EmptyAnn
     private final Module module3 = InjectionLibrary.inject();
-    @Inject()
+    @NamedInject()
     @EmptyAnn
     @Singleton
     private Provider<Module> someModuleProvider;
 
-    @Inject()
+    @NamedInject()
     @EmptyAnn
     private Module edit = this.injectEdit();
 
@@ -98,7 +97,7 @@ public class AdvancedExampleObject
 //        return Injector.injectField(this, 0, 4);
     }
 
-    @Inject
+    @NamedInject
     @Singleton
     private void injectMoreModules(Module module1, Module module2, @EmptyAnn Module guard)
     {
@@ -127,7 +126,7 @@ public class AdvancedExampleObject
         Assert.assertEquals(this.module1.getName(), "module1");
         Assert.assertEquals(this.module2.getName(), "module2");
         Assert.assertEquals(this.module3.getName(), "essentials");
-        Assert.assertEquals(this.someModuleProvider.get().getName(), "someModule");
+        Assert.assertEquals(this.someModuleProvider.notNull().getName(), "someModule");
         Assert.assertEquals(this.edit.getName(), "edit");
     }
 

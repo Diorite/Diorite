@@ -24,10 +24,6 @@
 
 package org.diorite.inject;
 
-import javax.inject.Named;
-import javax.inject.Scope;
-import javax.inject.Singleton;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;

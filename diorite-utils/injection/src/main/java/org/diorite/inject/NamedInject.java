@@ -22,46 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.scopes;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.diorite.inject.ScopeHandler;
-import org.diorite.inject.Singleton;
-import org.diorite.inject.binder.DynamicProvider;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Implementation of {@link Singleton} scope.
- *
- * @param <T>
- *         type of object.
+ * Shortcut {@link Inject} annotation for {@link Named} {@link Qualifier} annotation.
  */
-public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@ShortcutInject//(Named.class)
+public @interface NamedInject
 {
-    private AtomicBoolean invoked = new AtomicBoolean(false);
-    @Nullable
-    private T value;
-
-    @Override
-    public DynamicProvider<T> apply(DynamicProvider<T> dynamicProvider, Singleton scope)
-    {
-        if (this.invoked.get())
-        {
-            return (object, data) -> this.value;
-        }
-        return (object, data) ->
-        {
-            if (this.invoked.getAndSet(true))
-            {
-                return this.value;
-            }
-            synchronized (this)
-            {
-                this.value = dynamicProvider.tryToGet(object, data);
-                return this.value;
-            }
-        };
-    }
+    /**
+     * Name qualifier of injected value.
+     *
+     * @return name qualifier of injected value.
+     *
+     * @see Named#value()
+     */
+    @DelegatedQualifier(Named.class)
+    String value() default "";
 }

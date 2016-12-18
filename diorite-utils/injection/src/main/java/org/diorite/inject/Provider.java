@@ -22,46 +22,61 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.scopes;
+package org.diorite.inject;
 
 import javax.annotation.Nullable;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.diorite.inject.ScopeHandler;
-import org.diorite.inject.Singleton;
-import org.diorite.inject.binder.DynamicProvider;
-
 /**
- * Implementation of {@link Singleton} scope.
+ * Provides instances of {@code T}. Typically implemented by an injector. For
+ * any type {@code T} that can be injected, you can also inject
+ * {@code Provider<T>}. Compared to injecting {@code T} directly, injecting
+ * {@code Provider<T>} enables:
  *
- * @param <T>
- *         type of object.
+ * <ul>
+ * <li>retrieving multiple instances.</li>
+ * <li>lazy or optional retrieval of an instance.</li>
+ * <li>breaking circular dependencies.</li>
+ * <li>abstracting scope so you can look up an instance in a smaller scope
+ * from an instance in a containing scope.</li>
+ * </ul>
+ *
+ * <p>For example:
+ *
+ * <pre>
+ *   class Car {
+ *     &#064;Inject Car(Provider&lt;Seat> seatProvider) {
+ *       Seat driver = seatProvider.get();
+ *       Seat passenger = seatProvider.get();
+ *       ...
+ *     }
+ *   }</pre>
  */
-public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
+public interface Provider<T>
 {
-    private AtomicBoolean invoked = new AtomicBoolean(false);
-    @Nullable
-    private T value;
 
-    @Override
-    public DynamicProvider<T> apply(DynamicProvider<T> dynamicProvider, Singleton scope)
+    /**
+     * Provides a fully-constructed and injected instance of {@code T}.
+     */
+    @Nullable
+    T get();
+
+    default T orDefault(T def)
     {
-        if (this.invoked.get())
+        T t = this.get();
+        if (t == null)
         {
-            return (object, data) -> this.value;
+            return def;
         }
-        return (object, data) ->
+        return t;
+    }
+
+    default T notNull()
+    {
+        T t = this.get();
+        if (t == null)
         {
-            if (this.invoked.getAndSet(true))
-            {
-                return this.value;
-            }
-            synchronized (this)
-            {
-                this.value = dynamicProvider.tryToGet(object, data);
-                return this.value;
-            }
-        };
+            throw new InjectionException("Injected null values, but requested non-null value");
+        }
+        return t;
     }
 }

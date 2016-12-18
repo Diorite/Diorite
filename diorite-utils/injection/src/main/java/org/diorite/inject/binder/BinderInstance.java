@@ -24,9 +24,9 @@
 
 package org.diorite.inject.binder;
 
-import javax.inject.Provider;
-
 import java.util.function.Supplier;
+
+import org.diorite.inject.Provider;
 
 public interface BinderInstance<T> extends Binder<T>
 {

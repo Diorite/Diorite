@@ -22,10 +22,5 @@
             <groupId>org.diorite.utils</groupId>
             <artifactId>unsafe</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
     </dependencies>
 </project>

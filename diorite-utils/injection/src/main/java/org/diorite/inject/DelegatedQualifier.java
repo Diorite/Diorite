@@ -32,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation methods annotated with this annotation are used to construct new instance of {@link javax.inject.Qualifier} annotation type selected by {@link
+ * Annotation methods annotated with this annotation are used to construct new instance of {@link Qualifier} annotation type selected by {@link
  * #value()} method. <br>
  * Annotation type must be annotated with {@link ShortcutInject}.
  */
@@ -42,7 +42,7 @@ import java.lang.annotation.Target;
 public @interface DelegatedQualifier
 {
     /**
-     * Type of annotation, type must be annotated with {@link javax.inject.Qualifier}.
+     * Type of annotation, type must be annotated with {@link Qualifier}.
      *
      * @return type of Qualifier annotation.
      */

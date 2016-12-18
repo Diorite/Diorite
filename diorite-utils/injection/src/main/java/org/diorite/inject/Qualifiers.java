@@ -24,9 +24,6 @@
 
 package org.diorite.inject;
 
-import javax.inject.Qualifier;
-import javax.inject.Scope;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -62,7 +59,7 @@ public final class Qualifiers
         }
         if (! (type.isAnnotationPresent(Qualifier.class) || type.isAnnotationPresent(Scope.class)))
         {
-            throw new IllegalStateException("Given annotation isn't annotated with 'javax.inject.Qualifier' or 'javax.inject.Scope' annotation!");
+            throw new IllegalStateException("Given annotation isn't annotated with 'org.diorite.inject.Qualifier' or 'org.diorite.inject.Scope' annotation!");
         }
         constructors.put(type, constructor);
         Qualifiers.unproxy.put(type, unproxy);

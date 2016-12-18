@@ -22,46 +22,31 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.scopes;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.diorite.inject.ScopeHandler;
-import org.diorite.inject.Singleton;
-import org.diorite.inject.binder.DynamicProvider;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
 
 /**
- * Implementation of {@link Singleton} scope.
+ * String-based {@linkplain Qualifier qualifier}.
  *
- * @param <T>
- *         type of object.
+ * <p>Example usage:
+ *
+ * <pre>
+ *   public class Car {
+ *     &#064;Inject <b>@Named("driver")</b> Seat driverSeat;
+ *     &#064;Inject <b>@Named("passenger")</b> Seat passengerSeat;
+ *     ...
+ *   }</pre>
  */
-public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
-{
-    private AtomicBoolean invoked = new AtomicBoolean(false);
-    @Nullable
-    private T value;
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface Named {
 
-    @Override
-    public DynamicProvider<T> apply(DynamicProvider<T> dynamicProvider, Singleton scope)
-    {
-        if (this.invoked.get())
-        {
-            return (object, data) -> this.value;
-        }
-        return (object, data) ->
-        {
-            if (this.invoked.getAndSet(true))
-            {
-                return this.value;
-            }
-            synchronized (this)
-            {
-                this.value = dynamicProvider.tryToGet(object, data);
-                return this.value;
-            }
-        };
-    }
+    /** The name. */
+    String value() default "";
 }

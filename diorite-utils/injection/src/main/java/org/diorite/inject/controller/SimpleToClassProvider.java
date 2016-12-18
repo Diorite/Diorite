@@ -24,11 +24,11 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Provider;
-
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
+
+import org.diorite.inject.Provider;
 
 class SimpleToClassProvider<T> implements Provider<T>
 {

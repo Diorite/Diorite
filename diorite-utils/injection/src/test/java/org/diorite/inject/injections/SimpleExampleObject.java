@@ -24,22 +24,21 @@
 
 package org.diorite.inject.injections;
 
-import javax.inject.Singleton;
-
 import org.junit.Assert;
 
 import org.diorite.inject.EmptyAnn;
-import org.diorite.inject.Inject;
 import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.NamedInject;
+import org.diorite.inject.Singleton;
 
 public class SimpleExampleObject
 {
-    @Inject()
+    @NamedInject()
     @Singleton
     private Module module1;
-    @Inject()
+    @NamedInject()
     private Module module2;
-    @Inject("essentials")
+    @NamedInject("essentials")
     @EmptyAnn
     private final Module module3 = InjectionLibrary.inject();
 

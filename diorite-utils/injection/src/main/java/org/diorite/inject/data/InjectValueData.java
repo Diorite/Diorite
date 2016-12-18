@@ -25,11 +25,11 @@
 package org.diorite.inject.data;
 
 import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+import org.diorite.inject.Provider;
 import org.diorite.inject.binder.DynamicProvider;
 import org.diorite.inject.binder.qualifier.QualifierData;
 

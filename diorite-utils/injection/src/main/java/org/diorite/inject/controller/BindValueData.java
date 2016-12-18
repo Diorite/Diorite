@@ -24,12 +24,11 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Provider;
-
 import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.diorite.inject.Provider;
 import org.diorite.inject.binder.DynamicProvider;
 import org.diorite.inject.binder.qualifier.QualifierPattern;
 import org.diorite.inject.data.InjectValueData;

@@ -25,7 +25,6 @@
 package org.diorite.inject;
 
 import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;

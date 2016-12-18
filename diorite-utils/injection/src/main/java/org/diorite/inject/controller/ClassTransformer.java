@@ -657,15 +657,15 @@ public class ClassTransformer implements Opcodes
     @SuppressWarnings("rawtypes")
     abstract static class MemberPair<DATA, NODE>
     {
-        DATA             data;
-        NODE             node;
-        int              index;
-        AbstractInsnNode injectStart;
-        AbstractInsnNode injectEnd;
-        MethodNode       injectNode;
-        MemberPair       next;
-        MemberPair       prev;
-        boolean          isStatic;
+        @Nullable DATA data;
+        @Nullable NODE node;
+        int index;
+        @Nullable AbstractInsnNode injectStart;
+        @Nullable AbstractInsnNode injectEnd;
+        @Nullable MethodNode       injectNode;
+        @Nullable MemberPair       next;
+        @Nullable MemberPair       prev;
+        boolean isStatic;
 
         boolean isInjected()
         {
@@ -690,6 +690,10 @@ public class ClassTransformer implements Opcodes
         @Override
         String getFullName()
         {
+            if (this.node == null)
+            {
+                throw new IllegalStateException("node not set.");
+            }
             return this.node.name + " " + this.node.desc;
         }
 
@@ -704,6 +708,10 @@ public class ClassTransformer implements Opcodes
         @Override
         String getFullName()
         {
+            if (this.node == null)
+            {
+                throw new IllegalStateException("node not set.");
+            }
             return this.node.name + " " + this.node.desc;
         }
 
@@ -721,6 +729,10 @@ public class ClassTransformer implements Opcodes
             if (methodPair == null)
             {
                 continue;
+            }
+            if (methodPair.node == null)
+            {
+                throw new IllegalStateException("node not set.");
             }
             lineNumber = InvokerGenerator.printMethod(mv, clazz, method, Modifier.isStatic(methodPair.node.access), lineNumber);
         }

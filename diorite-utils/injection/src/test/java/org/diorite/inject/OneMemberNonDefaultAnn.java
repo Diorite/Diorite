@@ -24,8 +24,6 @@
 
 package org.diorite.inject;
 
-import javax.inject.Qualifier;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

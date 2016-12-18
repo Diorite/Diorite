@@ -24,9 +24,6 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Qualifier;
-import javax.inject.Scope;
-
 import java.lang.annotation.Annotation;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.AnnotatedElement;
@@ -50,7 +47,11 @@ import org.diorite.inject.BeforeInject;
 import org.diorite.inject.DelegatedQualifier;
 import org.diorite.inject.Inject;
 import org.diorite.inject.InjectionControllerBasic;
+import org.diorite.inject.NamedInject;
+import org.diorite.inject.Provider;
+import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
+import org.diorite.inject.Scope;
 import org.diorite.inject.ShortcutInject;
 import org.diorite.inject.binder.Binder;
 import org.diorite.unsafe.ByteBuddyUtils;
@@ -67,8 +68,8 @@ import net.bytebuddy.description.type.TypeDescription.Generic;
 
 public final class DefaultInjectionController extends InjectionControllerBasic<AnnotatedCodeElement, ForLoadedType, Generic>
 {
-    static final TypeDescription.ForLoadedType INJECT              = new TypeDescription.ForLoadedType(javax.inject.Inject.class);
-    static final TypeDescription.ForLoadedType PROVIDER            = new TypeDescription.ForLoadedType(javax.inject.Provider.class);
+    static final TypeDescription.ForLoadedType INJECT              = new TypeDescription.ForLoadedType(Inject.class);
+    static final TypeDescription.ForLoadedType PROVIDER            = new TypeDescription.ForLoadedType(Provider.class);
     static final TypeDescription.ForLoadedType SHORTCUT_INJECT     = new TypeDescription.ForLoadedType(ShortcutInject.class);
     static final TypeDescription.ForLoadedType DELEGATED_QUALIFIER = new TypeDescription.ForLoadedType(DelegatedQualifier.class);
     static final TypeDescription.ForLoadedType QUALIFIER           = new TypeDescription.ForLoadedType(Qualifier.class);
@@ -448,7 +449,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         for (Annotation annotation : element.getAnnotations())
         {
             Class<? extends Annotation> annotationType = annotation.annotationType();
-            if (annotationType.equals(Inject.class))
+            if (annotationType.equals(NamedInject.class))
             {
                 return true;
             }

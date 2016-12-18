@@ -25,8 +25,6 @@
 package org.diorite.inject.asm;
 
 import javax.annotation.Nullable;
-import javax.inject.Qualifier;
-import javax.inject.Scope;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -43,7 +41,9 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
+import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
+import org.diorite.inject.Scope;
 import org.diorite.inject.utils.Constants;
 import org.diorite.unsafe.ByteBuddyUtils;
 

@@ -22,46 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.scopes;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.diorite.inject.ScopeHandler;
-import org.diorite.inject.Singleton;
-import org.diorite.inject.binder.DynamicProvider;
-
-/**
- * Implementation of {@link Singleton} scope.
- *
- * @param <T>
- *         type of object.
- */
-public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
+public class InjectionException extends RuntimeException
 {
-    private AtomicBoolean invoked = new AtomicBoolean(false);
-    @Nullable
-    private T value;
+    private static final long serialVersionUID = 0;
 
-    @Override
-    public DynamicProvider<T> apply(DynamicProvider<T> dynamicProvider, Singleton scope)
+    public InjectionException()
     {
-        if (this.invoked.get())
-        {
-            return (object, data) -> this.value;
-        }
-        return (object, data) ->
-        {
-            if (this.invoked.getAndSet(true))
-            {
-                return this.value;
-            }
-            synchronized (this)
-            {
-                this.value = dynamicProvider.tryToGet(object, data);
-                return this.value;
-            }
-        };
+    }
+
+    public InjectionException(String message)
+    {
+        super(message);
+    }
+
+    public InjectionException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public InjectionException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public InjectionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
+    {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
