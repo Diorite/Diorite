@@ -70,7 +70,7 @@ public interface Provider<T>
         return t;
     }
 
-    default T notNull()
+    default T getNotNull()
     {
         T t = this.get();
         if (t == null)

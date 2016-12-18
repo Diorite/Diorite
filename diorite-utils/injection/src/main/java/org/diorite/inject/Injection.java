@@ -28,14 +28,13 @@ import javax.annotation.Nullable;
 
 import java.lang.instrument.Instrumentation;
 import java.util.function.Supplier;
-
-import org.objectweb.asm.Opcodes;
+import java.util.logging.Logger;
 
 import org.diorite.inject.controller.DefaultInjectionController;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 
-public final class InjectionLibrary implements Opcodes
+public final class Injection
 {
 //    public static final String DEFAULT_ID = "default";
 
@@ -45,8 +44,13 @@ public final class InjectionLibrary implements Opcodes
 
     private static final DefaultInjectionController DEFAULT = new DefaultInjectionController();
 
-    private InjectionLibrary()
+    private Injection()
     {
+    }
+
+    public static void ensureLoaded()
+    {
+        Logger.getLogger("diorite-injection").info("Injection library is ready to use.");
     }
 
     public static DefaultInjectionController getController()

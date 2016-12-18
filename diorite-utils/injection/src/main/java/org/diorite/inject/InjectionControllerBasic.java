@@ -46,7 +46,7 @@ public abstract class InjectionControllerBasic<MEMBER, TYPE, GENERIC> extends In
     static
     {
         // ensure loaded first:
-        Class<InjectionLibrary> libraryClass = InjectionLibrary.class;
+        Class<Injection> libraryClass = Injection.class;
     }
 
     protected final Map<TYPE, ClassData<GENERIC>> map      = new ConcurrentHashMap<>(100);

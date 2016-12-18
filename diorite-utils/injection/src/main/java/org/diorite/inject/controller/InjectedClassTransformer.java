@@ -31,7 +31,6 @@ import java.security.ProtectionDomain;
 
 import org.diorite.inject.InjectionController;
 import org.diorite.inject.asm.AbstractClassTransformer;
-import org.diorite.unsafe.AsmUtils;
 
 public class InjectedClassTransformer extends AbstractClassTransformer<InjectionController<?, ?, ?>>
 {
@@ -56,9 +55,9 @@ public class InjectedClassTransformer extends AbstractClassTransformer<Injection
         try
         {
             InjectTransformer classTransformer = new InjectTransformer(bytes, classData);
-            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
+//            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             classTransformer.run();
-            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
+//            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             return classTransformer.getWriter().toByteArray();
         } catch (Throwable e)
         {

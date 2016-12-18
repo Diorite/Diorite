@@ -29,24 +29,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.diorite.inject.EmptyAnn;
-import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.Injection;
 import org.diorite.inject.Named;
 import org.diorite.inject.Qualifiers;
 import org.diorite.inject.controller.DefaultInjectionController;
 
 public class InjectionTest
 {
-    public static void main(String[] args)
+    static
     {
-        prepare();
-        InjectionTest injectionTest = new InjectionTest();
-        injectionTest.simpleInjectionTest();
+        Injection.ensureLoaded();
     }
+
+    private static final int TESTS = 3;
 
     @BeforeClass
     public static void prepare()
     {
-        DefaultInjectionController controller = InjectionLibrary.getController();
+        Class<MethodExampleObject> methodExampleObjectClass = MethodExampleObject.class;
+        DefaultInjectionController controller = Injection.getController();
         controller.bindToClass(Module.class).with(Named.class, EmptyAnn.class).dynamic(
                 (object, data) ->
                 {
@@ -73,39 +74,44 @@ public class InjectionTest
     @Test
     public void simpleInjectionTest()
     {
-        SimpleExampleObject exampleObject = new SimpleExampleObject();
-        exampleObject.assertInjections();
+        for (int i = 0; i < TESTS; i++)
+        {
+            ExampleObject exampleObject = new ExampleObject();
+            exampleObject.assertInjections();
+        }
     }
 
-    //    @Test
-//    public void injectionTest()
-//    {
-//        ExampleObject exampleObject = new ExampleObject();
-//        exampleObject.assertInjections();
-//    }
-//
-//    @Test
-//    public void advancedInjectionTest()
-//    {
-//        AdvancedExampleObject exampleObject = new AdvancedExampleObject();
-//        exampleObject.assertInjections();
-//    }
-//
+    @Test
+    public void methodInjectionTest()
+    {
+        for (int i = 0; i < TESTS; i++)
+        {
+            MethodExampleObject exampleObject = new MethodExampleObject();
+            exampleObject.assertInjections();
+        }
+    }
+
     @Test
     public void singletonTest()
     {
-        SimpleExampleObject exampleObject1 = new SimpleExampleObject();
-        SimpleExampleObject exampleObject2 = new SimpleExampleObject();
-        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
+        for (int i = 0; i < TESTS; i++)
+        {
+            ExampleObject exampleObject1 = new ExampleObject();
+            ExampleObject exampleObject2 = new ExampleObject();
+            Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
+            Assert.assertEquals(exampleObject1.getModule1().hashCode(), exampleObject2.getModule1().hashCode());
+        }
     }
-//
-//    @Test
-//    public void advancedSingletonTest()
-//    {
-//        ExampleObject exampleObject1 = new ExampleObject();
-//        ExampleObject exampleObject2 = new ExampleObject();
-//        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
-//        Assert.assertNotEquals(exampleObject1.getModule2(), exampleObject2.getModule2());
-//        Assert.assertEquals(exampleObject1.getSomeModuleProvider().get(), exampleObject2.getSomeModuleProvider().get());
-//    }
+
+    @Test
+    public void advancedSingletonTest()
+    {
+        for (int i = 0; i < TESTS; i++)
+        {
+            MethodExampleObject exampleObject1 = new MethodExampleObject();
+            MethodExampleObject exampleObject2 = new MethodExampleObject();
+            Assert.assertEquals(exampleObject1.getSomeModuleProvider().getNotNull(), exampleObject2.getSomeModuleProvider().getNotNull());
+            Assert.assertEquals(exampleObject1.getSomeModuleProvider().getNotNull().hashCode(), exampleObject2.getSomeModuleProvider().getNotNull().hashCode());
+        }
+    }
 }

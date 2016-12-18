@@ -38,7 +38,7 @@ public final class Injector
     @Deprecated
     public static <T> T injectField(Object $this, int typeId, int memberId)
     {
-        return (T) ((InjectionController) InjectionLibrary.getController()).getInjectedField($this, typeId, memberId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedField($this, typeId, memberId);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -46,6 +46,6 @@ public final class Injector
     @Deprecated
     public static <T> T injectMethod(Object $this, int typeId, int memberId, int argumentId)
     {
-        return (T) ((InjectionController) InjectionLibrary.getController()).getInjectedMethod($this, typeId, memberId, argumentId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedMethod($this, typeId, memberId, argumentId);
     }
 }

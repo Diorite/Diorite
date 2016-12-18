@@ -36,7 +36,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.Injection;
 import org.diorite.inject.data.InjectValueData;
 import org.diorite.inject.utils.Constants;
 import org.diorite.unsafe.AsmUtils;
@@ -59,7 +59,7 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
     public static final String   INJECTOR_FIELD_DESC  = "(Ljava/lang/Object;II)Ljava/lang/Object;";
     public static final String   INJECTOR_METHOD      = "injectMethod";
     public static final String   INJECTOR_METHOD_DESC = "(Ljava/lang/Object;III)Ljava/lang/Object;";
-    public static final String   GENERATED_PREFIX     = InjectionLibrary.class.getPackage().getName() + ".generated.invokers";
+    public static final String   GENERATED_PREFIX     = Injection.class.getPackage().getName() + ".generated.invokers";
     public static final Object[] STACK                = {};
     public static final int      HASHCODE_MULTI       = 127;
 
