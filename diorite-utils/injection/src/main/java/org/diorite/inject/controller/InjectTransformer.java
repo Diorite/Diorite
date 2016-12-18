@@ -61,7 +61,7 @@ public class InjectTransformer implements Opcodes
     private final ClassNode classNode;
     private final ClassData classData;
 
-    private final Map<MethodNode, MethodInsnNode> inits = new LinkedHashMap<>(3);
+    private final Map<MethodNode, InitPair> inits = new LinkedHashMap<>(3);
 //    private MethodNode clinit;
 
     private final Map<String, MethodPair> methods = new LinkedHashMap<>(5);
@@ -161,7 +161,10 @@ public class InjectTransformer implements Opcodes
 //            }
             if (method.name.equals(InjectionController.CONSTRUCTOR_NAME))
             {
-                this.inits.put(method, this.findSuperNode(method));
+                MethodInsnNode superNode = this.findSuperNode(method);
+                InitPair initPair = new InitPair(method, superNode);
+                this.findReturns(initPair);
+                this.inits.put(method, initPair);
             }
             String id = method.desc + method.name;
             MethodPair methodPair = this.methods.computeIfAbsent(id, k -> new MethodPair(null));
@@ -176,6 +179,24 @@ public class InjectTransformer implements Opcodes
             FieldPair fieldPair = this.fields.computeIfAbsent(id, k -> new FieldPair(null));
             fieldPair.node = field;
             fieldPair.index = i;
+        }
+    }
+
+    private void findReturns(InitPair initPair)
+    {
+        MethodNode init = initPair.node;
+        AbstractInsnNode node = init.instructions.getFirst();
+        while (node != null)
+        {
+            if ((node instanceof InsnNode) && AsmUtils.isReturnCode(node.getOpcode()))
+            {
+                initPair.returns.add((InsnNode) node);
+            }
+            node = node.getNext();
+            if (node == null)
+            {
+                break;
+            }
         }
     }
 
@@ -313,25 +334,17 @@ public class InjectTransformer implements Opcodes
         MethodNode codeBefore = new MethodNode();
         MethodNode codeAfter = new MethodNode();
         this.fillMethodInvokes(codeBefore, codeAfter, this.classData);
-        for (Entry<MethodNode, MethodInsnNode> initEntry : this.inits.entrySet())
+        for (Entry<MethodNode, InitPair> initEntry : this.inits.entrySet())
         {
             MethodNode init = initEntry.getKey();
-            MethodInsnNode superInvoke = initEntry.getValue();
+            InitPair initPair = initEntry.getValue();
+            MethodInsnNode superInvoke = initPair.superInvoke;
 
             if (codeAfter.instructions.size() > 0)
             {
-                AbstractInsnNode node = init.instructions.getFirst();
-                while (node != null)
+                for (InsnNode node : initPair.returns)
                 {
-                    if ((node instanceof InsnNode) && AsmUtils.isReturnCode(node.getOpcode()))
-                    {
-                        init.instructions.insertBefore(node, codeAfter.instructions);
-                    }
-                    node = node.getNext();
-                    if (node == null)
-                    {
-                        break;
-                    }
+                    init.instructions.insertBefore(node, codeAfter.instructions);
                 }
             }
             if (codeBefore.instructions.size() > 0)
@@ -426,6 +439,19 @@ public class InjectTransformer implements Opcodes
             }
         }
         return PlaceholderType.INVALID;
+    }
+
+    static class InitPair
+    {
+        MethodNode     node;
+        MethodInsnNode superInvoke;
+        Collection<InsnNode> returns = new LinkedList<>();
+
+        InitPair(MethodNode node, MethodInsnNode superInvoke)
+        {
+            this.node = node;
+            this.superInvoke = superInvoke;
+        }
     }
 
     @SuppressWarnings("rawtypes")
