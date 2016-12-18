@@ -22,41 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.injections;
+package org.diorite.inject;
 
-import java.util.Objects;
-
-public class Module1 implements Module
+/**
+ * Each class that use injections must have this annotation.
+ */
+public @interface InjectableClass
 {
-    public String toString()
-    {
-        return "Module1[" + this.hashCode() + "]";
-    }
-
-    @Override
-    public String getName()
-    {
-        return "Module1";
-    }
-
-    @Override
-    public boolean equals(Object object)
-    {
-        if (this == object)
-        {
-            return true;
-        }
-        if (! (object instanceof Module1))
-        {
-            return false;
-        }
-        Module1 anyModule = (Module1) object;
-        return Objects.equals(this.getName(), anyModule.getName());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(this.getName());
-    }
 }

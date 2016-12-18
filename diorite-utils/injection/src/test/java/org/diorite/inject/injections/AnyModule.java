@@ -24,6 +24,8 @@
 
 package org.diorite.inject.injections;
 
+import java.util.Objects;
+
 public class AnyModule implements Module
 {
     private final String name;
@@ -42,5 +44,26 @@ public class AnyModule implements Module
     public String getName()
     {
         return this.name;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof AnyModule))
+        {
+            return false;
+        }
+        AnyModule anyModule = (AnyModule) object;
+        return Objects.equals(this.name, anyModule.getName());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.name);
     }
 }

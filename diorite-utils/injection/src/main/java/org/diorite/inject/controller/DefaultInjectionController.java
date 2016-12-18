@@ -26,6 +26,7 @@ package org.diorite.inject.controller;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
 import org.diorite.inject.Scope;
 import org.diorite.inject.ShortcutInject;
+import org.diorite.inject.asm.AddClinitClassFileTransformer;
 import org.diorite.inject.binder.Binder;
 import org.diorite.unsafe.ByteBuddyUtils;
 
@@ -82,7 +84,9 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
 
     public DefaultInjectionController()
     {
-        ByteBuddyAgent.getInstrumentation().addTransformer(new InjectedClassTransformer(this, ByteBuddyAgent.getInstrumentation()), true);
+        Instrumentation instrumentation = ByteBuddyAgent.getInstrumentation();
+        instrumentation.addTransformer(new AddClinitClassFileTransformer(this, instrumentation), false);
+        instrumentation.addTransformer(new InjectedClassTransformer(this, instrumentation), true);
     }
 
     static String fixName(TypeDescription.Generic type, String currentName)
@@ -107,8 +111,18 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         }
     }
 
+    public void addClassData(Class<?> type, boolean bind)
+    {
+        org.diorite.inject.data.ClassData<Generic> classData = this.addClassData(new ForLoadedType(type));
+        if (bind && (classData != null))
+        {
+            this.rebindSingleWithLock(classData);
+        }
+    }
+
     @Override
-    public ClassData addClassData(TypeDescription.ForLoadedType typeDescription, org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    public ClassData addClassData(TypeDescription.ForLoadedType typeDescription,
+                                  org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
     {
         if (! (classData instanceof ClassData))
         {
@@ -132,7 +146,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         }
         catch (Exception e)
         {
-            throw new GeneratedCodeError(e);
+            throw new TransformerError(e);
         }
         return (ClassData) classData;
     }
@@ -265,6 +279,55 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
 //        ByteBuddyAgent.getInstrumentation().retransformClasses(ByteBuddyUtils.toClass(type));
 //    }
 
+    private void rebindSingleWithLock(org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    {
+        Lock writeLock = this.lock.writeLock();
+        try
+        {
+            writeLock.lock();
+            this.rebindSingle(classData);
+        }
+        finally
+        {
+            writeLock.unlock();
+        }
+    }
+
+    private void rebindSingle(org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    {
+        Collection<org.diorite.inject.data.InjectValueData<?, Generic>> allData = new ArrayList<>(100);
+        for (org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic> fieldData : classData.getMembers())
+        {
+            allData.addAll(fieldData.getInjectValues());
+        }
+        for (org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData : allData)
+        {
+            Iterator<BindValueData> iterator = this.bindValues.iterator();
+            BindValueData best = null;
+            while (iterator.hasNext())
+            {
+                BindValueData data = iterator.next();
+                if (! data.isCompatible(valueData))
+                {
+                    continue;
+                }
+                if ((best == null) || (best.compareTo(data) > 0))
+                {
+                    best = data;
+                }
+            }
+            if (best == null)
+            {
+                valueData.setProvider(null);
+            }
+            else
+            {
+                valueData.setProvider(best.getProvider());
+            }
+            this.applyScopes(valueData);
+        }
+    }
+
     @Override
     public void rebind()
     {
@@ -274,37 +337,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
             writeLock.lock();
             for (org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData : this.dataList)
             {
-                Collection<org.diorite.inject.data.InjectValueData<?, Generic>> allData = new ArrayList<>(100);
-                for (org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic> fieldData : classData.getMembers())
-                {
-                    allData.addAll(fieldData.getInjectValues());
-                }
-                for (org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData : allData)
-                {
-                    Iterator<BindValueData> iterator = this.bindValues.iterator();
-                    BindValueData best = null;
-                    while (iterator.hasNext())
-                    {
-                        BindValueData data = iterator.next();
-                        if (! data.isCompatible(valueData))
-                        {
-                            continue;
-                        }
-                        if ((best == null) || (best.compareTo(data) > 0))
-                        {
-                            best = data;
-                        }
-                    }
-                    if (best == null)
-                    {
-                        valueData.setProvider(null);
-                    }
-                    else
-                    {
-                        valueData.setProvider(best.getProvider());
-                    }
-                    this.applyScopes(valueData);
-                }
+                this.rebindSingle(classData);
             }
         }
         finally

@@ -32,7 +32,7 @@ import org.diorite.inject.utils.Constants;
 
 final class MethodReplaceMethodVisitor extends GeneratorAdapter implements Opcodes
 {
-    private static final String CLASS_NAME = Constants.DI_LIBRARY.getInternalName();
+    private static final String CLASS_NAME = Constants.INJECTION_LIBRARY.getInternalName();
 
     MethodReplaceMethodVisitor(MethodVisitor mv, int access, String name, String desc)
     {

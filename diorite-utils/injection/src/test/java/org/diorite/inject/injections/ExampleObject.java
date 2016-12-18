@@ -33,11 +33,13 @@ import org.junit.Assert;
 import org.diorite.inject.AfterInject;
 import org.diorite.inject.BeforeInject;
 import org.diorite.inject.EmptyAnn;
+import org.diorite.inject.InjectableClass;
 import org.diorite.inject.InjectionLibrary;
 import org.diorite.inject.NamedInject;
 import org.diorite.inject.Provider;
 import org.diorite.inject.Singleton;
 
+@InjectableClass
 public class ExampleObject
 {
     private static final Collection<String> invoked_pattern = List.of("beforeMoreModules", "injectMoreModules", "afterMoreModules");
@@ -101,6 +103,10 @@ public class ExampleObject
 
     public void assertInjections()
     {
+        Assert.assertNotNull(this.module1);
+        Assert.assertNotNull(this.module2);
+        Assert.assertNotNull(this.module3);
+        Assert.assertNotNull(this.someModuleProvider);
         Assert.assertEquals(invoked_pattern, this.invoked);
         Assert.assertEquals(this.module1.getName(), "module1");
         Assert.assertEquals(this.module2.getName(), "module2");

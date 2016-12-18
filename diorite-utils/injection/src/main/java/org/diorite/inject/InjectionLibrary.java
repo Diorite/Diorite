@@ -29,14 +29,13 @@ import javax.annotation.Nullable;
 import java.lang.instrument.Instrumentation;
 import java.util.function.Supplier;
 
+import org.objectweb.asm.Opcodes;
+
 import org.diorite.inject.controller.DefaultInjectionController;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
-import net.bytebuddy.description.annotation.AnnotatedCodeElement;
-import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
-import net.bytebuddy.description.type.TypeDescription.Generic;
 
-public final class InjectionLibrary
+public final class InjectionLibrary implements Opcodes
 {
 //    public static final String DEFAULT_ID = "default";
 
@@ -44,13 +43,13 @@ public final class InjectionLibrary
 //    private static final Map<String, DiController<?, ?, ?>> controllers     = new ConcurrentHashMap<>(5);
 //    private static final List<DiController<?, ?, ?>>        controllersList = new CopyOnWriteArrayList<>();
 
-    private static final InjectionController<AnnotatedCodeElement, ForLoadedType, Generic> DEFAULT = new DefaultInjectionController();
+    private static final DefaultInjectionController DEFAULT = new DefaultInjectionController();
 
     private InjectionLibrary()
     {
     }
 
-    public static InjectionController<AnnotatedCodeElement, ForLoadedType, Generic> getController()
+    public static DefaultInjectionController getController()
     {
         return DEFAULT;
     }

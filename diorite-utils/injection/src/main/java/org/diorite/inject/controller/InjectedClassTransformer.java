@@ -55,7 +55,8 @@ public class InjectedClassTransformer extends AbstractClassTransformer<Injection
         }
         try
         {
-            ClassTransformer classTransformer = new ClassTransformer(bytes, classData);
+            InjectTransformer classTransformer = new InjectTransformer(bytes, classData);
+            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             classTransformer.run();
             AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             return classTransformer.getWriter().toByteArray();

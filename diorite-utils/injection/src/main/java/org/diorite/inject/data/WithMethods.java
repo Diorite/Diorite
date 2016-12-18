@@ -22,28 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.controller;
+package org.diorite.inject.data;
 
-public class GeneratedCodeError extends InternalError
+import java.util.Collection;
+
+/**
+ * Represent members that supports {@link org.diorite.inject.AfterInject} and {@link org.diorite.inject.BeforeInject}
+ */
+public interface WithMethods
 {
-    private static final long serialVersionUID = 0;
+    void addBefore(String method);
 
-    public GeneratedCodeError()
-    {
-    }
+    void addAfter(String method);
 
-    public GeneratedCodeError(String message)
-    {
-        super(message);
-    }
+    Collection<String> getBefore();
 
-    public GeneratedCodeError(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public GeneratedCodeError(Throwable cause)
-    {
-        super(cause);
-    }
+    Collection<String> getAfter();
 }

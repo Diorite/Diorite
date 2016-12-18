@@ -22,41 +22,28 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.injections;
+package org.diorite.inject.controller;
 
-import java.util.Objects;
-
-public class Module1 implements Module
+public class TransformerError extends InternalError
 {
-    public String toString()
+    private static final long serialVersionUID = 0;
+
+    public TransformerError()
     {
-        return "Module1[" + this.hashCode() + "]";
     }
 
-    @Override
-    public String getName()
+    public TransformerError(String message)
     {
-        return "Module1";
+        super(message);
     }
 
-    @Override
-    public boolean equals(Object object)
+    public TransformerError(String message, Throwable cause)
     {
-        if (this == object)
-        {
-            return true;
-        }
-        if (! (object instanceof Module1))
-        {
-            return false;
-        }
-        Module1 anyModule = (Module1) object;
-        return Objects.equals(this.getName(), anyModule.getName());
+        super(message, cause);
     }
 
-    @Override
-    public int hashCode()
+    public TransformerError(Throwable cause)
     {
-        return Objects.hash(this.getName());
+        super(cause);
     }
 }

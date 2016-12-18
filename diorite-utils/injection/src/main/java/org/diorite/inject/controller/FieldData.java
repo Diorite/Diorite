@@ -39,6 +39,11 @@ class FieldData<T> extends MemberData<InDefinedShape> implements org.diorite.inj
     protected FieldData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
     {
         super(controller, classType, member, name, index);
+        if (member.isStatic())
+        {
+            throw new IllegalStateException("Can't use injections on static fields! (Source: " + member.getDeclaringType().getCanonicalName() + "#" +
+                                            member.getName() + " of type " + member.getType().getTypeName() + ")");
+        }
         this.value = controller.createValue(0, classType, member.getType(), member, name, Collections.emptyMap(), Collections.emptyMap());
         this.collection = List.of(this.value);
     }

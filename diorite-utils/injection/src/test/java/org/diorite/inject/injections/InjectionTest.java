@@ -24,10 +24,52 @@
 
 package org.diorite.inject.injections;
 
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import org.diorite.inject.EmptyAnn;
+import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.Named;
+import org.diorite.inject.Qualifiers;
+import org.diorite.inject.controller.DefaultInjectionController;
 
 public class InjectionTest
 {
+    public static void main(String[] args)
+    {
+        prepare();
+        InjectionTest injectionTest = new InjectionTest();
+        injectionTest.simpleInjectionTest();
+    }
+
+    @BeforeClass
+    public static void prepare()
+    {
+        DefaultInjectionController controller = InjectionLibrary.getController();
+        controller.bindToClass(Module.class).with(Named.class, EmptyAnn.class).dynamic(
+                (object, data) ->
+                {
+                    Named qualifier = data.getQualifier(Named.class);
+                    if (qualifier == null)
+                    {
+                        throw new RuntimeException();
+                    }
+                    if (qualifier.value().equals("module1"))
+                    {
+                        return new Module1();
+                    }
+                    if (qualifier.value().equals("module2"))
+                    {
+                        return new Module2();
+                    }
+                    return new AnyModule(qualifier.value());
+                });
+        controller.bindToClass(Module.class).with(Qualifiers.of(Named.class, "module2")).toInstance(new Module2());
+        controller.bindToClass(Module.class).with(Qualifiers.of(Named.class, "module1")).toType(Module1.class);
+        controller.rebind();
+    }
+
     @Test
     public void simpleInjectionTest()
     {
@@ -35,7 +77,7 @@ public class InjectionTest
         exampleObject.assertInjections();
     }
 
-//    @Test
+    //    @Test
 //    public void injectionTest()
 //    {
 //        ExampleObject exampleObject = new ExampleObject();
@@ -49,14 +91,13 @@ public class InjectionTest
 //        exampleObject.assertInjections();
 //    }
 //
-//    @Test
-//    public void singletonTest()
-//    {
-//        SimpleExampleObject exampleObject1 = new SimpleExampleObject();
-//        SimpleExampleObject exampleObject2 = new SimpleExampleObject();
-//        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
-//        Assert.assertNotEquals(exampleObject1.getModule2(), exampleObject2.getModule2());
-//    }
+    @Test
+    public void singletonTest()
+    {
+        SimpleExampleObject exampleObject1 = new SimpleExampleObject();
+        SimpleExampleObject exampleObject2 = new SimpleExampleObject();
+        Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
+    }
 //
 //    @Test
 //    public void advancedSingletonTest()

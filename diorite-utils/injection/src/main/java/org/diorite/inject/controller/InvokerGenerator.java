@@ -34,7 +34,6 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import org.diorite.inject.InjectionLibrary;
@@ -123,65 +122,29 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
 //        }
 //    }
 
-    public static AbstractInsnNode[] generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, boolean printMethods, int lineNumber,
-                                                            int arg)
+    public static int generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, int lineNumber)
     {
-        MethodNode tempNode = new MethodNode();
         AbstractInsnNode[] result = new AbstractInsnNode[2];
         FieldDescription.InDefinedShape member = fieldData.getMember();
         TypeDescription fieldType = member.getType().asErasure();
         boolean isStatic = member.isStatic();
 
-        if (printMethods)
-        {
-            lineNumber = printMethods(tempNode, classData.getType().getInternalName(), fieldData.getBefore(), isStatic, lineNumber);
-        }
-        lineNumber = AsmUtils.printLineNumber(tempNode, lineNumber);
+        lineNumber = AsmUtils.printLineNumber(mv, lineNumber);
 
         if (isStatic)
         {
-            tempNode.visitInsn(ACONST_NULL);
+            mv.visitInsn(ACONST_NULL);
         }
         else
         {
-            tempNode.visitVarInsn(ALOAD, 0);
-            tempNode.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
         }
 
-        AsmUtils.storeInt(tempNode, classData.getIndex());
-        AsmUtils.storeInt(tempNode, fieldData.getIndex());
-        tempNode.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_FIELD, INJECTOR_FIELD_DESC, false);
-//        mv.visitTypeInsn(CHECKCAST, fieldType.getInternalName()); // skip cast check?
-
-        if (arg > 0)
-        {
-            tempNode.visitVarInsn(AsmUtils.getStoreCode(fieldType), arg);
-        }
-        else if (arg != Integer.MIN_VALUE)
-        {
-            if (isStatic)
-            {
-                tempNode.visitFieldInsn(PUTSTATIC, classData.getType().getInternalName(), member.getName(), fieldType.getDescriptor());
-            }
-            else
-            {
-                tempNode.visitFieldInsn(PUTFIELD, classData.getType().getInternalName(), member.getName(), fieldType.getDescriptor());
-            }
-        }
-        if (printMethods)
-        {
-            printMethods(tempNode, classData.getType().getInternalName(), fieldData.getAfter(), isStatic, lineNumber);
-        }
-        InsnList instructions = tempNode.instructions;
-        result[0] = instructions.getFirst();
-        result[1] = instructions.getLast();
-        mv.instructions.add(instructions);
-        return result;
-    }
-
-    public static AbstractInsnNode[] generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, boolean printMethods, int lineNumber)
-    {
-        return generateFieldInjection(classData, fieldData, mv, printMethods, lineNumber, - 1);
+        AsmUtils.storeInt(mv, classData.getIndex());
+        AsmUtils.storeInt(mv, fieldData.getIndex());
+        mv.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_FIELD, INJECTOR_FIELD_DESC, false);
+        return lineNumber;
     }
 
     public static int printMethods(MethodNode mv, String clazz, Iterable<String> methods, Predicate<String> isStatic, int lineNumber)

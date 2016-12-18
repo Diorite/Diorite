@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface ClassData<GENERIC>
+public interface ClassData<GENERIC> extends WithMethods
 {
     int getIndex();
 
@@ -40,14 +40,6 @@ public interface ClassData<GENERIC>
     Collection<? extends MethodData<GENERIC>> getMethods();
 
     List<? extends MemberData<GENERIC>> getMembers();
-
-    void addBefore(String method);
-
-    void addAfter(String method);
-
-    Collection<String> getBefore();
-
-    Collection<String> getAfter();
 
     default <T> FieldData<T, GENERIC> getField(int index)
     {

@@ -32,7 +32,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC>>
+public interface MemberData<GENERIC> extends WithMethods, Iterable<InjectValueData<?, GENERIC>>
 {
     String getName();
 
@@ -44,14 +44,6 @@ public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC
     <T> InjectValueData<?, GENERIC> getValueData(int index);
 
     Collection<? extends InjectValueData<?, GENERIC>> getInjectValues();
-
-    void addBefore(String method);
-
-    void addAfter(String method);
-
-    Collection<String> getBefore();
-
-    Collection<String> getAfter();
 
     Map<Class<? extends Annotation>, ? extends Annotation> getDeclaredScopes();
 
