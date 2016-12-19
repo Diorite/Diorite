@@ -28,8 +28,30 @@ import javax.annotation.Nullable;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Represent qualifier dynamic predicate for two annotation.
+ *
+ * @param <T>
+ *         type of value to inject.
+ * @param <A>
+ *         type of qualifier annotation.
+ * @param <B>
+ *         type of qualifier annotation.
+ */
 public interface QualifierPredicateTwoDynamic<T, A extends Annotation, B extends Annotation>
 {
+    /**
+     * Returns value to inject based on qualifier annotations.
+     *
+     * @param object
+     *         object where injectable member is located.
+     * @param a
+     *         annotation to test.
+     * @param b
+     *         annotation to test.
+     *
+     * @return value to inject.
+     */
     @Nullable
     T test(Object object, A a, B b);
 }

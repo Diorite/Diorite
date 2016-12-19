@@ -28,12 +28,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.diorite.inject.Controller;
 import org.diorite.inject.EmptyAnn;
 import org.diorite.inject.Injection;
 import org.diorite.inject.Named;
 import org.diorite.inject.OneMemberAnn;
 import org.diorite.inject.Qualifiers;
-import org.diorite.inject.controller.DefaultInjectionController;
 
 public class InjectionTest
 {
@@ -45,10 +45,10 @@ public class InjectionTest
     private static final int TESTS = 3;
 
     @BeforeClass
-    public static void prepare() throws Exception
+    public static void prepare()
     {
         Class<MethodExampleObject> methodExampleObjectClass = MethodExampleObject.class;
-        DefaultInjectionController controller = Injection.getController();
+        Controller controller = Injection.getController();
         controller.bindToClass(Module.class).with(OneMemberAnn.class).toType(ModuleWithConstructor.class);
         controller.bindToClass(Module.class).with(Named.class, EmptyAnn.class).dynamic(
                 (object, data) ->

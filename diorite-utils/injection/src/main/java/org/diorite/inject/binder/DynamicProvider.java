@@ -26,35 +26,81 @@ package org.diorite.inject.binder;
 
 import javax.annotation.Nullable;
 
-import org.diorite.inject.binder.qualifier.QualifierData;
+import java.util.Collection;
+import java.util.Collections;
 
+import org.diorite.inject.InjectionException;
+import org.diorite.inject.binder.qualifier.QualifierData;
+import org.diorite.inject.impl.data.InjectValueData;
+
+@FunctionalInterface
 public interface DynamicProvider<T>
 {
+    /**
+     * Provides a fully-constructed and injected instance of {@code T}.
+     *
+     * @param object
+     *         instance of object where injected member is.
+     * @param data
+     *         qualifiers of member.
+     *
+     * @return fully-constructed and injected instance of {@code T}.
+     */
     @Nullable
     T tryToGet(Object object, QualifierData data);
 
-    @SafeVarargs
-    static <T> DynamicProvider<T> create(DynamicProvider<T>... patterns)
+    /**
+     * Provides a fully-constructed and injected instance of {@code T}, or default value if injection returned null value.
+     *
+     * @param object
+     *         instance of object where injected member is.
+     * @param data
+     *         qualifiers of member.
+     * @param def
+     *         default value to use.
+     *
+     * @return fully-constructed and injected instance of {@code T}.
+     */
+    default T orDefault(Object object, QualifierData data, T def)
     {
-        if (patterns.length == 0)
+        T t = this.tryToGet(object, data);
+        if (t == null)
         {
-            return (o, d) -> null;
+            return def;
         }
-        if (patterns.length == 1)
+        return t;
+    }
+
+    /**
+     * Provides a fully-constructed and injected instance of {@code T}, or throws error if injection returned null value.
+     *
+     * @param object
+     *         instance of object where injected member is.
+     * @param data
+     *         qualifiers of member.
+     *
+     * @return fully-constructed and injected instance of {@code T}.
+     *
+     * @throws InjectionException
+     *         if injection returned null value.
+     */
+    default T getNotNull(Object object, QualifierData data) throws InjectionException
+    {
+        T t = this.tryToGet(object, data);
+        if (t == null)
         {
-            return patterns[0];
+            throw new InjectionException("Injected null values, but requested non-null value");
         }
-        return (object, data) ->
-        {
-            for (DynamicProvider<T> pattern : patterns)
-            {
-                T test = pattern.tryToGet(object, data);
-                if (test != null)
-                {
-                    return test;
-                }
-            }
-            return null;
-        };
+        return t;
+    }
+
+    /**
+     * Returns list of injected values that this provider depends on, empty collection if none.
+     *
+     * @return list of injected values that this provider depends on, empty collection if none.
+     */
+    default Collection<? extends InjectValueData<?, ?>> getInjectValues()
+    {
+        return Collections.emptyList();
     }
 }

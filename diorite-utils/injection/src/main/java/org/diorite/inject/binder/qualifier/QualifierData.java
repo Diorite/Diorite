@@ -28,14 +28,50 @@ import javax.annotation.Nullable;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Represent something that can store qualifiers.
+ */
 public interface QualifierData
 {
+    /**
+     * Returns scope annotation instance of given type, or null if this QualifierData does not store this type of scope.
+     *
+     * @param type
+     *         type of scope annotation.
+     * @param <T>
+     *         type of scope.
+     *
+     * @return scope annotation instance or null.
+     */
     @Nullable
     <T extends Annotation> T getScope(Class<T> type);
 
+    /**
+     * Returns qualifier annotation instance of given type, or null if this QualifierData does not store this type of qualifier.
+     *
+     * @param type
+     *         type of qualifier annotation.
+     * @param <T>
+     *         type of qualifier.
+     *
+     * @return qualifier annotation instance or null.
+     */
     @Nullable
     <T extends Annotation> T getQualifier(Class<T> type);
 
+    /**
+     * Returns scope annotation instance of given type, or throws error if this QualifierData does not store this type of scope.
+     *
+     * @param type
+     *         type of scope annotation.
+     * @param <T>
+     *         type of scope.
+     *
+     * @return scope annotation instance or error.
+     *
+     * @throws IllegalArgumentException
+     *         if this QualifierData does not store this type of scope.
+     */
     default <T extends Annotation> T getScopeNotNull(Class<T> type)
     {
         T scope = this.getScope(type);
@@ -46,6 +82,19 @@ public interface QualifierData
         return scope;
     }
 
+    /**
+     * Returns qualifier annotation instance of given type, or throws error if this QualifierData does not store this type of qualifier.
+     *
+     * @param type
+     *         type of qualifier annotation.
+     * @param <T>
+     *         type of qualifier.
+     *
+     * @return qualifier annotation instance or error.
+     *
+     * @throws IllegalArgumentException
+     *         if this QualifierData does not store this type of qualifier.
+     */
     default <T extends Annotation> T getQualifierNotNull(Class<T> type)
     {
         T qualifier = this.getQualifier(type);

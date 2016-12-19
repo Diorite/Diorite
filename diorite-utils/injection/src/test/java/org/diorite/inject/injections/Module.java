@@ -24,8 +24,6 @@
 
 package org.diorite.inject.injections;
 
-import javax.annotation.Nonnull;
-
 public interface Module
 {
     String getName();

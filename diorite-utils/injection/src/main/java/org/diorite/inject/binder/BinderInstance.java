@@ -26,23 +26,48 @@ package org.diorite.inject.binder;
 
 import java.util.function.Supplier;
 
-import org.diorite.inject.Provider;
-
+/**
+ * Extension of binder, allows for finalization of binding configuration.
+ *
+ * @param <T>
+ *         type of bind value.
+ */
 public interface BinderInstance<T> extends Binder<T>
 {
+    /**
+     * Register binding to type, it will create type instance via reflections.
+     *
+     * @param type
+     *         binding target type.
+     */
     void toType(Class<? extends T> type);
 
+    /**
+     * Register binding to type, it will create type instance via reflections.
+     *
+     * @param type
+     *         binding target type.
+     * @param constructorParams
+     *         constructor parameters to use.
+     */
     void toType(Class<? extends T> type, Class<?>... constructorParams);
 
+    /**
+     * Register binding to static instance of object.
+     *
+     * @param instance
+     *         binding target object.
+     */
     default void toInstance(T instance)
     {
         this.toProvider(() -> instance);
     }
 
-    default void toSupplier(Supplier<? extends T> supplier)
-    {
-        this.toProvider(supplier::get);
-    }
-
-    void toProvider(Provider<? extends T> supplier);
+    /**
+     * Register binding to supplier of objects.
+     *
+     * @param supplier
+     *         binding target supplier.
+     */
+    void toProvider(Supplier<? extends T> supplier);
 }

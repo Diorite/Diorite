@@ -30,19 +30,16 @@ import java.lang.instrument.Instrumentation;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-import org.diorite.inject.controller.DefaultInjectionController;
-
 import net.bytebuddy.agent.ByteBuddyAgent;
 
+/**
+ * Basic library class that store controller instance.
+ */
 public final class Injection
 {
-//    public static final String DEFAULT_ID = "default";
-
     private static final Instrumentation instrumentation = ByteBuddyAgent.install();
-//    private static final Map<String, DiController<?, ?, ?>> controllers     = new ConcurrentHashMap<>(5);
-//    private static final List<DiController<?, ?, ?>>        controllersList = new CopyOnWriteArrayList<>();
 
-    private static final DefaultInjectionController DEFAULT = new DefaultInjectionController();
+    private static final Controller CONTROLLER = new org.diorite.inject.impl.controller.Controller();
 
     private Injection()
     {
@@ -53,9 +50,9 @@ public final class Injection
         Logger.getLogger("diorite-injection").info("Injection library is ready to use.");
     }
 
-    public static DefaultInjectionController getController()
+    public static Controller getController()
     {
-        return DEFAULT;
+        return CONTROLLER;
     }
 
     // to prevent IDEs like intellij to see that inject always return null.
@@ -69,6 +66,9 @@ public final class Injection
      *         type of injected field.
      *
      * @return always null.
+     *
+     * @throws InjectionException
+     *         if injection returned null value.
      */
     @SuppressWarnings("unchecked")
     public static <T> T inject()

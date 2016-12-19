@@ -31,7 +31,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Methods annotated by this annotation are invoked before given fields are injected, method will executed once before every field. <br>
+ * Methods annotated by this annotation are invoked before given fields are injected, method will executed once before every field. <br/>
  * Empty value means that method is executed before all injections.
  */
 @Target(ElementType.METHOD)

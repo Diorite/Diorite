@@ -29,6 +29,13 @@ import java.util.function.BiFunction;
 
 import org.diorite.inject.AnnotatedMemberData;
 
-public interface AnnotationTransformer<T extends Annotation, M, C> extends BiFunction<AnnotatedMemberData<M, C>, T, T>
+/**
+ * Annotation transformer functional interface.
+ *
+ * @param <T>
+ *         type of annotation.
+ */
+@FunctionalInterface
+public interface AnnotationTransformer<T extends Annotation> extends BiFunction<AnnotatedMemberData<?, ?>, T, T>
 {
 }

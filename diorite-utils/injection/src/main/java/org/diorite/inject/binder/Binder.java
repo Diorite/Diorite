@@ -34,22 +34,65 @@ import org.diorite.inject.binder.qualifier.QualifierPredicateThreeDynamic;
 import org.diorite.inject.binder.qualifier.QualifierPredicateTwo;
 import org.diorite.inject.binder.qualifier.QualifierPredicateTwoDynamic;
 
+/**
+ * Binder interface used for constructing bind configs.
+ *
+ * @param <T>
+ *         type of bind value.
+ */
 public interface Binder<T>
 {
+    /**
+     * Adds qualifier pattern for current binding.
+     *
+     * @param a
+     *         qualifier pattern to add.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     BinderInstance<T> with(QualifierPattern a);
 
+    /**
+     * Register binder with dynamic provider.
+     *
+     * @param dynamic
+     *         provider of injected value.
+     */
     void dynamic(DynamicProvider<T> dynamic);
 
+    /**
+     * Adds empty qualifier pattern for current binding.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with()
     {
         return this.with(QualifierPattern.EMPTY);
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier type.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Class<? extends Annotation> a)
     {
         return this.with(data -> data.getQualifier(a) != null);
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Class<? extends Annotation> a, Class<? extends Annotation> b)
     {
         return this.with(data ->
@@ -62,6 +105,18 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param c
+     *         requested qualifier type.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Class<? extends Annotation> a, Class<? extends Annotation> b, Class<? extends Annotation> c)
     {
         return this.with(data ->
@@ -78,6 +133,20 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param c
+     *         requested qualifier type.
+     * @param d
+     *         requested qualifier type.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Class<? extends Annotation> a, Class<? extends Annotation> b, Class<? extends Annotation> c,
                                    Class<? extends Annotation> d)
     {
@@ -99,6 +168,22 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param c
+     *         requested qualifier type.
+     * @param d
+     *         requested qualifier type.
+     * @param e
+     *         requested qualifier type.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Class<? extends Annotation> a, Class<? extends Annotation> b, Class<? extends Annotation> c,
                                    Class<? extends Annotation> d, Class<? extends Annotation> e)
     {
@@ -124,6 +209,14 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Annotation a)
     {
         return this.with(data ->
@@ -133,6 +226,16 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier.
+     * @param b
+     *         requested qualifier.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Annotation a, Annotation b)
     {
         return this.with(data ->
@@ -147,6 +250,18 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier.
+     * @param b
+     *         requested qualifier.
+     * @param c
+     *         requested qualifier.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Annotation a, Annotation b, Annotation c)
     {
         return this.with(data ->
@@ -166,6 +281,20 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier.
+     * @param b
+     *         requested qualifier.
+     * @param c
+     *         requested qualifier.
+     * @param d
+     *         requested qualifier.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Annotation a, Annotation b, Annotation c, Annotation d)
     {
         return this.with(data ->
@@ -190,6 +319,22 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier.
+     *
+     * @param a
+     *         requested qualifier.
+     * @param b
+     *         requested qualifier.
+     * @param c
+     *         requested qualifier.
+     * @param d
+     *         requested qualifier.
+     * @param e
+     *         requested qualifier.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default BinderInstance<T> with(Annotation a, Annotation b, Annotation c, Annotation d, Annotation e)
     {
         return this.with(data ->
@@ -219,6 +364,16 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param predicate
+     *         predicate for qualifier data.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default <A extends Annotation> BinderInstance<T> with(Class<A> a, QualifierPredicateOne<A> predicate)
     {
         return this.with(data ->
@@ -232,6 +387,18 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param predicate
+     *         predicate for qualifier data.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default <A extends Annotation, B extends Annotation> BinderInstance<T> with(Class<A> a, Class<B> b, QualifierPredicateTwo<A, B> predicate)
     {
         return this.with(data ->
@@ -250,6 +417,20 @@ public interface Binder<T>
                          });
     }
 
+    /**
+     * Adds qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param c
+     *         requested qualifier type.
+     * @param predicate
+     *         predicate for qualifier data.
+     *
+     * @return binder instance for finalization of binding configuration, or adding more patterns.
+     */
     default <A extends Annotation, B extends Annotation, C extends Annotation> BinderInstance<T> with(Class<A> a, Class<B> b, Class<C> c,
                                                                                                       QualifierPredicateThree<A, B, C> predicate)
     {
@@ -274,7 +455,16 @@ public interface Binder<T>
                          });
     }
 
-    default <A extends Annotation> void dynamic(Class<A> a, QualifierPredicateOneDynamic<T, A> predicate)
+    /**
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adding dynamic qualifier register and ends binder configuration.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param dynamicPattern
+     *         predicate for qualifier data, and function returning value to inject.
+     */
+    default <A extends Annotation> void dynamic(Class<A> a, QualifierPredicateOneDynamic<T, A> dynamicPattern)
     {
         this.dynamic((obj, data) ->
                      {
@@ -283,11 +473,22 @@ public interface Binder<T>
                          {
                              return null;
                          }
-                         return predicate.test(obj, aq);
+                         return dynamicPattern.test(obj, aq);
                      });
     }
 
-    default <A extends Annotation, B extends Annotation> void dynamic(Class<A> a, Class<B> b, QualifierPredicateTwoDynamic<T, A, B> predicate)
+    /**
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adding dynamic qualifier register and ends binder configuration.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param dynamicPattern
+     *         predicate for qualifier data, and function returning value to inject.
+     */
+    default <A extends Annotation, B extends Annotation> void dynamic(Class<A> a, Class<B> b, QualifierPredicateTwoDynamic<T, A, B> dynamicPattern)
     {
         this.dynamic((obj, data) ->
                      {
@@ -301,12 +502,25 @@ public interface Binder<T>
                          {
                              return null;
                          }
-                         return predicate.test(obj, aq, bq);
+                         return dynamicPattern.test(obj, aq, bq);
                      });
     }
 
+    /**
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adding dynamic qualifier register and ends binder configuration.
+     *
+     * @param a
+     *         requested qualifier type.
+     * @param b
+     *         requested qualifier type.
+     * @param c
+     *         requested qualifier type.
+     * @param dynamicPattern
+     *         predicate for qualifier data, and function returning value to inject.
+     */
     default <A extends Annotation, B extends Annotation, C extends Annotation> void dynamic(Class<A> a, Class<B> b, Class<C> c,
-                                                                                            QualifierPredicateThreeDynamic<T, A, B, C> predicate)
+                                                                                            QualifierPredicateThreeDynamic<T, A, B, C> dynamicPattern)
     {
         this.dynamic((obj, data) ->
                      {
@@ -325,7 +539,7 @@ public interface Binder<T>
                          {
                              return null;
                          }
-                         return predicate.test(obj, aq, bq, cq);
+                         return dynamicPattern.test(obj, aq, bq, cq);
                      });
     }
 

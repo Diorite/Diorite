@@ -32,6 +32,14 @@ import java.util.function.BiFunction;
 import org.diorite.inject.binder.DynamicProvider;
 import org.diorite.inject.binder.qualifier.QualifierData;
 
+/**
+ * Scope handler interface, allows for implementing custom scopes like {@link Singleton}
+ *
+ * @param <T>
+ *         type of injected object.
+ * @param <S>
+ *         type of scope annotation.
+ */
 public interface ScopeHandler<T, S extends Annotation> extends BiFunction<DynamicProvider<T>, S, DynamicProvider<T>>
 {
     @Override

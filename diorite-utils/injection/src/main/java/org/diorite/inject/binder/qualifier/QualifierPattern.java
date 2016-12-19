@@ -24,12 +24,34 @@
 
 package org.diorite.inject.binder.qualifier;
 
+/**
+ * Qualifier pattern filter/predicate for {@link QualifierData}.
+ */
 public interface QualifierPattern
 {
+    /**
+     * Pattern that always matches and returns true.
+     */
     QualifierPattern EMPTY = d -> true;
 
+    /**
+     * Check if given {@link QualifierData} matches this pattern.
+     *
+     * @param data
+     *         to check.
+     *
+     * @return true if given data matches this pattern.
+     */
     boolean test(QualifierData data);
 
+    /**
+     * Join multiple {@link QualifierPattern} into one.
+     *
+     * @param patterns
+     *         patterns to join.
+     *
+     * @return pattern that can be used instead of given array.
+     */
     static QualifierPattern create(QualifierPattern... patterns)
     {
         if (patterns.length == 0)
