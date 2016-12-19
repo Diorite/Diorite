@@ -3,6 +3,8 @@
 # Modules
 - [ ] **org.diorite:diorite-parent**
 - [ ] **org.diorite.utils:diorite-utils** (*Diorite Utils*)
+    - [ ] [**org.diorite.utils:annotations** (*Diorite Utils - Annotations*)](#diorite-utils---annotations)
+        - set of basic libraries.
     - [ ] [**org.diorite.utils:commons** (*Diorite Utils - Commons*)](#diorite-utils---commons)
         - set of basic libraries.
     - [ ] [**org.diorite.utils:config** (*Diorite Utils - Config*)](#diorite-utils---config)
@@ -456,6 +458,12 @@ Should use CUI and GUI depending on needs.
 ____  
 
 ## Diorite Utils
+
+
+### Diorite Utils - Annotations
+___
+Module that only contains additional annotations used by diorite, like @NonnullByDefault.
+___
 
 ### Diorite Utils - Commons
 ____
