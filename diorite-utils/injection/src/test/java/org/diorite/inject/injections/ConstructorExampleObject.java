@@ -24,39 +24,35 @@
 
 package org.diorite.inject.injections;
 
-import java.util.Objects;
+import org.junit.Assert;
 
-public class Module2 implements Module
+import org.diorite.inject.AfterInject;
+import org.diorite.inject.Inject;
+import org.diorite.inject.InjectableClass;
+import org.diorite.inject.Injection;
+import org.diorite.inject.OneMemberAnn;
+
+@InjectableClass
+public class ConstructorExampleObject
 {
+    @Inject @OneMemberAnn
+    private Module delegated = Injection.inject();
+
+    @AfterInject("delegated")
+    private void afterDelegated()
+    {
+        System.out.println("[ConstructorExampleObject] delegated: " + this.delegated);
+    }
+
+    public void assertInjections()
+    {
+        Assert.assertNotNull(this.delegated);
+        Assert.assertEquals(this.delegated.getName(), "delegatedModule");
+        Assert.assertTrue(this.delegated instanceof ModuleWithConstructor);
+    }
+
     public String toString()
     {
-        return "Module2[" + System.identityHashCode(this) + "]";
-    }
-
-    @Override
-    public String getName()
-    {
-        return "Module2";
-    }
-
-    @Override
-    public boolean equals(Object object)
-    {
-        if (this == object)
-        {
-            return true;
-        }
-        if (! (object instanceof Module2))
-        {
-            return false;
-        }
-        Module2 anyModule = (Module2) object;
-        return Objects.equals(this.getName(), anyModule.getName());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(this.getName());
+        return String.valueOf(this.delegated);
     }
 }

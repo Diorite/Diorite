@@ -30,7 +30,7 @@ public class Module1 implements Module
 {
     public String toString()
     {
-        return "Module1[" + this.hashCode() + "]";
+        return "Module1[" + System.identityHashCode(this) + "]";
     }
 
     @Override

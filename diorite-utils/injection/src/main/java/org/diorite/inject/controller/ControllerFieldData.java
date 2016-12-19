@@ -36,7 +36,7 @@ class ControllerFieldData<T> extends ControllerMemberData<InDefinedShape> implem
     private final ControllerInjectValueData<T>             value;
     private final Collection<ControllerInjectValueData<T>> collection;
 
-    protected ControllerFieldData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
+    protected ControllerFieldData(DefaultInjectionController controller, TypeDescription classType, InDefinedShape member, String name, int index)
     {
         super(controller, classType, member, name, index);
         if (member.isStatic())

@@ -30,15 +30,14 @@ import java.util.Map;
 import net.bytebuddy.description.annotation.AnnotatedCodeElement;
 import net.bytebuddy.description.type.TypeDescription;
 
-class ControllerMemberDataBuilderImpl<T extends AnnotatedCodeElement> implements org.diorite.inject.AnnotatedMemberData<T, TypeDescription.ForLoadedType>
+class ControllerMemberDataBuilderImpl<T extends AnnotatedCodeElement> implements org.diorite.inject.AnnotatedMemberData<T, TypeDescription>
 {
-    private final TypeDescription.ForLoadedType                          classType;
+    private final TypeDescription                                        classType;
     private final String                                                 name;
     private final T                                                      member;
     private final Map<Class<? extends Annotation>, ? extends Annotation> rawAnnotations;
 
-    ControllerMemberDataBuilderImpl(TypeDescription.ForLoadedType classType, String name, T member,
-                                    Map<Class<? extends Annotation>, ? extends Annotation> rawAnnotations)
+    ControllerMemberDataBuilderImpl(TypeDescription classType, String name, T member, Map<Class<? extends Annotation>, ? extends Annotation> rawAnnotations)
     {
         this.classType = classType;
         this.name = name;
@@ -47,7 +46,7 @@ class ControllerMemberDataBuilderImpl<T extends AnnotatedCodeElement> implements
     }
 
     @Override
-    public TypeDescription.ForLoadedType getClassType()
+    public TypeDescription getClassType()
     {
         return this.classType;
     }

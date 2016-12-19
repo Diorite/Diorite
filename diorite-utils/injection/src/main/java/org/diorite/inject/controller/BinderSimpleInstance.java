@@ -79,7 +79,7 @@ final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
         {
             if (this.diController.isInjectElement(constructor))
             {
-                // todo: binding to constructor that needs some parameters
+                this.dynamic(new BinderToConstructor<>(this.diController, type, constructor));
                 return;
             }
         }
@@ -112,7 +112,7 @@ final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
             }
             if (params.containsAll(Arrays.asList(constructor.getParameterTypes())))
             {
-                // todo: binding to constructor that needs some parameters
+                this.dynamic(new BinderToConstructor<>(this.diController, type, constructor));
                 return;
             }
         }
@@ -129,7 +129,9 @@ final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
     private void bind()
     {
         Predicate<Generic> typePredicate =
-                type -> type.asErasure().equals(DefaultInjectionController.PROVIDER) ? this.typePredicate.test(type.getTypeArguments().get(0)) : this.typePredicate.test(type);
+                type -> type.asErasure().equals(DefaultInjectionController.PROVIDER) ?
+                        this.typePredicate.test(type.getTypeArguments().get(0)) :
+                        this.typePredicate.test(type);
         BinderValueData valueData = BinderValueData.dynamic(typePredicate, this.patterns, this.provider);
         this.diController.bindValues.add(valueData);
     }

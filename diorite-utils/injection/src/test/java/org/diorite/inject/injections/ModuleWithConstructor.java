@@ -24,39 +24,30 @@
 
 package org.diorite.inject.injections;
 
-import java.util.Objects;
+import org.diorite.inject.EmptyAnn;
+import org.diorite.inject.Inject;
+import org.diorite.inject.NamedInject;
 
-public class Module2 implements Module
+public class ModuleWithConstructor implements Module
 {
-    public String toString()
+    private final Module delegatedModule;
+
+    @Inject
+    public ModuleWithConstructor(@NamedInject @EmptyAnn Module delegatedModule)
     {
-        return "Module2[" + System.identityHashCode(this) + "]";
+        System.out.println("[ModuleWithConstructor] injected " + delegatedModule);
+        this.delegatedModule = delegatedModule;
     }
 
     @Override
     public String getName()
     {
-        return "Module2";
+        return this.delegatedModule.getName();
     }
 
     @Override
-    public boolean equals(Object object)
+    public String toString()
     {
-        if (this == object)
-        {
-            return true;
-        }
-        if (! (object instanceof Module2))
-        {
-            return false;
-        }
-        Module2 anyModule = (Module2) object;
-        return Objects.equals(this.getName(), anyModule.getName());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(this.getName());
+        return "<Delegated>" + this.delegatedModule.toString();
     }
 }

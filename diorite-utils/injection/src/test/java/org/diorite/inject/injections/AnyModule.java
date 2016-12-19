@@ -37,7 +37,7 @@ public class AnyModule implements Module
 
     public String toString()
     {
-        return "Dynamic (" + this.name + "[" + this.hashCode() + "])";
+        return "Dynamic (" + this.name + "[" + System.identityHashCode(this) + "])";
     }
 
     @Override

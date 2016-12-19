@@ -60,7 +60,7 @@ public class MethodExampleObject
     private void injectMoreModules(Module module1, @NamedInject("module1") Module module12, Module module2, @NamedInject("module2") Module module22,
                                    @EmptyAnn Module guard)
     {
-//        System.out.println("injectMoreModules: " + module1 + " & " + module2 + " & " + guard);
+        System.out.println("[MethodExampleObject] injectMoreModules: " + module1 + " & " + module12 + " & " + module2 + " & " + module22 + " & " + guard);
         Assert.assertEquals(module1.getName(), "Module1");
         Assert.assertEquals(module12.getName(), "Module1");
         Assert.assertEquals(module1.hashCode(), module12.hashCode());
@@ -75,12 +75,14 @@ public class MethodExampleObject
     @AfterInject("moreModules")
     private void afterMoreModules()
     {
+        System.out.println("[MethodExampleObject] afterMoreModules");
         this.invoked.add("afterMoreModules");
     }
 
     @BeforeInject("MoreModules")
     private void beforeMoreModules()
     {
+        System.out.println("[MethodExampleObject] beforeMoreModules");
         this.invoked.add("beforeMoreModules");
     }
 

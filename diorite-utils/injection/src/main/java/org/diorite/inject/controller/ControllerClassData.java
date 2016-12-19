@@ -37,7 +37,7 @@ import net.bytebuddy.description.type.TypeDescription;
 class ControllerClassData implements org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic>
 {
     private       int                                index;
-    private final TypeDescription.ForLoadedType      type;
+    private final TypeDescription                    type;
     private final List<ControllerMemberData<?>>      members;
     private final Collection<ControllerFieldData<?>> fields;
     private final Collection<ControllerMethodData>   methods;
@@ -47,7 +47,7 @@ class ControllerClassData implements org.diorite.inject.data.ClassData<TypeDescr
     private Collection<String> after  = null;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    ControllerClassData(TypeDescription.ForLoadedType type, ControllerMemberData... members)
+    ControllerClassData(TypeDescription type, ControllerMemberData... members)
     {
         this.type = type;
         this.members = List.of(members);
@@ -68,7 +68,7 @@ class ControllerClassData implements org.diorite.inject.data.ClassData<TypeDescr
         this.methods = List.of(methods.toArray(new ControllerMethodData[methods.size()]));
     }
 
-    public TypeDescription.ForLoadedType getType()
+    public TypeDescription getType()
     {
         return this.type;
     }

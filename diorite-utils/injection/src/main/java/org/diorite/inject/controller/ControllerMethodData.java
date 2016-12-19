@@ -42,7 +42,7 @@ class ControllerMethodData extends ControllerMemberData<InDefinedShape> implemen
     private final Map<Class<? extends Annotation>, ? extends Annotation>                                  qualifierAnnotations;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    protected ControllerMethodData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
+    protected ControllerMethodData(DefaultInjectionController controller, TypeDescription classType, InDefinedShape member, String name, int index)
     {
         super(controller, classType, member, name, index);
         if (member.isStatic())
@@ -61,8 +61,7 @@ class ControllerMethodData extends ControllerMemberData<InDefinedShape> implemen
         for (ParameterDescription.InDefinedShape param : parameters)
         {
             values[i] = controller.createValue(i, classType, param.getType(), param, DefaultInjectionController.fixName(param.getType(), param.getName()),
-                                               rawScopeAnnotations,
-                                               rawQualifierAnnotations);
+                                               rawScopeAnnotations, rawQualifierAnnotations);
             i++;
         }
         this.values = List.of(values);
