@@ -43,7 +43,7 @@ final class TransformerInjectTracker implements Opcodes
     private final FieldInsnNode fieldInsnNode;
     private final boolean       isStatic;
     private       InsnList      resultNodeList;
-    private       InsnList      initNodeList;
+    private final InsnList      initNodeList;
 
     private InjectionType   injectionType   = InjectionType.UNKNOWN;
     private PlaceholderType placeholderType = PlaceholderType.UNKNOWN;
@@ -156,10 +156,10 @@ final class TransformerInjectTracker implements Opcodes
     // indirect example:
     //    INVOKESTATIC org/diorite/inject/InjectionLibrary.inject ()Ljava/lang/Object;
     //    CHECKCAST org/diorite/inject/injections/Module
-    //    XSTORE 1 // wynik injecta
+    //    XSTORE 1 // inject result
     // <code to skip, or track local variable changes?>
     //    XLOAD 0 // this
-    //    XLOAD 1 // wynik injecta
+    //    XLOAD 1 // inject result
     //    PUTFIELD org/diorite/inject/injections/AdvancedExampleObject.module2 : Lorg/diorite/inject/injections/Module;
     private InjectionType checkIndirect()
     {

@@ -45,7 +45,7 @@ public class InjectionTest
     private static final int TESTS = 3;
 
     @BeforeClass
-    public static void prepare() throws Exception
+    public static void prepare()
     {
         Class<MethodExampleObject> methodExampleObjectClass = MethodExampleObject.class;
         Controller controller = Injection.getController();

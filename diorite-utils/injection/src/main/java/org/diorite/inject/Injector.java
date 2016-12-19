@@ -26,7 +26,6 @@ package org.diorite.inject;
 
 import javax.annotation.Nullable;
 
-@Deprecated
 public final class Injector
 {
     private Injector()

@@ -94,7 +94,6 @@ public abstract class InjectionController<MEMBER, TYPE, GENERIC> implements Cont
 
     protected abstract Map<Class<? extends Annotation>, ? extends Annotation> extractRawScopeAnnotations(MEMBER element);
 
-    @SuppressWarnings({"rawtypes"})
     protected <T> void applyScopes(InjectValueData<T, GENERIC> data)
     {
         Collection<? extends Annotation> scopes = data.getScopes().values();

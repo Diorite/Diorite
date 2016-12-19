@@ -33,9 +33,9 @@ import org.objectweb.asm.tree.MethodNode;
 
 final class TransformerInitMethodData
 {
-    MethodNode     node;
-    MethodInsnNode superInvoke;
-    Collection<InsnNode> returns = new LinkedList<>();
+    final MethodNode     node;
+    final MethodInsnNode superInvoke;
+    final Collection<InsnNode> returns = new LinkedList<>();
 
     TransformerInitMethodData(MethodNode node, MethodInsnNode superInvoke)
     {

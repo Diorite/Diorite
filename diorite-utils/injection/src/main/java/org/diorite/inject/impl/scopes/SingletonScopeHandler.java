@@ -40,7 +40,7 @@ import org.diorite.inject.binder.DynamicProvider;
  */
 public class SingletonScopeHandler<T> implements ScopeHandler<T, Singleton>
 {
-    private AtomicBoolean invoked = new AtomicBoolean(false);
+    private final AtomicBoolean invoked = new AtomicBoolean(false);
     @Nullable
     private T value;
 

@@ -29,8 +29,8 @@ import javax.annotation.Nullable;
 @SuppressWarnings("rawtypes")
 abstract class TransformerMemberPair<DATA, NODE>
 {
-    @Nullable DATA data;
-    @Nullable NODE node;
+    @Nullable final DATA data;
+    @Nullable       NODE node;
     int index;
     @Nullable TransformerMemberPair next;
     @Nullable TransformerMemberPair prev;

@@ -39,7 +39,6 @@ public final class Constants
     public static final TypeDescription.ForLoadedType INJECTION_LIBRARY = new TypeDescription.ForLoadedType(Injection.class);
     public static final TypeDescription.ForLoadedType QUALIFIERS        = new TypeDescription.ForLoadedType(Qualifiers.class);
     public static final TypeDescription.ForLoadedType INSTANCE_SUPPLIER = new TypeDescription.ForLoadedType(InstanceSupplier.class);
-    @SuppressWarnings("deprecation")
     public static final TypeDescription.ForLoadedType INJECTOR          = new TypeDescription.ForLoadedType(Injector.class);
 
     private Constants()
