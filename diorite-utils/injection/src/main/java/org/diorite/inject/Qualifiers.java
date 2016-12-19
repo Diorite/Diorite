@@ -30,8 +30,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import org.diorite.inject.asm.QualifierAndScopeImplementationGenerator;
+import org.diorite.inject.impl.asm.QualifierAndScopeImplementationGenerator;
 
+/**
+ * Library utility class for creation qualifier instances.
+ */
 public final class Qualifiers
 {
     private static final Map<Class<? extends Annotation>, Function<Map<String, ?>, ? extends Annotation>>       constructors = new ConcurrentHashMap<>(20);

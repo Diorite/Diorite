@@ -36,7 +36,7 @@ import org.diorite.inject.EmptyAnn;
 import org.diorite.inject.InjectableClass;
 import org.diorite.inject.Injection;
 import org.diorite.inject.NamedInject;
-import org.diorite.inject.Provider;
+import org.diorite.inject.binder.Provider;
 import org.diorite.inject.Singleton;
 
 @InjectableClass

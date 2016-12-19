@@ -24,19 +24,60 @@
 
 package org.diorite.inject;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+/**
+ * Represent member of class that may use annotations.
+ *
+ * @param <M>
+ *         type of member data descriptor.
+ * @param <C>
+ *         type of class data descriptor.
+ */
 public interface AnnotatedMemberData<M, C>
 {
+    /**
+     * Returns class type descriptor.
+     *
+     * @return class type descriptor.
+     */
     C getClassType();
 
+    /**
+     * Returns member descriptor.
+     *
+     * @return member descriptor.
+     */
     M getMember();
 
+    /**
+     * Returns name of member.
+     *
+     * @return name of member.
+     */
     String getName();
 
+    /**
+     * Returns all annotations of this member.
+     *
+     * @return all annotations of this member.
+     */
     Map<Class<? extends Annotation>, ? extends Annotation> getRawAnnotations();
 
+    /**
+     * Returns annotation of given type from this member.
+     *
+     * @param type
+     *         class of annotation.
+     * @param <T>
+     *         type of annotation.
+     *
+     * @return annotation instance or null if member does not contain given annotation.
+     */
+    @Nullable
     @SuppressWarnings("unchecked")
     default <T extends Annotation> T getAnnotation(Class<T> type)
     {

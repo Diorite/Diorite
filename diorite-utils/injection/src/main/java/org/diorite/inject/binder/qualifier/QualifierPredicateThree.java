@@ -26,7 +26,29 @@ package org.diorite.inject.binder.qualifier;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Represent qualifier predicate for three annotations.
+ *
+ * @param <A>
+ *         type of qualifier annotation.
+ * @param <B>
+ *         type of qualifier annotation.
+ * @param <C>
+ *         type of qualifier annotation.
+ */
 public interface QualifierPredicateThree<A extends Annotation, B extends Annotation, C extends Annotation>
 {
+    /**
+     * Tests if qualifiers matches this pattern/predicate.
+     *
+     * @param a
+     *         annotation to test.
+     * @param b
+     *         annotation to test.
+     * @param c
+     *         annotation to test.
+     *
+     * @return true if given qualifiers matches this pattern/predicate.
+     */
     boolean test(A a, B b, C c);
 }

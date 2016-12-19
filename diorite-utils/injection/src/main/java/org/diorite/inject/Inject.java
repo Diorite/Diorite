@@ -33,6 +33,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.diorite.inject.binder.Provider;
+
 /**
  * Identifies injectable constructors, methods, and fields. May apply to static
  * as well as instance members. An injectable member may have any access

@@ -39,11 +39,4 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ShortcutInject
 {
-//    /**
-//     * {@link Qualifier} annotations used by this shortcut, empty array means that shortcut is {@link Qualifier} and {@link
-//     * Inject} at once.
-//     *
-//     * @return annotations used by this shortcut.
-//     */
-//    Class<? extends Annotation>[] value() default {};
 }
