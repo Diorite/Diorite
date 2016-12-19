@@ -30,7 +30,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import org.diorite.unsafe.AsmUtils;
+import org.diorite.inject.impl.utils.AsmUtils;
 
 final class TransformerFieldInjector
 {

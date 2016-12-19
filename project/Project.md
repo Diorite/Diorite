@@ -7,15 +7,14 @@
         - set of basic libraries.
     - [ ] [**org.diorite.utils:commons** (*Diorite Utils - Commons*)](#diorite-utils---commons)
         - set of basic libraries.
+        - depends on: 
+            - *org.diorite.utils:annotations*
     - [ ] [**org.diorite.utils:config** (*Diorite Utils - Config*)](#diorite-utils---config)
         - config serialization/deserialization framework.
         - depends on: 
             - *org.diorite.utils:commons*
     - [ ] [**org.diorite.utils:injection** (*Diorite Utils - Injections*)](#diorite-utils---injections)
         - object injection framework. (This isn't normal dependency injection)
-        - depends on: 
-            - *org.diorite.utils:unsafe*
-            - *org.diorite.utils:commons*
     - [ ] [**org.diorite.utils:unsafe** (*Diorite Utils - Unsafe*)](#diorite-utils---unsafe)
         - utils related to bytecode manipulation and sun.misc.Unsafe
         - depends on: 

@@ -44,8 +44,8 @@ import org.objectweb.asm.Type;
 import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
 import org.diorite.inject.Scope;
+import org.diorite.inject.impl.utils.AsmUtils;
 import org.diorite.inject.impl.utils.Constants;
-import org.diorite.unsafe.ByteBuddyUtils;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
@@ -354,7 +354,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                     mv.visitMethodInsn(INVOKESTATIC, internalImplName, "$_get", "(Ljava/util/Map;Ljava/lang/String;)Ljava/lang/Object;", false);
                     if (returnType.isPrimitive())
                     {
-                        String wrapperInternal = ByteBuddyUtils.getWrapperClass(returnType).getInternalName();
+                        String wrapperInternal = AsmUtils.getWrapperClass(returnType).getInternalName();
                         mv.visitTypeInsn(CHECKCAST, wrapperInternal);
                         mv.visitMethodInsn(INVOKEVIRTUAL, wrapperInternal, returnType.getName() + "Value", "()" + returnType.getDescriptor(), false);
                     }
@@ -602,7 +602,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                     mv.visitFieldInsn(GETFIELD, internalImplName, methodName, returnTypeDescriptor);
                     if (returnType.isPrimitive())
                     {
-                        TypeDescription wrapperClass = ByteBuddyUtils.getWrapperClass(returnType);
+                        TypeDescription wrapperClass = AsmUtils.getWrapperClass(returnType);
                         mv.visitMethodInsn(INVOKESTATIC, wrapperClass.getInternalName(), "valueOf",
                                            "(" + returnTypeDescriptor + ")" + wrapperClass.getDescriptor(), false);
                         mv.visitMethodInsn(INVOKEVIRTUAL, wrapperClass.getInternalName(), "hashCode", "()I", false);
@@ -681,7 +681,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
                     boolean isPrimitive = returnType.isPrimitive();
                     boolean isFloat =
                             isPrimitive && (returnType.getName().equals(float.class.getName()) || returnType.getName().equals(double.class.getName()));
-                    TypeDescription wrapperClass = ByteBuddyUtils.getWrapperClass(returnType);
+                    TypeDescription wrapperClass = AsmUtils.getWrapperClass(returnType);
                     String wrapperClassInternalName = wrapperClass.getInternalName();
 
                     mv.visitVarInsn(ALOAD, 0);

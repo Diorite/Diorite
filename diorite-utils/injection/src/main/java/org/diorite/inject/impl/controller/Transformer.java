@@ -50,8 +50,8 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.diorite.inject.InjectionController;
 import org.diorite.inject.impl.controller.TransformerInjectTracker.PlaceholderType;
 import org.diorite.inject.impl.data.WithMethods;
+import org.diorite.inject.impl.utils.AsmUtils;
 import org.diorite.inject.impl.utils.Constants;
-import org.diorite.unsafe.AsmUtils;
 
 import net.bytebuddy.description.ByteCodeElement;
 

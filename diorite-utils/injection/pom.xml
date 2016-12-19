@@ -16,11 +16,20 @@
     <dependencies>
         <dependency>
             <groupId>org.diorite.utils</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.diorite.utils</groupId>
-            <artifactId>unsafe</artifactId>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-dep</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
         </dependency>
     </dependencies>
 </project>
