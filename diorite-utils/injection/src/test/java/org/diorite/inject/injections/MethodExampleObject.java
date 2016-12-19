@@ -57,16 +57,22 @@ public class MethodExampleObject
 
     @NamedInject
     @Singleton
-    private void injectMoreModules(Module module1, Module module2, @EmptyAnn Module guard)
+    private void injectMoreModules(Module module1, @NamedInject("module1") Module module12, Module module2, @NamedInject("module2") Module module22,
+                                   @EmptyAnn Module guard)
     {
 //        System.out.println("injectMoreModules: " + module1 + " & " + module2 + " & " + guard);
-        Assert.assertEquals(module1.getName(), new Module1().getName());
-        Assert.assertEquals(module2.getName(), new Module2().getName());
+        Assert.assertEquals(module1.getName(), "Module1");
+        Assert.assertEquals(module12.getName(), "Module1");
+        Assert.assertEquals(module1.hashCode(), module12.hashCode());
+        Assert.assertNotSame(module1, module12); // there are singletons, but each one is separate singleton.
+        Assert.assertEquals(module2.getName(), "Module2");
+        Assert.assertEquals(module22.getName(), "Module2");
+        Assert.assertSame(module2, module22); // Module2 is bind to single object
         Assert.assertEquals(guard.getName(), "guard");
         this.invoked.add("injectMoreModules");
     }
 
-    @AfterInject("MoreModules")
+    @AfterInject("moreModules")
     private void afterMoreModules()
     {
         this.invoked.add("afterMoreModules");

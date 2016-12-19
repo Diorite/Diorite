@@ -75,7 +75,7 @@ class Transformer implements Opcodes
     @SuppressWarnings("rawtypes") @Nullable
     TransformerMemberPair lastObject  = null;
 
-    public Transformer(byte[] bytecode, ControllerClassData classData)
+    Transformer(byte[] bytecode, ControllerClassData classData)
     {
         this.classData = classData;
         this.classNode = new ClassNode(Opcodes.ASM6);

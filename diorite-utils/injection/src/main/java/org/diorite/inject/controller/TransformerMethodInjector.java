@@ -24,6 +24,10 @@
 
 package org.diorite.inject.controller;
 
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.MethodNode;
+
 final class TransformerMethodInjector
 {
     private final Transformer injectTransformer;
@@ -47,6 +51,18 @@ final class TransformerMethodInjector
 
     private void injectMethods()
     {
-
+        MethodNode methodNode = new MethodNode();
+        for (ControllerMethodData methodData : this.injectTransformer.classData.getMethods())
+        {
+            TransformerInvokerGenerator.generateMethodInjection(this.injectTransformer.classData, methodData, methodNode, true, - 1);
+        }
+        for (TransformerInitMethodData methodData : this.injectTransformer.inits.values())
+        {
+            InsnList instructions = methodData.node.instructions;
+            for (InsnNode node : methodData.returns)
+            {
+                instructions.insertBefore(node, methodNode.instructions);
+            }
+        }
     }
 }

@@ -636,7 +636,7 @@ Library will edit classes to add code that will fetch missing objects.
 - [x] Rebinding in runtime.
 - [x] Shortcut annotations - one annotation works as multiple Qualifiers.
 - [x] After/before inject methods.
-- [ ] Retransforming all classes that use injecting on load time.
+- [x] Retransforming all classes that use injecting on load time.
 - [ ] Allow for static injections, not sure if this is good idea, injections are here to help using objects, not to create tons of static injected values.
 
 ____

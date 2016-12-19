@@ -172,7 +172,8 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                     ControllerFieldData<Object> fieldData = new ControllerFieldData<>(this, typeDescription, fieldDescription, name, index++);
                     members.add(fieldData);
                     inject = true;
-                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(fieldDescription.getName(), k -> new HashSet<>(2));
+                    Collection<ControllerMemberData<?>> memberData =
+                            membersMap.computeIfAbsent(fieldDescription.getName().toLowerCase(), k -> new HashSet<>(2));
                     memberData.add(fieldData);
                 }
             }
@@ -194,7 +195,9 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                     ControllerMethodData methodData = new ControllerMethodData(this, typeDescription, methodDescription, name, index++);
                     members.add(methodData);
                     inject = true;
-                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(methodDescription.getName(), k -> new HashSet<>(2));
+                    String methodName = methodDescription.getName().toLowerCase();
+                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(methodName, k -> new HashSet<>(2));
+                    membersMap.computeIfAbsent(name.toLowerCase(), k -> memberData);
                     memberData.add(methodData);
                 }
             }
@@ -241,7 +244,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                 }
                 for (String s : value)
                 {
-                    Collection<ControllerMemberData<?>> memberData = membersMap.get(s);
+                    Collection<ControllerMemberData<?>> memberData = membersMap.get(s.toLowerCase());
                     if (memberData != null)
                     {
                         for (ControllerMemberData<?> data : memberData)

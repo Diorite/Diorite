@@ -44,7 +44,7 @@ public class InjectionTest
     private static final int TESTS = 3;
 
     @BeforeClass
-    public static void prepare()
+    public static void prepare() throws Exception
     {
         Class<MethodExampleObject> methodExampleObjectClass = MethodExampleObject.class;
         DefaultInjectionController controller = Injection.getController();
@@ -98,8 +98,8 @@ public class InjectionTest
         {
             ExampleObject exampleObject1 = new ExampleObject();
             ExampleObject exampleObject2 = new ExampleObject();
-            Assert.assertEquals(exampleObject1.getModule1(), exampleObject2.getModule1());
             Assert.assertEquals(exampleObject1.getModule1().hashCode(), exampleObject2.getModule1().hashCode());
+            Assert.assertSame(exampleObject1.getModule1(), exampleObject2.getModule1());
         }
     }
 
@@ -110,8 +110,8 @@ public class InjectionTest
         {
             MethodExampleObject exampleObject1 = new MethodExampleObject();
             MethodExampleObject exampleObject2 = new MethodExampleObject();
-            Assert.assertEquals(exampleObject1.getSomeModuleProvider().getNotNull(), exampleObject2.getSomeModuleProvider().getNotNull());
             Assert.assertEquals(exampleObject1.getSomeModuleProvider().getNotNull().hashCode(), exampleObject2.getSomeModuleProvider().getNotNull().hashCode());
+            Assert.assertSame(exampleObject1.getSomeModuleProvider().getNotNull(), exampleObject2.getSomeModuleProvider().getNotNull());
         }
     }
 }
