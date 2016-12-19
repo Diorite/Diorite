@@ -24,31 +24,26 @@
 
 package org.diorite.inject.data;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC>>
+public interface MemberData<GENERIC> extends WithMethods, Iterable<InjectValueData<?, GENERIC>>
 {
     String getName();
 
     int getIndex();
 
+    @Nullable
     <T> InjectValueData<?, GENERIC> getValueData(String name);
 
     <T> InjectValueData<?, GENERIC> getValueData(int index);
 
     Collection<? extends InjectValueData<?, GENERIC>> getInjectValues();
-
-    void addBefore(String method);
-
-    void addAfter(String method);
-
-    Collection<String> getBefore();
-
-    Collection<String> getAfter();
 
     Map<Class<? extends Annotation>, ? extends Annotation> getDeclaredScopes();
 
@@ -67,11 +62,13 @@ public interface MemberData<GENERIC> extends Iterable<InjectValueData<?, GENERIC
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     default <A extends Annotation> A getDeclaredScope(Class<A> type)
     {
         return (A) this.getDeclaredScopes().get(type);
     }
 
+    @SuppressWarnings("unchecked")
     default <A extends Annotation> A getDeclaredQualifier(Class<A> type)
     {
         return (A) this.getDeclaredQualifiers().get(type);

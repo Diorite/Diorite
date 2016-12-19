@@ -24,11 +24,6 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Qualifier;
-import javax.inject.Scope;
-
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.instrument.ClassFileTransformer;
 import java.util.function.Predicate;
 
@@ -39,15 +34,13 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
-import org.diorite.inject.InjectionLibrary;
+import org.diorite.inject.Injection;
 import org.diorite.inject.data.InjectValueData;
 import org.diorite.inject.utils.Constants;
 import org.diorite.unsafe.AsmUtils;
 
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.field.FieldDescription;
@@ -55,51 +48,20 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodDescription.InDefinedShape;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 import net.bytebuddy.description.type.TypeDescription.Generic;
-import net.bytebuddy.dynamic.DynamicType.Loaded;
-import net.bytebuddy.dynamic.DynamicType.Unloaded;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
-import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.Implementation.Context;
 import net.bytebuddy.pool.TypePool;
 
-public class InvokerGenerator implements ClassFileTransformer, Opcodes
+final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
 {
     public static final String   INJECTOR_CLASS       = Constants.INJECTOR.getInternalName();
     public static final String   INJECTOR_FIELD       = "injectField";
     public static final String   INJECTOR_FIELD_DESC  = "(Ljava/lang/Object;II)Ljava/lang/Object;";
     public static final String   INJECTOR_METHOD      = "injectMethod";
     public static final String   INJECTOR_METHOD_DESC = "(Ljava/lang/Object;III)Ljava/lang/Object;";
-    public static final String   GENERATED_PREFIX     = InjectionLibrary.class.getPackage().getName() + ".generated.invokers";
+    public static final String   GENERATED_PREFIX     = Injection.class.getPackage().getName() + ".generated.invokers";
     public static final Object[] STACK                = {};
     public static final int      HASHCODE_MULTI       = 127;
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Annotation> Class<? extends T> transform(Class<T> clazz)
-    {
-        if (clazz == null)
-        {
-            return null;
-        }
-        if (! clazz.isAnnotation() || ! (clazz.isAnnotationPresent(Qualifier.class) || clazz.isAnnotationPresent(Scope.class)))
-        {
-            return null;
-        }
-        try
-        {
-            String name = GENERATED_PREFIX + "." + clazz.getName();
-            Unloaded<Object> make = new ByteBuddy(ClassFileVersion.JAVA_V9).subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                                                                           .implement(Serializable.class, clazz).name(name)
-                                                                           .visit(new AnnotationImplementationVisitor(new ForLoadedType(clazz))).make();
-            Loaded<Object> load = make.load(ClassLoader.getSystemClassLoader(), Default.INJECTION);
-            return (Class<? extends T>) load.getLoaded();
-        }
-        catch (Throwable e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static final class AnnotationImplementationVisitor implements AsmVisitorWrapper
     {
@@ -160,65 +122,29 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
 //        }
 //    }
 
-    public static AbstractInsnNode[] generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, boolean printMethods, int lineNumber,
-                                                            int arg)
+    public static int generateFieldInjection(ControllerClassData classData, ControllerFieldData<?> fieldData, MethodNode mv, int lineNumber)
     {
-        MethodNode tempNode = new MethodNode();
         AbstractInsnNode[] result = new AbstractInsnNode[2];
         FieldDescription.InDefinedShape member = fieldData.getMember();
         TypeDescription fieldType = member.getType().asErasure();
         boolean isStatic = member.isStatic();
 
-        if (printMethods)
-        {
-            lineNumber = printMethods(tempNode, classData.getType().getInternalName(), fieldData.getBefore(), isStatic, lineNumber);
-        }
-        lineNumber = AsmUtils.printLineNumber(tempNode, lineNumber);
+        lineNumber = AsmUtils.printLineNumber(mv, lineNumber);
 
         if (isStatic)
         {
-            tempNode.visitInsn(ACONST_NULL);
+            mv.visitInsn(ACONST_NULL);
         }
         else
         {
-            tempNode.visitVarInsn(ALOAD, 0);
-            tempNode.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
+            mv.visitVarInsn(ALOAD, 0);
         }
 
-        AsmUtils.storeInt(tempNode, classData.getIndex());
-        AsmUtils.storeInt(tempNode, fieldData.getIndex());
-        tempNode.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_FIELD, INJECTOR_FIELD_DESC, false);
-//        mv.visitTypeInsn(CHECKCAST, fieldType.getInternalName()); // skip cast check?
-
-        if (arg > 0)
-        {
-            tempNode.visitVarInsn(AsmUtils.getStoreCode(fieldType), arg);
-        }
-        else if (arg != Integer.MIN_VALUE)
-        {
-            if (isStatic)
-            {
-                tempNode.visitFieldInsn(PUTSTATIC, classData.getType().getInternalName(), member.getName(), fieldType.getDescriptor());
-            }
-            else
-            {
-                tempNode.visitFieldInsn(PUTFIELD, classData.getType().getInternalName(), member.getName(), fieldType.getDescriptor());
-            }
-        }
-        if (printMethods)
-        {
-            printMethods(tempNode, classData.getType().getInternalName(), fieldData.getAfter(), isStatic, lineNumber);
-        }
-        InsnList instructions = tempNode.instructions;
-        result[0] = instructions.getFirst();
-        result[1] = instructions.getLast();
-        mv.instructions.add(instructions);
-        return result;
-    }
-
-    public static AbstractInsnNode[] generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, boolean printMethods, int lineNumber)
-    {
-        return generateFieldInjection(classData, fieldData, mv, printMethods, lineNumber, - 1);
+        AsmUtils.storeInt(mv, classData.getIndex());
+        AsmUtils.storeInt(mv, fieldData.getIndex());
+        mv.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_FIELD, INJECTOR_FIELD_DESC, false);
+        return lineNumber;
     }
 
     public static int printMethods(MethodNode mv, String clazz, Iterable<String> methods, Predicate<String> isStatic, int lineNumber)
@@ -254,7 +180,7 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
         return lineNumber;
     }
 
-    public static void generateMethodInjection(ClassData classData, MethodData methodData, MethodNode mv, boolean printMethods, int lineNumber)
+    public static void generateMethodInjection(ControllerClassData classData, ControllerMethodData methodData, MethodNode mv, boolean printMethods, int lineNumber)
     {
         MethodDescription.InDefinedShape member = methodData.getMember();
         boolean isStatic = member.isStatic();

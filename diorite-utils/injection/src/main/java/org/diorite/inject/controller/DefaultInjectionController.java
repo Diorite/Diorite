@@ -24,11 +24,9 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Qualifier;
-import javax.inject.Scope;
-
 import java.lang.annotation.Annotation;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -48,10 +46,14 @@ import java.util.function.Predicate;
 import org.diorite.inject.AfterInject;
 import org.diorite.inject.BeforeInject;
 import org.diorite.inject.DelegatedQualifier;
-import org.diorite.inject.InjectionControllerBasic;
 import org.diorite.inject.Inject;
+import org.diorite.inject.InjectionControllerBasic;
+import org.diorite.inject.Provider;
+import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
+import org.diorite.inject.Scope;
 import org.diorite.inject.ShortcutInject;
+import org.diorite.inject.asm.AddClinitClassFileTransformer;
 import org.diorite.inject.binder.Binder;
 import org.diorite.unsafe.ByteBuddyUtils;
 
@@ -65,10 +67,10 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-public final class DefaultInjectionController extends InjectionControllerBasic<AnnotatedCodeElement, ForLoadedType, Generic>
+public final class DefaultInjectionController extends InjectionControllerBasic<AnnotatedCodeElement, TypeDescription, Generic>
 {
-    static final TypeDescription.ForLoadedType INJECT              = new TypeDescription.ForLoadedType(javax.inject.Inject.class);
-    static final TypeDescription.ForLoadedType PROVIDER            = new TypeDescription.ForLoadedType(javax.inject.Provider.class);
+    static final TypeDescription.ForLoadedType INJECT              = new TypeDescription.ForLoadedType(Inject.class);
+    static final TypeDescription.ForLoadedType PROVIDER            = new TypeDescription.ForLoadedType(Provider.class);
     static final TypeDescription.ForLoadedType SHORTCUT_INJECT     = new TypeDescription.ForLoadedType(ShortcutInject.class);
     static final TypeDescription.ForLoadedType DELEGATED_QUALIFIER = new TypeDescription.ForLoadedType(DelegatedQualifier.class);
     static final TypeDescription.ForLoadedType QUALIFIER           = new TypeDescription.ForLoadedType(Qualifier.class);
@@ -76,12 +78,14 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
     static final TypeDescription.ForLoadedType AFTER               = new TypeDescription.ForLoadedType(AfterInject.class);
     static final TypeDescription.ForLoadedType BEFORE              = new TypeDescription.ForLoadedType(BeforeInject.class);
 
-    final         Collection<BindValueData> bindValues  = new ConcurrentLinkedQueue<>();
-    private final Set<Class<?>>             transformed = new HashSet<>(100);
+    final         Collection<BinderValueData> bindValues  = new ConcurrentLinkedQueue<>();
+    private final Set<Class<?>>               transformed = new HashSet<>(100);
 
     public DefaultInjectionController()
     {
-        ByteBuddyAgent.getInstrumentation().addTransformer(new InjectedClassTransformer(this, ByteBuddyAgent.getInstrumentation()), true);
+        Instrumentation instrumentation = ByteBuddyAgent.getInstrumentation();
+        instrumentation.addTransformer(new AddClinitClassFileTransformer(this, instrumentation), false);
+        instrumentation.addTransformer(new TransformerOfInjectedClass(this, instrumentation), true);
     }
 
     static String fixName(TypeDescription.Generic type, String currentName)
@@ -106,10 +110,19 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         }
     }
 
-    @Override
-    public ClassData addClassData(TypeDescription.ForLoadedType typeDescription, org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    public void addClassData(Class<?> type, boolean bind)
     {
-        if (! (classData instanceof ClassData))
+        org.diorite.inject.data.ClassData<Generic> classData = this.addClassData(new ForLoadedType(type));
+        if (bind && (classData != null))
+        {
+            this.rebindSingleWithLock(classData);
+        }
+    }
+
+    @Override
+    public ControllerClassData addClassData(TypeDescription typeDescription, org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    {
+        if (! (classData instanceof ControllerClassData))
         {
             throw new IllegalArgumentException("Unsupported class data for this controller");
         }
@@ -118,7 +131,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         try
         {
             lock.lock();
-            ((ClassData) classData).setIndex(this.dataList.size());
+            ((ControllerClassData) classData).setIndex(this.dataList.size());
             this.dataList.add(classData);
         }
         finally
@@ -131,17 +144,17 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         }
         catch (Exception e)
         {
-            throw new GeneratedCodeError(e);
+            throw new TransformerError(e);
         }
-        return (ClassData) classData;
+        return (ControllerClassData) classData;
     }
 
     @Override
-    protected ClassData generateMemberData(TypeDescription.ForLoadedType typeDescription)
+    protected ControllerClassData generateMemberData(TypeDescription typeDescription)
     {
         boolean inject = false;
-        Collection<MemberData<?>> members = new LinkedList<>();
-        Map<String, Collection<MemberData<?>>> membersMap = new HashMap<>(2);
+        Collection<ControllerMemberData<?>> members = new LinkedList<>();
+        Map<String, Collection<ControllerMemberData<?>>> membersMap = new HashMap<>(2);
         if (this.isInjectElement(typeDescription))
         {
             inject = true;
@@ -154,10 +167,11 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                 if (this.isInjectElement(fieldDescription))
                 {
                     String name = fixName(fieldDescription.getType(), fieldDescription.getName());
-                    FieldData<Object> fieldData = new FieldData<>(this, typeDescription, fieldDescription, name, index++);
+                    ControllerFieldData<Object> fieldData = new ControllerFieldData<>(this, typeDescription, fieldDescription, name, index++);
                     members.add(fieldData);
                     inject = true;
-                    Collection<MemberData<?>> memberData = membersMap.computeIfAbsent(fieldDescription.getName(), k -> new HashSet<>(2));
+                    Collection<ControllerMemberData<?>> memberData =
+                            membersMap.computeIfAbsent(fieldDescription.getName().toLowerCase(), k -> new HashSet<>(2));
                     memberData.add(fieldData);
                 }
             }
@@ -176,10 +190,12 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                         }
                         name = name_;
                     }
-                    MethodData methodData = new MethodData(this, typeDescription, methodDescription, name, index++);
+                    ControllerMethodData methodData = new ControllerMethodData(this, typeDescription, methodDescription, name, index++);
                     members.add(methodData);
                     inject = true;
-                    Collection<MemberData<?>> memberData = membersMap.computeIfAbsent(methodDescription.getName(), k -> new HashSet<>(2));
+                    String methodName = methodDescription.getName().toLowerCase();
+                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(methodName, k -> new HashSet<>(2));
+                    membersMap.computeIfAbsent(name.toLowerCase(), k -> memberData);
                     memberData.add(methodData);
                 }
             }
@@ -188,7 +204,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         {
             return null;
         }
-        ClassData classData = new ClassData(typeDescription, members.toArray(new MemberData<?>[members.size()]));
+        ControllerClassData classData = new ControllerClassData(typeDescription, members.toArray(new ControllerMemberData<?>[members.size()]));
 
         for (MethodDescription.InDefinedShape methodDescription : typeDescription.getDeclaredMethods())
         {
@@ -226,10 +242,10 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                 }
                 for (String s : value)
                 {
-                    Collection<MemberData<?>> memberData = membersMap.get(s);
+                    Collection<ControllerMemberData<?>> memberData = membersMap.get(s.toLowerCase());
                     if (memberData != null)
                     {
-                        for (MemberData<?> data : memberData)
+                        for (ControllerMemberData<?> data : memberData)
                         {
                             if (after)
                             {
@@ -264,6 +280,60 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
 //        ByteBuddyAgent.getInstrumentation().retransformClasses(ByteBuddyUtils.toClass(type));
 //    }
 
+    private void rebindSingleWithLock(org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    {
+        Lock writeLock = this.lock.writeLock();
+        try
+        {
+            writeLock.lock();
+            this.rebindSingle(classData);
+        }
+        finally
+        {
+            writeLock.unlock();
+        }
+    }
+
+    private void rebindSingle(org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    {
+        Collection<org.diorite.inject.data.InjectValueData<?, Generic>> allData = new ArrayList<>(100);
+        for (org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic> fieldData : classData.getMembers())
+        {
+            allData.addAll(fieldData.getInjectValues());
+        }
+        for (org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData : allData)
+        {
+            this.findBinder(valueData);
+        }
+    }
+
+    void findBinder(org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData)
+    {
+        Iterator<BinderValueData> iterator = this.bindValues.iterator();
+        BinderValueData best = null;
+        while (iterator.hasNext())
+        {
+            BinderValueData data = iterator.next();
+            if (! data.isCompatible(valueData))
+            {
+                continue;
+            }
+            if ((best == null) || (best.compareTo(data) > 0))
+            {
+                best = data;
+            }
+        }
+        if (best == null)
+        {
+            valueData.setProvider(null);
+        }
+        else
+        {
+            valueData.setProvider(best.getProvider());
+        }
+        this.applyScopes(valueData);
+    }
+
     @Override
     public void rebind()
     {
@@ -273,36 +343,18 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
             writeLock.lock();
             for (org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData : this.dataList)
             {
-                Collection<org.diorite.inject.data.InjectValueData<?, Generic>> allData = new ArrayList<>(100);
-                for (org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic> fieldData : classData.getMembers())
+                this.rebindSingle(classData);
+            }
+            for (BinderValueData bindValue : this.bindValues)
+            {
+                if (! (bindValue.getProvider() instanceof BinderToConstructor))
                 {
-                    allData.addAll(fieldData.getInjectValues());
+                    continue;
                 }
-                for (org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData : allData)
+                BinderToConstructor<?> binderToConstructor = (BinderToConstructor<?>) bindValue.getProvider();
+                for (ControllerInjectValueData<?> param : binderToConstructor.params)
                 {
-                    Iterator<BindValueData> iterator = this.bindValues.iterator();
-                    BindValueData best = null;
-                    while (iterator.hasNext())
-                    {
-                        BindValueData data = iterator.next();
-                        if (! data.isCompatible(valueData))
-                        {
-                            continue;
-                        }
-                        if ((best == null) || (best.compareTo(data) > 0))
-                        {
-                            best = data;
-                        }
-                    }
-                    if (best == null)
-                    {
-                        valueData.setProvider(null);
-                    }
-                    else
-                    {
-                        valueData.setProvider(best.getProvider());
-                    }
-                    this.applyScopes(valueData);
+                    this.findBinder(param);
                 }
             }
         }
@@ -598,7 +650,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
     @Override
     public <T> Binder<T> bindToClass(Predicate<Class<?>> typePredicate)
     {
-        return new SimpleBinderInstance<>(this, type ->
+        return new BinderSimpleInstance<>(this, type ->
         {
             try
             {
@@ -614,25 +666,25 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
 
     public <T> Binder<T> bindToType(Predicate<Generic> typePredicate)
     {
-        return new SimpleBinderInstance<>(this, typePredicate);
+        return new BinderSimpleInstance<>(this, typePredicate);
     }
 
     @Override
-    protected Map<Class<? extends Annotation>, ? extends Annotation> transformAll(TypeDescription.ForLoadedType classType, String name,
+    protected Map<Class<? extends Annotation>, ? extends Annotation> transformAll(TypeDescription classType, String name,
                                                                                   AnnotatedCodeElement member,
                                                                                   Map<Class<? extends Annotation>, ? extends Annotation> raw)
     {
         Map<Class<? extends Annotation>, Annotation> scopeAnnotations = new HashMap<>(raw.size());
         for (Entry<Class<? extends Annotation>, ? extends Annotation> entry : raw.entrySet())
         {
-            Annotation value = this.transform(entry.getValue(), new MemberDataBuilderImpl<>(classType, name, member, raw));
+            Annotation value = this.transform(entry.getValue(), new ControllerMemberDataBuilderImpl<>(classType, name, member, raw));
             scopeAnnotations.put(entry.getKey(), value);
         }
         return scopeAnnotations;
     }
 
-    <T, B extends AnnotatedCodeElement & NamedElement.WithRuntimeName> InjectValueData<T> createValue
-            (int index, TypeDescription.ForLoadedType classType, TypeDescription.ForLoadedType.Generic type, B member, String name,
+    <T, B extends AnnotatedCodeElement & NamedElement.WithRuntimeName> ControllerInjectValueData<T> createValue
+            (int index, TypeDescription classType, TypeDescription.ForLoadedType.Generic type, B member, String name,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawScopeAnnotations,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawQualifierAnnotations)
     {
@@ -650,7 +702,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
             rawQualifierAnnotations.putAll(memberRawQualifierAnnotations);
             qualifierAnnotations = this.transformAll(classType, name, member, rawQualifierAnnotations);
         }
-        return new InjectValueData<>(index, name, type, scopeAnnotations, qualifierAnnotations);
+        return new ControllerInjectValueData<>(index, name, type, scopeAnnotations, qualifierAnnotations);
     }
 
 }

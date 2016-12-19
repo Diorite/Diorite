@@ -22,14 +22,28 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.controller;
 
-import javax.annotation.Nullable;
-
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+public class TransformerError extends InternalError
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    private static final long serialVersionUID = 0;
+
+    public TransformerError()
+    {
+    }
+
+    public TransformerError(String message)
+    {
+        super(message);
+    }
+
+    public TransformerError(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public TransformerError(Throwable cause)
+    {
+        super(cause);
+    }
 }

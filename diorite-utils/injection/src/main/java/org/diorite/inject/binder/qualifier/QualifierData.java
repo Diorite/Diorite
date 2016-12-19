@@ -24,11 +24,35 @@
 
 package org.diorite.inject.binder.qualifier;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 
 public interface QualifierData
 {
+    @Nullable
     <T extends Annotation> T getScope(Class<T> type);
 
+    @Nullable
     <T extends Annotation> T getQualifier(Class<T> type);
+
+    default <T extends Annotation> T getScopeNotNull(Class<T> type)
+    {
+        T scope = this.getScope(type);
+        if (scope == null)
+        {
+            throw new IllegalArgumentException("Unknown scope " + type);
+        }
+        return scope;
+    }
+
+    default <T extends Annotation> T getQualifierNotNull(Class<T> type)
+    {
+        T qualifier = this.getQualifier(type);
+        if (qualifier == null)
+        {
+            throw new IllegalArgumentException("Unknown qualifier " + type);
+        }
+        return qualifier;
+    }
 }

@@ -22,14 +22,29 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.controller;
 
 import javax.annotation.Nullable;
 
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+@SuppressWarnings("rawtypes")
+abstract class TransformerMemberPair<DATA, NODE>
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    @Nullable DATA data;
+    @Nullable NODE node;
+    int index;
+    @Nullable TransformerMemberPair next;
+    @Nullable TransformerMemberPair prev;
+    boolean isStatic;
+
+    boolean isInjected()
+    {
+        return this.data != null;
+    }
+
+    abstract String getFullName();
+
+    TransformerMemberPair(@Nullable DATA data)
+    {
+        this.data = data;
+    }
 }

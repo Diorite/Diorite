@@ -33,7 +33,7 @@ import org.diorite.inject.binder.DynamicProvider;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-class InjectValueData<T> implements org.diorite.inject.data.InjectValueData<T, TypeDescription.ForLoadedType.Generic>
+class ControllerInjectValueData<T> implements org.diorite.inject.data.InjectValueData<T, TypeDescription.ForLoadedType.Generic>
 {
     private final int                                                    index;
     private final String                                                 name;
@@ -44,8 +44,8 @@ class InjectValueData<T> implements org.diorite.inject.data.InjectValueData<T, T
 
     private final AtomicReference<DynamicProvider<T>> provider = new AtomicReference<>(DefaultInjectionController.getNullDynamicProvider());
 
-    InjectValueData(int index, String name, Generic type, Map<Class<? extends Annotation>, ? extends Annotation> scopes,
-                    Map<Class<? extends Annotation>, ? extends Annotation> qualifiers)
+    ControllerInjectValueData(int index, String name, Generic type, Map<Class<? extends Annotation>, ? extends Annotation> scopes,
+                              Map<Class<? extends Annotation>, ? extends Annotation> qualifiers)
     {
         this.index = index;
         this.name = name;

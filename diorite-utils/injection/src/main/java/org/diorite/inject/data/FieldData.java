@@ -37,7 +37,6 @@ public interface FieldData<T, GENERIC> extends MemberData<GENERIC>
     InjectValueData<T, GENERIC> getValueData();
 
     @Override
-    @SuppressWarnings("unchecked")
     default <X> InjectValueData<?, GENERIC> getValueData(String name)
     {
         InjectValueData<T, GENERIC> valueData = this.getValueData();

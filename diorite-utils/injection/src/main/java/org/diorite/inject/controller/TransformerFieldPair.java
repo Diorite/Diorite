@@ -22,14 +22,26 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.controller;
 
 import javax.annotation.Nullable;
 
-import java.lang.annotation.Annotation;
+import org.objectweb.asm.tree.FieldNode;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+final class TransformerFieldPair extends TransformerMemberPair<ControllerFieldData<?>, FieldNode>
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    @Override
+    String getFullName()
+    {
+        if (this.node == null)
+        {
+            throw new TransformerError("Node not set yet.");
+        }
+        return this.node.name + " " + this.node.desc;
+    }
+
+    TransformerFieldPair(@Nullable ControllerFieldData<?> fieldData)
+    {
+        super(fieldData);
+    }
 }

@@ -24,8 +24,6 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Provider;
-
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.diorite.inject.Provider;
 import org.diorite.inject.binder.Binder;
 import org.diorite.inject.binder.BinderInstance;
 import org.diorite.inject.binder.DynamicProvider;
@@ -40,14 +39,14 @@ import org.diorite.inject.binder.qualifier.QualifierPattern;
 
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
+final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
 {
     private final DefaultInjectionController diController;
     private final Collection<QualifierPattern> patterns = new HashSet<>(2);
     private final Predicate<Generic> typePredicate;
     private       DynamicProvider<T> provider;
 
-    SimpleBinderInstance(DefaultInjectionController diController, Predicate<Generic> typePredicate)
+    BinderSimpleInstance(DefaultInjectionController diController, Predicate<Generic> typePredicate)
     {
         this.diController = diController;
         this.typePredicate = typePredicate;
@@ -80,7 +79,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
         {
             if (this.diController.isInjectElement(constructor))
             {
-                // todo:
+                this.dynamic(new BinderToConstructor<>(this.diController, type, constructor));
                 return;
             }
         }
@@ -88,7 +87,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
         {
             if (constructor.getParameterCount() == 0)
             {
-                this.toProvider(new SimpleToClassProvider<>(type));
+                this.toProvider(new BinderToClassProvider<>(type));
                 return;
             }
         }
@@ -113,7 +112,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
             }
             if (params.containsAll(Arrays.asList(constructor.getParameterTypes())))
             {
-                // TODO
+                this.dynamic(new BinderToConstructor<>(this.diController, type, constructor));
                 return;
             }
         }
@@ -130,8 +129,10 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
     private void bind()
     {
         Predicate<Generic> typePredicate =
-                type -> type.asErasure().equals(DefaultInjectionController.PROVIDER) ? this.typePredicate.test(type.getTypeArguments().get(0)) : this.typePredicate.test(type);
-        BindValueData valueData = BindValueData.dynamic(typePredicate, this.patterns, this.provider);
+                type -> type.asErasure().equals(DefaultInjectionController.PROVIDER) ?
+                        this.typePredicate.test(type.getTypeArguments().get(0)) :
+                        this.typePredicate.test(type);
+        BinderValueData valueData = BinderValueData.dynamic(typePredicate, this.patterns, this.provider);
         this.diController.bindValues.add(valueData);
     }
 }

@@ -22,14 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
-
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+/**
+ * Each class that use injections must have this annotation.
+ */
+public @interface InjectableClass
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
 }

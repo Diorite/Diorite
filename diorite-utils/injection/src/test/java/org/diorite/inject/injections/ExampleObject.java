@@ -24,9 +24,6 @@
 
 package org.diorite.inject.injections;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,31 +32,81 @@ import org.junit.Assert;
 
 import org.diorite.inject.AfterInject;
 import org.diorite.inject.BeforeInject;
-import org.diorite.inject.InjectionLibrary;
 import org.diorite.inject.EmptyAnn;
-import org.diorite.inject.Inject;
+import org.diorite.inject.InjectableClass;
+import org.diorite.inject.Injection;
+import org.diorite.inject.NamedInject;
+import org.diorite.inject.Singleton;
 
+@InjectableClass
 public class ExampleObject
 {
-    private static final Collection<String> invoked_pattern = List.of("injectEdit", "beforeMoreModules", "injectMoreModules", "afterMoreModules");
-    private final        Collection<String> invoked         = new ArrayList<>(4);
+    private static final Collection<String> invoked_pattern =
+            List.of("beforeAll", "beforeModule3", "afterModule3", "beforeIdk", "Module1", "afterIdk", "beforeIndirect", "injectIndirect", "afterIndirect",
+                    "afterAll");
+    private static final Collection<String> invoked         = new ArrayList<>(3);
 
-    @Inject()
+    @NamedInject("module1")
+    private       Module module0 = Injection.inject();
+    @NamedInject()
     @Singleton
-    private Module module1;
-    @Inject()
-    private Module module2;
-    @Inject("essentials")
+    private       Module module1 = Injection.inject();
+    @NamedInject()
+    private       Module module2 = Injection.inject();
+    @NamedInject("essentials")
     @EmptyAnn
-    private final Module module3 = InjectionLibrary.inject();
-    @Inject()
+    private final Module module3 = Injection.inject();
+    @NamedInject()
     @EmptyAnn
-    @Singleton
-    private Provider<Module> someModuleProvider;
+    private final Module idk     = this.heh();
+    @NamedInject()
+    @EmptyAnn
+    private final Module indirect;
 
-    @Inject()
-    @EmptyAnn
-    private Module edit = this.injectEdit();
+    {
+        // test for indirectly tracking
+        Module inject = this.injectIndirect();
+
+        System.out.println("[ExampleObject] indirect: " + inject);
+
+        Assert.assertNotNull(inject);
+        Assert.assertEquals(inject.getName(), "indirect");
+        Module module = this.someMethod(inject);
+        Module temp = module;
+        module = inject;
+        inject = temp;
+        this.indirect = module;
+        Assert.assertNotNull(this.indirect);
+        Assert.assertEquals(this.indirect.getName(), "indirect");
+    }
+
+    private Module injectIndirect()
+    {
+        Module inject = Injection.inject();
+        Assert.assertEquals(inject.getName(), "indirect");
+        invoked.add("injectIndirect");
+        return inject;
+    }
+
+    private Module heh()
+    {
+        // test for indirectly tracking
+        Module inject = Injection.inject();
+        System.out.println("[ExampleObject] idk: " + inject);
+        Assert.assertNotNull(inject);
+        Assert.assertEquals(inject.getName(), "idk");
+        Module module = this.someMethod(inject);
+        Module temp = module;
+        module = inject;
+        inject = temp;
+        invoked.add(inject.getName());
+        return module;
+    }
+
+    Module someMethod(Module module)
+    {
+        return new Module1();
+    }
 
     public Module getModule1()
     {
@@ -76,63 +123,83 @@ public class ExampleObject
         return this.module3;
     }
 
-    public Provider<Module> getSomeModuleProvider()
+    @BeforeInject
+    public void beforeAll()
     {
-        return this.someModuleProvider;
+        System.out.println("[ExampleObject] beforeAll: " + this);
+        invoked.clear();
+        invoked.add("beforeAll");
     }
 
-    public Module getEdit()
+    @AfterInject
+    public void afterAll()
     {
-        return this.edit;
+        System.out.println("[ExampleObject] afterAll: " + this);
+        invoked.add("afterAll");
     }
 
-    // this should found invoke to DILibrary.inject() in method body and replace it with proper injectField invoke
-    private Module injectEdit()
+    @AfterInject("module3")
+    public void afterModule3()
     {
-        System.out.println("Before inject");
-        Module inject = InjectionLibrary.inject();
-        System.out.println("After inject: " + inject);
-        Assert.assertEquals(inject, "edit");
-        this.invoked.add("injectEdit");
-        return inject;
-//        return Injector.injectField(this, 0, 4);
+        System.out.println("[ExampleObject] afterModule3: " + this.module3);
+        invoked.add("afterModule3");
     }
 
-    @Inject
-    @Singleton
-    private void injectMoreModules(Module module1, Module module2, @EmptyAnn Module guard)
+    @BeforeInject("module3")
+    public void beforeModule3()
     {
-//        System.out.println("injectMoreModules: " + module1 + " & " + module2 + " & " + guard);
-        Assert.assertEquals(module1.getName(), new Module1().getName());
-        Assert.assertEquals(module2.getName(), new Module2().getName());
-        Assert.assertEquals(guard.getName(), "guard");
-        this.invoked.add("injectMoreModules");
+        System.out.println("[ExampleObject] beforeModule3: " + this.module3);
+        invoked.add("beforeModule3");
     }
 
-    @AfterInject("MoreModules")
-    private void afterMoreModules()
+    @AfterInject("idk")
+    public void afterIdk()
     {
-        this.invoked.add("afterMoreModules");
+        System.out.println("[ExampleObject] afterIdk: " + this.idk);
+        invoked.add("afterIdk");
     }
 
-    @BeforeInject("MoreModules")
-    private void beforeMoreModules()
+    @BeforeInject("idk")
+    public void beforeIdk()
     {
-        this.invoked.add("beforeMoreModules");
+        System.out.println("[ExampleObject] beforeIdk: " + this.idk);
+        invoked.add("beforeIdk");
+    }
+
+    @AfterInject("indirect")
+    public void afterIndirect()
+    {
+        System.out.println("[ExampleObject] afterIndirect: " + this.indirect);
+        invoked.add("afterIndirect");
+    }
+
+    @BeforeInject("indirect")
+    public void beforeIndirect()
+    {
+        System.out.println("[ExampleObject] beforeIndirect: " + this.indirect);
+        invoked.add("beforeIndirect");
     }
 
     public void assertInjections()
     {
-        Assert.assertEquals(invoked_pattern, this.invoked);
-        Assert.assertEquals(this.module1.getName(), "module1");
-        Assert.assertEquals(this.module2.getName(), "module2");
+        Assert.assertNotNull(this.module0);
+        Assert.assertNotNull(this.module1);
+        Assert.assertNotNull(this.module2);
+        Assert.assertNotNull(this.module3);
+        Assert.assertNotNull(this.idk);
+        Assert.assertNotNull(this.indirect);
+        Assert.assertEquals(invoked_pattern, invoked);
+        Assert.assertEquals(this.module0.getName(), "Module1");
+        Assert.assertEquals(this.module1.getName(), "Module1");
+        Assert.assertNotSame(this.module1, this.module0);
+        Assert.assertEquals(this.module2.getName(), "Module2");
         Assert.assertEquals(this.module3.getName(), "essentials");
-        Assert.assertEquals(this.someModuleProvider.get().getName(), "someModule");
-        Assert.assertEquals(this.edit.getName(), "edit");
+        Assert.assertEquals(this.idk.getName(), "idk");
+        Assert.assertEquals(this.indirect.getName(), "indirect");
     }
 
     public String toString()
     {
-        return this.module1 + " & " + this.module2 + " & " + this.module3 + " & " + this.someModuleProvider.get() + " & " + this.edit;
+        return this.module0 + " & " + this.module1 + " & " + this.module2 + " & " + this.module3 + " & " + this.idk + " & " + this.indirect;
     }
 }

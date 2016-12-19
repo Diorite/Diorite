@@ -22,14 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.controller;
 
-import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.LinkedList;
 
-import java.lang.annotation.Annotation;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+final class TransformerInitMethodData
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    MethodNode     node;
+    MethodInsnNode superInvoke;
+    Collection<InsnNode> returns = new LinkedList<>();
+
+    TransformerInitMethodData(MethodNode node, MethodInsnNode superInvoke)
+    {
+        this.node = node;
+        this.superInvoke = superInvoke;
+    }
 }

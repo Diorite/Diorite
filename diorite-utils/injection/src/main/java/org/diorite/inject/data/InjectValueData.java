@@ -24,11 +24,12 @@
 
 package org.diorite.inject.data;
 
-import javax.inject.Provider;
+import javax.annotation.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+import org.diorite.inject.Provider;
 import org.diorite.inject.binder.DynamicProvider;
 import org.diorite.inject.binder.qualifier.QualifierData;
 
@@ -48,8 +49,9 @@ public interface InjectValueData<T, GENERIC> extends QualifierData
 
     DynamicProvider<T> getProvider();
 
-    void setProvider(DynamicProvider<T> provider);
+    void setProvider(@Nullable DynamicProvider<T> provider);
 
+    @Nullable
     @SuppressWarnings({"unchecked", "rawtypes"})
     default T tryToGet(Object object)
     {
@@ -61,12 +63,14 @@ public interface InjectValueData<T, GENERIC> extends QualifierData
         return this.getProvider().tryToGet(object, this);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     default <A extends Annotation> A getScope(Class<A> type)
     {
         return (A) this.getScopes().get(type);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     default <A extends Annotation> A getQualifier(Class<A> type)
     {

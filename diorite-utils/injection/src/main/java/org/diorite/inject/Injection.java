@@ -24,17 +24,17 @@
 
 package org.diorite.inject;
 
+import javax.annotation.Nullable;
+
 import java.lang.instrument.Instrumentation;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import org.diorite.inject.controller.DefaultInjectionController;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
-import net.bytebuddy.description.annotation.AnnotatedCodeElement;
-import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
-import net.bytebuddy.description.type.TypeDescription.Generic;
 
-public final class InjectionLibrary
+public final class Injection
 {
 //    public static final String DEFAULT_ID = "default";
 
@@ -42,19 +42,39 @@ public final class InjectionLibrary
 //    private static final Map<String, DiController<?, ?, ?>> controllers     = new ConcurrentHashMap<>(5);
 //    private static final List<DiController<?, ?, ?>>        controllersList = new CopyOnWriteArrayList<>();
 
-    private static final InjectionController<AnnotatedCodeElement, ForLoadedType, Generic> DEFAULT = new DefaultInjectionController();
+    private static final DefaultInjectionController DEFAULT = new DefaultInjectionController();
 
-    private InjectionLibrary()
+    private Injection()
     {
     }
 
-    public static InjectionController<AnnotatedCodeElement, ForLoadedType, Generic> getController()
+    public static void ensureLoaded()
+    {
+        Logger.getLogger("diorite-injection").info("Injection library is ready to use.");
+    }
+
+    public static DefaultInjectionController getController()
     {
         return DEFAULT;
     }
 
     // to prevent IDEs like intellij to see that inject always return null.
-    private static Supplier<Object> NULL = () -> null;
+    private static final Supplier<Object> NULL = () -> null;
+
+    /**
+     * Any use of that method will be removed from bytecode and replaced with valid injection call. <br/>
+     * Throws error on null injection.
+     *
+     * @param <T>
+     *         type of injected field.
+     *
+     * @return always null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T inject()
+    {
+        return (T) NULL.get();
+    }
 
     /**
      * Any use of that method will be removed from bytecode and replaced with valid injection call.
@@ -65,7 +85,8 @@ public final class InjectionLibrary
      * @return always null.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T inject()
+    @Nullable
+    public static <T> T injectNullable()
     {
         return (T) NULL.get();
     }

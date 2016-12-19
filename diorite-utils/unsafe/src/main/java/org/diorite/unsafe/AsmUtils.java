@@ -48,6 +48,63 @@ public final class AsmUtils implements Opcodes
         cr.accept(new TraceClassVisitor(new PrintWriter(outputStream)), 0);
     }
 
+    public static boolean isPutField(int code)
+    {
+        switch (code)
+        {
+            case PUTFIELD:
+            case PUTSTATIC:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isInvokeCode(int code)
+    {
+        switch (code)
+        {
+            case INVOKEDYNAMIC:
+            case INVOKEINTERFACE:
+            case INVOKESPECIAL:
+            case INVOKESTATIC:
+            case INVOKEVIRTUAL:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isLoadCode(int code)
+    {
+        switch (code)
+        {
+            case ALOAD:
+            case ILOAD:
+            case LLOAD:
+            case FLOAD:
+            case DLOAD:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isStoreCode(int code)
+    {
+        switch (code)
+        {
+            case ASTORE:
+            case ISTORE:
+            case LSTORE:
+            case FSTORE:
+            case DSTORE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public static boolean isReturnCode(int code)
     {
         switch (code)

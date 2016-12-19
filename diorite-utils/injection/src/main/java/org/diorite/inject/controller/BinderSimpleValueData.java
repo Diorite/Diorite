@@ -24,47 +24,29 @@
 
 package org.diorite.inject.controller;
 
-import javax.inject.Provider;
+import java.util.Collection;
+import java.util.function.Predicate;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
+import org.diorite.inject.Provider;
+import org.diorite.inject.binder.DynamicProvider;
+import org.diorite.inject.binder.qualifier.QualifierPattern;
 
-class SimpleToClassProvider<T> implements Provider<T>
+import net.bytebuddy.description.type.TypeDescription.Generic;
+
+final class BinderSimpleValueData extends BinderValueData
 {
-    private final Class<T>     type;
-    private final MethodHandle handle;
+    private final Provider<?> provider;
 
-    SimpleToClassProvider(Class<T> type)
+    BinderSimpleValueData(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, Provider<?> provider)
     {
-        this.type = type;
-        try
-        {
-            Constructor<T> declaredConstructor = this.type.getDeclaredConstructor();
-            declaredConstructor.setAccessible(true);
-            this.handle = MethodHandles.lookup().unreflectConstructor(declaredConstructor);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("No usable default constructor", e);
-        }
+        super(typePredicate, qualifiers);
+        this.provider = provider;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T get()
+    public <T> DynamicProvider<T> getProvider()
     {
-        try
-        {
-            return (T) this.handle.invoke();
-        }
-        catch (Exception throwable)
-        {
-            throw new RuntimeException("Can't invoke constructor of " + this.type.getName(), throwable);
-        }
-        catch (Throwable throwable)
-        {
-            throw new InternalError("Can't invoke constructor of " + this.type.getName(), throwable);
-        }
+        return (ignored1, ignored2) -> (T) this.provider.get();
     }
 }

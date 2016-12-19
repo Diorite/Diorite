@@ -24,34 +24,47 @@
 
 package org.diorite.inject.controller;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Constructor;
 
-import net.bytebuddy.description.field.FieldDescription.InDefinedShape;
-import net.bytebuddy.description.type.TypeDescription;
+import org.diorite.inject.Provider;
 
-class FieldData<T> extends MemberData<InDefinedShape> implements org.diorite.inject.data.FieldData<T, TypeDescription.ForLoadedType.Generic>
+final class BinderToClassProvider<T> implements Provider<T>
 {
-    private final InjectValueData<T>             value;
-    private final Collection<InjectValueData<T>> collection;
+    private final Class<T>     type;
+    private final MethodHandle handle;
 
-    protected FieldData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
+    BinderToClassProvider(Class<T> type)
     {
-        super(controller, classType, member, name, index);
-        this.value = controller.createValue(0, classType, member.getType(), member, name, Collections.emptyMap(), Collections.emptyMap());
-        this.collection = List.of(this.value);
+        this.type = type;
+        try
+        {
+            Constructor<T> declaredConstructor = this.type.getDeclaredConstructor();
+            declaredConstructor.setAccessible(true);
+            this.handle = MethodHandles.lookup().unreflectConstructor(declaredConstructor);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("No usable default constructor", e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Collection<? extends InjectValueData<?>> getInjectValues()
+    public T get()
     {
-        return this.collection;
-    }
-
-    @Override
-    public InjectValueData<T> getValueData()
-    {
-        return this.value;
+        try
+        {
+            return (T) this.handle.invoke();
+        }
+        catch (Exception throwable)
+        {
+            throw new RuntimeException("Can't invoke constructor of " + this.type.getName(), throwable);
+        }
+        catch (Throwable throwable)
+        {
+            throw new InternalError("Can't invoke constructor of " + this.type.getName(), throwable);
+        }
     }
 }

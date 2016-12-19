@@ -22,14 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.controller;
 
-import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Predicate;
 
-import java.lang.annotation.Annotation;
+import org.diorite.inject.binder.DynamicProvider;
+import org.diorite.inject.binder.qualifier.QualifierPattern;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+import net.bytebuddy.description.type.TypeDescription.Generic;
+
+final class BinderDynamicValueData extends BinderValueData
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    private final DynamicProvider<?> provider;
+
+    BinderDynamicValueData(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, DynamicProvider<?> provider)
+    {
+        super(typePredicate, qualifiers);
+        this.provider = provider;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> DynamicProvider<T> getProvider()
+    {
+        return (DynamicProvider<T>) this.provider;
+    }
 }

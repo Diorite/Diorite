@@ -22,14 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+/**
+ * Shortcut {@link Inject} annotation for {@link Named} {@link Qualifier} annotation.
+ */
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@ShortcutInject//(Named.class)
+public @interface NamedInject
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    /**
+     * Name qualifier of injected value.
+     *
+     * @return name qualifier of injected value.
+     *
+     * @see Named#value()
+     */
+    @DelegatedQualifier(Named.class)
+    String value() default "";
 }

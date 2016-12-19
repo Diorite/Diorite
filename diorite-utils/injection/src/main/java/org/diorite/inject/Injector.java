@@ -24,6 +24,8 @@
 
 package org.diorite.inject;
 
+import javax.annotation.Nullable;
+
 @Deprecated
 public final class Injector
 {
@@ -31,15 +33,19 @@ public final class Injector
     {
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
     @Deprecated
     public static <T> T injectField(Object $this, int typeId, int memberId)
     {
-        return InjectionLibrary.getController().getInjectedField($this, typeId, memberId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedField($this, typeId, memberId);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
     @Deprecated
     public static <T> T injectMethod(Object $this, int typeId, int memberId, int argumentId)
     {
-        return InjectionLibrary.getController().getInjectedMethod($this, typeId, memberId, argumentId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedMethod($this, typeId, memberId, argumentId);
     }
 }

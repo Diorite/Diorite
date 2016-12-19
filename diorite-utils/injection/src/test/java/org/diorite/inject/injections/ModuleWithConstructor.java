@@ -22,14 +22,32 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.injections;
 
-import javax.annotation.Nullable;
+import org.diorite.inject.EmptyAnn;
+import org.diorite.inject.Inject;
+import org.diorite.inject.NamedInject;
 
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+public class ModuleWithConstructor implements Module
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    private final Module delegatedModule;
+
+    @Inject
+    public ModuleWithConstructor(@NamedInject @EmptyAnn Module delegatedModule)
+    {
+        System.out.println("[ModuleWithConstructor] injected " + delegatedModule);
+        this.delegatedModule = delegatedModule;
+    }
+
+    @Override
+    public String getName()
+    {
+        return this.delegatedModule.getName();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "<Delegated>" + this.delegatedModule.toString();
+    }
 }

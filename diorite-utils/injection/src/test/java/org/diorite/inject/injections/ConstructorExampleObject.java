@@ -22,14 +22,37 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.injections;
 
-import javax.annotation.Nullable;
+import org.junit.Assert;
 
-import java.lang.annotation.Annotation;
+import org.diorite.inject.AfterInject;
+import org.diorite.inject.Inject;
+import org.diorite.inject.InjectableClass;
+import org.diorite.inject.Injection;
+import org.diorite.inject.OneMemberAnn;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+@InjectableClass
+public class ConstructorExampleObject
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    @Inject @OneMemberAnn
+    private Module delegated = Injection.inject();
+
+    @AfterInject("delegated")
+    private void afterDelegated()
+    {
+        System.out.println("[ConstructorExampleObject] delegated: " + this.delegated);
+    }
+
+    public void assertInjections()
+    {
+        Assert.assertNotNull(this.delegated);
+        Assert.assertEquals(this.delegated.getName(), "delegatedModule");
+        Assert.assertTrue(this.delegated instanceof ModuleWithConstructor);
+    }
+
+    public String toString()
+    {
+        return String.valueOf(this.delegated);
+    }
 }

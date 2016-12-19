@@ -28,9 +28,6 @@ import static org.diorite.inject.ManyMembersAnn.TestEnum._1;
 import static org.diorite.inject.ManyMembersAnn.TestEnum._2;
 import static org.diorite.inject.ManyMembersAnn.TestEnum._3;
 
-
-import javax.inject.Qualifier;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;

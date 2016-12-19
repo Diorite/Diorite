@@ -22,14 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Annotation;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
-{
-    @Nullable
-    T test(Object object, A a, B b, C c);
-}
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+
+/**
+ * Identifies a type that the injector only instantiates once. Not inherited.
+ *
+ * @see Scope @Scope
+ */
+@Scope
+@Documented
+@Retention(RUNTIME)
+public @interface Singleton {}

@@ -31,11 +31,10 @@ import java.security.ProtectionDomain;
 
 import org.diorite.inject.InjectionController;
 import org.diorite.inject.asm.AbstractClassTransformer;
-import org.diorite.unsafe.AsmUtils;
 
-public class InjectedClassTransformer extends AbstractClassTransformer<InjectionController<?, ?, ?>>
+public final class TransformerOfInjectedClass extends AbstractClassTransformer<InjectionController<?, ?, ?>>
 {
-    public InjectedClassTransformer(InjectionController<?, ?, ?> controller, Instrumentation instrumentation)
+    public TransformerOfInjectedClass(InjectionController<?, ?, ?> controller, Instrumentation instrumentation)
     {
         super(controller, instrumentation);
     }
@@ -48,26 +47,22 @@ public class InjectedClassTransformer extends AbstractClassTransformer<Injection
         {
             return null;
         }
-        ClassData classData = (ClassData) controller.getClassData(clazz);
+        ControllerClassData classData = (ControllerClassData) controller.getClassData(clazz);
         if (classData == null)
         {
             return null;
         }
         try
         {
-            ClassTransformer classTransformer = new ClassTransformer(bytes, classData);
+            Transformer classTransformer = new Transformer(bytes, classData);
+//            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             classTransformer.run();
-            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
+//            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             return classTransformer.getWriter().toByteArray();
         } catch (Throwable e)
         {
             e.printStackTrace();
             return null;
         }
-//        controller.isInjectElement()
-//        ClassReader reader = new ClassReader(bytes);
-//        ClassWriter writer = new ClassWriter(reader, 0);
-//        ClassPrinter visitor = new ClassPrinter(writer);
-//        return writer.toByteArray();
     }
 }

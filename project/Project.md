@@ -624,18 +624,20 @@ ____
 ### Diorite Utils - Injections
 ____
 Something similar to Dependency Injection libraries, but with different rules.  
-Main goal is simple way to inject fields.  
+Main goal is to create some simple way to inject fields.  
 Library will edit classes to add code that will fetch missing objects.  
 
 ###### Goals
-- [ ] Basic injection bindings.
-- [ ] Dynamic injection bindings.
-- [ ] Generating Qualifier and Scope implementation classes.
-- [ ] Singleton scope.
-- [ ] Rebinding in runtime.
-- [ ] Shortcut annotations - one annotation works as multiple Qualifiers.
-- [ ] After/before inject methods.
-- [ ] Retransforming all classes that use injecting on load time.
+- [x] Basic injection bindings.
+- [x] Dynamic injection bindings.
+- [x] Binding to constructors that needs other bindings.
+- [x] Generating Qualifier and Scope implementation classes.
+- [x] Singleton scope.
+- [x] Rebinding in runtime.
+- [x] Shortcut annotations - one annotation works as multiple Qualifiers.
+- [x] After/before inject methods.
+- [x] Retransforming all classes that use injecting on load time.
+- [ ] Allow for static injections, not sure if this is good idea, injections are here to help using objects, not to create tons of static injected values.
 
 ____
 

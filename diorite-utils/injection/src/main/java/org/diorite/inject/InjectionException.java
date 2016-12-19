@@ -22,28 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.controller;
+package org.diorite.inject;
 
-public class GeneratedCodeError extends InternalError
+public class InjectionException extends RuntimeException
 {
     private static final long serialVersionUID = 0;
 
-    public GeneratedCodeError()
+    public InjectionException()
     {
     }
 
-    public GeneratedCodeError(String message)
+    public InjectionException(String message)
     {
         super(message);
     }
 
-    public GeneratedCodeError(String message, Throwable cause)
+    public InjectionException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public GeneratedCodeError(Throwable cause)
+    public InjectionException(Throwable cause)
     {
         super(cause);
+    }
+
+    public InjectionException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
+    {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

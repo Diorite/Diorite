@@ -24,6 +24,8 @@
 
 package org.diorite.inject.controller;
 
+import javax.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,16 +34,17 @@ import net.bytebuddy.description.ByteCodeElement;
 import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 
-abstract class MemberData<B extends ByteCodeElement & NamedElement> implements org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic>
+abstract class ControllerMemberData<B extends ByteCodeElement & NamedElement> implements org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType
+                                                                                                                                    .Generic>
 {
-    protected final TypeDescription.ForLoadedType classType;
-    protected final B                             member;
-    protected final String                        name;
-    protected final int                           index;
-    protected Collection<String> before = null;
-    protected Collection<String> after  = null;
+    protected final TypeDescription classType;
+    protected final B               member;
+    protected final String          name;
+    protected final int             index;
+    @Nullable protected Collection<String> before = null;
+    @Nullable protected Collection<String> after  = null;
 
-    protected MemberData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, B member, String name, int index)
+    protected ControllerMemberData(DefaultInjectionController controller, TypeDescription classType, B member, String name, int index)
     {
         this.classType = classType;
         this.member = member;
@@ -49,7 +52,7 @@ abstract class MemberData<B extends ByteCodeElement & NamedElement> implements o
         this.index = index;
     }
 
-    public TypeDescription.ForLoadedType getClassType()
+    public TypeDescription getClassType()
     {
         return this.classType;
     }

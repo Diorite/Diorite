@@ -24,6 +24,8 @@
 
 package org.diorite.inject;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.util.function.BiFunction;
 
@@ -35,6 +37,7 @@ public interface ScopeHandler<T, S extends Annotation> extends BiFunction<Dynami
     @Override
     DynamicProvider<T> apply(DynamicProvider<T> tDynamicProvider, S scope);
 
+    @Nullable
     default T tryToGet(DynamicProvider<T> dynamicProvider, S scope, Object object, QualifierData qualifierData)
     {
         return this.apply(dynamicProvider, scope).tryToGet(object, qualifierData);

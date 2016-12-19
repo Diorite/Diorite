@@ -22,14 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject.data;
 
-import javax.annotation.Nullable;
+import java.util.Collection;
 
-import java.lang.annotation.Annotation;
-
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
+/**
+ * Represent members that supports {@link org.diorite.inject.AfterInject} and {@link org.diorite.inject.BeforeInject}
+ */
+public interface WithMethods
 {
-    @Nullable
-    T test(Object object, A a, B b, C c);
+    void addBefore(String method);
+
+    void addAfter(String method);
+
+    Collection<String> getBefore();
+
+    Collection<String> getAfter();
 }

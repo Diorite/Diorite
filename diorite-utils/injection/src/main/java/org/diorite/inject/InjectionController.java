@@ -24,7 +24,7 @@
 
 package org.diorite.inject;
 
-import javax.inject.Provider;
+import javax.annotation.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -63,8 +63,10 @@ public abstract class InjectionController<MEMBER, TYPE, GENERIC>
 
     // inject methods
 
+    @Nullable
     protected abstract <T> T getInjectedField(Object $this, int type, int field);
 
+    @Nullable
     protected abstract <T> T getInjectedMethod(Object $this, int type, int method, int argument);
 
     public abstract boolean isInjectElement(MEMBER element);
@@ -80,14 +82,18 @@ public abstract class InjectionController<MEMBER, TYPE, GENERIC>
 
     // class data methods
 
+    @Nullable
     protected abstract ClassData<GENERIC> generateMemberData(TYPE typeDescription);
 
+    @Nullable
     public abstract ClassData<GENERIC> getClassData(Class<?> type);
 
+    @Nullable
     public abstract ClassData<GENERIC> getClassData(TYPE type);
 
     protected abstract ClassData<GENERIC> addClassData(TYPE typeDescription, ClassData<GENERIC> classData);
 
+    @Nullable
     protected abstract ClassData<GENERIC> addClassData(TYPE typeDescription);
 
     // binder methods

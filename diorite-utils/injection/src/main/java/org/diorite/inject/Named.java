@@ -22,14 +22,31 @@
  * SOFTWARE.
  */
 
-package org.diorite.inject.binder.qualifier;
+package org.diorite.inject;
 
-import javax.annotation.Nullable;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Annotation;
 
-public interface QualifierPredicateThreeDynamic<T, A extends Annotation, B extends Annotation, C extends Annotation>
-{
-    @Nullable
-    T test(Object object, A a, B b, C c);
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+
+/**
+ * String-based {@linkplain Qualifier qualifier}.
+ *
+ * <p>Example usage:
+ *
+ * <pre>
+ *   public class Car {
+ *     &#064;Inject <b>@Named("driver")</b> Seat driverSeat;
+ *     &#064;Inject <b>@Named("passenger")</b> Seat passengerSeat;
+ *     ...
+ *   }</pre>
+ */
+@Qualifier
+@Documented
+@Retention(RUNTIME)
+public @interface Named {
+
+    /** The name. */
+    String value() default "";
 }

@@ -24,9 +24,12 @@
 
 package org.diorite.inject.binder.qualifier;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 
 public interface QualifierPredicateOneDynamic<T, A extends Annotation>
 {
+    @Nullable
     T test(Object object, A a);
 }

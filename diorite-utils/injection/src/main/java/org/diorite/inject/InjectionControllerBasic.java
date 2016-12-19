@@ -24,10 +24,6 @@
 
 package org.diorite.inject;
 
-import javax.inject.Named;
-import javax.inject.Scope;
-import javax.inject.Singleton;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +46,7 @@ public abstract class InjectionControllerBasic<MEMBER, TYPE, GENERIC> extends In
     static
     {
         // ensure loaded first:
-        Class<InjectionLibrary> libraryClass = InjectionLibrary.class;
+        Class<Injection> libraryClass = Injection.class;
     }
 
     protected final Map<TYPE, ClassData<GENERIC>> map      = new ConcurrentHashMap<>(100);
@@ -81,7 +77,7 @@ public abstract class InjectionControllerBasic<MEMBER, TYPE, GENERIC> extends In
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public <T> void applyScopes(InjectValueData<T, GENERIC> data)
     {
         Collection<? extends Annotation> scopes = data.getScopes().values();

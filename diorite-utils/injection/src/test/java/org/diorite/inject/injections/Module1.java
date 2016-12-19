@@ -24,16 +24,39 @@
 
 package org.diorite.inject.injections;
 
+import java.util.Objects;
+
 public class Module1 implements Module
 {
     public String toString()
     {
-        return "Module1["+this.hashCode()+"]";
+        return "Module1[" + System.identityHashCode(this) + "]";
     }
 
     @Override
     public String getName()
     {
         return "Module1";
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof Module1))
+        {
+            return false;
+        }
+        Module1 anyModule = (Module1) object;
+        return Objects.equals(this.getName(), anyModule.getName());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.getName());
     }
 }
