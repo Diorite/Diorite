@@ -79,14 +79,14 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
     static final TypeDescription.ForLoadedType AFTER               = new TypeDescription.ForLoadedType(AfterInject.class);
     static final TypeDescription.ForLoadedType BEFORE              = new TypeDescription.ForLoadedType(BeforeInject.class);
 
-    final         Collection<BindValueData> bindValues  = new ConcurrentLinkedQueue<>();
-    private final Set<Class<?>>             transformed = new HashSet<>(100);
+    final         Collection<BinderValueData> bindValues  = new ConcurrentLinkedQueue<>();
+    private final Set<Class<?>>               transformed = new HashSet<>(100);
 
     public DefaultInjectionController()
     {
         Instrumentation instrumentation = ByteBuddyAgent.getInstrumentation();
         instrumentation.addTransformer(new AddClinitClassFileTransformer(this, instrumentation), false);
-        instrumentation.addTransformer(new InjectedClassTransformer(this, instrumentation), true);
+        instrumentation.addTransformer(new TransformerOfInjectedClass(this, instrumentation), true);
     }
 
     static String fixName(TypeDescription.Generic type, String currentName)
@@ -121,10 +121,10 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
     }
 
     @Override
-    public ClassData addClassData(TypeDescription.ForLoadedType typeDescription,
-                                  org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
+    public ControllerClassData addClassData(TypeDescription.ForLoadedType typeDescription,
+                                            org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic> classData)
     {
-        if (! (classData instanceof ClassData))
+        if (! (classData instanceof ControllerClassData))
         {
             throw new IllegalArgumentException("Unsupported class data for this controller");
         }
@@ -133,7 +133,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         try
         {
             lock.lock();
-            ((ClassData) classData).setIndex(this.dataList.size());
+            ((ControllerClassData) classData).setIndex(this.dataList.size());
             this.dataList.add(classData);
         }
         finally
@@ -148,15 +148,15 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         {
             throw new TransformerError(e);
         }
-        return (ClassData) classData;
+        return (ControllerClassData) classData;
     }
 
     @Override
-    protected ClassData generateMemberData(TypeDescription.ForLoadedType typeDescription)
+    protected ControllerClassData generateMemberData(TypeDescription.ForLoadedType typeDescription)
     {
         boolean inject = false;
-        Collection<MemberData<?>> members = new LinkedList<>();
-        Map<String, Collection<MemberData<?>>> membersMap = new HashMap<>(2);
+        Collection<ControllerMemberData<?>> members = new LinkedList<>();
+        Map<String, Collection<ControllerMemberData<?>>> membersMap = new HashMap<>(2);
         if (this.isInjectElement(typeDescription))
         {
             inject = true;
@@ -169,10 +169,10 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                 if (this.isInjectElement(fieldDescription))
                 {
                     String name = fixName(fieldDescription.getType(), fieldDescription.getName());
-                    FieldData<Object> fieldData = new FieldData<>(this, typeDescription, fieldDescription, name, index++);
+                    ControllerFieldData<Object> fieldData = new ControllerFieldData<>(this, typeDescription, fieldDescription, name, index++);
                     members.add(fieldData);
                     inject = true;
-                    Collection<MemberData<?>> memberData = membersMap.computeIfAbsent(fieldDescription.getName(), k -> new HashSet<>(2));
+                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(fieldDescription.getName(), k -> new HashSet<>(2));
                     memberData.add(fieldData);
                 }
             }
@@ -191,10 +191,10 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                         }
                         name = name_;
                     }
-                    MethodData methodData = new MethodData(this, typeDescription, methodDescription, name, index++);
+                    ControllerMethodData methodData = new ControllerMethodData(this, typeDescription, methodDescription, name, index++);
                     members.add(methodData);
                     inject = true;
-                    Collection<MemberData<?>> memberData = membersMap.computeIfAbsent(methodDescription.getName(), k -> new HashSet<>(2));
+                    Collection<ControllerMemberData<?>> memberData = membersMap.computeIfAbsent(methodDescription.getName(), k -> new HashSet<>(2));
                     memberData.add(methodData);
                 }
             }
@@ -203,7 +203,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         {
             return null;
         }
-        ClassData classData = new ClassData(typeDescription, members.toArray(new MemberData<?>[members.size()]));
+        ControllerClassData classData = new ControllerClassData(typeDescription, members.toArray(new ControllerMemberData<?>[members.size()]));
 
         for (MethodDescription.InDefinedShape methodDescription : typeDescription.getDeclaredMethods())
         {
@@ -241,10 +241,10 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
                 }
                 for (String s : value)
                 {
-                    Collection<MemberData<?>> memberData = membersMap.get(s);
+                    Collection<ControllerMemberData<?>> memberData = membersMap.get(s);
                     if (memberData != null)
                     {
-                        for (MemberData<?> data : memberData)
+                        for (ControllerMemberData<?> data : memberData)
                         {
                             if (after)
                             {
@@ -302,11 +302,11 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         }
         for (org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic> valueData : allData)
         {
-            Iterator<BindValueData> iterator = this.bindValues.iterator();
-            BindValueData best = null;
+            Iterator<BinderValueData> iterator = this.bindValues.iterator();
+            BinderValueData best = null;
             while (iterator.hasNext())
             {
-                BindValueData data = iterator.next();
+                BinderValueData data = iterator.next();
                 if (! data.isCompatible(valueData))
                 {
                     continue;
@@ -632,7 +632,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
     @Override
     public <T> Binder<T> bindToClass(Predicate<Class<?>> typePredicate)
     {
-        return new SimpleBinderInstance<>(this, type ->
+        return new BinderSimpleInstance<>(this, type ->
         {
             try
             {
@@ -648,7 +648,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
 
     public <T> Binder<T> bindToType(Predicate<Generic> typePredicate)
     {
-        return new SimpleBinderInstance<>(this, typePredicate);
+        return new BinderSimpleInstance<>(this, typePredicate);
     }
 
     @Override
@@ -659,13 +659,13 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
         Map<Class<? extends Annotation>, Annotation> scopeAnnotations = new HashMap<>(raw.size());
         for (Entry<Class<? extends Annotation>, ? extends Annotation> entry : raw.entrySet())
         {
-            Annotation value = this.transform(entry.getValue(), new MemberDataBuilderImpl<>(classType, name, member, raw));
+            Annotation value = this.transform(entry.getValue(), new ControllerMemberDataBuilderImpl<>(classType, name, member, raw));
             scopeAnnotations.put(entry.getKey(), value);
         }
         return scopeAnnotations;
     }
 
-    <T, B extends AnnotatedCodeElement & NamedElement.WithRuntimeName> InjectValueData<T> createValue
+    <T, B extends AnnotatedCodeElement & NamedElement.WithRuntimeName> ControllerInjectValueData<T> createValue
             (int index, TypeDescription.ForLoadedType classType, TypeDescription.ForLoadedType.Generic type, B member, String name,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawScopeAnnotations,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawQualifierAnnotations)
@@ -684,7 +684,7 @@ public final class DefaultInjectionController extends InjectionControllerBasic<A
             rawQualifierAnnotations.putAll(memberRawQualifierAnnotations);
             qualifierAnnotations = this.transformAll(classType, name, member, rawQualifierAnnotations);
         }
-        return new InjectValueData<>(index, name, type, scopeAnnotations, qualifierAnnotations);
+        return new ControllerInjectValueData<>(index, name, type, scopeAnnotations, qualifierAnnotations);
     }
 
 }

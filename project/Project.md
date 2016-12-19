@@ -630,6 +630,7 @@ Library will edit classes to add code that will fetch missing objects.
 ###### Goals
 - [x] Basic injection bindings.
 - [x] Dynamic injection bindings.
+- [ ] Binding to constructors that needs other bindings.
 - [x] Generating Qualifier and Scope implementation classes.
 - [x] Singleton scope.
 - [x] Rebinding in runtime.

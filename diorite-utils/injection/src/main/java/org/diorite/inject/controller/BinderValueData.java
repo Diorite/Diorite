@@ -36,12 +36,12 @@ import org.diorite.inject.data.InjectValueData;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-abstract class BindValueData implements Comparable<BindValueData>
+abstract class BinderValueData implements Comparable<BinderValueData>
 {
     private final Predicate<TypeDescription.Generic> typePredicate;
     private final Collection<QualifierPattern>       qualifiers;
 
-    BindValueData(Predicate<TypeDescription.Generic> typePredicate, Collection<QualifierPattern> qualifiers)
+    BinderValueData(Predicate<TypeDescription.Generic> typePredicate, Collection<QualifierPattern> qualifiers)
     {
         this.typePredicate = typePredicate;
         this.qualifiers = qualifiers;
@@ -70,11 +70,11 @@ abstract class BindValueData implements Comparable<BindValueData>
         {
             return true;
         }
-        if (! (object instanceof BindValueData))
+        if (! (object instanceof BinderValueData))
         {
             return false;
         }
-        BindValueData that = (BindValueData) object;
+        BinderValueData that = (BinderValueData) object;
         return Objects.equals(this.typePredicate, that.typePredicate) &&
                Objects.equals(this.qualifiers, that.qualifiers);
     }
@@ -86,7 +86,7 @@ abstract class BindValueData implements Comparable<BindValueData>
     }
 
     @Override
-    public int compareTo(BindValueData o)
+    public int compareTo(BinderValueData o)
     {
         int compare = Integer.compare(o.qualifiers.size(), this.qualifiers.size());
         if (compare != 0)
@@ -103,29 +103,14 @@ abstract class BindValueData implements Comparable<BindValueData>
 
     public abstract <T> DynamicProvider<T> getProvider();
 
-    static BindValueData simple(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, Provider<?> provider)
+    static BinderValueData simple(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, Provider<?> provider)
     {
-        return new BindValueData(typePredicate, qualifiers)
-        {
-            @SuppressWarnings("unchecked")
-            @Override
-            public <T> DynamicProvider<T> getProvider()
-            {
-                return (ignored1, ignored2) -> (T) provider.get();
-            }
-        };
+        return new BinderSimpleValueData(typePredicate, qualifiers, provider);
     }
 
-    static BindValueData dynamic(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, DynamicProvider<?> provider)
+    static BinderValueData dynamic(Predicate<Generic> typePredicate, Collection<QualifierPattern> qualifiers, DynamicProvider<?> provider)
     {
-        return new BindValueData(typePredicate, qualifiers)
-        {
-            @SuppressWarnings("unchecked")
-            @Override
-            public <T> DynamicProvider<T> getProvider()
-            {
-                return (DynamicProvider<T>) provider;
-            }
-        };
+        return new BinderDynamicValueData(typePredicate, qualifiers, provider);
     }
+
 }

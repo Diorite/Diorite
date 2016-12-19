@@ -37,13 +37,13 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import org.diorite.unsafe.AsmUtils;
 
-public class InjectTracker implements Opcodes
+final class TransformerInjectTracker implements Opcodes
 {
-    private final InjectTransformer transformer;
-    private final FieldInsnNode     fieldInsnNode;
-    private final boolean           isStatic;
-    private       InsnList          resultNodeList;
-    private       InsnList          initNodeList;
+    private final Transformer   transformer;
+    private final FieldInsnNode fieldInsnNode;
+    private final boolean       isStatic;
+    private       InsnList      resultNodeList;
+    private       InsnList      initNodeList;
 
     private InjectionType   injectionType   = InjectionType.UNKNOWN;
     private PlaceholderType placeholderType = PlaceholderType.UNKNOWN;
@@ -51,7 +51,7 @@ public class InjectTracker implements Opcodes
     @Nullable private LoadCode       loadCode        = null;
     @Nullable private MethodInsnNode placeholderNode = null;
 
-    private InjectTracker(InjectTransformer transformer, FieldInsnNode fieldInsnNode, InsnList insnList)
+    private TransformerInjectTracker(Transformer transformer, FieldInsnNode fieldInsnNode, InsnList insnList)
     {
         this.transformer = transformer;
         this.fieldInsnNode = fieldInsnNode;
@@ -60,9 +60,9 @@ public class InjectTracker implements Opcodes
         this.initNodeList = insnList;
     }
 
-    public static InjectTracker trackFromField(InjectTransformer transformer, FieldInsnNode fieldInsnNode, InsnList insnList)
+    public static TransformerInjectTracker trackFromField(Transformer transformer, FieldInsnNode fieldInsnNode, InsnList insnList)
     {
-        InjectTracker injectTracker = new InjectTracker(transformer, fieldInsnNode, insnList);
+        TransformerInjectTracker injectTracker = new TransformerInjectTracker(transformer, fieldInsnNode, insnList);
         injectTracker.run();
         return injectTracker;
     }
@@ -131,7 +131,7 @@ public class InjectTracker implements Opcodes
     private InjectionType checkDirect()
     {
         AbstractInsnNode previous = this.getPrevious(true);
-        PlaceholderType injectPlaceholder = InjectTransformer.isInjectPlaceholder(previous);
+        PlaceholderType injectPlaceholder = Transformer.isInjectPlaceholder(previous);
         if (injectPlaceholder != PlaceholderType.INVALID)
         {
             assert previous instanceof MethodInsnNode;
@@ -175,7 +175,7 @@ public class InjectTracker implements Opcodes
         previous = this.trackLoadBackwards(previous);
 
         // final check for placeholder method
-        PlaceholderType injectPlaceholder = InjectTransformer.isInjectPlaceholder(previous);
+        PlaceholderType injectPlaceholder = Transformer.isInjectPlaceholder(previous);
 
         if (injectPlaceholder != PlaceholderType.INVALID)
         {
@@ -220,7 +220,7 @@ public class InjectTracker implements Opcodes
             MethodInsnNode methodInvoke = (MethodInsnNode) node;
 
             // maybe this is already placeholder invoke?
-            if (InjectTransformer.isInjectPlaceholder(methodInvoke) != PlaceholderType.INVALID)
+            if (Transformer.isInjectPlaceholder(methodInvoke) != PlaceholderType.INVALID)
             {
                 return node;
             }
@@ -270,7 +270,7 @@ public class InjectTracker implements Opcodes
                                        ")! Missing invoke placeholder! Remember that you can't use multiple method delegations!");
             }
             node = node.getNext();
-            if (InjectTransformer.isInjectPlaceholder(node) != PlaceholderType.INVALID)
+            if (Transformer.isInjectPlaceholder(node) != PlaceholderType.INVALID)
             {
                 this.resultNodeList = methodNode.instructions;
                 return node;
@@ -296,7 +296,7 @@ public class InjectTracker implements Opcodes
         previous = this.trackMethod(methodInvoke);
 
         // final check for placeholder method
-        PlaceholderType injectPlaceholder = InjectTransformer.isInjectPlaceholder(previous);
+        PlaceholderType injectPlaceholder = Transformer.isInjectPlaceholder(previous);
 
         if (injectPlaceholder != PlaceholderType.INVALID)
         {
@@ -495,17 +495,17 @@ public class InjectTracker implements Opcodes
 
         public AnalyzeError()
         {
-            this(fixErrorMessage(InjectTracker.this, "AnalyzeError"));
+            this(fixErrorMessage(TransformerInjectTracker.this, "AnalyzeError"));
         }
 
         public AnalyzeError(String message)
         {
-            super(fixErrorMessage(InjectTracker.this, message));
+            super(fixErrorMessage(TransformerInjectTracker.this, message));
         }
 
         public AnalyzeError(String message, Throwable cause)
         {
-            super(fixErrorMessage(InjectTracker.this, message), cause);
+            super(fixErrorMessage(TransformerInjectTracker.this, message), cause);
         }
 
         public AnalyzeError(Throwable cause)
@@ -515,7 +515,7 @@ public class InjectTracker implements Opcodes
 
     }
 
-    static String fixErrorMessage(InjectTracker tracker, String message)
+    static String fixErrorMessage(TransformerInjectTracker tracker, String message)
     {
         return message + " (Source: " + tracker.fieldNodeToString() + ")";
     }

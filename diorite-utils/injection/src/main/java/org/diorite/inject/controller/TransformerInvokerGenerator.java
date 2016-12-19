@@ -52,7 +52,7 @@ import net.bytebuddy.description.type.TypeDescription.Generic;
 import net.bytebuddy.implementation.Implementation.Context;
 import net.bytebuddy.pool.TypePool;
 
-public class InvokerGenerator implements ClassFileTransformer, Opcodes
+final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
 {
     public static final String   INJECTOR_CLASS       = Constants.INJECTOR.getInternalName();
     public static final String   INJECTOR_FIELD       = "injectField";
@@ -122,7 +122,7 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
 //        }
 //    }
 
-    public static int generateFieldInjection(ClassData classData, FieldData<?> fieldData, MethodNode mv, int lineNumber)
+    public static int generateFieldInjection(ControllerClassData classData, ControllerFieldData<?> fieldData, MethodNode mv, int lineNumber)
     {
         AbstractInsnNode[] result = new AbstractInsnNode[2];
         FieldDescription.InDefinedShape member = fieldData.getMember();
@@ -180,7 +180,7 @@ public class InvokerGenerator implements ClassFileTransformer, Opcodes
         return lineNumber;
     }
 
-    public static void generateMethodInjection(ClassData classData, MethodData methodData, MethodNode mv, boolean printMethods, int lineNumber)
+    public static void generateMethodInjection(ControllerClassData classData, ControllerMethodData methodData, MethodNode mv, boolean printMethods, int lineNumber)
     {
         MethodDescription.InDefinedShape member = methodData.getMember();
         boolean isStatic = member.isStatic();

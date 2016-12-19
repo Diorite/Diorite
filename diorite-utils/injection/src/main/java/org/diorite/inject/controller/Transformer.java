@@ -42,41 +42,40 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 
 import org.diorite.inject.InjectionController;
-import org.diorite.inject.controller.InjectTracker.PlaceholderType;
+import org.diorite.inject.controller.TransformerInjectTracker.PlaceholderType;
 import org.diorite.inject.data.WithMethods;
 import org.diorite.inject.utils.Constants;
 import org.diorite.unsafe.AsmUtils;
 
 import net.bytebuddy.description.ByteCodeElement;
 
-public class InjectTransformer implements Opcodes
+class Transformer implements Opcodes
 {
-    private final ClassNode classNode;
-    private final ClassData classData;
+    final ClassNode           classNode;
+    final ControllerClassData classData;
 
-    private final Map<MethodNode, InitPair> inits = new LinkedHashMap<>(3);
+    final Map<MethodNode, TransformerInitMethodData> inits = new LinkedHashMap<>(3);
 //    private MethodNode clinit;
 
-    private final Map<String, MethodPair> methods = new LinkedHashMap<>(5);
-    private final Map<String, FieldPair>  fields  = new LinkedHashMap<>(5);
+    final Map<String, TransformerMethodPair> methods = new LinkedHashMap<>(5);
+    final Map<String, TransformerFieldPair>  fields  = new LinkedHashMap<>(5);
 
     @SuppressWarnings("rawtypes") @Nullable
-    private MemberPair firstStatic = null;
+    TransformerMemberPair firstStatic = null;
     @SuppressWarnings("rawtypes") @Nullable
-    private MemberPair lastStatic  = null;
+    TransformerMemberPair lastStatic  = null;
     @SuppressWarnings("rawtypes") @Nullable
-    private MemberPair firstObject = null;
+    TransformerMemberPair firstObject = null;
     @SuppressWarnings("rawtypes") @Nullable
-    private MemberPair lastObject  = null;
+    TransformerMemberPair lastObject  = null;
 
-    public InjectTransformer(byte[] bytecode, ClassData classData)
+    public Transformer(byte[] bytecode, ControllerClassData classData)
     {
         this.classData = classData;
         this.classNode = new ClassNode(Opcodes.ASM6);
@@ -95,22 +94,22 @@ public class InjectTransformer implements Opcodes
     private void createMappings()
     {
         // add all methods to object maps.
-        for (MemberData<?> memberData : this.classData.getMembers())
+        for (ControllerMemberData<?> memberData : this.classData.getMembers())
         {
             ByteCodeElement member = memberData.getMember();
             String id = member.getDescriptor() + member.getName();
-            MemberPair memberPair;
-            if (memberData instanceof FieldData)
+            TransformerMemberPair memberPair;
+            if (memberData instanceof ControllerFieldData)
             {
-                FieldData<?> fieldData = (FieldData<?>) memberData;
-                FieldPair fieldPair = new FieldPair(fieldData);
+                ControllerFieldData<?> fieldData = (ControllerFieldData<?>) memberData;
+                TransformerFieldPair fieldPair = new TransformerFieldPair(fieldData);
                 memberPair = fieldPair;
                 this.fields.put(id, fieldPair);
             }
             else
             {
-                MethodData methodData = (MethodData) memberData;
-                MethodPair methodPair = new MethodPair(methodData);
+                ControllerMethodData methodData = (ControllerMethodData) memberData;
+                TransformerMethodPair methodPair = new TransformerMethodPair(methodData);
                 memberPair = methodPair;
                 this.methods.put(id, methodPair);
             }
@@ -162,12 +161,12 @@ public class InjectTransformer implements Opcodes
             if (method.name.equals(InjectionController.CONSTRUCTOR_NAME))
             {
                 MethodInsnNode superNode = this.findSuperNode(method);
-                InitPair initPair = new InitPair(method, superNode);
+                TransformerInitMethodData initPair = new TransformerInitMethodData(method, superNode);
                 this.findReturns(initPair);
                 this.inits.put(method, initPair);
             }
             String id = method.desc + method.name;
-            MethodPair methodPair = this.methods.computeIfAbsent(id, k -> new MethodPair(null));
+            TransformerMethodPair methodPair = this.methods.computeIfAbsent(id, k -> new TransformerMethodPair(null));
             methodPair.node = method;
             methodPair.index = i;
         }
@@ -176,13 +175,13 @@ public class InjectTransformer implements Opcodes
         {
             FieldNode field = fields.get(i);
             String id = field.desc + field.name;
-            FieldPair fieldPair = this.fields.computeIfAbsent(id, k -> new FieldPair(null));
+            TransformerFieldPair fieldPair = this.fields.computeIfAbsent(id, k -> new TransformerFieldPair(null));
             fieldPair.node = field;
             fieldPair.index = i;
         }
     }
 
-    private void findReturns(InitPair initPair)
+    private void findReturns(TransformerInitMethodData initPair)
     {
         MethodNode init = initPair.node;
         AbstractInsnNode node = init.instructions.getFirst();
@@ -231,99 +230,11 @@ public class InjectTransformer implements Opcodes
         throw new TransformerError("Can't find super() invoke for constructor!");
     }
 
-    private void findAllFieldInitMethods()
-    {
-//        assert this.clinit != null;
-//        this.findAllFieldInitMethods(this.clinit);
-        for (MethodNode init : this.inits.keySet())
-        {
-            this.findAllFieldInitMethods(init);
-        }
-    }
-
-    private void trackField(FieldInsnNode fieldInsnNode, InsnList insnList)
-    {
-        // check if field is in this same class
-        if (! fieldInsnNode.owner.equals(this.classNode.name))
-        {
-            return;
-        }
-        // first check if field is injected
-        FieldPair fieldPair = this.getFieldPair(fieldInsnNode);
-        if ((fieldPair == null) || (fieldPair.node == null) || (fieldPair.data == null))
-        {
-            return;
-        }
-
-        InjectTracker injectTracker = InjectTracker.trackFromField(this, fieldInsnNode, insnList);
-        this.injectField(fieldPair, injectTracker);
-    }
-
-    private void injectField(FieldPair fieldPair, InjectTracker result)
-    {
-        FieldData<?> fieldData = fieldPair.data;
-        assert fieldData != null;
-
-        MethodInsnNode injectionInvokeNode = result.getResult();
-        FieldInsnNode putfieldNode = result.getFieldInsnNode();
-
-        // insert invoke methods:
-        MethodNode codeBefore = new MethodNode();
-        MethodNode codeAfter = new MethodNode();
-        this.fillMethodInvokes(codeBefore, codeAfter, fieldData);
-
-        // node list for PUTFIELD
-        InsnList initNodeList = result.getInitNodeList();
-        // node list for invoke execution
-        InsnList resultNodeList = result.getResultNodeList();
-
-        if (codeBefore.instructions.size() != 0)
-        {
-            // invoke before should be added before PUTFIELD and before INVOKE
-            resultNodeList.insertBefore(injectionInvokeNode, codeBefore.instructions);
-        }
-        if (codeAfter.instructions.size() != 0)
-        {
-            // invoke after should be added after PUTFIELD
-            initNodeList.insert(putfieldNode, codeAfter.instructions);
-        }
-
-        // and replace placeholder node with real injections:
-        {
-            MethodNode tempNode = new MethodNode();
-            InvokerGenerator.generateFieldInjection(this.classData, fieldData, tempNode, - 1);
-            resultNodeList.insertBefore(injectionInvokeNode, tempNode.instructions);
-            resultNodeList.remove(injectionInvokeNode);
-        }
-    }
-
-    private void findAllFieldInitMethods(MethodNode rootNode)
-    {
-        InsnList instructions = rootNode.instructions;
-        if (instructions.size() == 0)
-        {
-            return;
-        }
-        AbstractInsnNode node = instructions.getFirst();
-        while (node != null)
-        {
-            while (! (node instanceof FieldInsnNode) || ! AsmUtils.isPutField(node.getOpcode()))
-            {
-                node = node.getNext();
-                if (node == null)
-                {
-                    return;
-                }
-            }
-            this.trackField((FieldInsnNode) node, rootNode.instructions);
-            node = node.getNext();
-        }
-    }
-
     public <T> void run()
     {
         this.createMappings();
-        this.findAllFieldInitMethods();
+        TransformerFieldInjector.run(this);
+        TransformerMethodInjector.run(this);
 
 
         this.addGlobalInjectInvokes();
@@ -334,10 +245,10 @@ public class InjectTransformer implements Opcodes
         MethodNode codeBefore = new MethodNode();
         MethodNode codeAfter = new MethodNode();
         this.fillMethodInvokes(codeBefore, codeAfter, this.classData);
-        for (Entry<MethodNode, InitPair> initEntry : this.inits.entrySet())
+        for (Entry<MethodNode, TransformerInitMethodData> initEntry : this.inits.entrySet())
         {
             MethodNode init = initEntry.getKey();
-            InitPair initPair = initEntry.getValue();
+            TransformerInitMethodData initPair = initEntry.getValue();
             MethodInsnNode superInvoke = initPair.superInvoke;
 
             if (codeAfter.instructions.size() > 0)
@@ -354,40 +265,40 @@ public class InjectTransformer implements Opcodes
         }
     }
 
-    private void fillMethodInvokes(MethodNode codeBefore, MethodNode codeAfter, WithMethods member)
+    void fillMethodInvokes(MethodNode codeBefore, MethodNode codeAfter, WithMethods member)
     {
         Collection<String> before = member.getBefore();
         Collection<String> after = member.getAfter();
         for (String s : before)
         {
-            MethodPair methodPair = this.methods.get("()V" + s);
+            TransformerMethodPair methodPair = this.methods.get("()V" + s);
             if ((methodPair == null) || (methodPair.node == null))
             {
                 throw new TransformerError("Can't find method for invoke before: " + s + " in " + this.classNode.name);
             }
             boolean isStatic = Modifier.isStatic(methodPair.node.access);
-            InvokerGenerator.printMethod(codeBefore, this.classNode.name, s, isStatic, - 1);
+            TransformerInvokerGenerator.printMethod(codeBefore, this.classNode.name, s, isStatic, - 1);
         }
         for (String s : after)
         {
-            MethodPair methodPair = this.methods.get("()V" + s);
+            TransformerMethodPair methodPair = this.methods.get("()V" + s);
             if ((methodPair == null) || (methodPair.node == null))
             {
                 throw new TransformerError("Can't find method for invoke after: " + s + " in " + this.classNode.name);
             }
             boolean isStatic = Modifier.isStatic(methodPair.node.access);
-            InvokerGenerator.printMethod(codeAfter, this.classNode.name, s, isStatic, - 1);
+            TransformerInvokerGenerator.printMethod(codeAfter, this.classNode.name, s, isStatic, - 1);
         }
     }
 
     @Nullable
-    MethodPair getMethodPair(MethodInsnNode methodInsnNode)
+    TransformerMethodPair getMethodPair(MethodInsnNode methodInsnNode)
     {
         return this.methods.get(methodInsnNode.desc + methodInsnNode.name);
     }
 
     @Nullable
-    FieldPair getFieldPair(FieldInsnNode fieldInsnNode)
+    TransformerFieldPair getFieldPair(FieldInsnNode fieldInsnNode)
     {
         return this.fields.get(fieldInsnNode.desc + fieldInsnNode.name);
     }
@@ -395,7 +306,7 @@ public class InjectTransformer implements Opcodes
     @Nullable
     MethodNode getMethod(MethodInsnNode methodInsnNode)
     {
-        MethodPair methodPair = this.getMethodPair(methodInsnNode);
+        TransformerMethodPair methodPair = this.getMethodPair(methodInsnNode);
         if (methodPair == null)
         {
             return null;
@@ -406,7 +317,7 @@ public class InjectTransformer implements Opcodes
     @Nullable
     FieldNode getField(FieldInsnNode fieldInsnNode)
     {
-        FieldPair fieldPair = this.getFieldPair(fieldInsnNode);
+        TransformerFieldPair fieldPair = this.getFieldPair(fieldInsnNode);
         if (fieldPair == null)
         {
             return null;
@@ -441,83 +352,11 @@ public class InjectTransformer implements Opcodes
         return PlaceholderType.INVALID;
     }
 
-    static class InitPair
-    {
-        MethodNode     node;
-        MethodInsnNode superInvoke;
-        Collection<InsnNode> returns = new LinkedList<>();
-
-        InitPair(MethodNode node, MethodInsnNode superInvoke)
-        {
-            this.node = node;
-            this.superInvoke = superInvoke;
-        }
-    }
-
-    @SuppressWarnings("rawtypes")
-    abstract static class MemberPair<DATA, NODE>
-    {
-        @Nullable DATA data;
-        @Nullable NODE node;
-        int index;
-        @Nullable MemberPair next;
-        @Nullable MemberPair prev;
-        boolean isStatic;
-
-        boolean isInjected()
-        {
-            return this.data != null;
-        }
-
-        abstract String getFullName();
-
-        MemberPair(@Nullable DATA data)
-        {
-            this.data = data;
-        }
-    }
-
-    static class MethodPair extends MemberPair<MethodData, MethodNode>
-    {
-        @Override
-        String getFullName()
-        {
-            if (this.node == null)
-            {
-                throw new TransformerError("Node not set yet.");
-            }
-            return this.node.name + " " + this.node.desc;
-        }
-
-        MethodPair(@Nullable MethodData data)
-        {
-            super(data);
-        }
-    }
-
-    static class FieldPair extends MemberPair<FieldData<?>, FieldNode>
-    {
-        @Override
-        String getFullName()
-        {
-            if (this.node == null)
-            {
-                throw new TransformerError("Node not set yet.");
-            }
-            return this.node.name + " " + this.node.desc;
-        }
-
-        FieldPair(@Nullable FieldData<?> fieldData)
-        {
-            super(fieldData);
-        }
-    }
-
-    private static int printMethods(MethodNode mv, String clazz, Iterable<String> methods, InjectTransformer transformer, int lineNumber)
+    private static int printMethods(MethodNode mv, String clazz, Iterable<String> methods, Transformer transformer, int lineNumber)
     {
         for (String method : methods)
         {
-            MethodPair methodPair = transformer.methods.get("()V" + method);
+            TransformerMethodPair methodPair = transformer.methods.get("()V" + method);
             if (methodPair == null)
             {
                 throw new TransformerError("Unknown method: " + method + " for " + clazz);
@@ -526,7 +365,7 @@ public class InjectTransformer implements Opcodes
             {
                 throw new TransformerError("Node not set yet.");
             }
-            lineNumber = InvokerGenerator.printMethod(mv, clazz, method, Modifier.isStatic(methodPair.node.access), lineNumber);
+            lineNumber = TransformerInvokerGenerator.printMethod(mv, clazz, method, Modifier.isStatic(methodPair.node.access), lineNumber);
         }
         return lineNumber;
     }

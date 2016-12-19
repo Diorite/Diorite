@@ -30,12 +30,12 @@ import java.lang.reflect.Constructor;
 
 import org.diorite.inject.Provider;
 
-class SimpleToClassProvider<T> implements Provider<T>
+final class BinderToClassProvider<T> implements Provider<T>
 {
     private final Class<T>     type;
     private final MethodHandle handle;
 
-    SimpleToClassProvider(Class<T> type)
+    BinderToClassProvider(Class<T> type)
     {
         this.type = type;
         try

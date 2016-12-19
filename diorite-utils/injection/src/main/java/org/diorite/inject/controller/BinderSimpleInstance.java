@@ -39,14 +39,14 @@ import org.diorite.inject.binder.qualifier.QualifierPattern;
 
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
+final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
 {
     private final DefaultInjectionController diController;
     private final Collection<QualifierPattern> patterns = new HashSet<>(2);
     private final Predicate<Generic> typePredicate;
     private       DynamicProvider<T> provider;
 
-    SimpleBinderInstance(DefaultInjectionController diController, Predicate<Generic> typePredicate)
+    BinderSimpleInstance(DefaultInjectionController diController, Predicate<Generic> typePredicate)
     {
         this.diController = diController;
         this.typePredicate = typePredicate;
@@ -79,7 +79,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
         {
             if (this.diController.isInjectElement(constructor))
             {
-                // todo:
+                // todo: binding to constructor that needs some parameters
                 return;
             }
         }
@@ -87,7 +87,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
         {
             if (constructor.getParameterCount() == 0)
             {
-                this.toProvider(new SimpleToClassProvider<>(type));
+                this.toProvider(new BinderToClassProvider<>(type));
                 return;
             }
         }
@@ -112,7 +112,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
             }
             if (params.containsAll(Arrays.asList(constructor.getParameterTypes())))
             {
-                // TODO
+                // todo: binding to constructor that needs some parameters
                 return;
             }
         }
@@ -130,7 +130,7 @@ class SimpleBinderInstance<T> implements BinderInstance<T>, Binder<T>
     {
         Predicate<Generic> typePredicate =
                 type -> type.asErasure().equals(DefaultInjectionController.PROVIDER) ? this.typePredicate.test(type.getTypeArguments().get(0)) : this.typePredicate.test(type);
-        BindValueData valueData = BindValueData.dynamic(typePredicate, this.patterns, this.provider);
+        BinderValueData valueData = BinderValueData.dynamic(typePredicate, this.patterns, this.provider);
         this.diController.bindValues.add(valueData);
     }
 }

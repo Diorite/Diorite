@@ -24,39 +24,49 @@
 
 package org.diorite.inject.controller;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.util.Map;
 
-import net.bytebuddy.description.field.FieldDescription.InDefinedShape;
+import net.bytebuddy.description.annotation.AnnotatedCodeElement;
 import net.bytebuddy.description.type.TypeDescription;
 
-class FieldData<T> extends MemberData<InDefinedShape> implements org.diorite.inject.data.FieldData<T, TypeDescription.ForLoadedType.Generic>
+class ControllerMemberDataBuilderImpl<T extends AnnotatedCodeElement> implements org.diorite.inject.AnnotatedMemberData<T, TypeDescription.ForLoadedType>
 {
-    private final InjectValueData<T>             value;
-    private final Collection<InjectValueData<T>> collection;
+    private final TypeDescription.ForLoadedType                          classType;
+    private final String                                                 name;
+    private final T                                                      member;
+    private final Map<Class<? extends Annotation>, ? extends Annotation> rawAnnotations;
 
-    protected FieldData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
+    ControllerMemberDataBuilderImpl(TypeDescription.ForLoadedType classType, String name, T member,
+                                    Map<Class<? extends Annotation>, ? extends Annotation> rawAnnotations)
     {
-        super(controller, classType, member, name, index);
-        if (member.isStatic())
-        {
-            throw new IllegalStateException("Can't use injections on static fields! (Source: " + member.getDeclaringType().getCanonicalName() + "#" +
-                                            member.getName() + " of type " + member.getType().getTypeName() + ")");
-        }
-        this.value = controller.createValue(0, classType, member.getType(), member, name, Collections.emptyMap(), Collections.emptyMap());
-        this.collection = List.of(this.value);
+        this.classType = classType;
+        this.name = name;
+        this.member = member;
+        this.rawAnnotations = rawAnnotations;
     }
 
     @Override
-    public Collection<? extends InjectValueData<?>> getInjectValues()
+    public TypeDescription.ForLoadedType getClassType()
     {
-        return this.collection;
+        return this.classType;
     }
 
     @Override
-    public InjectValueData<T> getValueData()
+    public String getName()
     {
-        return this.value;
+        return this.name;
+    }
+
+    @Override
+    public T getMember()
+    {
+        return this.member;
+    }
+
+    @Override
+    public Map<Class<? extends Annotation>, ? extends Annotation> getRawAnnotations()
+    {
+        return this.rawAnnotations;
     }
 }

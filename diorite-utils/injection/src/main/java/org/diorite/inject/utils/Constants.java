@@ -28,7 +28,6 @@ import org.diorite.inject.InjectableClass;
 import org.diorite.inject.Injection;
 import org.diorite.inject.Injector;
 import org.diorite.inject.Qualifiers;
-import org.diorite.inject.controller.ClassData;
 import org.diorite.inject.controller.DefaultInjectionController;
 
 import net.bytebuddy.description.type.TypeDescription;
@@ -36,7 +35,6 @@ import net.bytebuddy.description.type.TypeDescription;
 public final class Constants
 {
     public static final TypeDescription.ForLoadedType DEFAULT_INJECTION_CONTROLLER = new TypeDescription.ForLoadedType(DefaultInjectionController.class);
-    public static final TypeDescription.ForLoadedType CLASS_DATA                   = new TypeDescription.ForLoadedType(ClassData.class);
     public static final TypeDescription.ForLoadedType INJECTABLE_CLASS             = new TypeDescription.ForLoadedType(InjectableClass.class);
     public static final TypeDescription.ForLoadedType INJECTION_LIBRARY            = new TypeDescription.ForLoadedType(Injection.class);
     public static final TypeDescription.ForLoadedType QUALIFIERS                   = new TypeDescription.ForLoadedType(Qualifiers.class);

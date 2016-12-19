@@ -26,80 +26,51 @@ package org.diorite.inject.controller;
 
 import javax.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 
+import net.bytebuddy.description.ByteCodeElement;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 
-public class ClassData implements org.diorite.inject.data.ClassData<TypeDescription.ForLoadedType.Generic>
+abstract class ControllerMemberData<B extends ByteCodeElement & NamedElement> implements org.diorite.inject.data.MemberData<TypeDescription.ForLoadedType.Generic>
 {
-    private       int                                                    index;
-    private final TypeDescription.ForLoadedType                          type;
-    private final List<org.diorite.inject.controller.MemberData<?>>      members;
-    private final Collection<org.diorite.inject.controller.FieldData<?>> fields;
-    private final Collection<org.diorite.inject.controller.MethodData>   methods;
-    @Nullable
-    private Collection<String> before = null;
-    @Nullable
-    private Collection<String> after  = null;
+    protected final TypeDescription.ForLoadedType classType;
+    protected final B                             member;
+    protected final String                        name;
+    protected final int                           index;
+    @Nullable protected Collection<String> before = null;
+    @Nullable protected Collection<String> after  = null;
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    ClassData(TypeDescription.ForLoadedType type, org.diorite.inject.controller.MemberData... members)
+    protected ControllerMemberData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, B member, String name, int index)
     {
-        this.type = type;
-        this.members = List.of(members);
-        Collection<org.diorite.inject.controller.FieldData<?>> fields = new ArrayList<>(members.length);
-        Collection<org.diorite.inject.controller.MethodData> methods = new ArrayList<>(members.length);
-        for (org.diorite.inject.data.MemberData member : members)
-        {
-            if (member instanceof org.diorite.inject.data.MethodData)
-            {
-                methods.add(((org.diorite.inject.controller.MethodData) member));
-            }
-            else
-            {
-                fields.add(((org.diorite.inject.controller.FieldData<?>) member));
-            }
-        }
-        this.fields = List.of(fields.toArray(new org.diorite.inject.controller.FieldData[fields.size()]));
-        this.methods = List.of(methods.toArray(new org.diorite.inject.controller.MethodData[methods.size()]));
-    }
-
-    public TypeDescription.ForLoadedType getType()
-    {
-        return this.type;
-    }
-
-    public void setIndex(int index)
-    {
+        this.classType = classType;
+        this.member = member;
+        this.name = name;
         this.index = index;
+    }
+
+    public TypeDescription.ForLoadedType getClassType()
+    {
+        return this.classType;
+    }
+
+    public B getMember()
+    {
+        return this.member;
+    }
+
+    @Override
+    public String getName()
+    {
+        return this.name;
     }
 
     @Override
     public int getIndex()
     {
         return this.index;
-    }
-
-    @Override
-    public Collection<org.diorite.inject.controller.FieldData<?>> getFields()
-    {
-        return this.fields;
-    }
-
-    @Override
-    public Collection<org.diorite.inject.controller.MethodData> getMethods()
-    {
-        return this.methods;
-    }
-
-    @Override
-    public List<org.diorite.inject.controller.MemberData<?>> getMembers()
-    {
-        return this.members;
     }
 
     @Override

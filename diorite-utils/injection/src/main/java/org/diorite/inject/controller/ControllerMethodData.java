@@ -35,14 +35,14 @@ import net.bytebuddy.description.method.ParameterDescription;
 import net.bytebuddy.description.method.ParameterList;
 import net.bytebuddy.description.type.TypeDescription;
 
-class MethodData extends MemberData<InDefinedShape> implements org.diorite.inject.data.MethodData<TypeDescription.ForLoadedType.Generic>
+class ControllerMethodData extends ControllerMemberData<InDefinedShape> implements org.diorite.inject.data.MethodData<TypeDescription.ForLoadedType.Generic>
 {
     private final List<org.diorite.inject.data.InjectValueData<?, TypeDescription.ForLoadedType.Generic>> values;
     private final Map<Class<? extends Annotation>, ? extends Annotation>                                  scopeAnnotations;
     private final Map<Class<? extends Annotation>, ? extends Annotation>                                  qualifierAnnotations;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    protected MethodData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
+    protected ControllerMethodData(DefaultInjectionController controller, TypeDescription.ForLoadedType classType, InDefinedShape member, String name, int index)
     {
         super(controller, classType, member, name, index);
         if (member.isStatic())
@@ -82,9 +82,9 @@ class MethodData extends MemberData<InDefinedShape> implements org.diorite.injec
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> InjectValueData<T> getValueData(int index)
+    public <T> ControllerInjectValueData<T> getValueData(int index)
     {
-        return (InjectValueData<T>) this.values.get(index);
+        return (ControllerInjectValueData<T>) this.values.get(index);
     }
 
     @Override
@@ -115,9 +115,9 @@ class MethodData extends MemberData<InDefinedShape> implements org.diorite.injec
         }
 
         @Override
-        public InjectValueData<?> next()
+        public ControllerInjectValueData<?> next()
         {
-            return (InjectValueData<?>) this.iterator.next();
+            return (ControllerInjectValueData<?>) this.iterator.next();
         }
 
     }
