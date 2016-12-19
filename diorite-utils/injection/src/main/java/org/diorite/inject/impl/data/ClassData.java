@@ -33,6 +33,8 @@ import java.util.function.Predicate;
 
 public interface ClassData<GENERIC> extends WithMethods
 {
+    String getName();
+
     int getIndex();
 
     Collection<? extends FieldData<?, GENERIC>> getFields();

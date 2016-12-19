@@ -48,6 +48,7 @@ import org.diorite.inject.BeforeInject;
 import org.diorite.inject.DelegatedQualifier;
 import org.diorite.inject.Inject;
 import org.diorite.inject.InjectionController;
+import org.diorite.inject.InjectionException;
 import org.diorite.inject.Qualifier;
 import org.diorite.inject.Qualifiers;
 import org.diorite.inject.Scope;
@@ -369,7 +370,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     }
 
     @Override
-    protected final <T> T getInjectedField(Object $this, int type, int field)
+    protected final <T> T getInjectedField(Object $this, int type, int field, boolean performNullCheck)
     {
         org.diorite.inject.impl.data.ClassData<TypeDescription.ForLoadedType.Generic> classData;
         Lock lock = this.lock.readLock();
@@ -378,10 +379,19 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
             lock.lock();
             classData = this.dataList.get(type);
         }
+        catch (InjectionException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            new RuntimeException("Can't find (missing type) to inject. (type: " + type + ", field: " + field + "), null returned instead.", e)
-                    .printStackTrace();
+            RuntimeException runtimeException =
+                    new RuntimeException("Can't find (missing type) to inject. (type: " + type + ", field: " + field + "), null returned instead.", e);
+            runtimeException.printStackTrace();
+            if (performNullCheck)
+            {
+                throw new InjectionException("Can't inject null value in " + $this, runtimeException);
+            }
             return null;
         }
         finally
@@ -392,18 +402,33 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
         try
         {
             fieldData = classData.getField(field);
-            return fieldData.getValueData().tryToGet($this);
+            T result = fieldData.getValueData().tryToGet($this);
+            if (performNullCheck && (result == null))
+            {
+                throw new InjectionException("Can't inject null value into: " + classData.getName() + "#" + fieldData.getName());
+            }
+            return result;
+        }
+        catch (InjectionException e)
+        {
+            throw e;
         }
         catch (Exception e)
         {
-            new RuntimeException("Can't find value (missing/invalid field) to inject. (type: " + type + ", field: " + field + ", classData: " + classData +
-                                 ", fieldData: " + fieldData + "), null returned instead.", e).printStackTrace();
+            RuntimeException runtimeException =
+                    new RuntimeException("Can't find value (missing/invalid field) to inject. (type: " + type + ", field: " + field + ", classData: " +
+                                         classData + ", fieldData: " + fieldData + "), null returned instead.", e);
+            runtimeException.printStackTrace();
+            if (performNullCheck)
+            {
+                throw new InjectionException("Can't inject null value into: " + classData.getName(), runtimeException);
+            }
             return null;
         }
     }
 
     @Override
-    protected final <T> T getInjectedMethod(Object $this, int type, int method, int argument)
+    protected final <T> T getInjectedMethod(Object $this, int type, int method, int argument, boolean performNullCheck)
     {
         org.diorite.inject.impl.data.ClassData<TypeDescription.ForLoadedType.Generic> classData;
         Lock lock = this.lock.readLock();
@@ -412,11 +437,20 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
             lock.lock();
             classData = this.dataList.get(type);
         }
+        catch (InjectionException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            new RuntimeException("Can't find value (missing type) to inject. (type: " + type + ", method: " + method + ", argument: " + argument +
-                                 "), null returned instead.", e)
-                    .printStackTrace();
+            RuntimeException runtimeException =
+                    new RuntimeException("Can't find value (missing type) to inject. (type: " + type + ", method: " + method + ", argument: " + argument +
+                                         "), null returned instead.", e);
+            runtimeException.printStackTrace();
+            if (performNullCheck)
+            {
+                throw new InjectionException("Can't inject null value in " + $this, runtimeException);
+            }
             return null;
         }
         finally
@@ -428,24 +462,49 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
         {
             methodData = classData.getMethod(method);
         }
+        catch (InjectionException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            new RuntimeException("Can't find value (missing method) to inject. (type: " + type + ", method: " + method + ", argument: " + argument +
-                                 "), null returned instead.", e)
-                    .printStackTrace();
+            RuntimeException runtimeException =
+                    new RuntimeException("Can't find value (missing method) to inject. (type: " + type + ", method: " + method + ", argument: " + argument +
+                                         "), null returned instead.", e);
+            runtimeException.printStackTrace();
+            if (performNullCheck)
+            {
+                throw new InjectionException("Can't inject null value into: " + classData.getName(), runtimeException);
+            }
             return null;
         }
         org.diorite.inject.impl.data.InjectValueData<T, TypeDescription.ForLoadedType.Generic> valueData = null;
         try
         {
             valueData = methodData.getValueData(argument);
-            return valueData.tryToGet($this);
+            T result = valueData.tryToGet($this);
+            if (performNullCheck && (result == null))
+            {
+                throw new InjectionException("Can't inject null value into: " + classData.getName() + "#" + methodData.getName() + " param: " +
+                                             valueData.getName());
+            }
+            return result;
+        }
+        catch (InjectionException e)
+        {
+            throw e;
         }
         catch (Exception e)
         {
-            new RuntimeException("Can't find value (missing/invalid argument) to inject. (type: " + type + ", method: " + method + ", argument: " + argument +
-                                 ", classData: " + classData + ", methodData: " + methodData + ", valueData: " + valueData + "), null returned instead.", e)
-                    .printStackTrace();
+            RuntimeException runtimeException =
+                    new RuntimeException("Can't find value (missing/invalid argument) to inject. (type: " + type + ", method: " + method + ", argument: " +
+                                         argument + ", classData: " + classData + ", methodData: " + methodData + ", valueData: " + valueData +
+                                         "), null returned instead.", e);
+            runtimeException.printStackTrace();
+            if (performNullCheck)
+            {
+                throw new InjectionException("Can't inject null value into: " + classData.getName() + "#" + methodData.getName(), runtimeException);
+            }
             return null;
         }
     }

@@ -101,6 +101,7 @@ final class TransformerFieldInjector
         }
 
         TransformerInjectTracker injectTracker = TransformerInjectTracker.trackFromField(this.injectTransformer, fieldInsnNode, insnList);
+        fieldPair.placeholderType = injectTracker.getPlaceholderType();
         this.injectField(fieldPair, injectTracker);
     }
 
@@ -136,7 +137,7 @@ final class TransformerFieldInjector
         // and replace placeholder node with real injections:
         {
             MethodNode tempNode = new MethodNode();
-            TransformerInvokerGenerator.generateFieldInjection(this.injectTransformer.classData, fieldData, tempNode, - 1);
+            TransformerInvokerGenerator.generateFieldInjection(this.injectTransformer.classData, fieldData, tempNode, - 1, fieldPair.placeholderType);
             resultNodeList.insertBefore(injectionInvokeNode, tempNode.instructions);
             resultNodeList.remove(injectionInvokeNode);
         }

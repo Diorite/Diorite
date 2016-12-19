@@ -28,8 +28,12 @@ import javax.annotation.Nullable;
 
 import org.objectweb.asm.tree.FieldNode;
 
+import org.diorite.inject.impl.controller.TransformerInjectTracker.PlaceholderType;
+
 final class TransformerFieldPair extends TransformerMemberPair<ControllerFieldData<?>, FieldNode>
 {
+    PlaceholderType placeholderType = PlaceholderType.UNKNOWN;
+
     @Override
     String getFullName()
     {

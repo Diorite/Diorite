@@ -67,6 +67,16 @@ final class TransformerInjectTracker implements Opcodes
         return injectTracker;
     }
 
+    public InjectionType getInjectionType()
+    {
+        return this.injectionType;
+    }
+
+    public PlaceholderType getPlaceholderType()
+    {
+        return this.placeholderType;
+    }
+
     public FieldInsnNode getFieldInsnNode()
     {
         return this.fieldInsnNode;

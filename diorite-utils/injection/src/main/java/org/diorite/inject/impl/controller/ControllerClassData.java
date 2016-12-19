@@ -79,6 +79,12 @@ class ControllerClassData implements org.diorite.inject.impl.data.ClassData<Type
     }
 
     @Override
+    public String getName()
+    {
+        return this.type.getCanonicalName();
+    }
+
+    @Override
     public int getIndex()
     {
         return this.index;

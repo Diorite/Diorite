@@ -70,10 +70,10 @@ public abstract class InjectionController<MEMBER, TYPE, GENERIC> implements Cont
     }
 
     @Nullable
-    protected abstract <T> T getInjectedField(Object $this, int type, int field);
+    protected abstract <T> T getInjectedField(Object $this, int type, int field, boolean performNullCheck);
 
     @Nullable
-    protected abstract <T> T getInjectedMethod(Object $this, int type, int method, int argument);
+    protected abstract <T> T getInjectedMethod(Object $this, int type, int method, int argument, boolean performNullCheck);
 
     // scopes
 

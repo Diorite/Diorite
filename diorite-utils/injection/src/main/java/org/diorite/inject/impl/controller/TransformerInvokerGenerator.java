@@ -37,6 +37,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import org.diorite.inject.Injection;
+import org.diorite.inject.impl.controller.TransformerInjectTracker.PlaceholderType;
 import org.diorite.inject.impl.data.InjectValueData;
 import org.diorite.inject.impl.utils.Constants;
 import org.diorite.unsafe.AsmUtils;
@@ -56,9 +57,9 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
 {
     public static final String   INJECTOR_CLASS       = Constants.INJECTOR.getInternalName();
     public static final String   INJECTOR_FIELD       = "injectField";
-    public static final String   INJECTOR_FIELD_DESC  = "(Ljava/lang/Object;II)Ljava/lang/Object;";
+    public static final String   INJECTOR_FIELD_DESC  = "(Ljava/lang/Object;IIZ)Ljava/lang/Object;";
     public static final String   INJECTOR_METHOD      = "injectMethod";
-    public static final String   INJECTOR_METHOD_DESC = "(Ljava/lang/Object;III)Ljava/lang/Object;";
+    public static final String   INJECTOR_METHOD_DESC = "(Ljava/lang/Object;IIIZ)Ljava/lang/Object;";
     public static final String   GENERATED_PREFIX     = Injection.class.getPackage().getName() + ".generated.invokers";
     public static final Object[] STACK                = {};
     public static final int      HASHCODE_MULTI       = 127;
@@ -122,7 +123,8 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
 //        }
 //    }
 
-    public static int generateFieldInjection(ControllerClassData classData, ControllerFieldData<?> fieldData, MethodNode mv, int lineNumber)
+    public static int generateFieldInjection(ControllerClassData classData, ControllerFieldData<?> fieldData, MethodNode mv, int lineNumber,
+                                             PlaceholderType placeholderType)
     {
         AbstractInsnNode[] result = new AbstractInsnNode[2];
         FieldDescription.InDefinedShape member = fieldData.getMember();
@@ -143,6 +145,21 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
 
         AsmUtils.storeInt(mv, classData.getIndex());
         AsmUtils.storeInt(mv, fieldData.getIndex());
+
+        switch (placeholderType)
+        {
+            case INVALID:
+            case UNKNOWN:
+            default:
+                throw new IllegalStateException("Can't generate injection for invalid placeholders.");
+            case NONNULL:
+                mv.visitInsn(ICONST_1);
+                break;
+            case NULLABLE:
+                mv.visitInsn(ICONST_0);
+                break;
+        }
+
         mv.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_FIELD, INJECTOR_FIELD_DESC, false);
         return lineNumber;
     }
@@ -180,7 +197,8 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
         return lineNumber;
     }
 
-    public static void generateMethodInjection(ControllerClassData classData, ControllerMethodData methodData, MethodNode mv, boolean printMethods, int lineNumber)
+    public static void generateMethodInjection(ControllerClassData classData, ControllerMethodData methodData, MethodNode mv, boolean printMethods,
+                                               int lineNumber)
     {
         MethodDescription.InDefinedShape member = methodData.getMember();
         boolean isStatic = member.isStatic();
@@ -209,6 +227,7 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
             AsmUtils.storeInt(mv, classData.getIndex());
             AsmUtils.storeInt(mv, methodData.getIndex());
             AsmUtils.storeInt(mv, valueData.getIndex());
+            mv.visitInsn(ICONST_0); // skip null checks in methods.
             lineNumber = AsmUtils.printLineNumber(mv, lineNumber);
             mv.visitMethodInsn(INVOKESTATIC, INJECTOR_CLASS, INJECTOR_METHOD, INJECTOR_METHOD_DESC, false);
             TypeDescription paramType = valueData.getType().asErasure();

@@ -36,16 +36,16 @@ public final class Injector
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     @Deprecated
-    public static <T> T injectField(Object $this, int typeId, int memberId)
+    public static <T> T injectField(Object $this, int typeId, int memberId, boolean performNullCheck)
     {
-        return (T) ((InjectionController) Injection.getController()).getInjectedField($this, typeId, memberId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedField($this, typeId, memberId, performNullCheck);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Nullable
     @Deprecated
-    public static <T> T injectMethod(Object $this, int typeId, int memberId, int argumentId)
+    public static <T> T injectMethod(Object $this, int typeId, int memberId, int argumentId, boolean performNullCheck)
     {
-        return (T) ((InjectionController) Injection.getController()).getInjectedMethod($this, typeId, memberId, argumentId);
+        return (T) ((InjectionController) Injection.getController()).getInjectedMethod($this, typeId, memberId, argumentId, performNullCheck);
     }
 }
