@@ -62,6 +62,11 @@
             </dependency>
             <dependency>
                 <groupId>org.diorite.utils</groupId>
+                <artifactId>annotations</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.diorite.utils</groupId>
                 <artifactId>commons</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>

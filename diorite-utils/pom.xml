@@ -17,6 +17,7 @@
         <module>config</module>
         <module>injection</module>
         <module>unsafe</module>
+        <module>annotations</module>
     </modules>
     <packaging>pom</packaging>
     <name>Diorite Utils</name>

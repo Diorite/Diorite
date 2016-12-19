@@ -28,4 +28,4 @@
 @NonnullByDefault
 package org.diorite.inject.impl.utils;
 
-import org.diorite.commons.annotations.NonnullByDefault;
+import org.diorite.annotations.NonnullByDefault;

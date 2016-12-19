@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
+/**
+ * Root package of diorite commons.
+ */
 @NonnullByDefault
 package org.diorite.commons;
 
-import org.diorite.commons.annotations.NonnullByDefault;
+import org.diorite.annotations.NonnullByDefault;

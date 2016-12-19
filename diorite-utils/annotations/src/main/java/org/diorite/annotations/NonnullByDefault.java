@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.annotations;
+package org.diorite.annotations;
 
 import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierDefault;
