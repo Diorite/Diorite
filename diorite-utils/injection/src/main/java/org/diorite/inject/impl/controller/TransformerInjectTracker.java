@@ -35,7 +35,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import org.diorite.unsafe.AsmUtils;
+import org.diorite.inject.impl.utils.AsmUtils;
 
 final class TransformerInjectTracker implements Opcodes
 {

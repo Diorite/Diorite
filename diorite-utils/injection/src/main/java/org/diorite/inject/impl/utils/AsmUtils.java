@@ -22,8 +22,12 @@
  * SOFTWARE.
  */
 
-package org.diorite.unsafe;
+package org.diorite.inject.impl.utils;
 
+import javax.annotation.Nullable;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.invoke.MethodHandle;
@@ -33,13 +37,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.TraceClassVisitor;
+
 import net.bytebuddy.description.annotation.AnnotatedCodeElement;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.annotation.AnnotationList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 
-public final class ByteBuddyUtils
+@SuppressWarnings("Duplicates")
+public final class AsmUtils implements Opcodes
 {
     public static final TypeDescription.ForLoadedType VOID      = new TypeDescription.ForLoadedType(Void.class);
     public static final TypeDescription.ForLoadedType BOOLEAN   = new TypeDescription.ForLoadedType(Boolean.class);
@@ -61,12 +73,245 @@ public final class ByteBuddyUtils
     public static final TypeDescription.ForLoadedType FLOAT_P   = new TypeDescription.ForLoadedType(float.class);
     public static final TypeDescription.ForLoadedType DOUBLE_P  = new TypeDescription.ForLoadedType(double.class);
 
-    private ByteBuddyUtils()
+    @Nullable
+    static final MethodHandle typeHandle;
+
+    static
+    {
+        MethodHandle r;
+        try
+        {
+            Field typeField = ForLoadedType.class.getDeclaredField("type");
+            typeField.setAccessible(true);
+            r = MethodHandles.lookup().unreflectGetter(typeField);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            r = null;
+        }
+        typeHandle = r;
+    }
+
+    private AsmUtils()
     {
     }
 
+    public static void printBytecodeSource(ClassWriter classWriter, OutputStream outputStream)
+    {
+        ClassReader cr = new ClassReader(classWriter.toByteArray());
+        cr.accept(new TraceClassVisitor(new PrintWriter(outputStream)), 0);
+    }
+
+    public static boolean isPutField(int code)
+    {
+        switch (code)
+        {
+            case PUTFIELD:
+            case PUTSTATIC:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isInvokeCode(int code)
+    {
+        switch (code)
+        {
+            case INVOKEDYNAMIC:
+            case INVOKEINTERFACE:
+            case INVOKESPECIAL:
+            case INVOKESTATIC:
+            case INVOKEVIRTUAL:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isLoadCode(int code)
+    {
+        switch (code)
+        {
+            case ALOAD:
+            case ILOAD:
+            case LLOAD:
+            case FLOAD:
+            case DLOAD:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isStoreCode(int code)
+    {
+        switch (code)
+        {
+            case ASTORE:
+            case ISTORE:
+            case LSTORE:
+            case FSTORE:
+            case DSTORE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean isReturnCode(int code)
+    {
+        switch (code)
+        {
+            case RETURN:
+            case ARETURN:
+            case IRETURN:
+            case LRETURN:
+            case FRETURN:
+            case DRETURN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static int getReturnCode(TypeDescription fieldType)
+    {
+        if (fieldType.isPrimitive())
+        {
+            if (BOOLEAN_P.equals(fieldType) || BYTE_P.equals(fieldType) || CHAR_P.equals(fieldType) ||
+                SHORT_P.equals(fieldType) || INT_P.equals(fieldType))
+            {
+                return IRETURN;
+            }
+            if (LONG_P.equals(fieldType))
+            {
+                return LRETURN;
+            }
+            if (FLOAT_P.equals(fieldType))
+            {
+                return FRETURN;
+            }
+            if (DOUBLE_P.equals(fieldType))
+            {
+                return DRETURN;
+            }
+            else
+            {
+                throw new IllegalStateException("Unknown store method");
+            }
+        }
+        else
+        {
+            return ARETURN;
+        }
+    }
+
+    public static int getStoreCode(TypeDescription fieldType)
+    {
+        if (fieldType.isPrimitive())
+        {
+            if (BOOLEAN_P.equals(fieldType) || BYTE_P.equals(fieldType) || CHAR_P.equals(fieldType) ||
+                SHORT_P.equals(fieldType) || INT_P.equals(fieldType))
+            {
+                return ISTORE;
+            }
+            if (LONG_P.equals(fieldType))
+            {
+                return LSTORE;
+            }
+            if (FLOAT_P.equals(fieldType))
+            {
+                return FSTORE;
+            }
+            if (DOUBLE_P.equals(fieldType))
+            {
+                return DSTORE;
+            }
+            else
+            {
+                throw new IllegalStateException("Unknown store method");
+            }
+        }
+        else
+        {
+            return ASTORE;
+        }
+    }
+
+    public static int getLoadCode(TypeDescription fieldType)
+    {
+        if (fieldType.isPrimitive())
+        {
+            if (BOOLEAN_P.equals(fieldType) || BYTE_P.equals(fieldType) || CHAR_P.equals(fieldType) ||
+                SHORT_P.equals(fieldType) || INT_P.equals(fieldType))
+            {
+                return ILOAD;
+            }
+            if (LONG_P.equals(fieldType))
+            {
+                return LLOAD;
+            }
+            if (FLOAT_P.equals(fieldType))
+            {
+                return FLOAD;
+            }
+            if (DOUBLE_P.equals(fieldType))
+            {
+                return DLOAD;
+            }
+            else
+            {
+                throw new IllegalStateException("Unknown load method");
+            }
+        }
+        else
+        {
+            return ALOAD;
+        }
+    }
+
+    public static int printLineNumber(MethodVisitor mv, int lineNumber)
+    {
+        if (lineNumber == - 1)
+        {
+            return - 1;
+        }
+        Label label = new Label();
+        mv.visitLabel(label);
+        mv.visitLineNumber(lineNumber, label);
+        return lineNumber + 1;
+    }
+
+    public static void storeInt(MethodVisitor mv, int i)
+    {
+        switch (i)
+        {
+            case 0:
+                mv.visitInsn(ICONST_0);
+                break;
+            case 1:
+                mv.visitInsn(ICONST_1);
+                break;
+            case 2:
+                mv.visitInsn(ICONST_2);
+                break;
+            case 3:
+                mv.visitInsn(ICONST_3);
+                break;
+            case 4:
+                mv.visitInsn(ICONST_4);
+                break;
+            default:
+                mv.visitIntInsn(BIPUSH, i);
+                break;
+        }
+
+    }
+
     /**
-     * If given type is primitive type {@link net.bytebuddy.description.type.TypeDescription#isPrimitive()} then it will return
+     * If given type is primitive type {@link TypeDescription#isPrimitive()} then it will return
      * wrapper type for it. Like: boolean.class {@literal ->} Boolean.class
      * If given type isn't primitive, then it will return given type.
      *
@@ -120,51 +365,6 @@ public final class ByteBuddyUtils
         throw new Error("Unknown primitive type?"); // not possible?
     }
 
-    public static TypeDescription getPrimitiveClass(TypeDescription type)
-    {
-        if (type.isPrimitive())
-        {
-            return type;
-        }
-        if (type.equals(BOOLEAN))
-        {
-            return BOOLEAN_P;
-        }
-        if (type.equals(BYTE))
-        {
-            return BYTE_P;
-        }
-        if (type.equals(SHORT))
-        {
-            return SHORT_P;
-        }
-        if (type.equals(CHARACTER))
-        {
-            return CHAR_P;
-        }
-        if (type.equals(INTEGER))
-        {
-            return INT_P;
-        }
-        if (type.equals(LONG))
-        {
-            return LONG_P;
-        }
-        if (type.equals(FLOAT))
-        {
-            return FLOAT_P;
-        }
-        if (type.equals(DOUBLE))
-        {
-            return DOUBLE_P;
-        }
-        if (type.equals(VOID))
-        {
-            return VOID_P;
-        }
-        throw new RuntimeException("Invalid primitive type?");
-    }
-
     public static AnnotationList getAnnotationList(AnnotatedCodeElement element)
     {
         if (element instanceof TypeDescription)
@@ -182,11 +382,6 @@ public final class ByteBuddyUtils
         Set<RetentionPolicy> policySet = Set.of(policies);
         AnnotationList annotationList = getAnnotationList(element);
         return getAnnotations(annotationList.visibility(policySet::contains));
-    }
-
-    public static Annotation[] getAnnotations(AnnotatedCodeElement element)
-    {
-        return getAnnotations(getAnnotationList(element));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -210,25 +405,6 @@ public final class ByteBuddyUtils
             }
         }
         return col.toArray(new Annotation[col.size()]);
-    }
-
-    private static final MethodHandle typeHandle;
-
-    static
-    {
-        MethodHandle r;
-        try
-        {
-            Field typeField = ForLoadedType.class.getDeclaredField("type");
-            typeField.setAccessible(true);
-            r = MethodHandles.lookup().unreflectGetter(typeField);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            r = null;
-        }
-        typeHandle = r;
     }
 
     @SuppressWarnings("unchecked")

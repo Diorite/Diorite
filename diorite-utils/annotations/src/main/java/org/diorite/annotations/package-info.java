@@ -22,5 +22,8 @@
  * SOFTWARE.
  */
 
+/**
+ * Root package of diorite annotation module.
+ */
 @NonnullByDefault
-package org.diorite.commons.annotations;
+package org.diorite.annotations;

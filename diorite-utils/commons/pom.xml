@@ -15,6 +15,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.diorite.utils</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
         </dependency>

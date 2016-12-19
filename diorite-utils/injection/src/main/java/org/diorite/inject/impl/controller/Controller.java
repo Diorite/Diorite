@@ -57,7 +57,7 @@ import org.diorite.inject.binder.Binder;
 import org.diorite.inject.binder.Provider;
 import org.diorite.inject.impl.asm.AddClinitClassFileTransformer;
 import org.diorite.inject.impl.data.InjectValueData;
-import org.diorite.unsafe.ByteBuddyUtils;
+import org.diorite.inject.impl.utils.AsmUtils;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.description.NamedElement;
@@ -144,7 +144,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
         }
         try
         {
-            ByteBuddyAgent.getInstrumentation().retransformClasses(ByteBuddyUtils.toClass(typeDescription));
+            ByteBuddyAgent.getInstrumentation().retransformClasses(AsmUtils.toClass(typeDescription));
         }
         catch (Exception e)
         {
@@ -213,7 +213,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
         for (MethodDescription.InDefinedShape methodDescription : typeDescription.getDeclaredMethods())
         {
             String name = methodDescription.getName();
-            Annotation[] annotations = ByteBuddyUtils.getAnnotations(methodDescription, RetentionPolicy.RUNTIME);
+            Annotation[] annotations = AsmUtils.getAnnotations(methodDescription, RetentionPolicy.RUNTIME);
             for (Annotation annotation : annotations)
             {
                 String[] value;
@@ -512,7 +512,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     @Override
     protected boolean isInjectElement(AnnotatedCodeElement element)
     {
-        for (AnnotationDescription annotation : ByteBuddyUtils.getAnnotationList(element))
+        for (AnnotationDescription annotation : AsmUtils.getAnnotationList(element))
         {
             TypeDescription annotationType = annotation.getAnnotationType();
             if (annotationType.equals(INJECT))
@@ -613,7 +613,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     @Override
     protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawQualifierAnnotations(AnnotatedCodeElement element)
     {
-        Annotation[] annotations = ByteBuddyUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
+        Annotation[] annotations = AsmUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
         Map<Class<? extends Annotation>, Annotation> resultMap = new HashMap<>(annotations.length + 1);
         for (Annotation annotation : annotations)
         {
@@ -646,7 +646,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     @Override
     protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawScopeAnnotations(AnnotatedCodeElement element)
     {
-        Annotation[] annotations = ByteBuddyUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
+        Annotation[] annotations = AsmUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
         Map<Class<? extends Annotation>, Annotation> resultMap = new HashMap<>(annotations.length + 1);
         for (Annotation annotation : annotations)
         {

@@ -39,8 +39,8 @@ import org.objectweb.asm.tree.MethodNode;
 import org.diorite.inject.Injection;
 import org.diorite.inject.impl.controller.TransformerInjectTracker.PlaceholderType;
 import org.diorite.inject.impl.data.InjectValueData;
+import org.diorite.inject.impl.utils.AsmUtils;
 import org.diorite.inject.impl.utils.Constants;
-import org.diorite.unsafe.AsmUtils;
 
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.AsmVisitorWrapper;
