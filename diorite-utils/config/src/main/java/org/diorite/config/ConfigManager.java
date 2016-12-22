@@ -27,18 +27,43 @@ package org.diorite.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.diorite.config.impl.ConfigImplementationProvider;
 import org.diorite.config.impl.ConfigTemplateImpl;
+import org.diorite.config.impl.proxy.ProxyImplementationProvider;
 
 /**
  * Root class of library.
  */
-public final class DioriteConfigs
+public final class ConfigManager
 {
-    private DioriteConfigs()
+    public static void main(String[] args)
+    {
+
+    }
+
+    private ConfigManager()
     {
     }
 
-    private static final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);
+    public static ConfigManager create()
+    {
+        return new ConfigManager();
+    }
+
+    private final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);
+
+    private ConfigImplementationProvider implementationProvider = new ProxyImplementationProvider();
+
+    /**
+     * Change config implementation provider.
+     *
+     * @param implementationProvider
+     *         implementation provider to be used.
+     */
+    public void setImplementationProvider(ConfigImplementationProvider implementationProvider)
+    {
+        this.implementationProvider = implementationProvider;
+    }
 
     /**
      * Get or create config file configuration for given config class.
@@ -51,13 +76,13 @@ public final class DioriteConfigs
      * @return config file configuration for given config class.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Config> ConfigTemplate<T> getConfigFile(Class<T> type)
+    public <T extends Config> ConfigTemplate<T> getConfigFile(Class<T> type)
     {
-        ConfigTemplate<T> configTemplate = (ConfigTemplate<T>) configs.get(type);
+        ConfigTemplate<T> configTemplate = (ConfigTemplate<T>) this.configs.get(type);
         if (configTemplate == null)
         {
-            configTemplate = new ConfigTemplateImpl<>(type);
-            configs.put(type, configTemplate);
+            configTemplate = new ConfigTemplateImpl<>(type, this.implementationProvider);
+            this.configs.put(type, configTemplate);
         }
         return configTemplate;
     }

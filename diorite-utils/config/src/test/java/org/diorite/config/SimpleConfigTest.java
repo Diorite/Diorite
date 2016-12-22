@@ -32,22 +32,30 @@ import org.junit.Test;
 
 public class SimpleConfigTest
 {
+    private final ConfigManager configManager = ConfigManager.create();
+
     @Test
     public void loadTest() throws Exception
     {
-        ConfigTemplate<SimpleConfig> configFile = DioriteConfigs.getConfigFile(SimpleConfig.class);
-        Assert.assertNotNull(configFile);
-        Assert.assertEquals(SimpleConfig.class.getSimpleName(), configFile.getName());
-        Assert.assertEquals(StandardCharsets.UTF_8, configFile.getDefaultDecoder().charset());
-        Assert.assertEquals(StandardCharsets.UTF_8, configFile.getDefaultEncoder().charset());
+        ConfigTemplate<SimpleConfig> configTemplate = this.configManager.getConfigFile(SimpleConfig.class);
+        Assert.assertNotNull(configTemplate);
+        Assert.assertEquals(SimpleConfig.class.getSimpleName(), configTemplate.getName());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultDecoder().charset());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultEncoder().charset());
 
         System.out.println("[SimpleConfigTest] loading simpleConfig.yml");
         try (InputStream stream = SimpleConfigTest.class.getResourceAsStream("/simpleConfig.yml"))
         {
             Assert.assertNotNull(stream);
 
-            SimpleConfig config = configFile.load(stream);
+            SimpleConfig config = configTemplate.load(stream);
             Assert.assertNotNull(config);
+            Assert.assertNotNull(config.template());
+            Assert.assertSame(config.template(), configTemplate);
+            Assert.assertNotNull(config.name());
+            Assert.assertEquals("SimpleConfig", config.name());
+            System.out.println("[SimpleConfigTest] loaded simpleConfig.yml (" + config.name() + ")");
+
             Assert.assertEquals("def", config.get("invalid", "def", String.class));
 
             System.out.println("[SimpleConfigTest] testing basic values");

@@ -75,6 +75,16 @@ public interface Config extends Map<String, Object>
     void fillWithDefaults();
 
     /**
+     * Check if config contains given key, note that value on that key still might be null!
+     *
+     * @param key
+     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *
+     * @return true if config contains given key.
+     */
+    boolean containsKey(String key);
+
+    /**
      * Get selected value from config.
      *
      * @param key
@@ -363,6 +373,12 @@ public interface Config extends Map<String, Object>
     }
 
     // default map method implementations.
+
+    @Override
+    default boolean containsKey(Object key)
+    {
+        return this.containsKey(key.toString());
+    }
 
     @Nullable
     @Override

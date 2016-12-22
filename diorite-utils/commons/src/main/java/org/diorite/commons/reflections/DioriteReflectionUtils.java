@@ -1259,10 +1259,24 @@ public final class DioriteReflectionUtils
      *         lookup class.
      *
      * @return instance of MethodHandles.Lookup
+     *
      * @see MethodHandles.Lookup#PRIVATE
      */
     public static MethodHandles.Lookup createPrivateLookup(Class<?> clazz)
     {
         return constructor.invoke(clazz, MethodHandles.Lookup.PRIVATE);
+    }
+
+    /**
+     * Creates method handle lookup object with given class and trusted lookup mode.
+     *
+     * @param clazz
+     *         lookup class.
+     *
+     * @return instance of MethodHandles.Lookup
+     */
+    public static MethodHandles.Lookup createTrustedLookup(Class<?> clazz)
+    {
+        return constructor.invoke(clazz, - 1);
     }
 }

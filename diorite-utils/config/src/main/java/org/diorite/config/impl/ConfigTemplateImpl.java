@@ -34,14 +34,16 @@ import org.diorite.config.ConfigTemplate;
 
 public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
 {
-    private final Class<T>       type;
-    private       String         name;
-    private       CharsetEncoder charsetEncoder;
-    private       CharsetDecoder charsetDecoder;
+    private final Class<T>                     type;
+    private       String                       name;
+    private       CharsetEncoder               charsetEncoder;
+    private       CharsetDecoder               charsetDecoder;
+    private final ConfigImplementationProvider implementationProvider;
 
-    public ConfigTemplateImpl(Class<T> type)
+    public ConfigTemplateImpl(Class<T> type, ConfigImplementationProvider provider)
     {
         this.type = type;
+        this.implementationProvider = provider;
         this.name = type.getSimpleName();
         this.setEncoding(StandardCharsets.UTF_8);
     }
@@ -91,7 +93,8 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     @Override
     public T load(Reader reader)
     {
-        return null;
+        T inst = this.implementationProvider.createImplementation(this.type, this);
+        return inst;
     }
 
 }
