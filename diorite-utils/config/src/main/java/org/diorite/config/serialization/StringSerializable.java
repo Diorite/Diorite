@@ -22,51 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
-
-import java.lang.invoke.MethodHandle;
+package org.diorite.config.serialization;
 
 /**
- * Represent reflective wrapper that support MethodHandles.
+ * Represent type that is serializable from/to string. <br/>
+ * Type implementing that interface must also implement one of following methods: (in order of searching)
+ * <ol>
+ * <li>static T deserializeFromString(String)</li>
+ * <li>static T valueOf(String)</li>
+ * <li>constructor(String)</li>
+ * </ol>
+ * Each method can also throw DeserializationException. <br/>
  */
-public interface ReflectMethod
+public interface StringSerializable
 {
     /**
-     * Returns if this method is a constructor.
+     * Serialize this value to simple string value.
      *
-     * @return if this method is a constructor.
+     * @return string representation of object.
      */
-    boolean isConstructor();
-
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
-
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
-    {
-        return this.getHandle().bindTo(object);
-    }
+    @StringSerializableMethod
+    String serializeToString();
 }

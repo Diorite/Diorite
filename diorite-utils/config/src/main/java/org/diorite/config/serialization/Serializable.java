@@ -22,51 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
-
-import java.lang.invoke.MethodHandle;
+package org.diorite.config.serialization;
 
 /**
- * Represent reflective wrapper that support MethodHandles.
+ * Represent serializable type, diorite will be able to serialize and deserialize objects implementing that interface to/from yaml, json and nby/ssf. <br/>
+ * Class also MUST contains one of following methods: (in order of searching):
+ * <ol>
+ * <li>{@literal T deserialize(Map<String, Object>), Serialization}</li>
+ * <li>{@literal constructor(Map<String, Object>), Serialization}</li>
+ * </ol>
  */
-public interface ReflectMethod
+public interface Serializable
 {
     /**
-     * Returns if this method is a constructor.
+     * Serialize this object to given data object.
      *
-     * @return if this method is a constructor.
+     * @param data
+     *         target data object to use.
+     * @param serialization
+     *         serialization instance.
      */
-    boolean isConstructor();
-
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
-
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
-    {
-        return this.getHandle().bindTo(object);
-    }
+    void serialize(SerializationData data, Serialization serialization);
 }

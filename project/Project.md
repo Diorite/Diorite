@@ -484,6 +484,8 @@ All mapping settings works for setters and getters.
 
 ###### Goals
 
+- [x] Simple string serialization.
+- [ ] Automatic registration of serializers with AutoRegister.
 - [ ] support for simple getters and setters
     ```java
     // someInt: 45

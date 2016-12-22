@@ -46,6 +46,11 @@ import org.diorite.config.exceptions.ConfigLoadException;
 public interface ConfigTemplate<T extends Config>
 {
     /**
+     * Char used to separate nodes.
+     */
+    char SEPARATOR = '.';
+
+    /**
      * Returns config type class.
      *
      * @return config type class.

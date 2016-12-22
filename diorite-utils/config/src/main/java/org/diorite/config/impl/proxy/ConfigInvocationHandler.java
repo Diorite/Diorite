@@ -36,12 +36,15 @@ import java.lang.reflect.Method;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.Config;
@@ -51,7 +54,9 @@ public final class ConfigInvocationHandler implements InvocationHandler
 {
     private final ConfigTemplate<?> template;
 
-    private final Map<Method, BiFunction<Config, Object[], Object>> basicMethods = new ConcurrentHashMap<>(20);
+    private final Map<Method, Function<Object[], Object>> basicMethods = new ConcurrentHashMap<>(20);
+
+    private Config config;
 
     public ConfigInvocationHandler(ConfigTemplate<?> template)
     {
@@ -62,24 +67,29 @@ public final class ConfigInvocationHandler implements InvocationHandler
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
     {
+        if (this.config != proxy)
+        {
+            throw new IllegalStateException("This isn't handler of thia config instance!");
+        }
         return this.invoke((Config) proxy, method, args);
     }
 
     @Nullable
     private Object invoke(Config proxy, Method method, Object[] args) throws Throwable
     {
-        BiFunction<Config, Object[], Object> function = this.basicMethods.get(method);
+        Function<Object[], Object> function = this.basicMethods.get(method);
         if (function != null)
         {
-            return function.apply(proxy, args);
+            return function.apply(args);
         }
+
         // check for default implementation
         try
         {
             MethodHandle methodHandle =
                     DioriteReflectionUtils.createLookup(method.getDeclaringClass(), - 1).unreflectSpecial(method, method.getDeclaringClass()).bindTo(proxy);
             Object r = methodHandle.invokeWithArguments(args);
-            this.registerMethod(method, (cfg, arg) ->
+            this.registerMethod(method, (arg) ->
             {
                 try
                 {
@@ -98,21 +108,21 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
     }
 
-    private void registerMethod(Method method, BiFunction<Config, Object[], Object> func)
+    private void registerMethod(Method method, Function<Object[], Object> func)
     {
         this.basicMethods.put(method, func);
     }
 
-    private void registerVoidMethod(Method method, BiConsumer<Config, Object[]> func)
+    private void registerVoidMethod(Method method, Consumer<Object[]> func)
     {
-        this.basicMethods.put(method, (c, a) ->
+        this.basicMethods.put(method, (a) ->
         {
-            func.accept(c, a);
+            func.accept(a);
             return null;
         });
     }
 
-    private void registerMethod(Class<? extends Config> clazz, Method method, BiFunction<Config, Object[], Object> func)
+    private void registerMethod(Class<? extends Config> clazz, Method method, Function<Object[], Object> func)
     {
         this.registerMethod(method, func);
         for (Class<?> aClass : clazz.getInterfaces())
@@ -130,11 +140,11 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
     }
 
-    private void registerVoidMethod(Class<? extends Config> clazz, Method method, BiConsumer<Config, Object[]> func)
+    private void registerVoidMethod(Class<? extends Config> clazz, Method method, Consumer<Object[]> func)
     {
-        this.registerMethod(clazz, method, (c, a) ->
+        this.registerMethod(clazz, method, (a) ->
         {
-            func.accept(c, a);
+            func.accept(a);
             return null;
         });
     }
@@ -142,152 +152,130 @@ public final class ConfigInvocationHandler implements InvocationHandler
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void prepare(Config config)
     {
+        this.config = config;
         try
         {
             Class<? extends Config> clazz = config.getClass();
-            // add default method handlers
-//            for (Class<?> iClass : clazz.getInterfaces())
-//            {
-//                for (Method method : iClass.getMethods())
-//                {
-//                    if (! method.isDefault())
-//                    {
-//                        continue;
-//                    }
-//                    MethodHandle result = DioriteReflectionUtils.createPrivateLookup(clazz).unreflectSpecial(method, clazz).bindTo(config);
-//                    this.registerMethod(method, (cfg, args) ->
-//                    {
-//                        try
-//                        {
-//                            return result.invokeWithArguments(args);
-//                        }
-//                        catch (Throwable e)
-//                        {
-//                            throw new RuntimeException(e);
-//                        }
-//                    });
-//                }
-//            }
             {
                 Method m = clazz.getMethod("template");
-                this.registerMethod(clazz, m, (cfg, args) -> this.template(cfg));
+                this.registerMethod(clazz, m, (args) -> this.templateImpl());
             }
             {
                 Method m = clazz.getMethod("fillWithDefaults");
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.fillWithDefaults(cfg));
+                this.registerVoidMethod(clazz, m, (args) -> this.fillWithDefaultsImpl());
             }
             {
                 Method m = clazz.getMethod("get", String.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.get(cfg, (String) args[0]));
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0]));
             }
             {
                 Method m = clazz.getMethod("get", String.class, Object.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.get(cfg, (String) args[0], args[1]));
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], args[1]));
             }
             {
                 Method m = clazz.getMethod("get", String.class, Object.class, Class.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.get(cfg, (String) args[0], args[1], (Class) args[2]));
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], args[1], (Class) args[2]));
             }
             {
                 Method m = clazz.getMethod("get", String.class, Class.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.get(cfg, (String) args[0], (Class) args[1]));
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], (Class) args[1]));
             }
             {
                 Method m = clazz.getMethod("set", String.class, Object.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.set(cfg, (String) args[0], args[1]));
+                this.registerMethod(clazz, m, (args) -> this.setImpl((String) args[0], args[1]));
             }
             {
                 Method m = clazz.getMethod("remove", String.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.remove(cfg, (String) args[0]));
+                this.registerMethod(clazz, m, (args) -> this.removeImpl((String) args[0]));
             }
             {
                 Method m = clazz.getMethod("encoder");
-                this.registerMethod(clazz, m, (cfg, args) -> this.encoder(cfg));
+                this.registerMethod(clazz, m, (args) -> this.encoderImpl());
             }
             {
                 Method m = clazz.getMethod("encoder", CharsetEncoder.class);
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.encoder(cfg, (CharsetEncoder) args[0]));
+                this.registerVoidMethod(clazz, m, (args) -> this.encoderImpl((CharsetEncoder) args[0]));
             }
             {
                 Method m = clazz.getMethod("decoder");
-                this.registerMethod(clazz, m, (cfg, args) -> this.decoder(cfg));
+                this.registerMethod(clazz, m, (args) -> this.decoderImpl());
             }
             {
                 Method m = clazz.getMethod("decoder", CharsetDecoder.class);
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.decoder(cfg, (CharsetDecoder) args[0]));
+                this.registerVoidMethod(clazz, m, (args) -> this.decoderImpl((CharsetDecoder) args[0]));
             }
             {
                 Method m = clazz.getMethod("bindFile");
-                this.registerMethod(clazz, m, (cfg, args) -> this.bindFile(cfg));
+                this.registerMethod(clazz, m, (args) -> this.bindFileImpl());
             }
             {
                 Method m = clazz.getMethod("bindFile", File.class);
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.bindFile(cfg, (File) args[0]));
+                this.registerVoidMethod(clazz, m, (args) -> this.bindFileImpl((File) args[0]));
             }
             {
                 Method m = clazz.getMethod("save");
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.save(cfg));
+                this.registerVoidMethod(clazz, m, (args) -> this.saveImpl());
             }
             {
                 Method m = clazz.getMethod("save", Writer.class);
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.save(cfg, (Writer) args[0]));
+                this.registerVoidMethod(clazz, m, (args) -> this.saveImpl((Writer) args[0]));
             }
             {
                 Method m = clazz.getMethod("load");
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.load(cfg));
+                this.registerVoidMethod(clazz, m, (args) -> this.loadImpl());
             }
             {
                 Method m = clazz.getMethod("load", Reader.class);
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.load(cfg, (Reader) args[0]));
+                this.registerVoidMethod(clazz, m, (args) -> this.loadImpl((Reader) args[0]));
             }
             {
                 Method m = clazz.getMethod("clone");
-                this.registerMethod(clazz, m, (cfg, args) -> this.clone(cfg));
+                this.registerMethod(clazz, m, (args) -> this.cloneImpl());
             }
             {
                 Method m = clazz.getMethod("size");
-                this.registerMethod(clazz, m, (cfg, args) -> this.size(cfg));
+                this.registerMethod(clazz, m, (args) -> this.sizeImpl());
             }
             {
                 Method m = clazz.getMethod("isEmpty");
-                this.registerMethod(clazz, m, (cfg, args) -> this.isEmpty(cfg));
+                this.registerMethod(clazz, m, (args) -> this.isEmptyImpl());
             }
             {
                 Method m = clazz.getMethod("containsKey", String.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.containsKey(cfg, (String) args[0]));
+                this.registerMethod(clazz, m, (args) -> this.containsKeyImpl((String) args[0]));
             }
             {
                 Method m = clazz.getMethod("containsValue", Object.class);
-                this.registerMethod(clazz, m, (cfg, args) -> this.containsValue(cfg, args[0]));
+                this.registerMethod(clazz, m, (args) -> this.containsValueImpl(args[0]));
             }
             {
                 Method m = clazz.getMethod("clear");
-                this.registerVoidMethod(clazz, m, (cfg, args) -> this.clear(cfg));
+                this.registerVoidMethod(clazz, m, (args) -> this.clearImpl());
             }
             {
                 Method m = clazz.getMethod("keySet");
-                this.registerMethod(clazz, m, (cfg, args) -> this.keySet(cfg));
+                this.registerMethod(clazz, m, (args) -> this.keySetImpl());
             }
             {
                 Method m = clazz.getMethod("values");
-                this.registerMethod(clazz, m, (cfg, args) -> this.values(cfg));
+                this.registerMethod(clazz, m, (args) -> this.valuesImpl());
             }
             {
                 Method m = clazz.getMethod("entrySet");
-                this.registerMethod(clazz, m, (cfg, args) -> this.entrySet(cfg));
+                this.registerMethod(clazz, m, (args) -> this.entrySetImpl());
             }
 
             {
                 Method m = Object.class.getMethod("toString");
-                this.registerMethod(m, (cfg, args) -> this.toString(cfg));
+                this.registerMethod(m, (args) -> this.toStringImpl());
             }
             {
                 Method m = Object.class.getMethod("hashCode");
-                this.registerMethod(m, (cfg, args) -> this.hashCode(cfg));
+                this.registerMethod(m, (args) -> this.hashCodeImpl());
             }
             {
                 Method m = Object.class.getMethod("equals", Object.class);
-                this.registerMethod(m, (cfg, args) -> this.equals(cfg, args[0]));
+                this.registerMethod(m, (args) -> this.equalsImpl(args[0]));
             }
         }
         catch (Exception e)
@@ -296,157 +284,217 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
     }
 
-    private ConfigTemplate<?> template(Config config)
+    private final Map<String, ConfigNode> data = new LinkedHashMap<>(20);
+
+    private ConfigTemplate<?> templateImpl()
     {
         return this.template;
     }
 
-    private void fillWithDefaults(Config config)
+    private void fillWithDefaultsImpl()
     {
 
     }
 
     @Nullable
-    private Object get(Config config, String key)
+    private Object getImpl(String[] keys, @Nullable Object def)
     {
-        return null;
-    }
-
-    private Object get(Config config, String key, Object def)
-    {
-        return null;
-    }
-
-    private <T> T get(Config config, String key, T def, Class<T> type)
-    {
+        if (keys.length == 0)
+        {
+            return def;
+        }
+        ConfigNode configNode = this.data.get(keys[0]);
+        if (configNode == null)
+        {
+            return def;
+        }
+        Object value = configNode.getValue();
+//        if (keys.length == 1)
+//        {
+//            return value;
+//        }
+//        for (int i = 1; i < keys.length; i++)
+//        {
+//            String key = keys[i];
+//            if ()
+//
+//        }
         return null;
     }
 
     @Nullable
-    private <T> T get(Config config, String key, Class<T> type)
+    private <T> T getImpl(String[] key, @Nullable T def, Class<T> type)
     {
-        return null;
+        Object value = getImpl(key, def);
+        if (value == null)
+        {
+            return null;
+        }
+        // TODO convert type
+        return (T) value;
     }
 
     @Nullable
-    private Object set(Config config, String key, @Nullable Object value)
+    private Object setImpl(String[] key, @Nullable Object value)
     {
         return null;
     }
 
-    private Object remove(Config config, String key)
+    private Object removeImpl(String[] key)
     {
         return null;
     }
 
-    private CharsetEncoder encoder(Config config)
+    private CharsetEncoder encoderImpl()
     {
         return null;
     }
 
-    private void encoder(Config config, CharsetEncoder encoder)
+    private void encoderImpl(CharsetEncoder encoder)
     {
 
     }
 
-    private CharsetDecoder decoder(Config config)
+    private CharsetDecoder decoderImpl()
     {
         return null;
     }
 
-    private void decoder(Config config, CharsetDecoder decoder)
+    private void decoderImpl(CharsetDecoder decoder)
     {
 
     }
 
     @Nullable
-    private File bindFile(Config config)
+    private File bindFileImpl()
     {
         return null;
     }
 
-    private void bindFile(Config config, @Nullable File file)
+    private void bindFileImpl(@Nullable File file)
     {
 
     }
 
-    private void save(Config config)
+    private void saveImpl()
     {
 
     }
 
-    private void save(Config config, @WillNotClose Writer writer)
+    private void saveImpl(@WillNotClose Writer writer)
     {
 
     }
 
-    private void load(Config config)
+    private void loadImpl()
     {
 
     }
 
-    private void load(Config config, @WillNotClose Reader reader)
+    private void loadImpl(@WillNotClose Reader reader)
     {
 
     }
 
-    private Config clone(Config config)
+    private Config cloneImpl()
     {
         return null;
     }
 
-    private int size(Config config)
+    private int sizeImpl()
     {
         return 0;
     }
 
-    private boolean isEmpty(Config config)
+    private boolean isEmptyImpl()
     {
         return false;
     }
 
-    private boolean containsKey(Config config, String key)
+    private boolean containsKeyImpl(String[] key)
     {
         return false;
     }
 
-    private boolean containsValue(Config config, Object value)
+    private boolean containsValueImpl(Object value)
     {
         return false;
     }
 
-    private void clear(Config config)
+    private void clearImpl()
     {
 
     }
 
-    private Set<String> keySet(Config config)
-    {
-        return null;
-    }
-
-    private Collection<Object> values(Config config)
+    private Set<String> keySetImpl()
     {
         return null;
     }
 
-    private Set<Entry<String, Object>> entrySet(Config config)
+    private Collection<Object> valuesImpl()
     {
         return null;
     }
 
-    private String toString(Config config)
+    private Set<Entry<String, Object>> entrySetImpl()
+    {
+        return null;
+    }
+
+    private String toStringImpl()
     {
         return "toString!";
     }
 
-    private int hashCode(Config config)
+    private int hashCodeImpl()
     {
         return 0;
     }
 
-    private boolean equals(Config config, Object object)
+    private boolean equalsImpl(Object object)
     {
         return false;
     }
+
+    @Nullable
+    private Object getImpl(String key)
+    {
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), null, Object.class);
+    }
+
+    @Nullable
+    private Object getImpl(String key, @Nullable Object def)
+    {
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), def, Object.class);
+    }
+
+    @Nullable
+    private <T> T getImpl(String key, @Nullable T def, Class<T> type)
+    {
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), def, type);
+    }
+
+    @Nullable
+    private <T> T getImpl(String key, Class<T> type)
+    {
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), null, type);
+    }
+
+    @Nullable
+    private Object setImpl(String key, @Nullable Object value)
+    {
+        return this.setImpl(StringUtils.splitPreserveAllTokens(key), value);
+    }
+
+    private Object removeImpl(String key)
+    {
+        return this.removeImpl(StringUtils.splitPreserveAllTokens(key));
+    }
+
+    private boolean containsKeyImpl(String key)
+    {
+        return this.containsKeyImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR));
+    }
+
+
 }

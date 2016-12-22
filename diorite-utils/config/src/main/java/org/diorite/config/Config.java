@@ -78,7 +78,7 @@ public interface Config extends Map<String, Object>
      * Check if config contains given key, note that value on that key still might be null!
      *
      * @param key
-     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *         key to get, you can use dots to access nested values like other config instances or maps.
      *
      * @return true if config contains given key.
      */
@@ -88,7 +88,7 @@ public interface Config extends Map<String, Object>
      * Get selected value from config.
      *
      * @param key
-     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *         key to get, you can use dots to access nested values like other config instances or maps.
      *
      * @return value on that key.
      */
@@ -99,7 +99,7 @@ public interface Config extends Map<String, Object>
      * Get selected value from config or default one.
      *
      * @param key
-     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *         key to get, you can use dots to access nested values like other config instances or maps.
      * @param def
      *         default value to use.
      *
@@ -113,7 +113,7 @@ public interface Config extends Map<String, Object>
      * etc)
      *
      * @param key
-     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *         key to get, you can use dots to access nested values like other config instances or maps.
      * @param def
      *         default value to use.
      * @param type
@@ -133,7 +133,7 @@ public interface Config extends Map<String, Object>
      * etc)
      *
      * @param key
-     *         ket to get, you can use dots to access nested values like other config instances or maps.
+     *         key to get, you can use dots to access nested values like other config instances or maps.
      * @param type
      *         type of value.
      * @param <T>

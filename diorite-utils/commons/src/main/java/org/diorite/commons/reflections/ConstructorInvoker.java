@@ -93,6 +93,24 @@ public class ConstructorInvoker<T> implements ReflectMethod
     private MethodHandle cached;
 
     @Override
+    public boolean isConstructor()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isStatic()
+    {
+        return false;
+    }
+
+    @Override
+    public void ensureAccessible()
+    {
+        this.constructor.setAccessible(true);
+    }
+
+    @Override
     public MethodHandle getHandle()
     {
         if (this.cached != null)

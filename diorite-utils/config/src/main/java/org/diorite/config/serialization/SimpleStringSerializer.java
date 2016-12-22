@@ -22,51 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
+package org.diorite.config.serialization;
 
-import java.lang.invoke.MethodHandle;
+import java.util.function.Function;
 
-/**
- * Represent reflective wrapper that support MethodHandles.
- */
-public interface ReflectMethod
+class SimpleStringSerializer<T> implements StringSerializer<T>
 {
-    /**
-     * Returns if this method is a constructor.
-     *
-     * @return if this method is a constructor.
-     */
-    boolean isConstructor();
+    private final Class<T>            type;
+    private final Function<String, T> deserializer;
+    private final Function<T, String> serializer;
 
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
-
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
+    SimpleStringSerializer(Class<T> type, Function<String, T> deserializer, Function<T, String> serializer)
     {
-        return this.getHandle().bindTo(object);
+        this.type = type;
+        this.deserializer = deserializer;
+        this.serializer = serializer;
+    }
+
+    @Override
+    public Class<T> getType()
+    {
+        return this.type;
+    }
+
+    @Override
+    public Function<String, T> deserializerFunction()
+    {
+        return this.deserializer;
+    }
+
+    @Override
+    public Function<T, String> serializerFunction()
+    {
+        return this.serializer;
+    }
+
+    @Override
+    public T deserialize(String data)
+    {
+        return this.deserializer.apply(data);
+    }
+
+    @Override
+    public String serialize(T data)
+    {
+        return this.serializer.apply(data);
     }
 }

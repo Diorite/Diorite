@@ -22,51 +22,63 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
+package org.diorite.config.impl.proxy;
 
-import java.lang.invoke.MethodHandle;
+import javax.annotation.Nullable;
 
-/**
- * Represent reflective wrapper that support MethodHandles.
- */
-public interface ReflectMethod
+import java.util.List;
+import java.util.Map;
+
+import org.diorite.config.Config;
+
+class ConfigNode
 {
-    /**
-     * Returns if this method is a constructor.
-     *
-     * @return if this method is a constructor.
-     */
-    boolean isConstructor();
+    private final Map<String, ConfigNode> parent;
 
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
+    private final String key;
+    private final Class<?> type;
+    @Nullable
+    private Object value;
 
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
+    ConfigNode(Map<String, ConfigNode> parent, String key, Class<?> type, @Nullable Object value)
     {
-        return this.getHandle().bindTo(object);
+        this.parent = parent;
+        this.key = key;
+        this.type = type;
+        this.value = value;
     }
+
+    public String getKey()
+    {
+        return this.key;
+    }
+
+    public Class<?> getType()
+    {
+        return this.type;
+    }
+
+    @Nullable
+    public Object getValue()
+    {
+        return this.value;
+    }
+
+    public void setValue(@Nullable Object value)
+    {
+        this.value = value;
+    }
+
+    @SuppressWarnings("PointlessNullCheck")
+    boolean canStoreNodes()
+    {
+        return (this.value != null) && ((this.value instanceof Config) || (this.value instanceof Map) || (this.value instanceof List));
+    }
+
+    Object getNode(String key)
+    {
+        return null;
+        // TODO
+    }
+
 }

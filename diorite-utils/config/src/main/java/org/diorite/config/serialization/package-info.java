@@ -22,51 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
-
-import java.lang.invoke.MethodHandle;
-
 /**
- * Represent reflective wrapper that support MethodHandles.
+ * Generic serialization API
  */
-public interface ReflectMethod
-{
-    /**
-     * Returns if this method is a constructor.
-     *
-     * @return if this method is a constructor.
-     */
-    boolean isConstructor();
+@NonnullByDefault
+package org.diorite.config.serialization;
 
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
-
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
-    {
-        return this.getHandle().bindTo(object);
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

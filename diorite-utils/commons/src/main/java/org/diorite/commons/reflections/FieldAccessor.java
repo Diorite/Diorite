@@ -98,6 +98,11 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
         }
     }
 
+    public void ensureAccessible()
+    {
+        this.field.setAccessible(true);
+    }
+
     /**
      * Check if given object class contains this field.
      *

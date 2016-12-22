@@ -30,6 +30,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.diorite.commons.DioriteUtils;
 
@@ -93,6 +94,24 @@ public class MethodInvoker implements ReflectMethod
 
     @Nullable
     private MethodHandle cached;
+
+    @Override
+    public boolean isConstructor()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isStatic()
+    {
+        return Modifier.isStatic(this.method.getModifiers());
+    }
+
+    @Override
+    public void ensureAccessible()
+    {
+        this.method.setAccessible(true);
+    }
 
     @Override
     public MethodHandle getHandle()

@@ -22,51 +22,26 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.reflections;
+package org.diorite.annotations;
 
-import java.lang.invoke.MethodHandle;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Represent reflective wrapper that support MethodHandles.
+ * Used to indicate that this class contains something that can be automatically registered.
  */
-public interface ReflectMethod
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AutoRegister
 {
     /**
-     * Returns if this method is a constructor.
+     * Additional values, might be used by some classes.
      *
-     * @return if this method is a constructor.
+     * @return additional values, might be used by some classes.
      */
-    boolean isConstructor();
-
-    /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
-     *
-     * @return true if this method is static.
-     */
-    boolean isStatic();
-
-    /**
-     * Ensure that given executable is accessible.
-     */
-    void ensureAccessible();
-
-    /**
-     * Returns {@link MethodHandle} for this method.
-     *
-     * @return {@link MethodHandle} for this method.
-     */
-    MethodHandle getHandle();
-
-    /**
-     * Returns {@link MethodHandle} for this method, and binds it to given object.
-     *
-     * @return {@link MethodHandle} for this method.
-     *
-     * @see MethodHandle#bindTo(Object)
-     */
-    default MethodHandle getHandle(Object object)
-    {
-        return this.getHandle().bindTo(object);
-    }
+    String[] value() default {};
 }
