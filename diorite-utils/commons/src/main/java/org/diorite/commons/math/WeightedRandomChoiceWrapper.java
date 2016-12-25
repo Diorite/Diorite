@@ -22,25 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.commons.math;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Represent type that is serializable from/to string. <br/>
- * Type implementing that interface must also implement one of following methods: (in order of searching)
- * <ol>
- * <li>static T deserializeFromString(String)</li>
- * <li>static T valueOf(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- * Each method can also throw DeserializationException. <br/>
+ * Represent weighted random choice for existing object as wrapper.
+ *
+ * @param <T>
+ *         type of wrapped object.
  */
-public interface StringSerializable
+public class WeightedRandomChoiceWrapper<T> extends WeightedRandomChoice
 {
     /**
-     * Serialize this value to simple string value.
-     *
-     * @return string representation of object.
+     * Wrapped object.
      */
-    @org.diorite.config.serialization.annotations.StringSerializable
-    String serializeToString();
+    protected final T wrapped;
+
+    /**
+     * Construnt new choice with given weight.
+     *
+     * @param weight
+     *         weight of this choice.
+     * @param wrapped
+     *         wrapped object.
+     */
+    public WeightedRandomChoiceWrapper(int weight, T wrapped)
+    {
+        super(weight);
+        this.wrapped = wrapped;
+    }
+
+    /**
+     * Returns wrapped object.
+     *
+     * @return wrapped object.
+     */
+    public T getWrapped()
+    {
+        return this.wrapped;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("wrapped", this.wrapped).toString();
+    }
 }

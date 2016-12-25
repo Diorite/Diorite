@@ -22,25 +22,45 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.commons.math;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Represent type that is serializable from/to string. <br/>
- * Type implementing that interface must also implement one of following methods: (in order of searching)
- * <ol>
- * <li>static T deserializeFromString(String)</li>
- * <li>static T valueOf(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- * Each method can also throw DeserializationException. <br/>
+ * Represent weighted random choice option, class to extend, see {@link WeightedRandomChoiceWrapper}
  */
-public interface StringSerializable
+public class WeightedRandomChoice implements IWeightedRandomChoice
 {
     /**
-     * Serialize this value to simple string value.
-     *
-     * @return string representation of object.
+     * weight of this choice.
      */
-    @org.diorite.config.serialization.annotations.StringSerializable
-    String serializeToString();
+    protected final double weight;
+
+    /**
+     * Construnt new choice with given weight.
+     *
+     * @param weight
+     *         weight of this choice.
+     */
+    public WeightedRandomChoice(double weight)
+    {
+        this.weight = weight;
+    }
+
+    /**
+     * Returns weight of this choice.
+     *
+     * @return weight of this choice.
+     */
+    @Override
+    public double getWeight()
+    {
+        return this.weight;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("weight", this.weight).toString();
+    }
 }

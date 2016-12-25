@@ -33,27 +33,27 @@ public class DeserializationException extends RuntimeException
 {
     private static final long serialVersionUID = 0;
 
-    public DeserializationException(Class<?> clazz, DeserializationData data)
+    public DeserializationException(Class<?> clazz, @Nullable DeserializationData data)
     {
         super(fixMessage(clazz, data, null));
     }
 
-    public DeserializationException(Class<?> clazz, DeserializationData data, @Nullable String message)
+    public DeserializationException(Class<?> clazz, @Nullable DeserializationData data, @Nullable String message)
     {
         super(fixMessage(clazz, data, message));
     }
 
-    public DeserializationException(Class<?> clazz, DeserializationData data, @Nullable String message, Throwable cause)
+    public DeserializationException(Class<?> clazz, @Nullable DeserializationData data, @Nullable String message, Throwable cause)
     {
         super(fixMessage(clazz, data, message), cause);
     }
 
-    public DeserializationException(Class<?> clazz, DeserializationData data, Throwable cause)
+    public DeserializationException(Class<?> clazz, @Nullable DeserializationData data, Throwable cause)
     {
         super(fixMessage(clazz, data, null), cause);
     }
 
-    public DeserializationException(Class<?> clazz, DeserializationData data, @Nullable String message, Throwable cause, boolean enableSuppression,
+    public DeserializationException(Class<?> clazz, @Nullable DeserializationData data, @Nullable String message, Throwable cause, boolean enableSuppression,
                                     boolean writableStackTrace)
     {
         super(fixMessage(clazz, data, message), cause, enableSuppression, writableStackTrace);
@@ -85,11 +85,15 @@ public class DeserializationException extends RuntimeException
         super(fixMessage(clazz, data, message), cause, enableSuppression, writableStackTrace);
     }
 
-    private static String fixMessage(Class<?> clazz, DeserializationData data, @Nullable String message)
+    private static String fixMessage(Class<?> clazz, @Nullable DeserializationData data, @Nullable String message)
     {
         StringBuilder sb = new StringBuilder(100);
         sb.append("Can't deserialize ").append(clazz.getName()).append(" class instance!");
-        sb.append("\n  Data map:\n    ").append(data).append("\n");
+        if (data != null)
+        {
+            sb.append("\n  Data map:\n    ").append(data);
+        }
+        sb.append("\n");
         if (message == null)
         {
             return sb.toString();

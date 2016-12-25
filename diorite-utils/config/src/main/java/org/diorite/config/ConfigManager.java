@@ -36,11 +36,6 @@ import org.diorite.config.impl.proxy.ProxyImplementationProvider;
  */
 public final class ConfigManager
 {
-    public static void main(String[] args)
-    {
-
-    }
-
     private ConfigManager()
     {
     }

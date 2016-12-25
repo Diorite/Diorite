@@ -35,9 +35,81 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
+import sun.misc.Unsafe;
+
 @SuppressWarnings({"unchecked", "ObjectEquality", "Duplicates"})
 public final class DioriteReflectionUtils
 {
+    private static final Unsafe unsafe;
+    private static final Field  constructorModifiers;
+    private static final Field  methodModifiers;
+    private static final Field  fieldModifiers;
+    private static final long   constructorModifiersOffset;
+    private static final long   methodModifiersOffset;
+    private static final long   fieldModifiersOffset;
+    private static final Method setAccessible;
+
+    static
+    {
+        try
+        {
+            Constructor<Unsafe> unsafeConstructor = Unsafe.class.getDeclaredConstructor();
+            unsafeConstructor.setAccessible(true);
+            unsafe = unsafeConstructor.newInstance();
+            constructorModifiers = Constructor.class.getDeclaredField("modifiers");
+            constructorModifiersOffset = unsafe.objectFieldOffset(constructorModifiers);
+            methodModifiers = Method.class.getDeclaredField("modifiers");
+            methodModifiersOffset = unsafe.objectFieldOffset(methodModifiers);
+            fieldModifiers = Field.class.getDeclaredField("modifiers");
+            fieldModifiersOffset = unsafe.objectFieldOffset(fieldModifiers);
+            setAccessible = AccessibleObject.class.getDeclaredMethod("setAccessible0", boolean.class);
+            setForceAccessible(setAccessible);
+        }
+        catch (Exception e)
+        {
+            throw new InternalError(e);
+        }
+    }
+
+    private static boolean setForceAccessible(AccessibleObject accessibleObject)
+    {
+        try
+        {
+            if (accessibleObject instanceof Constructor)
+            {
+                Constructor<?> object = (Constructor<?>) accessibleObject;
+                unsafe.getAndSetInt(object, constructorModifiersOffset, addPublicModifier(object.getModifiers()));
+                return true;
+            }
+            if (accessibleObject instanceof Method)
+            {
+                Method object = (Method) accessibleObject;
+                unsafe.getAndSetInt(object, methodModifiersOffset, addPublicModifier(object.getModifiers()));
+                return true;
+            }
+            if (accessibleObject instanceof Field)
+            {
+                Field object = (Field) accessibleObject;
+                unsafe.getAndSetInt(object, fieldModifiersOffset, addPublicModifier(object.getModifiers()));
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static int addPublicModifier(int mod)
+    {
+        mod &= ~ (Modifier.PRIVATE);
+        mod &= ~ (Modifier.PROTECTED);
+        mod |= (Modifier.PUBLIC);
+        return mod;
+    }
+
     private static final ConstructorInvoker<Lookup> constructor = getConstructor(MethodHandles.Lookup.class, Class.class, int.class);
 
     private DioriteReflectionUtils()
@@ -563,7 +635,14 @@ public final class DioriteReflectionUtils
     {
         if (! o.isAccessible())
         {
-            o.setAccessible(true);
+            try
+            {
+                setAccessible.invoke(o, true);
+            }
+            catch (Exception e)
+            {
+                throw new InternalError("Can't get access to: " + o, e);
+            }
         }
         return o;
     }

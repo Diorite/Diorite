@@ -24,23 +24,55 @@
 
 package org.diorite.config.serialization;
 
-/**
- * Represent type that is serializable from/to string. <br/>
- * Type implementing that interface must also implement one of following methods: (in order of searching)
- * <ol>
- * <li>static T deserializeFromString(String)</li>
- * <li>static T valueOf(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- * Each method can also throw DeserializationException. <br/>
- */
-public interface StringSerializable
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+public class SomeProperties implements Serializable
 {
-    /**
-     * Serialize this value to simple string value.
-     *
-     * @return string representation of object.
-     */
-    @org.diorite.config.serialization.annotations.StringSerializable
-    String serializeToString();
+    Map<String, String> prop = new HashMap<>(20);
+
+    public SomeProperties()
+    {
+    }
+
+    public SomeProperties(DeserializationData data)
+    {
+        this.prop.putAll(data.getMap("", String.class, String.class));
+    }
+
+    @Override
+    public void serialize(SerializationData data)
+    {
+        data.addMap("", this.prop, String.class);
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof SomeProperties))
+        {
+            return false;
+        }
+        SomeProperties that = (SomeProperties) object;
+        return Objects.equals(this.prop, that.prop);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.prop);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("prop", this.prop).toString();
+    }
 }

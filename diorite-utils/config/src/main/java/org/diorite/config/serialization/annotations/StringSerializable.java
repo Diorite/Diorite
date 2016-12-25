@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.config.serialization.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -30,8 +30,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.diorite.config.serialization.StringSerializer;
+
 /**
- * Used to mark methods that should be used for string serialization. <br>
+ * Used to mark class and methods that should be used for string serialization. <br>
  * Serialization method must be matching one of this patterns:
  * <ol>
  * <li>static String nameOfMethod(T)</li>
@@ -44,12 +46,12 @@ import java.lang.annotation.Target;
  * <li>constructor(String)</li>
  * </ol>
  *
- * @see StringSerializable
+ * @see org.diorite.config.serialization.StringSerializable
  * @see StringSerializer
  */
 @Documented
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StringSerializableMethod
+public @interface StringSerializable
 {
 }

@@ -24,32 +24,7 @@
 
 package org.diorite.config.serialization;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * Used to mark methods that should be used for serialization. <br>
- * Serialization method must be matching one of this patterns:
- * <ol>
- * <li>static String nameOfMethod(T)</li>
- * <li>static String nameOfMethod(Object)</li>
- * <li>String nameOfMethod()</li>
- * </ol>
- * Deserialization method must be matching one of this patterns:
- * <ol>
- * <li>static T nameOfMethod(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- *
- * @see Serializable
- * @see
- */
-@Documented
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SerializableMethod
+public enum EntityType
 {
+    CREEPER, SHEEP
 }

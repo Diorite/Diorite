@@ -24,49 +24,61 @@
 
 package org.diorite.config.serialization;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.Objects;
 
-class SimpleSerializer<T> implements Serializer<T>
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+public class SheepEntityData extends AbstractEntityData
 {
-    private final Class<T>                         type;
-    private final Function<DeserializationData, T> deserializer;
-    private final BiConsumer<T, SerializationData> serializer;
+    byte color;
 
-    SimpleSerializer(Class<T> type, Function<DeserializationData, T> deserializer, BiConsumer<T, SerializationData> serializer)
+    protected SheepEntityData(String name, int age, boolean special, int color)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        super(EntityType.SHEEP, name, age, special);
+        this.color = (byte) color;
+    }
+
+    protected SheepEntityData(DeserializationData data)
+    {
+        super(data);
+        this.color = data.getAsHexByte("color");
     }
 
     @Override
-    public Class<T> getType()
+    public void serialize(SerializationData data)
     {
-        return this.type;
+        super.serialize(data);
+        data.addHexNumber("color", this.color, 2);
     }
 
     @Override
-    public Function<DeserializationData, T> getDeserializerFunction()
+    public boolean equals(Object object)
     {
-        return this.deserializer;
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof SheepEntityData))
+        {
+            return false;
+        }
+        if (! super.equals(object))
+        {
+            return false;
+        }
+        SheepEntityData that = (SheepEntityData) object;
+        return this.color == that.color;
     }
 
     @Override
-    public BiConsumer<T, SerializationData> getSerializerFunction()
+    public int hashCode()
     {
-        return this.serializer;
+        return Objects.hash(super.hashCode(), this.color);
     }
 
     @Override
-    public void serialize(T object, SerializationData data)
+    public String toString()
     {
-        this.serializer.accept(object, data);
-    }
-
-    @Override
-    public T deserialize(DeserializationData data)
-    {
-        return this.deserializer.apply(data);
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("color", this.color).toString();
     }
 }

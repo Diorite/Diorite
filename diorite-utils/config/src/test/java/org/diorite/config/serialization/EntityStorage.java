@@ -24,23 +24,55 @@
 
 package org.diorite.config.serialization;
 
-/**
- * Represent type that is serializable from/to string. <br/>
- * Type implementing that interface must also implement one of following methods: (in order of searching)
- * <ol>
- * <li>static T deserializeFromString(String)</li>
- * <li>static T valueOf(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- * Each method can also throw DeserializationException. <br/>
- */
-public interface StringSerializable
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Objects;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+public class EntityStorage implements Serializable
 {
-    /**
-     * Serialize this value to simple string value.
-     *
-     * @return string representation of object.
-     */
-    @org.diorite.config.serialization.annotations.StringSerializable
-    String serializeToString();
+    Collection<EntityData> entityData = new ArrayList<>();
+
+    public EntityStorage()
+    {
+    }
+
+    public EntityStorage(DeserializationData data)
+    {
+        data.getAsCollection("", EntityData.class, this.entityData);
+    }
+
+    @Override
+    public void serialize(SerializationData data)
+    {
+        data.addCollection("", this.entityData, EntityData.class);
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof EntityStorage))
+        {
+            return false;
+        }
+        EntityStorage that = (EntityStorage) object;
+        return Objects.equals(this.entityData, that.entityData);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.entityData);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("entityData", this.entityData).toString();
+    }
 }

@@ -28,8 +28,9 @@ package org.diorite.config.serialization;
  * Represent serializable type, diorite will be able to serialize and deserialize objects implementing that interface to/from yaml, json and nby/ssf. <br/>
  * Class also MUST contains one of following methods: (in order of searching):
  * <ol>
- * <li>{@literal T deserialize(Map<String, Object>), Serialization}</li>
- * <li>{@literal constructor(Map<String, Object>), Serialization}</li>
+ * <li>{@literal T deserialize({@link DeserializationData}}</li>
+ * <li>{@literal T valueOf({@link DeserializationData}}</li>
+ * <li>{@literal constructor({@link DeserializationData}}</li>
  * </ol>
  */
 public interface Serializable
@@ -39,8 +40,6 @@ public interface Serializable
      *
      * @param data
      *         target data object to use.
-     * @param serialization
-     *         serialization instance.
      */
-    void serialize(SerializationData data, Serialization serialization);
+    void serialize(SerializationData data);
 }

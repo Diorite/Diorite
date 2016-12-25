@@ -25,7 +25,6 @@
 package org.diorite.config.serialization;
 
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -44,21 +43,21 @@ public interface Serializer<T>
     Class<T> getType();
 
     /**
-     * Returns {@link #deserialize(DeserializationData, Serialization)} as {@link Function}.
+     * Returns {@link #deserialize(DeserializationData)} as {@link Function}.
      *
-     * @return {@link #deserialize(DeserializationData, Serialization)} as {@link Function}.
+     * @return {@link #deserialize(DeserializationData)} as {@link Function}.
      */
-    default BiFunction<DeserializationData, Serialization, T> getDeserializerFunction()
+    default Function<DeserializationData, T> getDeserializerFunction()
     {
         return this::deserialize;
     }
 
     /**
-     * Returns {@link #serialize(SerializationData, Serialization)} as {@link Function}.
+     * Returns {@link #serialize(Object, SerializationData)} as {@link BiConsumer}.
      *
-     * @return {@link #serialize(SerializationData, Serialization)} as {@link Function}.
+     * @return {@link #serialize(Object, SerializationData)} as {@link BiConsumer}.
      */
-    default BiConsumer<SerializationData, Serialization> getSerializerFunction()
+    default BiConsumer<T, SerializationData> getSerializerFunction()
     {
         return this::serialize;
     }
@@ -66,20 +65,37 @@ public interface Serializer<T>
     /**
      * Serialize this object into given data object.
      *
+     * @param object
+     *         object to serialize.
      * @param data
      *         target data object to use.
-     * @param serialization
-     *         serialization instance.
      */
-    void serialize(SerializationData data, Serialization serialization);
+    void serialize(T object, SerializationData data);
 
     /**
      * Deserialize object from given data object.
      *
      * @param data
      *         target data object to use.
-     * @param serialization
-     *         serialization instance.
      */
-    T deserialize(DeserializationData data, Serialization serialization);
+    T deserialize(DeserializationData data);
+
+    /**
+     * Create instance of serializer from type and serialize/deserializer functions.
+     *
+     * @param type
+     *         type of implemented value type.
+     * @param serializer
+     *         function that serialize object into given data object.
+     * @param deserializer
+     *         function that change given data object into deserialized object.
+     * @param <T>
+     *         type of implemented value type.
+     *
+     * @return serializer instance.
+     */
+    static <T> Serializer<T> of(Class<T> type, BiConsumer<T, SerializationData> serializer, Function<DeserializationData, T> deserializer)
+    {
+        return new SimpleSerializer<>(type, deserializer, serializer);
+    }
 }

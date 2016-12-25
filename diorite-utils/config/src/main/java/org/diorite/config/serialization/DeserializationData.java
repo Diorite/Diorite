@@ -78,6 +78,29 @@ public interface DeserializationData
     boolean containsKey(String key);
 
     /**
+     * Get and deserialize given object from this data instance. <br/>
+     * If there is no value, or it is null, throw error.
+     *
+     * @param key
+     *         value to deserialize.
+     * @param type
+     *         type of value.
+     * @param <T>
+     *         type of value.
+     *
+     * @return deserialized value.
+     */
+    default <T> T getOrThrow(String key, Class<T> type)
+    {
+        T t = this.get(key, type, null);
+        if (t == null)
+        {
+            throw new IllegalStateException("Missing value: " + key);
+        }
+        return t;
+    }
+
+    /**
      * Get and deserialize given object from this data instance.
      *
      * @param key
@@ -613,7 +636,8 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized and returned as list of values.
+     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized and returned as list of values.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -634,7 +658,8 @@ public interface DeserializationData
 
     /**
      * Deserialize list on given key, if key contains Map instead of List, it will be deserialized as list of values. <br/>
-     * All deserialized values are added to given collection.
+     * All deserialized values are added to given collection.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -651,7 +676,8 @@ public interface DeserializationData
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br/>
-     * If key contains Map value, keyMapper is still used, and all keys are updated.
+     * If key contains Map value, keyMapper is still used, and all keys are updated.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -664,7 +690,7 @@ public interface DeserializationData
      *
      * @return deserialized value.
      */
-    default <T> Map<String, T> getAsMap(String key, Class<T> type, Function<? extends T, String> keyMapper)
+    default <T> Map<String, T> getAsMap(String key, Class<T> type, Function<T, String> keyMapper)
     {
         LinkedHashMap<String, T> map = new LinkedHashMap<>(20);
         this.getAsMap(key, type, keyMapper, map);
@@ -674,46 +700,57 @@ public interface DeserializationData
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using {@link
      * SerializationData#DEFAULT_KEY_PROPERTY} value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.
+     * If key contains Map value, key will be still updated if key property exists.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
+     * @param keyType
+     *         type of keys.
      * @param type
      *         type of elements.
      * @param <T>
      *         type of elements.
+     * @param <K>
+     *         type of keys.
      *
      * @return deserialized value.
      */
-    default <T> Map<String, T> getAsMapWithKeys(String key, Class<T> type)
+    default <K, T> Map<K, T> getAsMapWithKeys(String key, Class<K> keyType, Class<T> type)
     {
-        LinkedHashMap<String, T> map = new LinkedHashMap<>(20);
-        this.getAsMapWithKeys(key, type, DEFAULT_KEY_PROPERTY, map);
+        LinkedHashMap<K, T> map = new LinkedHashMap<>(20);
+        this.getAsMapWithKeys(key, keyType, type, DEFAULT_KEY_PROPERTY, map);
         return map;
     }
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.
+     * If key contains Map value, key will be still updated if key property exists.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
+     * @param keyType
+     *         type of keys.
      * @param type
      *         type of elements.
      * @param <T>
      *         type of elements.
+     * @param <K>
+     *         type of keys.
      *
      * @return deserialized value.
      */
-    default <T> Map<String, T> getAsMapWithKeys(String key, Class<T> type, String keyPropertyName)
+    default <K, T> Map<K, T> getAsMapWithKeys(String key, Class<K> keyType, Class<T> type, String keyPropertyName)
     {
-        LinkedHashMap<String, T> map = new LinkedHashMap<>(20);
-        this.getAsMapWithKeys(key, type, keyPropertyName, map);
+        LinkedHashMap<K, T> map = new LinkedHashMap<>(20);
+        this.getAsMapWithKeys(key, keyType, type, keyPropertyName, map);
         return map;
     }
 
     /**
-     * Deserialize map on given key, key type must be serializable to string.
+     * Deserialize map on given key, key type must be serializable to string.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -736,7 +773,8 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key using keyMapper to change string keys to key objects.
+     * Deserialize map on given key using keyMapper to change string keys to key objects. <br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -761,7 +799,8 @@ public interface DeserializationData
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br/>
      * If key contains Map value, keyMapper is still used, and all keys are updated.<br/>
-     * All deserialized values are added to given map.
+     * All deserialized values are added to given map.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -776,7 +815,7 @@ public interface DeserializationData
      * @param <M>
      *         type of map.
      */
-    <T, M extends Map<String, T>> void getAsMap(String key, Class<T> type, Function<? extends T, String> keyMapper, M map);
+    <T, M extends Map<String, T>> void getAsMap(String key, Class<T> type, Function<T, String> keyMapper, M map);
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using {@link
@@ -786,41 +825,51 @@ public interface DeserializationData
      *
      * @param key
      *         value to deserialize.
+     * @param keyType
+     *         type of keys.
      * @param type
      *         type of elements
      * @param map
      *         target map for deserialized elements.
+     * @param <K>
+     *         type of keys
      * @param <T>
      *         type of elements
      * @param <M>
      *         type of map.
      */
-    default <T, M extends Map<String, T>> void getAsMapWithKeys(String key, Class<T> type, M map)
+    default <K, T, M extends Map<K, T>> void getAsMapWithKeys(String key, Class<K> keyType, Class<T> type, M map)
     {
-        this.getAsMapWithKeys(key, type, DEFAULT_KEY_PROPERTY, map);
+        this.getAsMapWithKeys(key, keyType, type, DEFAULT_KEY_PROPERTY, map);
     }
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br/>
      * If key contains Map value, key will be still updated if key property exists.<br/>
-     * All deserialized values are added to given map.
+     * All deserialized values are added to given map.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
+     * @param keyType
+     *         type of keys.
      * @param type
-     *         type of elements
+     *         type of elements.
      * @param map
      *         target map for deserialized elements.
+     * @param <K>
+     *         type of keys
      * @param <T>
      *         type of elements
      * @param <M>
      *         type of map.
      */
-    <T, M extends Map<String, T>> void getAsMapWithKeys(String key, Class<T> type, String keyPropertyName, M map);
+    <K, T, M extends Map<K, T>> void getAsMapWithKeys(String key, Class<K> keyType, Class<T> type, String keyPropertyName, M map);
 
     /**
      * Deserialize map on given key, key type must be serializable to string.<br/>
-     * All deserialized values are added to given map.
+     * All deserialized values are added to given map.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -843,7 +892,8 @@ public interface DeserializationData
 
     /**
      * Deserialize map on given key using keyMapper to change string keys to key objects.<br/>
-     * All deserialized values are added to given map.
+     * All deserialized values are added to given map.<br/>
+     * Use empty key to deserialize map from root element.
      *
      * @param key
      *         value to deserialize.
@@ -864,25 +914,25 @@ public interface DeserializationData
      */
     <K, T, M extends Map<K, T>> void getMap(String key, Function<String, K> keyMapper, Class<T> type, M map);
 
-    /**
-     * Return copy of raw data as map instance.
-     *
-     * @return simple map of values.
-     */
-    Map<String, Object> asMap();
-
-    /**
-     * Create deserialization data instance for given manager.
-     *
-     * @param serialization
-     *         serialization manager to use.
-     * @param dataMap
-     *         map with configuration values.
-     *
-     * @return created deserialization data instance.
-     */
-    static DeserializationData create(Serialization serialization, Map<String, Object> dataMap)
-    {
-        return new SimpleDeserializationData(serialization, dataMap);
-    }
+//    /**
+//     * Return copy of raw data as map instance.
+//     *
+//     * @return simple map of values.
+//     */
+//    Map<String, Object> asMap();
+//
+//    /**
+//     * Create deserialization data instance for given manager.
+//     *
+//     * @param serialization
+//     *         serialization manager to use.
+//     * @param dataMap
+//     *         map with configuration values.
+//     *
+//     * @return created deserialization data instance.
+//     */
+//    static DeserializationData create(Serialization serialization, Map<String, Object> dataMap)
+//    {
+//        return new SimpleDeserializationData(serialization, dataMap);
+//    }
 }
