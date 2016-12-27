@@ -129,17 +129,17 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectElement<T> getReflectElement(String fieldName, Class<?> clazz)
+    public static <T> ReflectedProperty<T> getReflectElement(String fieldName, Class<?> clazz)
     {
         ReflectGetter<T> getter = getReflectGetter(fieldName, clazz);
         if (getter instanceof ReflectField)
         {
             ReflectField<T> reflectField = (ReflectField<T>) getter;
-            return new ReflectElement<>(reflectField, reflectField);
+            return new ReflectedProperty<>(reflectField, reflectField);
         }
         else
         {
-            return new ReflectElement<>(getter, getReflectSetter(fieldName, clazz));
+            return new ReflectedProperty<>(getter, getReflectSetter(fieldName, clazz));
         }
     }
 
@@ -154,7 +154,7 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectElement<T> getReflectElement(Field field)
+    public static <T> ReflectedProperty<T> getReflectElement(Field field)
     {
         return getReflectElement(field, field.getDeclaringClass());
     }
@@ -172,17 +172,17 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectElement<T> getReflectElement(Field field, Class<?> clazz)
+    public static <T> ReflectedProperty<T> getReflectElement(Field field, Class<?> clazz)
     {
         ReflectGetter<T> getter = getReflectGetter(field, clazz);
         if (getter instanceof ReflectField)
         {
             ReflectField<T> reflectField = (ReflectField<T>) getter;
-            return new ReflectElement<>(reflectField, reflectField);
+            return new ReflectedProperty<>(reflectField, reflectField);
         }
         else
         {
-            return new ReflectElement<>(getter, getReflectSetter(field, clazz));
+            return new ReflectedProperty<>(getter, getReflectSetter(field, clazz));
         }
     }
 
@@ -1328,7 +1328,7 @@ public final class DioriteReflectionUtils
      */
     public static MethodHandles.Lookup createLookup(Class<?> clazz, int mode)
     {
-        return constructor.invoke(clazz, mode);
+        return constructor.invokeWith(clazz, mode);
     }
 
     /**
@@ -1343,7 +1343,7 @@ public final class DioriteReflectionUtils
      */
     public static MethodHandles.Lookup createPrivateLookup(Class<?> clazz)
     {
-        return constructor.invoke(clazz, MethodHandles.Lookup.PRIVATE);
+        return constructor.invokeWith(clazz, MethodHandles.Lookup.PRIVATE);
     }
 
     /**
@@ -1356,6 +1356,6 @@ public final class DioriteReflectionUtils
      */
     public static MethodHandles.Lookup createTrustedLookup(Class<?> clazz)
     {
-        return constructor.invoke(clazz, - 1);
+        return constructor.invokeWith(clazz, - 1);
     }
 }

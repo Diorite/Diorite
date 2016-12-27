@@ -27,11 +27,8 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Function;
 
 import com.google.gson.JsonArray;
@@ -45,59 +42,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
-class JsonDeserializationData implements DeserializationData
+class JsonDeserializationData extends AbstractDeserializationData
 {
-    private final Serialization              serialization;
     private final JsonElement                element;
     private final JsonDeserializationContext context;
-    private final Class<?>                   type;
-
-    private final Set<String> trueValues  = new HashSet<>(1);
-    private final Set<String> falseValues = new HashSet<>(1);
 
     JsonDeserializationData(Serialization serialization, JsonElement element, JsonDeserializationContext context, Class<?> type)
     {
-        this.serialization = serialization;
+        super(type, serialization);
         this.element = element;
         this.context = context;
-        this.type = type;
-    }
-
-    @Override
-    public Serialization getSerializationInstance()
-    {
-        return this.serialization;
-    }
-
-    @Override
-    public void addTrueValues(String... strings)
-    {
-        Collections.addAll(this.trueValues, strings);
-    }
-
-    @Override
-    public void addFalseValues(String... strings)
-    {
-        Collections.addAll(this.falseValues, strings);
-    }
-
-    @Nullable
-    Boolean toBool(String str)
-    {
-        Boolean bool = this.serialization.toBool(str);
-        if (bool != null)
-        {
-            return bool;
-        }
-        if (this.trueValues.contains(str))
-        {
-            return true;
-        }
-        if (this.falseValues.contains(str))
-        {
-            return false;
-        }
-        return null;
     }
 
     @Override
@@ -345,7 +299,7 @@ class JsonDeserializationData implements DeserializationData
             K keyObj;
             if (Serialization.isSimpleType(keyType))
             {
-                keyObj = this.context.deserialize(new JsonPrimitive(entry.getKey()), type);
+                keyObj = this.context.deserialize(new JsonPrimitive(entry.getKey()), keyType);
             }
             else if (this.serialization.isStringSerializable(keyType))
             {
@@ -380,6 +334,6 @@ class JsonDeserializationData implements DeserializationData
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("element", this.element).append("type", this.type).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("element", this.element).toString();
     }
 }

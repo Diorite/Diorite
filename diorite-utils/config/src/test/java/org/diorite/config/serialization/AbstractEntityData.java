@@ -35,6 +35,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.SerializableAs;
+
+@SerializableAs(EntityData.class)
 public abstract class AbstractEntityData implements EntityData
 {
     EntityType type;
@@ -63,6 +66,20 @@ public abstract class AbstractEntityData implements EntityData
         data.getAsCollection("metaObjects", MetaObject.class, this.metaObjects);
         data.getAsMapWithKeys("uuidMetaObjectMap", UUID.class, MetaObject.class, "uuid", this.uuidMetaObjectMap);
         data.getAsCollection("propertiesCollection", SomeProperties.class, this.propertiesCollection);
+    }
+
+    public static AbstractEntityData deserialize(DeserializationData data)
+    {
+        EntityType type = data.getOrThrow("type", EntityType.class);
+        switch (type)
+        {
+            case CREEPER:
+                return new CreeperEntityData(data);
+            case SHEEP:
+                return new SheepEntityData(data);
+            default:
+                throw new AssertionError();
+        }
     }
 
     @OverridingMethodsMustInvokeSuper

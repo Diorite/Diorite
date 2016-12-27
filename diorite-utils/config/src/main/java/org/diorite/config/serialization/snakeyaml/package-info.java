@@ -22,50 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+/**
+ * SnakeYaml related classes.
+ */
+@NonnullByDefault
+package org.diorite.config.serialization.snakeyaml;
 
-import java.util.function.Function;
-
-class SimpleStringSerializer<T> implements StringSerializer<T>
-{
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
-
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
-    {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
-    }
-
-    @Override
-    public Class<? super T> getType()
-    {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

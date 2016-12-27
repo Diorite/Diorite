@@ -40,7 +40,7 @@ public interface Serializer<T>
      *
      * @return type of values for this serializer.
      */
-    Class<T> getType();
+    Class<? super T> getType();
 
     /**
      * Returns {@link #deserialize(DeserializationData)} as {@link Function}.
@@ -94,7 +94,7 @@ public interface Serializer<T>
      *
      * @return serializer instance.
      */
-    static <T> Serializer<T> of(Class<T> type, BiConsumer<T, SerializationData> serializer, Function<DeserializationData, T> deserializer)
+    static <T> Serializer<T> of(Class<? super T> type, BiConsumer<T, SerializationData> serializer, Function<DeserializationData, T> deserializer)
     {
         return new SimpleSerializer<>(type, deserializer, serializer);
     }

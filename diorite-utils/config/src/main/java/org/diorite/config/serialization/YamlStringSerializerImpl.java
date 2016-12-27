@@ -24,48 +24,53 @@
 
 package org.diorite.config.serialization;
 
-import java.util.function.Function;
+import org.yaml.snakeyaml.constructor.Construct;
+import org.yaml.snakeyaml.nodes.AnchorNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.ScalarNode;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+import org.diorite.config.serialization.snakeyaml.AbstractRepresent;
+import org.diorite.config.serialization.snakeyaml.Representer;
+
+class YamlStringSerializerImpl<T> extends AbstractRepresent implements Construct
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
+    private final StringSerializer<T> stringSerializer;
 
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    YamlStringSerializerImpl(Representer representer, StringSerializer<T> stringSerializer)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        super(representer);
+        this.stringSerializer = stringSerializer;
     }
 
-    @Override
     public Class<? super T> getType()
     {
-        return this.type;
+        return this.stringSerializer.getType();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Node representData(Object data)
+    {
+        return this.representString(this.stringSerializer.serialize((T) data));
     }
 
     @Override
-    public Function<String, T> deserializerFunction()
+    public Object construct(Node node)
     {
-        return this.deserializer;
+        while (node instanceof AnchorNode)
+        {
+            node = ((AnchorNode) node).getRealNode();
+        }
+        if (node instanceof ScalarNode)
+        {
+            return this.stringSerializer.deserialize(((ScalarNode) node).getValue());
+        }
+        throw new RuntimeException("Can't deserialize simple string from yaml node: " + node);
     }
 
     @Override
-    public Function<T, String> serializerFunction()
+    public void construct2ndStep(Node node, Object object)
     {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
+// skip
     }
 }

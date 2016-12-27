@@ -24,58 +24,73 @@
 
 package org.diorite.config.serialization;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import javax.annotation.Nullable;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class EntityStorage implements Serializable
+abstract class AbstractDeserializationData implements DeserializationData
 {
-    Collection<EntityData> entityData = new ArrayList<>();
-    BeanObject beanObject;
+    protected final Serialization serialization;
+    protected final Class<?>      type;
 
-    public EntityStorage()
+    private final Set<String> trueValues  = new HashSet<>(1);
+    private final Set<String> falseValues = new HashSet<>(1);
+
+    AbstractDeserializationData(Class<?> type, Serialization serialization)
     {
+        this.type = type;
+        this.serialization = serialization;
     }
 
-    public EntityStorage(DeserializationData data)
+    public Class<?> getType()
     {
-        data.getAsCollection("", EntityData.class, this.entityData);
-        this.beanObject = data.getOrThrow("beanObject", BeanObject.class);
-    }
-
-    @Override
-    public void serialize(SerializationData data)
-    {
-        data.addCollection("", this.entityData, EntityData.class);
-        data.add("beanObject", this.beanObject);
+        return this.type;
     }
 
     @Override
-    public boolean equals(Object object)
+    public Serialization getSerializationInstance()
     {
-        if (this == object)
+        return this.serialization;
+    }
+
+    @Override
+    public void addTrueValues(String... strings)
+    {
+        Collections.addAll(this.trueValues, strings);
+    }
+
+    @Override
+    public void addFalseValues(String... strings)
+    {
+        Collections.addAll(this.falseValues, strings);
+    }
+
+    @Nullable
+    Boolean toBool(String str)
+    {
+        Boolean bool = this.serialization.toBool(str);
+        if (bool != null)
+        {
+            return bool;
+        }
+        if (this.trueValues.contains(str))
         {
             return true;
         }
-        if (! (object instanceof EntityStorage))
+        if (this.falseValues.contains(str))
         {
             return false;
         }
-        EntityStorage that = (EntityStorage) object;
-        return Objects.equals(this.entityData, that.entityData);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(this.entityData);
+        return null;
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("entityData", this.entityData).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("type", this.type).toString();
     }
 }

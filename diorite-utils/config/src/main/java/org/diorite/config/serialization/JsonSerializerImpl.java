@@ -32,16 +32,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 
-class SerializerTypeAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T>
+class JsonSerializerImpl<T> implements JsonSerializer<T>, JsonDeserializer<T>
 {
     private final Serializer<T> serializer;
     private final Serialization serialization;
 
-    private static final Type mapType = (new TypeToken<>() {}).getType();
-
-    SerializerTypeAdapter(Serializer<T> serializer, Serialization serialization)
+    JsonSerializerImpl(Serializer<T> serializer, Serialization serialization)
     {
         this.serializer = serializer;
         this.serialization = serialization;

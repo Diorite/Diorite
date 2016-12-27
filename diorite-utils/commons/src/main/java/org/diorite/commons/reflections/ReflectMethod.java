@@ -25,11 +25,12 @@
 package org.diorite.commons.reflections;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Modifier;
 
 /**
  * Represent reflective wrapper that support MethodHandles.
  */
-public interface ReflectMethod
+public interface ReflectMethod extends ReflectElement
 {
     /**
      * Returns if this method is a constructor.
@@ -39,17 +40,34 @@ public interface ReflectMethod
     boolean isConstructor();
 
     /**
-     * Returns true if this method is static. <br/>
-     * Returns false for constructor.
+     * Returns true if given method is abstract.
      *
-     * @return true if this method is static.
+     * @return true if given method is abstract.
      */
-    boolean isStatic();
+    default boolean isAbstract()
+    {
+        return Modifier.isAbstract(this.getModifiers());
+    }
 
     /**
-     * Ensure that given executable is accessible.
+     * Returns true if given method is native.
+     *
+     * @return true if given method is native.
      */
-    void ensureAccessible();
+    default boolean isNative()
+    {
+        return Modifier.isNative(this.getModifiers());
+    }
+
+    /**
+     * Returns true if given method is synchronized.
+     *
+     * @return true if given method is synchronized.
+     */
+    default boolean isSynchronized()
+    {
+        return Modifier.isSynchronized(this.getModifiers());
+    }
 
     /**
      * Returns {@link MethodHandle} for this method.

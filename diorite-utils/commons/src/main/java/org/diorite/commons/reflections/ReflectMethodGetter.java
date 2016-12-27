@@ -24,6 +24,8 @@
 
 package org.diorite.commons.reflections;
 
+import javax.annotation.Nullable;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -41,7 +43,7 @@ class ReflectMethodGetter<E> extends MethodInvoker implements ReflectGetter<E>
     }
 
     @Override
-    public E get(Object src)
+    public E get(@Nullable Object src)
     {
         //noinspection unchecked
         return (E) super.invoke(src);

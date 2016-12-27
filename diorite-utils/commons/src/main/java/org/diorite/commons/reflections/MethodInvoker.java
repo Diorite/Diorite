@@ -30,7 +30,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import org.diorite.commons.DioriteUtils;
 
@@ -101,10 +100,32 @@ public class MethodInvoker implements ReflectMethod
         return false;
     }
 
+    @Nullable
     @Override
-    public boolean isStatic()
+    public Object invokeWith(Object... args) throws IllegalArgumentException
     {
-        return Modifier.isStatic(this.method.getModifiers());
+        if (this.isStatic())
+        {
+            return this.invoke(null, args);
+        }
+        if (args.length == 0)
+        {
+            throw new IllegalArgumentException("Missing object instance!");
+        }
+        Object inst = args[0];
+        if (args.length == 1)
+        {
+            return this.invoke(inst);
+        }
+        Object[] newArgs = new Object[args.length - 1];
+        System.arraycopy(args, 1, newArgs, 0, args.length - 1);
+        return this.invoke(inst, newArgs);
+    }
+
+    @Override
+    public int getModifiers()
+    {
+        return this.method.getModifiers();
     }
 
     @Override

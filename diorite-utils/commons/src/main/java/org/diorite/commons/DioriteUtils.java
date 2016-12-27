@@ -24,9 +24,6 @@
 
 package org.diorite.commons;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -45,23 +42,5 @@ public final class DioriteUtils
 
     private DioriteUtils()
     {
-    }
-    /**
-     * Create file directory, and then create file.
-     *
-     * @param file
-     *         file to create.
-     *
-     * @throws IOException
-     *         from {@link File#createNewFile()}
-     */
-    public static void createFile(File file) throws IOException
-    {
-        if (file.exists())
-        {
-            return;
-        }
-        file.getAbsoluteFile().getParentFile().mkdirs();
-        file.createNewFile();
     }
 }

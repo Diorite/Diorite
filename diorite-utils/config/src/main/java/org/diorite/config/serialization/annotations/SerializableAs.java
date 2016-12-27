@@ -22,50 +22,26 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.config.serialization.annotations;
 
-import java.util.function.Function;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+/**
+ * Allows to serialize given type as different type, like you can implement serialization in implementation class, but use API class as type.
+ */
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SerializableAs
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
-
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
-    {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
-    }
-
-    @Override
-    public Class<? super T> getType()
-    {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
-    }
+    /**
+     * Class to use instead.
+     *
+     * @return class used to registration.
+     */
+    Class<?> value();
 }

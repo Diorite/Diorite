@@ -39,7 +39,7 @@ public interface StringSerializer<T>
      *
      * @return type of values for this serializer.
      */
-    Class<T> getType();
+    Class<? super T> getType();
 
     /**
      * Returns {@link #deserialize(String)} as {@link Function}.
@@ -95,7 +95,7 @@ public interface StringSerializer<T>
      *
      * @return string serializer instance.
      */
-    static <T> StringSerializer<T> of(Class<T> type, Function<T, String> serializer, Function<String, T> deserializer)
+    static <T> StringSerializer<T> of(Class<? super T> type, Function<T, String> serializer, Function<String, T> deserializer)
     {
         return new SimpleStringSerializer<>(type, deserializer, serializer);
     }

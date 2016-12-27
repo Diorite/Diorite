@@ -59,7 +59,7 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
     @Override
     @Nullable
     @SuppressWarnings("unchecked")
-    public T get(Object target)
+    public T get(@Nullable Object target)
     {
         try
         {
@@ -98,6 +98,42 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
         }
     }
 
+    @Nullable
+    @Override
+    public Object invokeWith(Object... args) throws IllegalArgumentException
+    {
+        if (this.isStatic())
+        {
+            if (args.length == 0)
+            {
+                return this.get(null);
+            }
+            if (args.length == 1)
+            {
+                this.set(null, args[0]);
+                return null;
+            }
+            throw new IllegalArgumentException("Expected none or single parameter.");
+        }
+        if (args.length == 1)
+        {
+            return this.get(args[0]);
+        }
+        if (args.length == 2)
+        {
+            this.set(args[0], args[1]);
+            return null;
+        }
+        throw new IllegalArgumentException("Expected object instance and none or one parameter.");
+    }
+
+    @Override
+    public int getModifiers()
+    {
+        return this.field.getModifiers();
+    }
+
+    @Override
     public void ensureAccessible()
     {
         this.field.setAccessible(true);

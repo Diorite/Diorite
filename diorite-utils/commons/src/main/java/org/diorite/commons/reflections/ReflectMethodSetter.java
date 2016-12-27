@@ -24,6 +24,8 @@
 
 package org.diorite.commons.reflections;
 
+import javax.annotation.Nullable;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 
@@ -40,7 +42,7 @@ class ReflectMethodSetter<E> extends MethodInvoker implements ReflectSetter<E>
     }
 
     @Override
-    public void set(Object src, Object obj)
+    public void set(@Nullable Object src, @Nullable Object obj)
     {
         super.invoke(src, obj);
     }

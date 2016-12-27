@@ -22,50 +22,23 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.config.serialization.snakeyaml;
 
-import java.util.function.Function;
+import java.util.Iterator;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+final class IteratorWrapper implements Iterable<Object>
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
+    private Iterator<Object> iterator;
 
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    @SuppressWarnings("unchecked")
+    IteratorWrapper(Iterator<?> iterator)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        this.iterator = (Iterator<Object>) iterator;
     }
 
     @Override
-    public Class<? super T> getType()
+    public Iterator<Object> iterator()
     {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
+        return this.iterator;
     }
 }

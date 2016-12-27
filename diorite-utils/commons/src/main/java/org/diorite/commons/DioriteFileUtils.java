@@ -22,33 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.commons;
 
+import java.io.File;
 import java.io.IOException;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
-class StringSerializerTypeAdapter<T> extends TypeAdapter<T>
+public final class DioriteFileUtils
 {
-    private final StringSerializer<T> stringSerializer;
-
-    StringSerializerTypeAdapter(StringSerializer<T> stringSerializer)
+    private DioriteFileUtils()
     {
-        this.stringSerializer = stringSerializer;
     }
 
-    @SuppressWarnings("resource")
-    @Override
-    public void write(JsonWriter jsonWriter, T t) throws IOException
+    /**
+     * Create file directory, and then create file.
+     *
+     * @param file
+     *         file to create.
+     *
+     * @throws IOException
+     *         from {@link File#createNewFile()}
+     */
+    public static void createFile(File file) throws IOException
     {
-        jsonWriter.jsonValue(this.stringSerializer.serialize(t));
-    }
-
-    @Override
-    public T read(JsonReader jsonReader) throws IOException
-    {
-        return this.stringSerializer.deserialize(jsonReader.nextString());
+        if (file.exists())
+        {
+            return;
+        }
+        file.getAbsoluteFile().getParentFile().mkdirs();
+        file.createNewFile();
     }
 }

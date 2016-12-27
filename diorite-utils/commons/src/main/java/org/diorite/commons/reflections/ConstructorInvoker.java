@@ -61,7 +61,8 @@ public class ConstructorInvoker<T> implements ReflectMethod
      *
      * @return new object.
      */
-    public T invoke(Object... arguments)
+    @Override
+    public T invokeWith(Object... arguments)
     {
         try
         {
@@ -102,6 +103,12 @@ public class ConstructorInvoker<T> implements ReflectMethod
     public boolean isStatic()
     {
         return false;
+    }
+
+    @Override
+    public int getModifiers()
+    {
+        return this.constructor.getModifiers();
     }
 
     @Override

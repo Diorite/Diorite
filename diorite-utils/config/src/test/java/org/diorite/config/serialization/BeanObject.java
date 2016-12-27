@@ -24,32 +24,45 @@
 
 package org.diorite.config.serialization;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class EntityStorage implements Serializable
+public class BeanObject
 {
-    Collection<EntityData> entityData = new ArrayList<>();
-    BeanObject beanObject;
+    private int intProperty;
+    private String stringProperty;
+    private Map<int[], int[]> intMap;
 
-    public EntityStorage()
+    public int getIntProperty()
     {
+        return this.intProperty;
     }
 
-    public EntityStorage(DeserializationData data)
+    public void setIntProperty(int intProperty)
     {
-        data.getAsCollection("", EntityData.class, this.entityData);
-        this.beanObject = data.getOrThrow("beanObject", BeanObject.class);
+        this.intProperty = intProperty;
     }
 
-    @Override
-    public void serialize(SerializationData data)
+    public String getStringProperty()
     {
-        data.addCollection("", this.entityData, EntityData.class);
-        data.add("beanObject", this.beanObject);
+        return this.stringProperty;
+    }
+
+    public void setStringProperty(String stringProperty)
+    {
+        this.stringProperty = stringProperty;
+    }
+
+    public Map<int[], int[]> getIntMap()
+    {
+        return this.intMap;
+    }
+
+    public void setIntMap(Map<int[], int[]> intMap)
+    {
+        this.intMap = intMap;
     }
 
     @Override
@@ -59,23 +72,26 @@ public class EntityStorage implements Serializable
         {
             return true;
         }
-        if (! (object instanceof EntityStorage))
+        if (! (object instanceof BeanObject))
         {
             return false;
         }
-        EntityStorage that = (EntityStorage) object;
-        return Objects.equals(this.entityData, that.entityData);
+        BeanObject that = (BeanObject) object;
+        return this.intProperty == that.intProperty &&
+               Objects.equals(this.stringProperty, that.stringProperty) &&
+               Objects.equals(this.intMap.toString(), that.intMap.toString());
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.entityData);
+        return Objects.hash(this.intProperty, this.stringProperty, this.intMap);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("entityData", this.entityData).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("intProperty", this.intProperty)
+                                        .append("stringProperty", this.stringProperty).append("intMap", this.intMap).toString();
     }
 }

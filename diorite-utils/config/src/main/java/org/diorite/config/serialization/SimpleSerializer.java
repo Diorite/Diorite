@@ -29,11 +29,11 @@ import java.util.function.Function;
 
 class SimpleSerializer<T> implements Serializer<T>
 {
-    private final Class<T>                         type;
+    private final Class<? super T>                 type;
     private final Function<DeserializationData, T> deserializer;
     private final BiConsumer<T, SerializationData> serializer;
 
-    SimpleSerializer(Class<T> type, Function<DeserializationData, T> deserializer, BiConsumer<T, SerializationData> serializer)
+    SimpleSerializer(Class<? super T> type, Function<DeserializationData, T> deserializer, BiConsumer<T, SerializationData> serializer)
     {
         this.type = type;
         this.deserializer = deserializer;
@@ -41,7 +41,7 @@ class SimpleSerializer<T> implements Serializer<T>
     }
 
     @Override
-    public Class<T> getType()
+    public Class<? super T> getType()
     {
         return this.type;
     }

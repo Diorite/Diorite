@@ -26,107 +26,109 @@ package org.diorite.commons.reflections;
 
 import javax.annotation.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.reflect.Type;
+import java.lang.reflect.Modifier;
 
 /**
- * Class that connect {@link ReflectGetter} and {@link ReflectSetter},
- * allowing to get and set values using one object.
- *
- * @param <E>
- *         type of value.
+ * Represent some reflect element, field, method or constructor.
  */
-public class ReflectElement<E> implements ReflectGetter<E>, ReflectSetter<E>
+public interface ReflectElement
 {
+    /**
+     * Invoke this reflect element: <br/>
+     * For constructor - invoke with all arguments. <br/>
+     * For static method - invoke with all arguments. <br/>
+     * For non-static method - first argument is object instance. <br/>
+     * For static fields - get -> no arguments, set -> single argument. <br/>
+     * For non-static fields - get -> object instance, set -> object instance and value. <br/>
+     *
+     * @param args
+     *         all arguments to use for invoking.
+     *
+     * @return return value if any.
+     */
     @Nullable
-    private final ReflectGetter<E> getter;
-    @Nullable
-    private final ReflectSetter<E> setter;
+    Object invokeWith(Object... args) throws IllegalArgumentException;
 
     /**
-     * Construct new reflect element using given getter and setter instance.
+     * Returns modifiers of element.
      *
-     * @param getter
-     *         getter for value.
-     * @param setter
-     *         setter for value.
+     * @return modifiers of element.
      */
-    public ReflectElement(@Nullable ReflectGetter<E> getter, @Nullable ReflectSetter<E> setter)
+    int getModifiers();
+
+    /**
+     * Returns true if this element is static. <br/>
+     * Returns false for constructor.
+     *
+     * @return true if this element is static.
+     */
+    default boolean isStatic()
     {
-        this.getter = getter;
-        this.setter = setter;
+        return Modifier.isStatic(this.getModifiers());
     }
 
-    ReflectElement(FieldAccessor<?> accessor)
+    /**
+     * Returns true if given element is public.
+     *
+     * @return true if given element is public.
+     */
+    default boolean isPublic()
     {
-        ReflectField<E> reflectField = new ReflectField<>(accessor);
-        this.getter = reflectField;
-        this.setter = reflectField;
+        return Modifier.isPublic(this.getModifiers());
     }
 
-    ReflectElement(MethodInvoker getter, MethodInvoker setter)
+    /**
+     * Returns true if given element is private.
+     *
+     * @return true if given element is private.
+     */
+    default boolean isPrivate()
     {
-        this.getter = new ReflectMethodGetter<>(getter);
-        this.setter = new ReflectMethodSetter<>(setter);
+        return Modifier.isPrivate(this.getModifiers());
     }
 
-    ReflectElement(MethodInvoker getter, FieldAccessor<?> accessor)
+    /**
+     * Returns true if given element is protected.
+     *
+     * @return true if given element is protected.
+     */
+    default boolean isProtected()
     {
-        this.getter = new ReflectMethodGetter<>(getter);
-        this.setter = new ReflectField<>(accessor);
+        return Modifier.isProtected(this.getModifiers());
     }
 
-    ReflectElement(FieldAccessor<?> accessor, MethodInvoker setter)
+    /**
+     * Returns true if given element is final.
+     *
+     * @return true if given element is final.
+     */
+    default boolean isFinal()
     {
-        this.getter = new ReflectField<>(accessor);
-        this.setter = new ReflectMethodSetter<>(setter);
+        return Modifier.isFinal(this.getModifiers());
     }
 
-    @Override
-    public E get(Object src)
+    /**
+     * Returns true if given element is transient.
+     *
+     * @return true if given element is transient.
+     */
+    default boolean isTransient()
     {
-        if (this.getter == null)
-        {
-            throw new IllegalStateException("Getter not provided.");
-        }
-        return this.getter.get(src);
+        return Modifier.isTransient(this.getModifiers());
     }
 
-    @Override
-    public void set(Object src, Object obj)
+    /**
+     * Returns true if given element is volatile.
+     *
+     * @return true if given element is volatile.
+     */
+    default boolean isVolatile()
     {
-        if (this.setter == null)
-        {
-            throw new IllegalStateException("Setter not provided.");
-        }
-        this.setter.set(src, obj);
+        return Modifier.isVolatile(this.getModifiers());
     }
 
-    @Override
-    public MethodHandle getSetter()
-    {
-        if (this.setter == null)
-        {
-            throw new IllegalStateException("Setter not provided.");
-        }
-        return this.setter.getSetter();
-    }
-
-    @Override
-    public MethodHandle getGetter()
-    {
-        if (this.getter == null)
-        {
-            throw new IllegalStateException("Getter not provided.");
-        }
-        return this.getter.getGetter();
-    }
-
-    @Nullable
-    @Override
-    public Type getGenericType()
-    {
-        return (this.getter == null) ? null : this.getter.getGenericType();
-    }
-
+    /**
+     * Ensure that given executable is accessible.
+     */
+    void ensureAccessible();
 }

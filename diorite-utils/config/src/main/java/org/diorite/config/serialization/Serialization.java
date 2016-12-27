@@ -27,6 +27,7 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.invoke.MethodHandle;
@@ -34,14 +35,20 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,11 +59,22 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.constructor.Construct;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.resolver.Resolver;
+
+import org.diorite.commons.DioriteThreadUtils;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.commons.reflections.ReflectMethod;
+import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.annotations.StringSerializable;
+import org.diorite.config.serialization.snakeyaml.Representer;
+import org.diorite.config.serialization.snakeyaml.Yaml;
+import org.diorite.config.serialization.snakeyaml.YamlConstructor;
 
 /**
  * Serialization manager, it allows to serialize and deserialize all registered types. <br/>
@@ -66,12 +84,63 @@ public final class Serialization
 {
     private static final Serialization GLOBAL = new Serialization((Void) null);
 
+    // gson section
     final   GsonBuilder       gsonBuilder = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues();
     private ThreadLocal<Gson> cachedGson  = ThreadLocal.withInitial(this.gsonBuilder::create);
+
+    // yaml section
+    private Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
+    private Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
+    private Map<Class<?>, Supplier<Construct>>                                                constructs         = new ConcurrentHashMap<>(10);
+    private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
+    private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
+
+    private Yaml createYaml()
+    {
+        Representer representer = new Representer();
+        YamlConstructor constructor = new YamlConstructor();
+
+        // register types
+        for (BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>> serializerCreator : this.stringRepresenters)
+        {
+            YamlStringSerializerImpl<?> yamlSerializer = serializerCreator.apply(constructor, representer);
+            Class<?> type = yamlSerializer.getType();
+            representer.addClassTag(type, Tag.MAP);
+            representer.addRepresenter(type, yamlSerializer);
+            constructor.addConstruct(type, yamlSerializer);
+        }
+        for (BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>> serializerCreator : this.objectRepresenters)
+        {
+            YamlSerializerImpl<?> yamlSerializer = serializerCreator.apply(constructor, representer);
+            Class<?> type = yamlSerializer.getType();
+            representer.addClassTag(type, Tag.MAP);
+            representer.addRepresenter(type, yamlSerializer);
+            constructor.addConstruct(type, yamlSerializer);
+        }
+
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setAllowReadOnlyProperties(true);
+        dumperOptions.setAllowUnicode(true);
+        dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+        dumperOptions.setIndent(2);
+        dumperOptions.setPrettyFlow(false);
+
+        Resolver resolver = new Resolver();
+
+        Yaml yaml = new Yaml(constructor, representer, dumperOptions, resolver);
+
+        yaml.setName("DioriteYaml[" + this.localCounter.get().getAndIncrement() + "]:" + DioriteThreadUtils.getFullThreadName(Thread.currentThread(), true));
+        return yaml;
+    }
 
     private Gson gson()
     {
         return this.cachedGson.get();
+    }
+
+    private Yaml yaml()
+    {
+        return this.cachedYaml.get();
     }
 
     private final Map<Class<?>, StringSerializer<?>> stringSerializerMap = new ConcurrentHashMap<>(10);
@@ -124,26 +193,13 @@ public final class Serialization
     private void refreshCache()
     {
         this.cachedGson = ThreadLocal.withInitial(this.gsonBuilder::create);
+        this.cachedYaml = ThreadLocal.withInitial(this::createYaml);
     }
-
-    @Nullable
-    private final Serialization parent;
 
     private Serialization(@Nullable Void v)
     {
-        this.parent = null;
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
     }
-
-//    public Serialization(Serialization parent)
-//    {
-//        this.parent = parent;
-//    }
-//
-//    public Serialization()
-//    {
-//        this(GLOBAL);
-//    }
 
     /**
      * Register given string serializable class to this serialization manager.
@@ -181,7 +237,8 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> StringSerializer<T> registerStringSerializer(StringSerializer<T> stringSerializer)
     {
-        this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new StringSerializerTypeAdapter<>(stringSerializer));
+        this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new JsonStringSerializerImpl<>(stringSerializer));
+        this.stringRepresenters.add((c, r) -> new YamlStringSerializerImpl<>(r, stringSerializer));
         this.refreshCache();
         return (StringSerializer<T>) this.stringSerializerMap.put(stringSerializer.getType(), stringSerializer);
     }
@@ -222,7 +279,8 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> Serializer<T> registerSerializer(Serializer<T> serializer)
     {
-        this.gsonBuilder.registerTypeAdapter(serializer.getType(), new SerializerTypeAdapter<>(serializer, this));
+        this.gsonBuilder.registerTypeAdapter(serializer.getType(), new JsonSerializerImpl<>(serializer, this));
+        this.objectRepresenters.add((c, r) -> new YamlSerializerImpl<>(r, c, serializer, this));
         this.refreshCache();
         return (Serializer<T>) this.serializerMap.put(serializer.getType(), serializer);
     }
@@ -250,10 +308,6 @@ public final class Serialization
      */
     public boolean isStringSerializable(Class<?> clazz)
     {
-        if ((this.parent != null) && this.parent.isStringSerializable(clazz))
-        {
-            return true;
-        }
         return this.stringSerializerMap.containsKey(clazz);
     }
 
@@ -280,10 +334,6 @@ public final class Serialization
      */
     public boolean isSerializable(Class<?> clazz)
     {
-        if ((this.parent != null) && this.parent.isSerializable(clazz))
-        {
-            return true;
-        }
         return this.serializerMap.containsKey(clazz);
     }
 
@@ -447,7 +497,7 @@ public final class Serialization
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
                         //noinspection Convert2MethodRef Java 9 conpiler bug: 9046392 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invoke(arguments);
+                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
                     }
                     else
                     {
@@ -460,7 +510,7 @@ public final class Serialization
                 throw stringAnnotationError(clazz);
             }
         }
-        return this.registerStringSerializer(StringSerializer.of(clazz, serialization, deserialization));
+        return this.registerStringSerializer(StringSerializer.of(getRedirectionClass(clazz), serialization, deserialization));
     }
 
     @Nullable
@@ -469,10 +519,10 @@ public final class Serialization
     {
 
         ReflectMethod deserialize = DioriteReflectionUtils.getTypedMethod(clazz, "deserializeFromString", clazz, false, String.class);
-        if ((deserialize == null) || deserialize.isStatic())
+        if ((deserialize == null) || ! deserialize.isStatic())
         {
             deserialize = DioriteReflectionUtils.getTypedMethod(clazz, "valueOf", clazz, false, String.class);
-            if ((deserialize == null) || deserialize.isStatic())
+            if ((deserialize == null) || ! deserialize.isStatic())
             {
                 deserialize = DioriteReflectionUtils.getConstructor(clazz, false, String.class);
                 if (deserialize == null)
@@ -484,17 +534,18 @@ public final class Serialization
             }
         }
         MethodHandle handle = deserialize.getHandle();
-        StringSerializer<T> serializer = StringSerializer.of(clazz, org.diorite.config.serialization.StringSerializable::serializeToString, str ->
-        {
-            try
-            {
-                return (T) handle.invokeExact(str);
-            }
-            catch (Throwable throwable)
-            {
-                throw new DeserializationException(clazz, str, throwable);
-            }
-        });
+        StringSerializer<T> serializer =
+                StringSerializer.of(getRedirectionClass(clazz), org.diorite.config.serialization.StringSerializable::serializeToString, str ->
+                {
+                    try
+                    {
+                        return (T) handle.invokeExact(str);
+                    }
+                    catch (Throwable throwable)
+                    {
+                        throw new DeserializationException(clazz, str, throwable);
+                    }
+                });
         return this.registerStringSerializer(serializer);
     }
 
@@ -503,13 +554,13 @@ public final class Serialization
     private <T extends Serializable> Serializer<T> registerSerializableByType(Class<T> clazz)
     {
         ReflectMethod deserialize = DioriteReflectionUtils.getTypedMethod(clazz, "deserialize", clazz, false, DeserializationData.class);
-        if ((deserialize == null) || deserialize.isStatic())
+        if ((deserialize == null) || ! deserialize.isStatic() || ! deserialize.isPublic())
         {
             deserialize = DioriteReflectionUtils.getTypedMethod(clazz, "valueOf", clazz, false, DeserializationData.class);
-            if ((deserialize == null) || deserialize.isStatic())
+            if ((deserialize == null) || ! deserialize.isStatic() || ! deserialize.isPublic())
             {
                 deserialize = DioriteReflectionUtils.getConstructor(clazz, false, DeserializationData.class);
-                if (deserialize == null)
+                if ((deserialize == null) || ! deserialize.isPublic())
                 {
                     throw new IllegalArgumentException("Given class (" + clazz.getName() +
                                                        ") does not contains deserialization method! Make sure to create one of this methods:\n    static T " +
@@ -519,7 +570,7 @@ public final class Serialization
             }
         }
         MethodHandle handle = deserialize.getHandle();
-        Serializer<T> serializer = Serializer.of(clazz, Serializable::serialize, data ->
+        Serializer<T> serializer = Serializer.of(getRedirectionClass(clazz), Serializable::serialize, data ->
         {
             try
             {
@@ -605,7 +656,7 @@ public final class Serialization
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
                         //noinspection Convert2MethodRef Java 9 conpiler bug: 9046392 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invoke(arguments);
+                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
                     }
                     else
                     {
@@ -618,7 +669,7 @@ public final class Serialization
                 throw annotationError(clazz);
             }
         }
-        return this.registerSerializer(Serializer.of(clazz, serialization, deserialization));
+        return this.registerSerializer(Serializer.of(getRedirectionClass(clazz), serialization, deserialization));
     }
 
     private static IllegalArgumentException stringAnnotationError(Class<?> clazz)
@@ -640,6 +691,17 @@ public final class Serialization
                                             "static void nameOfMethod(Object, SerializationData)\n    static void nameOfMethod(SerializationData, Object)\n  " +
                                             "  void nameOfMethod(SerializationData)\n  Deserialization methods:\n    static T nameOfMethod" +
                                             "(DeserializationData)\n    constructor(DeserializationData)");
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Class<? super T> getRedirectionClass(Class<T> type)
+    {
+        if (type.isAnnotationPresent(SerializableAs.class))
+        {
+            SerializableAs serializableAs = type.getAnnotation(SerializableAs.class);
+            return (Class<? super T>) getRedirectionClass(serializableAs.value());
+        }
+        return type;
     }
 
     static boolean isSimpleType(Class<?> type)
@@ -743,8 +805,11 @@ public final class Serialization
      * just the object itself should not be of a generic type. If the object is of generic type, use
      * {@link #toJsonTree(Object, Type)} instead.
      *
-     * @param src the object for which Json representation is to be created setting for Gson
+     * @param src
+     *         the object for which Json representation is to be created setting for Gson
+     *
      * @return Json representation of {@code src}.
+     *
      * @since 1.4
      */
     public JsonElement toJsonTree(Object src)
@@ -758,14 +823,15 @@ public final class Serialization
      * specified object is a generic type. For non-generic objects, use {@link #toJsonTree(Object)}
      * instead.
      *
-     * @param src the object for which JSON representation is to be created
-     * @param typeOfSrc The specific genericized type of src. You can obtain
-     * this type by using the {@link TypeToken} class. For example,
-     * to get the type for {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     * @param src
+     *         the object for which JSON representation is to be created
+     * @param typeOfSrc
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
+     *
      * @return Json representation of {@code src}
+     *
      * @since 1.4
      */
     public JsonElement toJsonTree(Object src, Type typeOfSrc)
@@ -783,7 +849,9 @@ public final class Serialization
      * {@link #toJson(Object, Type)} instead. If you want to write out the object to a
      * {@link Writer}, use {@link #toJson(Object, Appendable)} instead.
      *
-     * @param src the object for which Json representation is to be created setting for Gson
+     * @param src
+     *         the object for which Json representation is to be created setting for Gson
+     *
      * @return Json representation of {@code src}.
      */
     public String toJson(Object src)
@@ -797,13 +865,13 @@ public final class Serialization
      * type. For non-generic objects, use {@link #toJson(Object)} instead. If you want to write out
      * the object to a {@link Appendable}, use {@link #toJson(Object, Type, Appendable)} instead.
      *
-     * @param src the object for which JSON representation is to be created
-     * @param typeOfSrc The specific genericized type of src. You can obtain
-     * this type by using the {@link TypeToken} class. For example,
-     * to get the type for {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     * @param src
+     *         the object for which JSON representation is to be created
+     * @param typeOfSrc
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
+     *
      * @return Json representation of {@code src}
      */
     public String toJson(Object src, Type typeOfSrc)
@@ -820,9 +888,13 @@ public final class Serialization
      * just the object itself should not be of a generic type. If the object is of generic type, use
      * {@link #toJson(Object, Type, Appendable)} instead.
      *
-     * @param src the object for which Json representation is to be created setting for Gson
-     * @param writer Writer to which the Json representation needs to be written
-     * @throws JsonIOException if there was a problem writing to the writer
+     * @param src
+     *         the object for which Json representation is to be created setting for Gson
+     * @param writer
+     *         Writer to which the Json representation needs to be written
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the writer
      * @since 1.2
      */
     public void toJson(Object src, Appendable writer) throws JsonIOException
@@ -835,15 +907,17 @@ public final class Serialization
      * equivalent Json representation. This method must be used if the specified object is a generic
      * type. For non-generic objects, use {@link #toJson(Object, Appendable)} instead.
      *
-     * @param src the object for which JSON representation is to be created
-     * @param typeOfSrc The specific genericized type of src. You can obtain
-     * this type by using the {@link TypeToken} class. For example,
-     * to get the type for {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
-     * @param writer Writer to which the Json representation of src needs to be written.
-     * @throws JsonIOException if there was a problem writing to the writer
+     * @param src
+     *         the object for which JSON representation is to be created
+     * @param typeOfSrc
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
+     * @param writer
+     *         Writer to which the Json representation of src needs to be written.
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the writer
      * @since 1.2
      */
     public void toJson(Object src, Type typeOfSrc, Appendable writer) throws JsonIOException
@@ -854,10 +928,13 @@ public final class Serialization
     /**
      * Writes the JSON representation of {@code src} of type {@code typeOfSrc} to
      * {@code writer}.
-     * @throws JsonIOException if there was a problem writing to the writer
+     *
      * @param src
      * @param typeOfSrc
      * @param writer
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the writer
      */
     public void toJson(Object src, Type typeOfSrc, JsonWriter writer) throws JsonIOException
     {
@@ -867,8 +944,11 @@ public final class Serialization
     /**
      * Converts a tree of {@link JsonElement}s into its equivalent JSON representation.
      *
-     * @param jsonElement root of a tree of {@link JsonElement}s
+     * @param jsonElement
+     *         root of a tree of {@link JsonElement}s
+     *
      * @return JSON String representation of the tree
+     *
      * @since 1.4
      */
     public String toJson(JsonElement jsonElement)
@@ -879,9 +959,13 @@ public final class Serialization
     /**
      * Writes out the equivalent JSON for a tree of {@link JsonElement}s.
      *
-     * @param jsonElement root of a tree of {@link JsonElement}s
-     * @param writer Writer to which the Json representation needs to be written
-     * @throws JsonIOException if there was a problem writing to the writer
+     * @param jsonElement
+     *         root of a tree of {@link JsonElement}s
+     * @param writer
+     *         Writer to which the Json representation needs to be written
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the writer
      * @since 1.4
      */
     public void toJson(JsonElement jsonElement, Appendable writer) throws JsonIOException
@@ -891,6 +975,7 @@ public final class Serialization
 
     /**
      * Returns a new JSON writer configured for the settings on this Gson instance.
+     *
      * @param writer
      */
     public JsonWriter newJsonWriter(Writer writer) throws IOException
@@ -900,6 +985,7 @@ public final class Serialization
 
     /**
      * Returns a new JSON reader configured for the settings on this Gson instance.
+     *
      * @param reader
      */
     public JsonReader newJsonReader(Reader reader)
@@ -909,9 +995,12 @@ public final class Serialization
 
     /**
      * Writes the JSON for {@code jsonElement} to {@code writer}.
-     * @throws JsonIOException if there was a problem writing to the writer
+     *
      * @param jsonElement
      * @param writer
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the writer
      */
     public void toJson(JsonElement jsonElement, JsonWriter writer) throws JsonIOException
     {
@@ -928,11 +1017,15 @@ public final class Serialization
      * {@link #fromJson(String, Type)}. If you have the Json in a {@link Reader} instead of
      * a String, use {@link #fromJson(Reader, Class)} instead.
      *
-     * @param json the string from which the object is to be deserialized
-     * @param classOfT the class of T
+     * @param json
+     *         the string from which the object is to be deserialized
+     * @param classOfT
+     *         the class of T
+     *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
-     * classOfT
+     *
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type classOfT
      */
     public <T> T fromJson(String json, Class<T> classOfT) throws JsonSyntaxException
     {
@@ -945,16 +1038,19 @@ public final class Serialization
      * {@link #fromJson(String, Class)} instead. If you have the Json in a {@link Reader} instead of
      * a String, use {@link #fromJson(Reader, Type)} instead.
      *
-     * @param json the string from which the object is to be deserialized
-     * @param typeOfT The specific genericized type of src. You can obtain this type by using the
-     * {@link TypeToken} class. For example, to get the type for
-     * {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     * @param json
+     *         the string from which the object is to be deserialized
+     * @param typeOfT
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
+     *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
-     * @throws com.google.gson.JsonParseException if json is not a valid representation for an object of type typeOfT
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
+     *
+     * @throws com.google.gson.JsonParseException
+     *         if json is not a valid representation for an object of type typeOfT
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type
      */
     public <T> T fromJson(String json, Type typeOfT) throws JsonSyntaxException
     {
@@ -971,11 +1067,17 @@ public final class Serialization
      * invoke {@link #fromJson(Reader, Type)}. If you have the Json in a String form instead of a
      * {@link Reader}, use {@link #fromJson(String, Class)} instead.
      *
-     * @param json the reader producing the Json from which the object is to be deserialized.
-     * @param classOfT the class of T
+     * @param json
+     *         the reader producing the Json from which the object is to be deserialized.
+     * @param classOfT
+     *         the class of T
+     *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is at EOF.
-     * @throws JsonIOException if there was a problem reading from the Reader
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
+     *
+     * @throws JsonIOException
+     *         if there was a problem reading from the Reader
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type
      * @since 1.2
      */
     public <T> T fromJson(Reader json, Class<T> classOfT) throws JsonSyntaxException, JsonIOException
@@ -989,16 +1091,19 @@ public final class Serialization
      * non-generic objects, use {@link #fromJson(Reader, Class)} instead. If you have the Json in a
      * String form instead of a {@link Reader}, use {@link #fromJson(String, Type)} instead.
      *
-     * @param json the reader producing Json from which the object is to be deserialized
-     * @param typeOfT The specific genericized type of src. You can obtain this type by using the
-     * {@link TypeToken} class. For example, to get the type for
-     * {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     * @param json
+     *         the reader producing Json from which the object is to be deserialized
+     * @param typeOfT
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
+     *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is at EOF.
-     * @throws JsonIOException if there was a problem reading from the Reader
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
+     *
+     * @throws JsonIOException
+     *         if there was a problem reading from the Reader
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type
      * @since 1.2
      */
     public <T> T fromJson(Reader json, Type typeOfT) throws JsonIOException, JsonSyntaxException
@@ -1011,10 +1116,13 @@ public final class Serialization
      * of type {@code typeOfT}. Returns {@code null}, if the {@code reader} is at EOF.
      * Since Type is not parameterized by T, this method is type unsafe and should be used carefully
      *
-     * @throws JsonIOException if there was a problem writing to the Reader
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type
      * @param reader
      * @param typeOfT
+     *
+     * @throws JsonIOException
+     *         if there was a problem writing to the Reader
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type
      */
     public <T> T fromJson(JsonReader reader, Type typeOfT) throws JsonIOException, JsonSyntaxException
     {
@@ -1029,11 +1137,16 @@ public final class Serialization
      * this method works fine if the any of the fields of the specified object are generics, just the
      * object itself should not be a generic type. For the cases when the object is of generic type,
      * invoke {@link #fromJson(JsonElement, Type)}.
-     * @param json the root of the parse tree of {@link JsonElement}s from which the object is to
-     * be deserialized
-     * @param classOfT The class of T
+     *
+     * @param json
+     *         the root of the parse tree of {@link JsonElement}s from which the object is to be deserialized
+     * @param classOfT
+     *         The class of T
+     *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is {@code null}.
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type typeOfT
+     *
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type typeOfT
      * @since 1.3
      */
     public <T> T fromJson(JsonElement json, Class<T> classOfT) throws JsonSyntaxException
@@ -1046,20 +1159,272 @@ public final class Serialization
      * specified type. This method is useful if the specified object is a generic type. For
      * non-generic objects, use {@link #fromJson(JsonElement, Class)} instead.
      *
-     * @param json the root of the parse tree of {@link JsonElement}s from which the object is to
-     * be deserialized
-     * @param typeOfT The specific genericized type of src. You can obtain this type by using the
-     * {@link TypeToken} class. For example, to get the type for
-     * {@code Collection<Foo>}, you should use:
-     * <pre>
-     * Type typeOfT = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
-     * </pre>
+     * @param json
+     *         the root of the parse tree of {@link JsonElement}s from which the object is to be deserialized
+     * @param typeOfT
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
+     *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is {@code null}.
-     * @throws JsonSyntaxException if json is not a valid representation for an object of type typeOfT
+     *
+     * @throws JsonSyntaxException
+     *         if json is not a valid representation for an object of type typeOfT
      * @since 1.3
      */
     public <T> T fromJson(JsonElement json, Type typeOfT) throws JsonSyntaxException
     {
         return this.gson().fromJson(json, typeOfT);
+    }
+
+    // yaml delegate:
+
+    /**
+     * Serialize a Java object into a YAML String.
+     *
+     * @param data
+     *         Java object to be Serialized to YAML
+     *
+     * @return YAML String
+     */
+    public String toYaml(Object data)
+    {
+        return this.yaml().dump(data);
+    }
+
+    /**
+     * Serialize a sequence of Java objects into a YAML String.
+     *
+     * @param data
+     *         Iterator with Objects
+     *
+     * @return YAML String with all the objects in proper sequence
+     */
+    public String toYaml(Iterator<?> data)
+    {
+        return this.yaml().dumpAll(data);
+    }
+
+    /**
+     * Serialize a Java object into a YAML stream.
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     * @param output
+     */
+    public void toYaml(Object data, Writer output)
+    {
+        this.yaml().dump(data, output);
+    }
+
+    /**
+     * Serialize a sequence of Java objects into a YAML stream.
+     *
+     * @param data
+     *         Iterator with Objects
+     * @param output
+     */
+    public void toYaml(Iterator<?> data, Writer output)
+    {
+        this.yaml().dumpAll(data, output);
+    }
+
+    /**
+     * <p>
+     * Serialize a Java object into a YAML string. Override the default root tag
+     * with <code>rootTag</code>.
+     * </p>
+     *
+     * <p>
+     * This method is similar to <code>Yaml.dump(data)</code> except that the
+     * root tag for the whole document is replaced with the given tag. This has
+     * two main uses.
+     * </p>
+     *
+     * <p>
+     * First, if the root tag is replaced with a standard YAML tag, such as
+     * <code>Tag.MAP</code>, then the object will be dumped as a map. The root
+     * tag will appear as <code>!!map</code>, or blank (implicit !!map).
+     * </p>
+     *
+     * <p>
+     * Second, if the root tag is replaced by a different custom tag, then the
+     * document appears to be a different type when loaded. For example, if an
+     * instance of MyClass is dumped with the tag !!YourClass, then it will be
+     * handled as an instance of YourClass when loaded.
+     * </p>
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     * @param rootTag
+     *         the tag for the whole YAML document. The tag should be Tag.MAP for a JavaBean to make the tag disappear (to use implicit tag !!map). If
+     *         <code>null</code> is provided then the standard tag with the full class name is used.
+     * @param flowStyle
+     *         flow style for the whole document. See Chapter 10. Collection Styles http://yaml.org/spec/1.1/#id930798. If <code>null</code> is provided then
+     *         the flow style from DumperOptions is used.
+     *
+     * @return YAML String
+     */
+    public String toYaml(Object data, Tag rootTag, @Nullable FlowStyle flowStyle)
+    {
+        return this.yaml().dumpAs(data, rootTag, flowStyle);
+    }
+
+    /**
+     * <p>
+     * Serialize a Java object into a YAML string. Override the default root tag
+     * with <code>Tag.MAP</code>.
+     * </p>
+     * <p>
+     * This method is similar to <code>Yaml.dump(data)</code> except that the
+     * root tag for the whole document is replaced with <code>Tag.MAP</code> tag
+     * (implicit !!map).
+     * </p>
+     * <p>
+     * Block Mapping is used as the collection style. See 10.2.2. Block Mappings
+     * (http://yaml.org/spec/1.1/#id934537)
+     * </p>
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     *
+     * @return YAML String
+     */
+    public String toYamlAsMap(Object data)
+    {
+        return this.yaml().dumpAsMap(data);
+    }
+
+    /**
+     * Parse the only YAML document in a String and produce the corresponding
+     * Java object. (Because the encoding in known BOM is not respected.)
+     *
+     * @param yaml
+     *         YAML data to load from (BOM must not be present)
+     *
+     * @return parsed object
+     */
+    public Object fromYaml(String yaml)
+    {
+        return this.yaml().load(yaml);
+    }
+
+    /**
+     * Parse the only YAML document in a stream and produce the corresponding
+     * Java object.
+     *
+     * @param io
+     *         data to load from (BOM is respected and removed)
+     *
+     * @return parsed object
+     */
+    public Object fromYaml(InputStream io)
+    {
+        return this.yaml().load(io);
+    }
+
+    /**
+     * Parse the only YAML document in a stream and produce the corresponding
+     * Java object.
+     *
+     * @param io
+     *         data to load from (BOM must not be present)
+     *
+     * @return parsed object
+     */
+    public Object fromYaml(Reader io)
+    {
+        return this.yaml().load(io);
+    }
+
+    /**
+     * Parse the only YAML document in a stream and produce the corresponding
+     * Java object.
+     *
+     * @param io
+     *         data to load from (BOM must not be present)
+     * @param type
+     *         Class of the object to be created
+     *
+     * @return parsed object
+     */
+    public <T> T fromYaml(Reader io, Class<T> type)
+    {
+        return this.yaml().loadAs(io, type);
+    }
+
+    /**
+     * Parse the only YAML document in a String and produce the corresponding
+     * Java object. (Because the encoding in known BOM is not respected.)
+     *
+     * @param yaml
+     *         YAML data to load from (BOM must not be present)
+     * @param type
+     *         Class of the object to be created
+     *
+     * @return parsed object
+     */
+    public <T> T fromYaml(String yaml, Class<T> type)
+    {
+        return this.yaml().loadAs(yaml, type);
+    }
+
+    /**
+     * Parse the only YAML document in a stream and produce the corresponding
+     * Java object.
+     *
+     * @param input
+     *         data to load from (BOM is respected and removed)
+     * @param type
+     *         Class of the object to be created
+     *
+     * @return parsed object
+     */
+    public <T> T fromYaml(InputStream input, Class<T> type)
+    {
+        return this.yaml().loadAs(input, type);
+    }
+
+    /**
+     * Parse all YAML documents in a String and produce corresponding Java
+     * objects. The documents are parsed only when the iterator is invoked.
+     *
+     * @param yaml
+     *         YAML data to load from (BOM must not be present)
+     *
+     * @return an iterator over the parsed Java objects in this String in proper sequence
+     */
+    public Iterable<Object> fromAllYaml(Reader yaml)
+    {
+        return this.yaml().loadAll(yaml);
+    }
+
+    /**
+     * Parse all YAML documents in a String and produce corresponding Java
+     * objects. (Because the encoding in known BOM is not respected.) The
+     * documents are parsed only when the iterator is invoked.
+     *
+     * @param yaml
+     *         YAML data to load from (BOM must not be present)
+     *
+     * @return an iterator over the parsed Java objects in this String in proper sequence
+     */
+    public Iterable<Object> fromAllYaml(String yaml)
+    {
+        return this.yaml().loadAll(yaml);
+    }
+
+    /**
+     * Parse all YAML documents in a stream and produce corresponding Java
+     * objects. The documents are parsed only when the iterator is invoked.
+     *
+     * @param yaml
+     *         YAML data to load from (BOM is respected and ignored)
+     *
+     * @return an iterator over the parsed Java objects in this stream in proper sequence
+     */
+    public Iterable<Object> fromAllYaml(InputStream yaml)
+    {
+        return this.yaml().loadAll(yaml);
     }
 }

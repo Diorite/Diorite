@@ -22,50 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.config.serialization.snakeyaml;
 
-import java.util.function.Function;
+import org.yaml.snakeyaml.nodes.Node;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+final class RepresentBoolean extends RepresentGeneric<Boolean>
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
+    String trueValue  = Boolean.TRUE.toString();
+    String falseValue = Boolean.FALSE.toString();
 
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    RepresentBoolean(Representer representer)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        super(representer);
+    }
+
+    RepresentBoolean(Representer representer, String trueValue, String falseValue)
+    {
+        super(representer);
+        this.trueValue = trueValue;
+        this.falseValue = falseValue;
+    }
+
+    public String getTrueValue()
+    {
+        return this.trueValue;
+    }
+
+    public void setTrueValue(String trueValue)
+    {
+        this.trueValue = trueValue;
+    }
+
+    public String getFalseValue()
+    {
+        return this.falseValue;
+    }
+
+    public void setFalseValue(String falseValue)
+    {
+        this.falseValue = falseValue;
     }
 
     @Override
-    public Class<? super T> getType()
+    public Node represent(Boolean data)
     {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
+        return this.representBoolean(data, this.trueValue, this.falseValue);
     }
 }

@@ -31,7 +31,7 @@ import java.lang.invoke.MethodHandle;
 /**
  * Classes implementing this interface can set given object in other given object.
  */
-public interface ReflectSetter<E>
+public interface ReflectSetter<E> extends ReflectElement
 {
     /**
      * Set value in given object.
@@ -42,6 +42,27 @@ public interface ReflectSetter<E>
      *         new value.
      */
     void set(@Nullable Object src, @Nullable Object obj);
+
+    @Nullable
+    @Override
+    default Object invokeWith(Object... args) throws IllegalArgumentException
+    {
+        if (this.isStatic())
+        {
+            if (args.length == 1)
+            {
+                this.set(null, args[0]);
+                return null;
+            }
+            throw new IllegalArgumentException("Expected single parameter.");
+        }
+        if (args.length == 2)
+        {
+            this.set(args[0], args[1]);
+            return null;
+        }
+        throw new IllegalArgumentException("Expected object instance and one parameter.");
+    }
 
     /**
      * Returns {@link MethodHandle} for this setter method.

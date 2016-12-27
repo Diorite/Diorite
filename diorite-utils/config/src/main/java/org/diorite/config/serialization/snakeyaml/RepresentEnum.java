@@ -22,50 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization;
+package org.diorite.config.serialization.snakeyaml;
 
-import java.util.function.Function;
+import org.yaml.snakeyaml.nodes.Node;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+final class RepresentEnum extends RepresentGeneric<Enum<?>>
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
-
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    RepresentEnum(Representer representer)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        super(representer);
     }
 
     @Override
-    public Class<? super T> getType()
+    public Node represent(Enum<?> data)
     {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
+        return this.representEnum(data);
     }
 }

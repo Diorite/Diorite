@@ -32,7 +32,7 @@ import java.lang.reflect.Type;
 /**
  * Classes implementing this interface can get something from given object.
  */
-public interface ReflectGetter<E>
+public interface ReflectGetter<E> extends ReflectElement
 {
     /**
      * Get value from given object.
@@ -44,6 +44,25 @@ public interface ReflectGetter<E>
      */
     @Nullable
     E get(@Nullable Object src);
+
+    @Nullable
+    @Override
+    default Object invokeWith(Object... args) throws IllegalArgumentException
+    {
+        if (this.isStatic())
+        {
+            if (args.length == 0)
+            {
+                return this.get(null);
+            }
+            throw new IllegalArgumentException("Expected no parameters.");
+        }
+        if (args.length == 1)
+        {
+            return this.get(args[0]);
+        }
+        throw new IllegalArgumentException("Expected single parameter.");
+    }
 
     /**
      * @return generic type.

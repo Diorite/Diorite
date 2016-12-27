@@ -24,48 +24,31 @@
 
 package org.diorite.config.serialization;
 
-import java.util.function.Function;
+import java.io.IOException;
 
-class SimpleStringSerializer<T> implements StringSerializer<T>
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+class JsonStringSerializerImpl<T> extends TypeAdapter<T>
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
+    private final StringSerializer<T> stringSerializer;
 
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    JsonStringSerializerImpl(StringSerializer<T> stringSerializer)
     {
-        this.type = type;
-        this.deserializer = deserializer;
-        this.serializer = serializer;
+        this.stringSerializer = stringSerializer;
+    }
+
+    @SuppressWarnings("resource")
+    @Override
+    public void write(JsonWriter jsonWriter, T t) throws IOException
+    {
+        jsonWriter.jsonValue(this.stringSerializer.serialize(t));
     }
 
     @Override
-    public Class<? super T> getType()
+    public T read(JsonReader jsonReader) throws IOException
     {
-        return this.type;
-    }
-
-    @Override
-    public Function<String, T> deserializerFunction()
-    {
-        return this.deserializer;
-    }
-
-    @Override
-    public Function<T, String> serializerFunction()
-    {
-        return this.serializer;
-    }
-
-    @Override
-    public T deserialize(String data)
-    {
-        return this.deserializer.apply(data);
-    }
-
-    @Override
-    public String serialize(T data)
-    {
-        return this.serializer.apply(data);
+        return this.stringSerializer.deserialize(jsonReader.nextString());
     }
 }
