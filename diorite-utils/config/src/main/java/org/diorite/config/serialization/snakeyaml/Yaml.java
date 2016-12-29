@@ -194,12 +194,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.composer.Composer;
 import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.emitter.Emitter;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.events.Event;
 import org.yaml.snakeyaml.introspector.BeanAccess;
@@ -213,6 +211,7 @@ import org.yaml.snakeyaml.resolver.Resolver;
 import org.yaml.snakeyaml.serializer.Serializer;
 
 import org.diorite.commons.DioriteThreadUtils;
+import org.diorite.config.serialization.snakeyaml.emitter.Emitter;
 
 /**
  * Public YAML interface. Each Thread must have its own instance.
@@ -422,8 +421,7 @@ public class Yaml
 
     private void dumpAll(Iterator<?> data, Writer output, @Nullable Tag rootTag)
     {
-        Serializer serializer = new Serializer(new Emitter(output, this.dumperOptions), this.resolver,
-                                               this.dumperOptions, rootTag);
+        Serializer serializer = new Serializer(new Emitter(output, this.dumperOptions), this.resolver, this.dumperOptions, rootTag);
         try
         {
             serializer.open();

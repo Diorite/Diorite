@@ -430,9 +430,13 @@ import it.unimi.dsi.fastutil.shorts.ShortSet;
 import it.unimi.dsi.fastutil.shorts.ShortSortedSet;
 import it.unimi.dsi.fastutil.shorts.ShortStack;
 
-public class YamlCollectionCreator
+final class YamlCollectionCreator
 {
     private static final Map<Class<?>, IntFunction<?>> collectionCreators = new ConcurrentHashMap<>(20);
+
+    private YamlCollectionCreator()
+    {
+    }
 
     static
     {

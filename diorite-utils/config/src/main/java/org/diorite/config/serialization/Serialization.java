@@ -60,7 +60,6 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
@@ -72,6 +71,7 @@ import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.commons.reflections.ReflectMethod;
 import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.annotations.StringSerializable;
+import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.Yaml;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor;

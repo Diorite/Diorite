@@ -56,7 +56,7 @@ public class SerializationTest
         {
             BeanObject beanObject = new BeanObject();
             beanObject.setIntProperty(53);
-            beanObject.setStringProperty("some str\nnew line\n  more lines\n    lel\nend.");
+            beanObject.setStringProperty("some str\nnew line");
             LinkedHashMap<int[], int[]> map = new LinkedHashMap<>(3);
             map.put(new int[]{1, 2, 3}, new int[]{11, 12, 13});
             map.put(new int[]{4, 5, 6}, new int[]{14, 15, 16});
