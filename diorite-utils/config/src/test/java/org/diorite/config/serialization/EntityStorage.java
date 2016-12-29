@@ -41,14 +41,14 @@ public class EntityStorage implements Serializable
 
     public EntityStorage(DeserializationData data)
     {
-        data.getAsCollection("", EntityData.class, this.entityData);
+        data.getAsCollection("entities", EntityData.class, this.entityData);
         this.beanObject = data.getOrThrow("beanObject", BeanObject.class);
     }
 
     @Override
     public void serialize(SerializationData data)
     {
-        data.addCollection("", this.entityData, EntityData.class);
+        data.addCollection("entities", this.entityData, EntityData.class);
         data.add("beanObject", this.beanObject);
     }
 

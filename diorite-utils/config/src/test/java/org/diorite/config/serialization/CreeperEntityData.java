@@ -24,6 +24,8 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
+
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,9 +34,9 @@ public class CreeperEntityData extends AbstractEntityData
 {
     boolean powered;
 
-    protected CreeperEntityData(String name, int age, boolean special, boolean powered)
+    protected CreeperEntityData(String name, int age, boolean special, boolean powered, @Nullable String displayName)
     {
-        super(EntityType.CREEPER, name, age, special);
+        super(EntityType.CREEPER, name, age, special, displayName);
         this.powered = powered;
     }
 

@@ -131,6 +131,14 @@ public final class DioriteRandomUtils
         return getRandomFloat(getRandom(), min, max);
     }
 
+    /**
+     * Get random boolean with given chance for true, chance is in %, 100.0 = 100%
+     *
+     * @param chance
+     *         chance in %.
+     *
+     * @return true or false.
+     */
     public static boolean getChance(double chance)
     {
         return getChance(getRandom(), chance);
@@ -282,6 +290,16 @@ public final class DioriteRandomUtils
         return (random.nextFloat() * (max - min)) + min;
     }
 
+    /**
+     * Get random boolean with given chance for true, chance is in %, 100.0 = 100%
+     *
+     * @param random
+     *         random instance to use.
+     * @param chance
+     *         chance in %.
+     *
+     * @return true or false.
+     */
     public static boolean getChance(Random random, double chance)
     {
         return (chance > 0) && ((chance >= 100) || (chance >= getRandomDouble(random, 0, 100)));

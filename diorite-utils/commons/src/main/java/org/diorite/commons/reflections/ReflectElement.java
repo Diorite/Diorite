@@ -50,6 +50,13 @@ public interface ReflectElement
     Object invokeWith(Object... args) throws IllegalArgumentException;
 
     /**
+     * Returns name of given element.
+     *
+     * @return name of given element.
+     */
+    String getName();
+
+    /**
      * Returns modifiers of element.
      *
      * @return modifiers of element.

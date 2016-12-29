@@ -122,6 +122,55 @@ public class ReflectedProperty<E> implements ReflectGetter<E>, ReflectSetter<E>
     }
 
     @Override
+    public String getName()
+    {
+        if (this.getter instanceof FieldAccessor)
+        {
+            return this.getter.getName();
+        }
+        if (this.setter instanceof FieldAccessor)
+        {
+            return this.setter.getName();
+        }
+        String baseName = null;
+        if (this.getter != null)
+        {
+            baseName = this.getter.getName();
+            if (baseName.startsWith("get"))
+            {
+                char first = baseName.charAt(3);
+                baseName.substring(4);
+                return Character.toLowerCase(first) + baseName;
+            }
+            if (baseName.startsWith("is"))
+            {
+                char first = baseName.charAt(2);
+                baseName.substring(3);
+                return Character.toLowerCase(first) + baseName;
+            }
+            if (baseName.startsWith("has"))
+            {
+                char first = baseName.charAt(3);
+                baseName.substring(4);
+                return Character.toLowerCase(first) + baseName;
+            }
+            return baseName;
+        }
+        if (this.setter != null)
+        {
+            baseName = this.setter.getName();
+            if (baseName.startsWith("set"))
+            {
+                char first = baseName.charAt(3);
+                baseName.substring(4);
+                return Character.toLowerCase(first) + baseName;
+            }
+            return baseName;
+        }
+        throw new IllegalStateException("Both setter and getter is null.");
+    }
+
+    @Override
     public void set(@Nullable Object src, @Nullable Object obj)
     {
         if (this.setter == null)

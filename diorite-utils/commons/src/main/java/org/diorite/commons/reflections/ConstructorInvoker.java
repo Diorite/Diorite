@@ -82,6 +82,12 @@ public class ConstructorInvoker<T> implements ReflectMethod
         }
     }
 
+    @Override
+    public String getName()
+    {
+        return this.constructor.getName();
+    }
+
     /**
      * @return wrapped constructor.
      */
@@ -114,7 +120,7 @@ public class ConstructorInvoker<T> implements ReflectMethod
     @Override
     public void ensureAccessible()
     {
-        this.constructor.setAccessible(true);
+        DioriteReflectionUtils.getAccess(this.constructor);
     }
 
     @Override

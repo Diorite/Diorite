@@ -305,7 +305,44 @@ public class Representer extends BaseRepresenter
     @Override
     public Node representMapping(Tag tag, Map<?, ?> mapping, @Nullable Boolean flowStyle)
     {
-        return super.representMapping(tag, mapping, flowStyle);
+        List<NodeTuple> value = new ArrayList<>(mapping.size());
+        MappingNode node = new MappingNode(tag, value, flowStyle);
+        this.representedObjects.put(this.objectToRepresent, node);
+        boolean bestStyle = true;
+        for (Map.Entry<?, ?> entry : mapping.entrySet())
+        {
+            Node nodeKey = this.representData(entry.getKey());
+            Node nodeValue;
+            if (entry.getValue() != null)
+            {
+                nodeValue = this.representData(entry.getValue());
+            }
+            else
+            {
+                nodeValue = this.representScalar(Tag.NULL, "~");
+            }
+            if (! ((nodeKey instanceof ScalarNode) && (((ScalarNode) nodeKey).getStyle() == null)))
+            {
+                bestStyle = false;
+            }
+            if (! ((nodeValue instanceof ScalarNode) && (((ScalarNode) nodeValue).getStyle() == null)))
+            {
+                bestStyle = false;
+            }
+            value.add(new NodeTuple(nodeKey, nodeValue));
+        }
+        if (flowStyle == null)
+        {
+            if (this.defaultFlowStyle != FlowStyle.AUTO)
+            {
+                node.setFlowStyle(this.defaultFlowStyle.getStyleBoolean());
+            }
+            else
+            {
+                node.setFlowStyle(bestStyle);
+            }
+        }
+        return node;
     }
 
     @Nullable

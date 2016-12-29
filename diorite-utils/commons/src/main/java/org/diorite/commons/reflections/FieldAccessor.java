@@ -30,6 +30,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 import org.diorite.commons.DioriteUtils;
@@ -73,6 +74,12 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
         {
             throw DioriteUtils.sneakyThrow(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<T> getType()
+    {
+        return (Class<T>) field.getType();
     }
 
     @Override
@@ -128,15 +135,42 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
     }
 
     @Override
+    public String getName()
+    {
+        return this.field.getName();
+    }
+
+    @Override
     public int getModifiers()
     {
         return this.field.getModifiers();
     }
 
+    public boolean makeNonFinal()
+    {
+        if (! this.isFinal())
+        {
+            return true;
+        }
+        try
+        {
+            this.ensureAccessible();
+            FieldAccessor<?> modifiersField = DioriteReflectionUtils.getField(Field.class, "modifiers");
+            modifiersField.ensureAccessible();
+            modifiersField.set(this.field, this.field.getModifiers() & ~ Modifier.FINAL);
+            return true;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public void ensureAccessible()
     {
-        this.field.setAccessible(true);
+        DioriteReflectionUtils.getAccess(this.field);
     }
 
     /**

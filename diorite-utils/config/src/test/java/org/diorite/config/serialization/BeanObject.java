@@ -31,8 +31,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class BeanObject
 {
-    private int intProperty;
-    private String stringProperty;
+    private int               intProperty;
+    private String            stringProperty;
     private Map<int[], int[]> intMap;
 
     public int getIntProperty()
@@ -77,9 +77,9 @@ public class BeanObject
             return false;
         }
         BeanObject that = (BeanObject) object;
-        return this.intProperty == that.intProperty &&
-               Objects.equals(this.stringProperty, that.stringProperty) &&
-               Objects.equals(this.intMap.toString(), that.intMap.toString());
+        return (this.intProperty == that.intProperty) &&
+               Objects.equals(this.stringProperty, that.stringProperty) && Objects.deepEquals(this.intMap.keySet().toArray(), that.intMap.keySet().toArray())
+               && Objects.deepEquals(this.intMap.values().toArray(), that.intMap.values().toArray());
     }
 
     @Override

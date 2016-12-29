@@ -44,24 +44,24 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
-import org.yaml.snakeyaml.constructor.Construct;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
@@ -85,13 +85,14 @@ public final class Serialization
     private static final Serialization GLOBAL = new Serialization((Void) null);
 
     // gson section
-    final   GsonBuilder       gsonBuilder = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues();
-    private ThreadLocal<Gson> cachedGson  = ThreadLocal.withInitial(this.gsonBuilder::create);
+    private final GsonBuilder       gsonBuilder =
+            new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().enableComplexMapKeySerialization();
+    private       ThreadLocal<Gson> cachedGson  = ThreadLocal.withInitial(this.gsonBuilder::create);
 
     // yaml section
+    private Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
     private Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
     private Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
-    private Map<Class<?>, Supplier<Construct>>                                                constructs         = new ConcurrentHashMap<>(10);
     private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
     private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
 
@@ -101,6 +102,10 @@ public final class Serialization
         YamlConstructor constructor = new YamlConstructor();
 
         // register types
+        for (Class<?> ignoredClass : this.yamlIgnoredClasses)
+        {
+            representer.addClassTag(ignoredClass, Tag.MAP);
+        }
         for (BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>> serializerCreator : this.stringRepresenters)
         {
             YamlStringSerializerImpl<?> yamlSerializer = serializerCreator.apply(constructor, representer);
@@ -194,6 +199,23 @@ public final class Serialization
     {
         this.cachedGson = ThreadLocal.withInitial(this.gsonBuilder::create);
         this.cachedYaml = ThreadLocal.withInitial(this::createYaml);
+    }
+
+    /**
+     * Remove all cached values.
+     */
+    public void cleanup()
+    {
+        this.refreshCache();
+    }
+
+    /**
+     * Remove cached values for current thread.
+     */
+    public void cleanupThread()
+    {
+        this.cachedGson.remove();
+        this.cachedYaml.remove();
     }
 
     private Serialization(@Nullable Void v)
@@ -337,6 +359,24 @@ public final class Serialization
         return this.serializerMap.containsKey(clazz);
     }
 
+    private final Set<Class<?>> canBeSerializedChecked = new ConcurrentSkipListSet<>();
+
+    boolean canBeSerialized(Class<?> clazz)
+    {
+        try
+        {
+            TypeAdapter<?> adapter = this.gson().getAdapter(clazz);
+            this.yamlIgnoredClasses.add(clazz);
+            return adapter != null;
+        }
+        catch (Exception e)
+        {
+            // print error but still return false to caller.
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Serialize given object to simple string.
      *
@@ -408,24 +448,18 @@ public final class Serialization
         return ((StringSerializer<Object>) this.stringSerializerMap.get(object.getClass())).serialize(object);
     }
 
-    @SuppressWarnings("unchecked")
-    Object serialize(Object object)
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    Object serialize(Object object, SerializationType serializationType)
     {
         if (isSimple(object))
         {
             return object;
         }
-        if (! this.isSerializable(object))
-        {
-            throw new IllegalArgumentException("Given object isn't serializable: " + object);
-        }
-        SimpleSerializationData serializationData = (SimpleSerializationData) SerializationData.create(this, object.getClass());
-        ((Serializer<Object>) this.serializerMap.get(object.getClass())).serialize(object, serializationData);
-        return serializationData.rawValue();
+        return this.serialize((Class) object.getClass(), object, serializationType);
     }
 
     @SuppressWarnings("unchecked")
-    <T> Object serialize(Class<T> type, T object)
+    <T> Object serialize(Class<T> type, T object, SerializationType serializationType)
     {
         if (isSimple(object))
         {
@@ -433,9 +467,21 @@ public final class Serialization
         }
         if (! this.isSerializable(type))
         {
+            if (this.canBeSerialized(type))
+            {
+                if (serializationType == SerializationType.YAML)
+                {
+                    return this.fromYaml(this.toYamlAsMap(object), Map.class);
+                }
+                else
+                {
+                    TypeAdapter<T> typeAdapter = this.gson().getAdapter(type);
+                    return this.fromJson(typeAdapter.toJsonTree(object), Map.class);
+                }
+            }
             throw new IllegalArgumentException("Given object isn't serializable: (" + type.getName() + ") -> " + object);
         }
-        SimpleSerializationData serializationData = (SimpleSerializationData) SerializationData.create(this, type);
+        SimpleSerializationData serializationData = (SimpleSerializationData) SerializationData.create(serializationType, this, type);
         ((Serializer<T>) this.serializerMap.get(type)).serialize(object, serializationData);
         return serializationData.rawValue();
     }
@@ -496,7 +542,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(String.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: 9046392 // FIXME
+                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
                         deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
                     }
                     else
@@ -655,7 +701,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(DeserializationData.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: 9046392 // FIXME
+                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
                         deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
                     }
                     else

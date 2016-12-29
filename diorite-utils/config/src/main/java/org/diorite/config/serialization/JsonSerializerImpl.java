@@ -67,7 +67,8 @@ class JsonSerializerImpl<T> implements JsonSerializer<T>, JsonDeserializer<T>
     {
         try
         {
-            SimpleSerializationData data = (SimpleSerializationData) SerializationData.create(this.serialization, this.serializer.getType());
+            SimpleSerializationData data =
+                    (SimpleSerializationData) SerializationData.create(SerializationType.JSON, this.serialization, this.serializer.getType());
             this.serializer.serialize(t, data);
             return jsonSerializationContext.serialize(data.rawValue());
         }

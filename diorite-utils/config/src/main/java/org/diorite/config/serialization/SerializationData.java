@@ -39,6 +39,13 @@ public interface SerializationData
     String DEFAULT_KEY_PROPERTY = "_key";
 
     /**
+     * Returns type of serializer data.
+     *
+     * @return type of serializer data.
+     */
+    SerializationType getSerializationType();
+
+    /**
      * Change how {@link Boolean#TRUE} value is saved to config. <br/>
      * Note that this value must be supported by serializer.
      *
@@ -167,6 +174,11 @@ public interface SerializationData
         if ((value instanceof Float) || (value instanceof Double))
         {
             throw new IllegalArgumentException("Can't use padding for float or double!");
+        }
+        if (this.getSerializationType() == SerializationType.YAML) // yaml reads padded value as octal, so we need escape it
+        {
+            this.add(key, String.format("%0" + padding + "d", value), String.class);
+            return;
         }
         this.add(key, String.format("%0" + padding + "d", value));
     }
@@ -351,13 +363,17 @@ public interface SerializationData
     /**
      * Create serialization data instance for given manager.
      *
+     * @param serializationType
+     *         type of serialization.
      * @param serialization
      *         serialization manager to use.
+     * @param type
+     *         type of object to serialize.
      *
      * @return created serialization data instance.
      */
-    static SerializationData create(Serialization serialization, Class<?> type)
+    static SerializationData create(SerializationType serializationType, Serialization serialization, Class<?> type)
     {
-        return new SimpleSerializationData(serialization, type);
+        return new SimpleSerializationData(serializationType, serialization, type);
     }
 }

@@ -24,6 +24,8 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
+
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,9 +34,9 @@ public class SheepEntityData extends AbstractEntityData
 {
     byte color;
 
-    protected SheepEntityData(String name, int age, boolean special, int color)
+    protected SheepEntityData(String name, int age, boolean special, int color, @Nullable String displayName)
     {
-        super(EntityType.SHEEP, name, age, special);
+        super(EntityType.SHEEP, name, age, special, displayName);
         this.color = (byte) color;
     }
 

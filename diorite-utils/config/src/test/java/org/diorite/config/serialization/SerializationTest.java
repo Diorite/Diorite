@@ -24,7 +24,7 @@
 
 package org.diorite.config.serialization;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -47,20 +47,6 @@ public class SerializationTest
         global.registerStringSerializable(MetaValue.class);
         global.registerSerializable(EntityStorage.class);
         global.registerSerializable(AbstractEntityData.class);
-//        global.registerSerializer(Serializer.of(EntityData.class, Serializable::serialize, data ->
-//        {
-//            EntityType type = data.getOrThrow("type", EntityType.class);
-//            switch (type)
-//            {
-//                case CREEPER:
-//                    return new CreeperEntityData(data);
-//                case SHEEP:
-//                    return new SheepEntityData(data);
-//                default:
-//                    throw new AssertionError();
-//            }
-//        }));
-
         return global;
     }
 
@@ -71,12 +57,15 @@ public class SerializationTest
             BeanObject beanObject = new BeanObject();
             beanObject.setIntProperty(53);
             beanObject.setStringProperty("some str\nnew line\n  more lines\n    lel\nend.");
-            beanObject.setIntMap(
-                    Map.of(new int[]{1, 2, 3}, new int[]{11, 12, 13}, new int[]{4, 5, 6}, new int[]{14, 15, 16}, new int[]{7, 8, 9}, new int[]{17, 18, 19}));
+            LinkedHashMap<int[], int[]> map = new LinkedHashMap<>(3);
+            map.put(new int[]{1, 2, 3}, new int[]{11, 12, 13});
+            map.put(new int[]{4, 5, 6}, new int[]{14, 15, 16});
+            map.put(new int[]{7, 8, 9}, new int[]{17, 18, 19});
+            beanObject.setIntMap(map);
             entityStorage.beanObject = beanObject;
         }
         {
-            AbstractEntityData entity = new CreeperEntityData("creeperName", 12, false, true);
+            AbstractEntityData entity = new CreeperEntityData("creeperName", 12, false, true, null);
             entity.metaObjects.add(new MetaObject("someMeta", new MetaValue("yup", 21)));
             entity.metaObjects.add(new MetaObject("someMeta2", new MetaValue("yup", 54)));
             SomeProperties someProperties = new SomeProperties();
@@ -86,7 +75,7 @@ public class SerializationTest
             entityStorage.entityData.add(entity);
         }
         {
-            AbstractEntityData entity = new SheepEntityData("creeperName", 12, false, 3);
+            AbstractEntityData entity = new SheepEntityData("sheepName", 12, false, 3, null);
             entity.metaObjects.add(new MetaObject("someMeta", new MetaValue("yup", 21)));
             entity.metaObjects.add(new MetaObject("someMeta2", new MetaValue("yup", 54)));
             SomeProperties someProperties = new SomeProperties();
@@ -95,7 +84,7 @@ public class SerializationTest
             entityStorage.entityData.add(entity);
         }
         {
-            AbstractEntityData entity = new CreeperEntityData("creeperName", 12, false, true);
+            AbstractEntityData entity = new CreeperEntityData("creeperName", 12, false, true, null);
             entityStorage.entityData.add(entity);
         }
         return entityStorage;
@@ -108,13 +97,20 @@ public class SerializationTest
 
         EntityStorage entityStorage = this.prepareObject();
 
-        System.out.println("[JSON] Deserializing object: \n" + entityStorage + "\n");
+        System.out.println("[JSON] Deserializing javabean: \n");
+        {
+            String toJson = global.toJson(entityStorage.beanObject);
+            System.out.println(toJson);
+            Assert.assertEquals(entityStorage.beanObject, global.fromJson(toJson, BeanObject.class));
+        }
+
+        System.out.println("\n[JSON] Deserializing object: \n" + entityStorage + "\n");
         String toJson = global.toJson(entityStorage);
         System.out.println(toJson);
         System.out.println();
 
         EntityStorage storage = global.fromJson(toJson, EntityStorage.class);
-        System.out.println("[JSON] Deserialized object: \n" + storage);
+        System.out.println("\n[JSON] Deserialized object: \n" + storage);
         Assert.assertEquals(entityStorage.toString(), storage.toString());
         Assert.assertEquals(entityStorage, storage);
 
@@ -128,13 +124,20 @@ public class SerializationTest
 
         EntityStorage entityStorage = this.prepareObject();
 
-        System.out.println("[YAML] Deserializing object: \n" + entityStorage + "\n");
-        String toJson = global.toYaml(entityStorage);
-        System.out.println(toJson);
+        System.out.println("[YAML] Deserializing javabean: \n");
+        {
+            String toYaml = global.toYaml(entityStorage.beanObject);
+            System.out.println(toYaml);
+            Assert.assertEquals(entityStorage.beanObject, global.fromYaml(toYaml, BeanObject.class));
+        }
+
+        System.out.println("\n[YAML] Deserializing object: \n" + entityStorage + "\n");
+        String toYaml = global.toYaml(entityStorage);
+        System.out.println(toYaml);
         System.out.println();
 
-        EntityStorage storage = global.fromYaml(toJson, EntityStorage.class);
-        System.out.println("[YAML] Deserialized object: \n" + storage);
+        EntityStorage storage = global.fromYaml(toYaml, EntityStorage.class);
+        System.out.println("\n[YAML] Deserialized object: \n" + storage);
         Assert.assertEquals(entityStorage.toString(), storage.toString());
         Assert.assertEquals(entityStorage, storage);
 

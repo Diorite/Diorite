@@ -85,7 +85,8 @@ class YamlSerializerImpl<T> extends AbstractRepresent implements Construct
     {
         try
         {
-            SimpleSerializationData data = (SimpleSerializationData) SerializationData.create(this.serialization, this.serializer.getType());
+            SimpleSerializationData data =
+                    (SimpleSerializationData) SerializationData.create(SerializationType.YAML, this.serialization, this.serializer.getType());
             this.serializer.serialize((T) object, data);
             Object rawValue = data.rawValue();
             if (rawValue instanceof Map)

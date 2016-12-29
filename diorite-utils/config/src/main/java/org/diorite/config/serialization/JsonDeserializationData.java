@@ -55,6 +55,12 @@ class JsonDeserializationData extends AbstractDeserializationData
     }
 
     @Override
+    public SerializationType getSerializationType()
+    {
+        return SerializationType.JSON;
+    }
+
+    @Override
     public boolean containsKey(String key)
     {
         if (this.element.isJsonObject())

@@ -24,6 +24,7 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import java.util.ArrayList;
@@ -47,13 +48,16 @@ public abstract class AbstractEntityData implements EntityData
     Collection<MetaObject>     metaObjects          = new ArrayList<>();
     Map<UUID, MetaObject>      uuidMetaObjectMap    = new HashMap<>();
     Collection<SomeProperties> propertiesCollection = new ArrayList<>();
+    @Nullable
+    String displayName;
 
-    protected AbstractEntityData(EntityType type, String name, int age, boolean special)
+    protected AbstractEntityData(EntityType type, String name, int age, boolean special, @Nullable String displayName)
     {
         this.type = type;
         this.name = name;
         this.age = age;
         this.special = special;
+        this.displayName = displayName;
     }
 
     protected AbstractEntityData(DeserializationData data)
@@ -62,6 +66,7 @@ public abstract class AbstractEntityData implements EntityData
         this.name = data.getOrThrow("name", String.class);
         this.age = data.getAsInt("age");
         this.special = data.getOrThrow("special", Boolean.class);
+        this.displayName = data.get("displayName", String.class);
 
         data.getAsCollection("metaObjects", MetaObject.class, this.metaObjects);
         data.getAsMapWithKeys("uuidMetaObjectMap", UUID.class, MetaObject.class, "uuid", this.uuidMetaObjectMap);
@@ -90,6 +95,7 @@ public abstract class AbstractEntityData implements EntityData
         data.add("name", this.name);
         data.addNumber("age", this.age, 3);
         data.add("special", this.special);
+        data.add("displayName", this.displayName);
         data.addMappedList("metaObjects", MetaObject.class, this.metaObjects, o -> o.name);
         data.addMapAsListWithKeys("uuidMetaObjectMap", this.uuidMetaObjectMap, MetaObject.class, "uuid");
         data.addCollection("propertiesCollection", this.propertiesCollection, SomeProperties.class);

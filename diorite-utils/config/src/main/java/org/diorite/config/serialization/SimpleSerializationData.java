@@ -38,6 +38,8 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
 
 class SimpleSerializationData implements SerializationData
 {
+    private final SerializationType serializationType;
+
     private final Class<?>      type;
     private final Serialization serialization;
 
@@ -47,10 +49,27 @@ class SimpleSerializationData implements SerializationData
     private String trueValue  = "true";
     private String falseValue = "false";
 
-    SimpleSerializationData(Serialization serialization, Class<?> type)
+    SimpleSerializationData(SerializationType serializationType, Serialization serialization, Class<?> type)
     {
+        this.serializationType = serializationType;
         this.serialization = serialization;
         this.type = type;
+    }
+
+    @Override
+    public SerializationType getSerializationType()
+    {
+        return this.serializationType;
+    }
+
+    private <T> Object serialize(T object)
+    {
+        return this.serialization.serialize(object, this.serializationType);
+    }
+
+    private <T> Object serialize(Class<T> type, T object)
+    {
+        return this.serialization.serialize(type, object, this.serializationType);
     }
 
     private void validateList(String key)
@@ -132,14 +151,19 @@ class SimpleSerializationData implements SerializationData
         }
         if (! this.serialization.isSerializable(value))
         {
-            if (! this.serialization.isStringSerializable(value))
+            if (this.serialization.isStringSerializable(value))
             {
-                throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: " + value);
+                this.dataMap.put(key, this.serialization.serializeToString(value));
+                return;
             }
-            this.dataMap.put(key, this.serialization.serializeToString(value));
-            return;
+            if (this.serialization.canBeSerialized(value.getClass()))
+            {
+                this.dataMap.put(key, this.serialize(value));
+                return;
+            }
+            throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: " + value);
         }
-        this.dataMap.put(key, this.serialization.serialize(value));
+        this.dataMap.put(key, this.serialize(value));
     }
 
     @Override
@@ -158,14 +182,19 @@ class SimpleSerializationData implements SerializationData
         }
         if (! this.serialization.isSerializable(type))
         {
-            if (! this.serialization.isStringSerializable(type))
+            if (this.serialization.isStringSerializable(type))
             {
-                throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: (" + type.getName() + ") -> " + value);
+                this.dataMap.put(key, this.serialization.serializeToString(type, value));
+                return;
             }
-            this.dataMap.put(key, this.serialization.serializeToString(type, value));
-            return;
+            if (this.serialization.canBeSerialized(value.getClass()))
+            {
+                this.dataMap.put(key, this.serialize(type, value));
+                return;
+            }
+            throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: (" + type.getName() + ") -> " + value);
         }
-        this.dataMap.put(key, this.serialization.serialize(type, value));
+        this.dataMap.put(key, this.serialize(type, value));
     }
 
     @Override
@@ -180,7 +209,7 @@ class SimpleSerializationData implements SerializationData
                 valueMap.put(key, this.toString(t, type));
                 continue;
             }
-            valueMap.put(mapper.apply(t), this.serialization.serialize(type, t));
+            valueMap.put(mapper.apply(t), this.serialize(type, t));
         }
         this.dataMap.put(key, valueMap);
     }
@@ -205,7 +234,7 @@ class SimpleSerializationData implements SerializationData
                 result.add(this.toString(t, type));
                 continue;
             }
-            result.add(this.serialization.serialize(type, t));
+            result.add(this.serialize(type, t));
         }
         if (! key.isEmpty())
         {
@@ -233,7 +262,7 @@ class SimpleSerializationData implements SerializationData
                 result.add(this.toString(entry.getValue(), type));
                 continue;
             }
-            result.add(this.serialization.serialize(type, entry.getValue()));
+            result.add(this.serialize(type, entry.getValue()));
         }
         if (! key.isEmpty())
         {
@@ -257,7 +286,7 @@ class SimpleSerializationData implements SerializationData
         }
         for (Entry<?, ? extends T> entry : value.entrySet())
         {
-            Object o = this.serialization.serialize(type, entry.getValue());
+            Object o = this.serialize(type, entry.getValue());
             if (o instanceof Map)
             {
                 Object entryKey = entry.getKey();
@@ -312,10 +341,10 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entry.getValue(), type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialization.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialization.serialize(type, entry.getValue()));
+            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialize(type, entry.getValue()));
         }
         if (! key.isEmpty())
         {
@@ -346,10 +375,10 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entry.getValue(), type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialization.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(entryKey), this.serialization.serialize(type, entry.getValue()));
+            resultMap.put(this.serialization.serializeToString(entryKey), this.serialize(type, entry.getValue()));
         }
         if (! key.isEmpty())
         {
@@ -380,10 +409,10 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entry.getValue(), type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialization.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
                 continue;
             }
-            resultMap.put(keyMapper.apply(entryKey), this.serialization.serialize(type, entry.getValue()));
+            resultMap.put(keyMapper.apply(entryKey), this.serialize(type, entry.getValue()));
         }
         if (! key.isEmpty())
         {

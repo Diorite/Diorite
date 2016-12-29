@@ -123,6 +123,12 @@ public class MethodInvoker implements ReflectMethod
     }
 
     @Override
+    public String getName()
+    {
+        return this.method.getName();
+    }
+
+    @Override
     public int getModifiers()
     {
         return this.method.getModifiers();
@@ -131,7 +137,7 @@ public class MethodInvoker implements ReflectMethod
     @Override
     public void ensureAccessible()
     {
-        this.method.setAccessible(true);
+        DioriteReflectionUtils.getAccess(this.method);
     }
 
     @Override

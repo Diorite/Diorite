@@ -67,6 +67,12 @@ class YamlDeserializationData extends AbstractDeserializationData
     }
 
     @Override
+    public SerializationType getSerializationType()
+    {
+        return SerializationType.YAML;
+    }
+
+    @Override
     public boolean containsKey(String key)
     {
         if (this.node instanceof MappingNode)
@@ -92,9 +98,9 @@ class YamlDeserializationData extends AbstractDeserializationData
         {
             return node;
         }
-        if (this.node instanceof SequenceNode)
+        if (node instanceof SequenceNode)
         {
-            SequenceNode sequenceNode = (SequenceNode) this.node;
+            SequenceNode sequenceNode = (SequenceNode) node;
             List<Node> sequenceNodeValue = sequenceNode.getValue();
             int i = DioriteMathUtils.asInt(key, - 1);
             if ((i == - 1) || (i < sequenceNodeValue.size()))
@@ -103,9 +109,9 @@ class YamlDeserializationData extends AbstractDeserializationData
             }
             return sequenceNodeValue.get(i);
         }
-        if (this.node instanceof MappingNode)
+        if (node instanceof MappingNode)
         {
-            return this.getNode((MappingNode) this.node, key);
+            return this.getNode((MappingNode) node, key);
         }
         return null;
     }
@@ -129,11 +135,11 @@ class YamlDeserializationData extends AbstractDeserializationData
             }
             if (key.equals(((ScalarNode) keyNode).getValue()))
             {
+                if (remove)
+                {
+                    iterator.remove();
+                }
                 return tuple.getValueNode();
-            }
-            if (remove)
-            {
-                iterator.remove();
             }
         }
         return null;
@@ -163,6 +169,31 @@ class YamlDeserializationData extends AbstractDeserializationData
             }
             return (T) valueSafe;
         }
+        if (Number.class.isAssignableFrom(DioriteReflectionUtils.getWrapperClass(type)))
+        {
+            Class<?> numType = DioriteReflectionUtils.getWrapperClass(type);
+            if ((numType == Byte.class) || (numType == Short.class) || (numType == Integer.class) || (numType == Long.class))
+            {
+                node.setTag(new Tag(String.class));
+                String deserialize = this.constructor.constructObject(node).toString();
+                if (numType == Byte.class)
+                {
+                    return (T) (Byte) Byte.parseByte(deserialize);
+                }
+                else if (numType == Short.class)
+                {
+                    return (T) (Short) Short.parseShort(deserialize);
+                }
+                else if (numType == Integer.class)
+                {
+                    return (T) (Integer) Integer.parseInt(deserialize);
+                }
+                else if (numType == Long.class)
+                {
+                    return (T) (Long) Long.parseLong(deserialize);
+                }
+            }
+        }
         node.setTag(new Tag(type));
         return (T) this.constructor.constructObject(node);
     }
@@ -172,18 +203,12 @@ class YamlDeserializationData extends AbstractDeserializationData
     {
         try
         {
-            if (DioriteReflectionUtils.getWrapperClass(type).equals(Boolean.class))
+            T deserializeSpecial = this.deserializeSpecial(type, node, null);
+            if (deserializeSpecial == null)
             {
-                node.setTag(Tag.STR);
-                T t = (T) this.toBool(this.constructor.constructObject(node).toString());
-                if (t == null)
-                {
-                    throw new DeserializationException(this.type, this, "Can't deserialize boolean value: (" + type.getName() + ") -> " + node);
-                }
-                return t;
+                throw new DeserializationException(this.type, this, "Can't deserialize boolean value: (" + type.getName() + ") -> " + node);
             }
-            node.setTag(new Tag(type));
-            return (T) this.constructor.constructObject(node);
+            return deserializeSpecial;
         }
         catch (DeserializationException e)
         {
@@ -216,17 +241,17 @@ class YamlDeserializationData extends AbstractDeserializationData
         {
             throw new DeserializationException(type, this, "Can't find valid value for key: " + key);
         }
-        if (this.node instanceof SequenceNode)
+        if (node instanceof SequenceNode)
         {
-            SequenceNode sequenceNode = (SequenceNode) this.node;
+            SequenceNode sequenceNode = (SequenceNode) node;
             for (Node nodeValue : sequenceNode.getValue())
             {
                 collection.add(this.deserializeSpecial(type, nodeValue, null));
             }
         }
-        else if (this.node instanceof MappingNode)
+        else if (node instanceof MappingNode)
         {
-            MappingNode mappingNode = (MappingNode) this.node;
+            MappingNode mappingNode = (MappingNode) node;
             for (NodeTuple tuple : mappingNode.getValue())
             {
                 collection.add(this.deserializeSpecial(type, tuple.getValueNode(), null));
@@ -248,9 +273,9 @@ class YamlDeserializationData extends AbstractDeserializationData
             throw new DeserializationException(type, this, "Can't find valid value for key: " + key);
         }
         Tag tag = new Tag(type);
-        if (this.node instanceof SequenceNode)
+        if (node instanceof SequenceNode)
         {
-            SequenceNode sequenceNode = (SequenceNode) this.node;
+            SequenceNode sequenceNode = (SequenceNode) node;
             for (Node nodeValue : sequenceNode.getValue())
             {
                 nodeValue.setTag(tag);
@@ -258,9 +283,9 @@ class YamlDeserializationData extends AbstractDeserializationData
                 map.put(keyMapper.apply(deserialize), deserialize);
             }
         }
-        else if (this.node instanceof MappingNode)
+        else if (node instanceof MappingNode)
         {
-            MappingNode mappingNode = (MappingNode) this.node;
+            MappingNode mappingNode = (MappingNode) node;
             for (NodeTuple tuple : mappingNode.getValue())
             {
                 Node valueNode = tuple.getValueNode();

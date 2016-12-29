@@ -43,6 +43,13 @@ import java.util.function.Function;
 public interface DeserializationData
 {
     /**
+     * Returns type of serializer data.
+     *
+     * @return type of serializer data.
+     */
+    SerializationType getSerializationType();
+
+    /**
      * Returns serialization object that started serialization.
      *
      * @return serialization object that started serialization.
