@@ -256,6 +256,7 @@ public class Representer extends BaseRepresenter
     public void addRepresenter(Class<?> type, Represent represent)
     {
         this.representers.put(type, represent);
+        this.multiRepresenters.put(type, represent);
     }
 
     public Tag getTag(Class<?> clazz, Tag defaultTag)

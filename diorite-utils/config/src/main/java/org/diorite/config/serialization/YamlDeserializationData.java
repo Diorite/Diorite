@@ -194,7 +194,10 @@ class YamlDeserializationData extends AbstractDeserializationData
                 }
             }
         }
-        node.setTag(new Tag(type));
+        if (type != Object.class)
+        {
+            node.setTag(new Tag(type));
+        }
         return (T) this.constructor.constructObject(node);
     }
 
@@ -278,7 +281,10 @@ class YamlDeserializationData extends AbstractDeserializationData
             SequenceNode sequenceNode = (SequenceNode) node;
             for (Node nodeValue : sequenceNode.getValue())
             {
-                nodeValue.setTag(tag);
+                if (type != Object.class)
+                {
+                    nodeValue.setTag(tag);
+                }
                 T deserialize = (T) this.constructor.constructObject(nodeValue);
                 map.put(keyMapper.apply(deserialize), deserialize);
             }
@@ -289,7 +295,10 @@ class YamlDeserializationData extends AbstractDeserializationData
             for (NodeTuple tuple : mappingNode.getValue())
             {
                 Node valueNode = tuple.getValueNode();
-                valueNode.setTag(tag);
+                if (type != Object.class)
+                {
+                    valueNode.setTag(tag);
+                }
                 T deserialize = (T) this.constructor.constructObject(valueNode);
                 map.put(keyMapper.apply(deserialize), deserialize);
             }
@@ -327,8 +336,14 @@ class YamlDeserializationData extends AbstractDeserializationData
                     throw new DeserializationException(type, this, "Missing property '" + keyPropertyName + "' in " + mappingNode + ". Key: " + key);
                 }
 
-                mappingNode.setTag(typeTag);
-                propKeyNode.setTag(keyTag);
+                if (type != Object.class)
+                {
+                    mappingNode.setTag(typeTag);
+                }
+                if (keyType != Object.class)
+                {
+                    propKeyNode.setTag(keyTag);
+                }
 
                 map.put((K) this.constructor.constructObject(propKeyNode), (T) this.constructor.constructObject(mappingNode));
             }
@@ -350,10 +365,16 @@ class YamlDeserializationData extends AbstractDeserializationData
                 {
                     keyNode = tuple.getKeyNode();
                 }
-                keyNode.setTag(keyTag);
+                if (keyType != Object.class)
+                {
+                    keyNode.setTag(keyTag);
+                }
                 K mapKey = (K) this.constructor.constructObject(keyNode);
 
-                valueNode.setTag(typeTag);
+                if (type != Object.class)
+                {
+                    valueNode.setTag(typeTag);
+                }
                 map.put(mapKey, (T) this.constructor.constructObject(valueNode));
             }
         }
@@ -382,7 +403,10 @@ class YamlDeserializationData extends AbstractDeserializationData
             Node keyNode = tuple.getKeyNode();
             if (Serialization.isSimpleType(keyType))
             {
-                keyNode.setTag(keyTag);
+                if (keyType != Object.class)
+                {
+                    keyNode.setTag(keyTag);
+                }
                 keyObj = (K) this.constructor.constructObject(keyNode);
             }
             else if (this.serialization.isStringSerializable(keyType))
@@ -396,7 +420,10 @@ class YamlDeserializationData extends AbstractDeserializationData
             }
 
             Node valueNode = tuple.getValueNode();
-            valueNode.setTag(typeTag);
+            if (type != Object.class)
+            {
+                valueNode.setTag(typeTag);
+            }
             map.put(keyObj, (T) this.constructor.constructObject(valueNode));
         }
     }
@@ -419,7 +446,10 @@ class YamlDeserializationData extends AbstractDeserializationData
             K keyObj = keyMapper.apply(this.constructor.constructObject(keyNode).toString());
 
             Node valueNode = tuple.getValueNode();
-            valueNode.setTag(typeTag);
+            if (type != Object.class)
+            {
+                valueNode.setTag(typeTag);
+            }
 
             map.put(keyObj, (T) this.constructor.constructObject(valueNode));
         }

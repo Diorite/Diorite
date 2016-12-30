@@ -64,6 +64,7 @@ import org.yaml.snakeyaml.scanner.Constant;
 import org.yaml.snakeyaml.util.ArrayStack;
 
 import org.diorite.commons.math.DioriteMathUtils;
+import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 
 /**
@@ -113,6 +114,7 @@ public final class Emitter implements Emitable
         DEFAULT_TAG_PREFIXES.put("!", "!");
         DEFAULT_TAG_PREFIXES.put(Tag.PREFIX, "!!");
     }
+    private final Serialization serialization;
 
     // The stream should have the methods `write` and possibly `flush`.
     private final Writer stream;
@@ -180,8 +182,9 @@ public final class Emitter implements Emitable
     @Nullable private ScalarAnalysis analysis;
     @Nullable private Character      style;
 
-    public Emitter(Writer stream, DumperOptions opts)
+    public Emitter(Serialization serialization, Writer stream, DumperOptions opts)
     {
+        this.serialization = serialization;
         // The stream should have the methods `write` and possibly `flush`.
         this.stream = stream;
         // Emitter is a state machine with a stack of states to handle nested
@@ -1323,7 +1326,7 @@ public final class Emitter implements Emitable
         int longest = - 1;
         if (length >= this.longCommentThreshold)
         {
-            longest = this.getLongestCommentLength(comments) + 3;
+            longest = this.getLongestCommentLength(comments) + (longCommentBorderStartsWithComment ? 3 : 4);
             border = this.constructBorder(this.longCommentBorder, longest);
             this.writeIndent();
             if (! longCommentBorderStartsWithComment)

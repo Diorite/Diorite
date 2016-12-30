@@ -208,16 +208,18 @@ import org.yaml.snakeyaml.parser.ParserImpl;
 import org.yaml.snakeyaml.reader.StreamReader;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.resolver.Resolver;
-import org.yaml.snakeyaml.serializer.Serializer;
 
 import org.diorite.commons.DioriteThreadUtils;
+import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.snakeyaml.emitter.Emitter;
+import org.diorite.config.serialization.snakeyaml.emitter.Serializer;
 
 /**
  * Public YAML interface. Each Thread must have its own instance.
  */
 public class Yaml
 {
+    protected final Serialization   serialization;
     protected final Resolver        resolver;
     private         String          name;
     protected       BaseConstructor constructor;
@@ -227,95 +229,21 @@ public class Yaml
     /**
      * Create Yaml instance. It is safe to create a few instances and use them
      * in different Threads.
-     */
-    public Yaml()
-    {
-        this(new Constructor(), new Representer(), new DumperOptions(), new Resolver());
-    }
-
-    /**
-     * Create Yaml instance.
      *
-     * @param dumperOptions
-     *         DumperOptions to configure outgoing objects
+     * @param serialization
+     *         serialization instance.
      */
-    public Yaml(DumperOptions dumperOptions)
+    public Yaml(Serialization serialization)
     {
-        this(new Constructor(), new Representer(), dumperOptions);
+        this(serialization, new Constructor(), new Representer(), new DumperOptions(), new Resolver());
     }
 
     /**
      * Create Yaml instance. It is safe to create a few instances and use them
      * in different Threads.
      *
-     * @param representer
-     *         Representer to emit outgoing objects
-     */
-    public Yaml(Representer representer)
-    {
-        this(new Constructor(), representer);
-    }
-
-    /**
-     * Create Yaml instance. It is safe to create a few instances and use them
-     * in different Threads.
-     *
-     * @param constructor
-     *         BaseConstructor to construct incoming documents
-     */
-    public Yaml(BaseConstructor constructor)
-    {
-        this(constructor, new Representer());
-    }
-
-    /**
-     * Create Yaml instance. It is safe to create a few instances and use them
-     * in different Threads.
-     *
-     * @param constructor
-     *         BaseConstructor to construct incoming documents
-     * @param representer
-     *         Representer to emit outgoing objects
-     */
-    public Yaml(BaseConstructor constructor, Representer representer)
-    {
-        this(constructor, representer, new DumperOptions());
-    }
-
-    /**
-     * Create Yaml instance. It is safe to create a few instances and use them
-     * in different Threads.
-     *
-     * @param representer
-     *         Representer to emit outgoing objects
-     * @param dumperOptions
-     *         DumperOptions to configure outgoing objects
-     */
-    public Yaml(Representer representer, DumperOptions dumperOptions)
-    {
-        this(new Constructor(), representer, dumperOptions, new Resolver());
-    }
-
-    /**
-     * Create Yaml instance. It is safe to create a few instances and use them
-     * in different Threads.
-     *
-     * @param constructor
-     *         BaseConstructor to construct incoming documents
-     * @param representer
-     *         Representer to emit outgoing objects
-     * @param dumperOptions
-     *         DumperOptions to configure outgoing objects
-     */
-    public Yaml(BaseConstructor constructor, Representer representer, DumperOptions dumperOptions)
-    {
-        this(constructor, representer, dumperOptions, new Resolver());
-    }
-
-    /**
-     * Create Yaml instance. It is safe to create a few instances and use them
-     * in different Threads.
-     *
+     * @param serialization
+     *         serialization instance.
      * @param constructor
      *         BaseConstructor to construct incoming documents
      * @param representer
@@ -323,10 +251,11 @@ public class Yaml
      * @param dumperOptions
      *         DumperOptions to configure outgoing objects
      * @param resolver
-     *         Resolver to detect implicit type
      */
-    public Yaml(BaseConstructor constructor, Representer representer, DumperOptions dumperOptions, Resolver resolver)
+    public Yaml(Serialization serialization, BaseConstructor constructor, Representer representer, DumperOptions dumperOptions,
+                Resolver resolver)
     {
+        this.serialization = serialization;
         if (! constructor.isExplicitPropertyUtils())
         {
             constructor.setPropertyUtils(representer.getPropertyUtils());
@@ -421,7 +350,8 @@ public class Yaml
 
     private void dumpAll(Iterator<?> data, Writer output, @Nullable Tag rootTag)
     {
-        Serializer serializer = new Serializer(new Emitter(output, this.dumperOptions), this.resolver, this.dumperOptions, rootTag);
+        Serializer serializer =
+                new Serializer(this.serialization, new Emitter(this.serialization, output, this.dumperOptions), this.resolver, this.dumperOptions, rootTag);
         try
         {
             serializer.open();
@@ -527,7 +457,7 @@ public class Yaml
     public List<Event> serialize(Node data)
     {
         YamlSilentEmitter emitter = new YamlSilentEmitter();
-        Serializer serializer = new Serializer(emitter, this.resolver, this.dumperOptions, null);
+        Serializer serializer = new Serializer(this.serialization, emitter, this.resolver, this.dumperOptions, null);
         try
         {
             serializer.open();

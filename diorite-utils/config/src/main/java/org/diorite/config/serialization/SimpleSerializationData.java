@@ -67,8 +67,13 @@ class SimpleSerializationData implements SerializationData
         return this.serialization.serialize(object, this.serializationType);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Object serialize(Class<T> type, T object)
     {
+        if (type == Object.class)
+        {
+            type = (Class<T>) object.getClass();
+        }
         return this.serialization.serialize(type, object, this.serializationType);
     }
 
@@ -99,7 +104,7 @@ class SimpleSerializationData implements SerializationData
     @SuppressWarnings("unchecked")
     private <T> String toString(T object, @Nullable Class<T> type)
     {
-        if (type == null)
+        if ((type == null) || (type == Object.class))
         {
             type = (Class<T>) object.getClass();
         }
@@ -167,7 +172,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <T> void add(String key, Class<T> type, @Nullable T value)
+    public <T> void add(String key, @Nullable T value, Class<T> type)
     {
         this.validateMap(key);
         if (value == null)

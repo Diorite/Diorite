@@ -25,9 +25,11 @@
 package org.diorite.config.serialization;
 
 import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.invoke.MethodHandle;
@@ -35,11 +37,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,8 +74,10 @@ import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.commons.reflections.ReflectMethod;
+import org.diorite.config.serialization.annotations.DelegateSerializable;
 import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.annotations.StringSerializable;
+import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.Yaml;
@@ -95,6 +102,48 @@ public final class Serialization
     private Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
     private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
     private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
+
+    // comments section
+    private Map<Class<?>, DocumentComments> commentsMap      = new ConcurrentHashMap<>(10);
+    private Map<Class<?>, DocumentComments> commentsCacheMap = new ConcurrentHashMap<>(10);
+
+    public DocumentComments getComments(Class<?> clazz)
+    {
+        DocumentComments documentComments = this.commentsCacheMap.get(clazz);
+        if (documentComments != null)
+        {
+            return documentComments;
+        }
+        for (Entry<Class<?>, DocumentComments> entry : this.commentsCacheMap.entrySet())
+        {
+            if (entry.getKey().isAssignableFrom(clazz))
+            {
+                DocumentComments result = entry.getValue();
+                this.commentsCacheMap.put(clazz, result);
+                return result;
+            }
+        }
+        return DocumentComments.getEmpty();
+    }
+
+    public void addComments(Class<?> clazz, DocumentComments comments)
+    {
+        this.commentsCacheMap.clear();
+        this.commentsMap.put(clazz, comments);
+        this.commentsCacheMap.putAll(this.commentsMap);
+    }
+
+    public void addComments(Class<?> clazz, @WillNotClose InputStream stream)
+    {
+        this.addComments(clazz, new InputStreamReader(stream, StandardCharsets.UTF_8.newDecoder()
+                                                                                    .onMalformedInput(CodingErrorAction.REPORT)
+                                                                                    .onUnmappableCharacter(CodingErrorAction.REPORT)));
+    }
+
+    public void addComments(Class<?> clazz, @WillNotClose Reader reader)
+    {
+        this.addComments(clazz, this.fromYaml(reader, DocumentComments.class));
+    }
 
     private Yaml createYaml()
     {
@@ -132,7 +181,7 @@ public final class Serialization
 
         Resolver resolver = new Resolver();
 
-        Yaml yaml = new Yaml(constructor, representer, dumperOptions, resolver);
+        Yaml yaml = new Yaml(this, constructor, representer, dumperOptions, resolver);
 
         yaml.setName("DioriteYaml[" + this.localCounter.get().getAndIncrement() + "]:" + DioriteThreadUtils.getFullThreadName(Thread.currentThread(), true));
         return yaml;
@@ -221,6 +270,7 @@ public final class Serialization
     private Serialization(@Nullable Void v)
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
+        this.registerSerializable(DocumentComments.class);
     }
 
     /**
@@ -238,11 +288,12 @@ public final class Serialization
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> StringSerializer<T> registerStringSerializable(Class<T> clazz)
     {
+        Class target = getDelegatedLookupClass(clazz);
         if (clazz.isAnnotationPresent(StringSerializable.class))
         {
-            return this.registerStringSerializableByAnnotations(clazz);
+            return this.registerStringSerializableByAnnotations(target);
         }
-        return this.registerStringSerializableByType((Class) clazz);
+        return this.registerStringSerializableByType(target);
     }
 
     /**
@@ -255,14 +306,13 @@ public final class Serialization
      *
      * @return old serializer if exists.
      */
-    @Nullable
     @SuppressWarnings("unchecked")
-    public <T> StringSerializer<T> registerStringSerializer(StringSerializer<T> stringSerializer)
+    public <T> void registerStringSerializer(StringSerializer<T> stringSerializer)
     {
         this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new JsonStringSerializerImpl<>(stringSerializer));
         this.stringRepresenters.add((c, r) -> new YamlStringSerializerImpl<>(r, stringSerializer));
         this.refreshCache();
-        return (StringSerializer<T>) this.stringSerializerMap.put(stringSerializer.getType(), stringSerializer);
+        this.stringSerializerMap.put(stringSerializer.getType(), stringSerializer);
     }
 
     /**
@@ -276,15 +326,23 @@ public final class Serialization
      *
      * @return old serializer if exists.
      */
-    @Nullable
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public <T> Serializer<T> registerSerializable(Class<T> clazz)
+    public <T> void registerSerializable(Class<T> clazz)
     {
+        Class target = getDelegatedLookupClass(clazz);
+        Serializer serializer;
         if (clazz.isAnnotationPresent(org.diorite.config.serialization.annotations.Serializable.class))
         {
-            return this.registerSerializableByAnnotations(clazz);
+            serializer = this.registerSerializableByAnnotations(target);
         }
-        return this.registerSerializableByType((Class) clazz);
+        else
+        {
+            serializer = this.registerSerializableByType(target);
+        }
+        if (clazz != target)
+        {
+            this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        }
     }
 
     /**
@@ -556,7 +614,9 @@ public final class Serialization
                 throw stringAnnotationError(clazz);
             }
         }
-        return this.registerStringSerializer(StringSerializer.of(getRedirectionClass(clazz), serialization, deserialization));
+        StringSerializer<T> stringSerializer = StringSerializer.of(getRedirectionClass(clazz), serialization, deserialization);
+        this.registerStringSerializer(stringSerializer);
+        return stringSerializer;
     }
 
     @Nullable
@@ -573,9 +633,13 @@ public final class Serialization
                 deserialize = DioriteReflectionUtils.getConstructor(clazz, false, String.class);
                 if (deserialize == null)
                 {
-                    throw new IllegalArgumentException("Given class (" + clazz.getName() +
-                                                       ") does not contains deserialization method! Make sure to create one of this methods:\n    static T " +
-                                                       "deserializeFromString(String)\n    static T valueOf(String)\n   constructor(String)");
+                    String simpleName = clazz.getSimpleName();
+                    throw new IllegalArgumentException
+                                  ("Given class (" + clazz.getName() +
+                                   ") does not contains deserialization method! Make sure to create one of this methods:\n" +
+                                   "    static " + simpleName + " deserializeFromString(String)\n" +
+                                   "    static " + simpleName + " valueOf(String)\n" +
+                                   "   constructor(String)");
                 }
             }
         }
@@ -592,10 +656,10 @@ public final class Serialization
                         throw new DeserializationException(clazz, str, throwable);
                     }
                 });
-        return this.registerStringSerializer(serializer);
+        this.registerStringSerializer(serializer);
+        return serializer;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T extends Serializable> Serializer<T> registerSerializableByType(Class<T> clazz)
     {
@@ -608,10 +672,13 @@ public final class Serialization
                 deserialize = DioriteReflectionUtils.getConstructor(clazz, false, DeserializationData.class);
                 if ((deserialize == null) || ! deserialize.isPublic())
                 {
-                    throw new IllegalArgumentException("Given class (" + clazz.getName() +
-                                                       ") does not contains deserialization method! Make sure to create one of this methods:\n    static T " +
-                                                       "deserialize(DeserializationData)\n    static T valueOf(DeserializationData)\n   constructor" +
-                                                       "(DeserializationData)");
+                    String simpleName = clazz.getSimpleName();
+                    throw new IllegalArgumentException
+                                  ("Given class (" + clazz.getName() +
+                                   ") does not contains deserialization method! Make sure to create one of this methods:\n" +
+                                   "    static " + simpleName + " deserialize(DeserializationData)\n" +
+                                   "    static " + simpleName + " valueOf(DeserializationData)\n" +
+                                   "    constructor(DeserializationData)");
                 }
             }
         }
@@ -631,10 +698,11 @@ public final class Serialization
                 throw new DeserializationException(clazz, data, throwable);
             }
         });
-        return this.registerSerializer(serializer);
+        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(serializer);
+        return serializer;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T> Serializer<T> registerSerializableByAnnotations(Class<T> clazz)
     {
@@ -715,28 +783,42 @@ public final class Serialization
                 throw annotationError(clazz);
             }
         }
-        return this.registerSerializer(Serializer.of(getRedirectionClass(clazz), serialization, deserialization));
+        Serializer<T> serializer = Serializer.of(getRedirectionClass(clazz), serialization, deserialization);
+        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(serializer);
+        return serializer;
     }
 
     private static IllegalArgumentException stringAnnotationError(Class<?> clazz)
     {
-        return new IllegalArgumentException("Given class (" + clazz.getName() +
-                                            ") does not contain needed methods (or contains annotations on invalid methods)! Make sure to create valid " +
-                                            "serialization and deserialization methods, with " +
-                                            "@StringSerializable annotation over them!\n  Serialization methods:\n    static String nameOfMethod(T)\n  " +
-                                            "  static String nameOfMethod(Object)\n    String nameOfMethod()\n  Deserialization methods:\n    static T " +
-                                            "nameOfMethod(String)\n    constructor(String)");
+        String simpleName = clazz.getSimpleName();
+        return new IllegalArgumentException
+                       ("Given class (" + clazz.getName() + ") does not contain needed methods (or contains annotations on invalid methods)! " +
+                        "Make sure to create valid serialization and deserialization methods, with @StringSerializable annotation over them!\n" +
+                        "  Serialization methods:\n" +
+                        "    static String nameOfMethod(" + simpleName + ")\n" +
+                        "    static String nameOfMethod(Object)\n" +
+                        "    String nameOfMethod()\n" +
+                        "  Deserialization methods:\n" +
+                        "    static " + simpleName + " nameOfMethod(String)\n" +
+                        "    constructor(String)");
     }
 
     private static IllegalArgumentException annotationError(Class<?> clazz)
     {
-        return new IllegalArgumentException("Given class (" + clazz.getName() +
-                                            ") does not contain needed methods (or contains annotations on invalid methods)! Make sure to create valid " +
-                                            "serialization and deserialization methods, with @Serializable annotation over them!\n  Serialization methods:\n " +
-                                            "   static void nameOfMethod(T, SerializationData)\n    static void nameOfMethod(SerializationData, T)\n    " +
-                                            "static void nameOfMethod(Object, SerializationData)\n    static void nameOfMethod(SerializationData, Object)\n  " +
-                                            "  void nameOfMethod(SerializationData)\n  Deserialization methods:\n    static T nameOfMethod" +
-                                            "(DeserializationData)\n    constructor(DeserializationData)");
+        String simpleName = clazz.getSimpleName();
+        return new IllegalArgumentException
+                       ("Given class (" + clazz.getName() + ") does not contain needed methods (or contains annotations on invalid methods)! " +
+                        "Make sure to create valid serialization and deserialization methods, with @Serializable annotation over them!\n" +
+                        "  Serialization methods:\n" +
+                        "    static void nameOfMethod(" + simpleName + ", SerializationData)\n" +
+                        "    static void nameOfMethod(SerializationData, " + simpleName + ")\n" +
+                        "    static void nameOfMethod(Object, SerializationData)\n" +
+                        "    static void nameOfMethod(SerializationData, Object)\n" +
+                        "    void nameOfMethod(SerializationData)\n" +
+                        "  Deserialization methods:\n" +
+                        "    static " + simpleName + " nameOfMethod(DeserializationData)\n" +
+                        "    constructor(DeserializationData)");
     }
 
     @SuppressWarnings("unchecked")
@@ -746,6 +828,17 @@ public final class Serialization
         {
             SerializableAs serializableAs = type.getAnnotation(SerializableAs.class);
             return (Class<? super T>) getRedirectionClass(serializableAs.value());
+        }
+        return type;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Class<? extends T> getDelegatedLookupClass(Class<T> type)
+    {
+        if (type.isAnnotationPresent(DelegateSerializable.class))
+        {
+            DelegateSerializable serializableAs = type.getAnnotation(DelegateSerializable.class);
+            return (Class<? extends T>) getDelegatedLookupClass(serializableAs.value());
         }
         return type;
     }

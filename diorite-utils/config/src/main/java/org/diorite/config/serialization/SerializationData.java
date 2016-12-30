@@ -94,7 +94,7 @@ public interface SerializationData
      * @param <T>
      *         type of object.
      */
-    <T> void add(String key, Class<T> type, @Nullable T value);
+    <T> void add(String key, @Nullable T value, Class<T> type);
 
     /**
      * Adds value to serializer data instance with given formatting, note that you need to manually deserialize that value in deserializer. <br/>
@@ -111,7 +111,7 @@ public interface SerializationData
      *
      * @see java.util.Formatter
      */
-    default <T> void add(String key, String format, @Nullable T value)
+    default <T> void addFormatted(String key, String format, @Nullable T value)
     {
         if (value == null)
         {
