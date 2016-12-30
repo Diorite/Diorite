@@ -270,7 +270,6 @@ public final class Serialization
     private Serialization(@Nullable Void v)
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
-        this.registerSerializable(DocumentComments.class);
     }
 
     /**
@@ -1323,12 +1322,27 @@ public final class Serialization
      *
      * @param data
      *         Java object to be Serialized to YAML
+     * @param comments
+     *         comments node.
+     *
+     * @return YAML String
+     */
+    public String toYamlWithComments(Object data, DocumentComments comments)
+    {
+        return this.yaml().toYamlWithComments(data, comments);
+    }
+
+    /**
+     * Serialize a Java object into a YAML String.
+     *
+     * @param data
+     *         Java object to be Serialized to YAML
      *
      * @return YAML String
      */
     public String toYaml(Object data)
     {
-        return this.yaml().dump(data);
+        return this.yaml().toYaml(data);
     }
 
     /**
@@ -1341,7 +1355,7 @@ public final class Serialization
      */
     public String toYaml(Iterator<?> data)
     {
-        return this.yaml().dumpAll(data);
+        return this.yaml().toYaml(data);
     }
 
     /**
@@ -1353,7 +1367,22 @@ public final class Serialization
      */
     public void toYaml(Object data, Writer output)
     {
-        this.yaml().dump(data, output);
+        this.yaml().toYaml(data, output);
+    }
+
+    /**
+     * Serialize a Java object into a YAML stream.
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     * @param output
+     *         output for yaml.
+     * @param comments
+     *         comments node.
+     */
+    public void toYamlWithComments(Object data, Writer output, DocumentComments comments)
+    {
+        this.yaml().toYamlWithComments(data, output, comments);
     }
 
     /**
@@ -1362,10 +1391,11 @@ public final class Serialization
      * @param data
      *         Iterator with Objects
      * @param output
+     *         output for yaml.
      */
     public void toYaml(Iterator<?> data, Writer output)
     {
-        this.yaml().dumpAll(data, output);
+        this.yaml().toYaml(data, output);
     }
 
     /**
@@ -1406,7 +1436,7 @@ public final class Serialization
      */
     public String toYaml(Object data, Tag rootTag, @Nullable FlowStyle flowStyle)
     {
-        return this.yaml().dumpAs(data, rootTag, flowStyle);
+        return this.yaml().toYaml(data, rootTag, flowStyle);
     }
 
     /**
@@ -1431,7 +1461,7 @@ public final class Serialization
      */
     public String toYamlAsMap(Object data)
     {
-        return this.yaml().dumpAsMap(data);
+        return this.yaml().toYamlAsMap(data);
     }
 
     /**
@@ -1445,7 +1475,7 @@ public final class Serialization
      */
     public Object fromYaml(String yaml)
     {
-        return this.yaml().load(yaml);
+        return this.yaml().fromYaml(yaml);
     }
 
     /**
@@ -1459,7 +1489,7 @@ public final class Serialization
      */
     public Object fromYaml(InputStream io)
     {
-        return this.yaml().load(io);
+        return this.yaml().fromYaml(io);
     }
 
     /**
@@ -1473,7 +1503,7 @@ public final class Serialization
      */
     public Object fromYaml(Reader io)
     {
-        return this.yaml().load(io);
+        return this.yaml().fromYaml(io);
     }
 
     /**
@@ -1489,7 +1519,7 @@ public final class Serialization
      */
     public <T> T fromYaml(Reader io, Class<T> type)
     {
-        return this.yaml().loadAs(io, type);
+        return this.yaml().fromYaml(io, type);
     }
 
     /**
@@ -1505,7 +1535,7 @@ public final class Serialization
      */
     public <T> T fromYaml(String yaml, Class<T> type)
     {
-        return this.yaml().loadAs(yaml, type);
+        return this.yaml().fromYaml(yaml, type);
     }
 
     /**
@@ -1521,7 +1551,7 @@ public final class Serialization
      */
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
-        return this.yaml().loadAs(input, type);
+        return this.yaml().fromYaml(input, type);
     }
 
     /**
@@ -1535,7 +1565,7 @@ public final class Serialization
      */
     public Iterable<Object> fromAllYaml(Reader yaml)
     {
-        return this.yaml().loadAll(yaml);
+        return this.yaml().fromAllYaml(yaml);
     }
 
     /**
@@ -1550,7 +1580,7 @@ public final class Serialization
      */
     public Iterable<Object> fromAllYaml(String yaml)
     {
-        return this.yaml().loadAll(yaml);
+        return this.yaml().fromAllYaml(yaml);
     }
 
     /**
@@ -1564,6 +1594,6 @@ public final class Serialization
      */
     public Iterable<Object> fromAllYaml(InputStream yaml)
     {
-        return this.yaml().loadAll(yaml);
+        return this.yaml().fromAllYaml(yaml);
     }
 }

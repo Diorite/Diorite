@@ -22,56 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.comments;
+/**
+ * I/O utility classes.
+ */
+@NonnullByDefault
+package org.diorite.commons.io;
 
-import javax.annotation.Nullable;
-
-import java.io.Writer;
-
-import org.apache.commons.lang3.StringUtils;
-
-class EmptyDocumentComments extends EmptyCommentsNode implements DocumentComments
-{
-    private static final EmptyDocumentComments EMPTY = new EmptyDocumentComments();
-
-    @Override
-    public String getFooter()
-    {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public void setFooter(@Nullable String footer)
-    {
-
-    }
-
-    @Override
-    public String getHeader()
-    {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public void setHeader(@Nullable String header)
-    {
-
-    }
-
-    @Override
-    public EmptyDocumentComments getRoot()
-    {
-        return this;
-    }
-
-    @Override
-    public void writeTo(Writer writer)
-    {
-
-    }
-
-    static DocumentComments getEmpty()
-    {
-        return EMPTY;
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

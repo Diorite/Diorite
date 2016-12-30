@@ -49,20 +49,27 @@ public interface CommentsNode
     DocumentComments getRoot();
 
     /**
-     * Represents node as map, key is a string and value is String or other Map. <br>
-     * Empty nodes are removed.
-     *
-     * @return node as map.
-     */
-    Map<String, Object> toMap();
-
-    /**
      * Returns parent node, or null if it is root node.
      *
      * @return parent node, or null if it is root node.
      */
     @Nullable
     CommentsNode getParent();
+
+    /**
+     * Removes unused nodes.
+     */
+    void trim();
+
+    /**
+     * Replaces wildcard strings with proper {@link #ANY} string.
+     *
+     * @param path
+     *         path to fix.
+     *
+     * @return this same array as given after changes.
+     */
+    String[] fixPath(String... path);
 
     /**
      * Set comment on given path.
@@ -73,6 +80,34 @@ public interface CommentsNode
      *         comment to set.
      */
     void setComment(String path, @Nullable String comment);
+
+    /**
+     * Set comment on given path.
+     *
+     * @param path
+     *         path of comment.
+     * @param comment
+     *         comment to set.
+     */
+    default void setComment(String[] path, @Nullable String comment)
+    {
+        if (path.length == 0)
+        {
+            throw new IllegalArgumentException("Can't get comment on empty path.");
+        }
+        if (path.length == 1)
+        {
+            this.setComment(path[0], comment);
+            return;
+        }
+        CommentsNode node = this;
+        for (int i = 1; i < path.length; i++)
+        {
+            String s = path[i - 1];
+            node = node.getNode(s);
+        }
+        node.setComment(path[path.length - 1], comment);
+    }
 
     /**
      * Set comment on given path.
@@ -123,7 +158,7 @@ public interface CommentsNode
     /**
      * Returns comment on given path, each string is next node in tree.
      *
-     * @param path
+     * @param pathNodes
      *         path to check for comments.
      *
      * @return comment on given path.
@@ -165,7 +200,7 @@ public interface CommentsNode
     /**
      * Returns node on given path, if there is no node on given path it will be created and returned, each string is next node in tree.
      *
-     * @param path
+     * @param pathNodes
      *         path to check for node.
      *
      * @return node on given path.

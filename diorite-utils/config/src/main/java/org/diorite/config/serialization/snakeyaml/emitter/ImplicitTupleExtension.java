@@ -22,56 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.comments;
+package org.diorite.config.serialization.snakeyaml.emitter;
 
 import javax.annotation.Nullable;
 
-import java.io.Writer;
+import org.yaml.snakeyaml.events.ImplicitTuple;
 
-import org.apache.commons.lang3.StringUtils;
-
-class EmptyDocumentComments extends EmptyCommentsNode implements DocumentComments
+public class ImplicitTupleExtension extends ImplicitTuple
 {
-    private static final EmptyDocumentComments EMPTY = new EmptyDocumentComments();
+    @Nullable private final String comment;
 
-    @Override
-    public String getFooter()
+    public ImplicitTupleExtension(boolean plain, boolean nonplain, @Nullable String comment)
     {
-        return StringUtils.EMPTY;
+        super(plain, nonplain);
+        this.comment = comment;
     }
 
-    @Override
-    public void setFooter(@Nullable String footer)
+    @Nullable
+    public String getComment()
     {
-
-    }
-
-    @Override
-    public String getHeader()
-    {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public void setHeader(@Nullable String header)
-    {
-
-    }
-
-    @Override
-    public EmptyDocumentComments getRoot()
-    {
-        return this;
-    }
-
-    @Override
-    public void writeTo(Writer writer)
-    {
-
-    }
-
-    static DocumentComments getEmpty()
-    {
-        return EMPTY;
+        return this.comment;
     }
 }

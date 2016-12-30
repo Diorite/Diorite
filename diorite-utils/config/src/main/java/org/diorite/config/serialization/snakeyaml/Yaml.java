@@ -210,7 +210,9 @@ import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.resolver.Resolver;
 
 import org.diorite.commons.DioriteThreadUtils;
+import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.config.serialization.Serialization;
+import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.emitter.Emitter;
 import org.diorite.config.serialization.snakeyaml.emitter.Serializer;
 
@@ -280,14 +282,31 @@ public class Yaml
      *
      * @param data
      *         Java object to be Serialized to YAML
+     * @param comments
+     *         comments node.
      *
      * @return YAML String
      */
-    public String dump(Object data)
+    public String toYamlWithComments(Object data, DocumentComments comments)
+    {
+        StringBuilderWriter stringWriter = new StringBuilderWriter();
+        this.toYamlWithComments(data, stringWriter, comments);
+        return stringWriter.toString();
+    }
+
+    /**
+     * Serialize a Java object into a YAML String.
+     *
+     * @param data
+     *         Java object to be Serialized to YAML
+     *
+     * @return YAML String
+     */
+    public String toYaml(Object data)
     {
         List<Object> list = new ArrayList<>(1);
         list.add(data);
-        return this.dumpAll(list.iterator());
+        return this.toYaml(list.iterator());
     }
 
     /**
@@ -313,7 +332,7 @@ public class Yaml
      *
      * @return YAML String with all the objects in proper sequence
      */
-    public String dumpAll(Iterator<?> data)
+    public String toYaml(Iterator<?> data)
     {
         StringWriter buffer = new StringWriter();
         this.dumpAll(data, buffer, null);
@@ -328,7 +347,7 @@ public class Yaml
      * @param output
      *         stream to write to
      */
-    public void dump(Object data, Writer output)
+    public void toYaml(Object data, Writer output)
     {
         List<Object> list = new ArrayList<>(1);
         list.add(data);
@@ -343,9 +362,37 @@ public class Yaml
      * @param output
      *         stream to write to
      */
-    public void dumpAll(Iterator<?> data, Writer output)
+    public void toYaml(Iterator<?> data, Writer output)
     {
         this.dumpAll(data, output, null);
+    }
+
+    /**
+     * Serialize a Java object into a YAML stream.
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     * @param output
+     *         output for yaml.
+     * @param comments
+     *         comments node.
+     */
+    public void toYamlWithComments(Object data, Writer output, DocumentComments comments)
+    {
+        Serializer serializer =
+                new Serializer(this.serialization, new Emitter(this.serialization, output, this.dumperOptions), this.resolver, this.dumperOptions, null);
+        serializer.setComments(comments);
+        try
+        {
+            serializer.open();
+            Node node = this.representer.represent(data);
+            serializer.serialize(node);
+            serializer.close();
+        }
+        catch (IOException e)
+        {
+            throw new YAMLException(e);
+        }
     }
 
     private void dumpAll(Iterator<?> data, Writer output, @Nullable Tag rootTag)
@@ -404,7 +451,7 @@ public class Yaml
      *
      * @return YAML String
      */
-    public String dumpAs(Object data, Tag rootTag, @Nullable FlowStyle flowStyle)
+    public String toYaml(Object data, Tag rootTag, @Nullable FlowStyle flowStyle)
     {
         FlowStyle oldStyle = this.representer.getDefaultFlowStyle();
         if (flowStyle != null)
@@ -439,9 +486,9 @@ public class Yaml
      *
      * @return YAML String
      */
-    public String dumpAsMap(Object data)
+    public String toYamlAsMap(Object data)
     {
-        return this.dumpAs(data, Tag.MAP, FlowStyle.BLOCK);
+        return this.toYaml(data, Tag.MAP, FlowStyle.BLOCK);
     }
 
     /**
@@ -480,7 +527,7 @@ public class Yaml
      *
      * @return parsed object
      */
-    public Object load(String yaml)
+    public Object fromYaml(String yaml)
     {
         return this.loadFromReader(new StreamReader(yaml), Object.class);
     }
@@ -494,7 +541,7 @@ public class Yaml
      *
      * @return parsed object
      */
-    public Object load(InputStream io)
+    public Object fromYaml(InputStream io)
     {
         return this.loadFromReader(new StreamReader(new UnicodeReader(io)), Object.class);
     }
@@ -508,7 +555,7 @@ public class Yaml
      *
      * @return parsed object
      */
-    public Object load(Reader io)
+    public Object fromYaml(Reader io)
     {
         return this.loadFromReader(new StreamReader(io), Object.class);
     }
@@ -527,7 +574,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
-    public <T> T loadAs(Reader io, Class<T> type)
+    public <T> T fromYaml(Reader io, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(io), type);
     }
@@ -546,7 +593,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
-    public <T> T loadAs(String yaml, Class<T> type)
+    public <T> T fromYaml(String yaml, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(yaml), type);
     }
@@ -565,7 +612,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
-    public <T> T loadAs(InputStream input, Class<T> type)
+    public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(new UnicodeReader(input)), type);
     }
@@ -586,7 +633,7 @@ public class Yaml
      *
      * @return an iterator over the parsed Java objects in this String in proper sequence
      */
-    public Iterable<Object> loadAll(Reader yaml)
+    public Iterable<Object> fromAllYaml(Reader yaml)
     {
         Composer composer = new Composer(new ParserImpl(new StreamReader(yaml)), this.resolver);
         this.constructor.setComposer(composer);
@@ -604,9 +651,9 @@ public class Yaml
      *
      * @return an iterator over the parsed Java objects in this String in proper sequence
      */
-    public Iterable<Object> loadAll(String yaml)
+    public Iterable<Object> fromAllYaml(String yaml)
     {
-        return this.loadAll(new StringReader(yaml));
+        return this.fromAllYaml(new StringReader(yaml));
     }
 
     /**
@@ -618,9 +665,9 @@ public class Yaml
      *
      * @return an iterator over the parsed Java objects in this stream in proper sequence
      */
-    public Iterable<Object> loadAll(InputStream yaml)
+    public Iterable<Object> fromAllYaml(InputStream yaml)
     {
-        return this.loadAll(new UnicodeReader(yaml));
+        return this.fromAllYaml(new UnicodeReader(yaml));
     }
 
     /**

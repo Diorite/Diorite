@@ -24,54 +24,31 @@
 
 package org.diorite.config.serialization.comments;
 
-import javax.annotation.Nullable;
-
-import java.io.Writer;
-
-import org.apache.commons.lang3.StringUtils;
-
-class EmptyDocumentComments extends EmptyCommentsNode implements DocumentComments
+public class CommentsParserException extends RuntimeException
 {
-    private static final EmptyDocumentComments EMPTY = new EmptyDocumentComments();
+    private static final long serialVersionUID = 0;
 
-    @Override
-    public String getFooter()
+    public CommentsParserException()
     {
-        return StringUtils.EMPTY;
     }
 
-    @Override
-    public void setFooter(@Nullable String footer)
+    public CommentsParserException(String message)
     {
-
+        super(message);
     }
 
-    @Override
-    public String getHeader()
+    public CommentsParserException(String message, Throwable cause)
     {
-        return StringUtils.EMPTY;
+        super(message, cause);
     }
 
-    @Override
-    public void setHeader(@Nullable String header)
+    public CommentsParserException(Throwable cause)
     {
-
+        super(cause);
     }
 
-    @Override
-    public EmptyDocumentComments getRoot()
+    public CommentsParserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
     {
-        return this;
-    }
-
-    @Override
-    public void writeTo(Writer writer)
-    {
-
-    }
-
-    static DocumentComments getEmpty()
-    {
-        return EMPTY;
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

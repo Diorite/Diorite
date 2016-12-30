@@ -26,9 +26,6 @@ package org.diorite.config.serialization.comments;
 
 import javax.annotation.Nullable;
 
-import java.util.Collections;
-import java.util.Map;
-
 class EmptyCommentsNode implements CommentsNode
 {
     @Nullable private final EmptyDocumentComments root;
@@ -58,18 +55,23 @@ class EmptyCommentsNode implements CommentsNode
         assert this.root != null;
         return this.root;
     }
-
-    @Override
-    public Map<String, Object> toMap()
-    {
-        return Collections.emptyMap();
-    }
-
     @Nullable
     @Override
     public EmptyCommentsNode getParent()
     {
         return this.parent;
+    }
+
+    @Override
+    public void trim()
+    {
+
+    }
+
+    @Override
+    public String[] fixPath(String... path)
+    {
+        return path;
     }
 
     @Override

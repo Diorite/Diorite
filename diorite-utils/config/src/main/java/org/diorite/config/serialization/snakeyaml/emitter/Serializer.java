@@ -27,8 +27,10 @@ package org.diorite.config.serialization.snakeyaml.emitter;
 import javax.annotation.Nullable;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,6 +63,7 @@ import org.yaml.snakeyaml.serializer.AnchorGenerator;
 import org.yaml.snakeyaml.serializer.SerializerException;
 
 import org.diorite.config.serialization.Serialization;
+import org.diorite.config.serialization.comments.DocumentComments;
 
 public final class Serializer
 {
@@ -76,6 +79,16 @@ public final class Serializer
     private           AnchorGenerator     anchorGenerator;
     @Nullable private Boolean             closed;
     @Nullable private Tag                 explicitRoot;
+
+    private DocumentComments        comments    = DocumentComments.getEmpty();
+    private Set<Collection<String>> commentsSet = new HashSet<>(20);
+
+    boolean checkCommentsSet(String[] path)
+    {
+        this.comments.fixPath(path);
+        List<String> key = List.of(path);
+        return this.commentsSet.add(key);
+    }
 
     public Serializer(Serialization serialization, Emitable emitter, Resolver resolver, DumperOptions opts, @Nullable Tag rootTag)
     {
@@ -94,6 +107,16 @@ public final class Serializer
         this.anchorGenerator = opts.getAnchorGenerator();
         this.closed = null;
         this.explicitRoot = rootTag;
+    }
+
+    public DocumentComments getComments()
+    {
+        return this.comments;
+    }
+
+    public void setComments(DocumentComments comments)
+    {
+        this.comments = comments;
     }
 
     public void open() throws IOException
@@ -152,12 +175,12 @@ public final class Serializer
 //        }
         this.emitter.emit(new DocumentStartEvent(null, null, this.explicitStart, this.useVersion, this.useTags));
         this.anchorNode(node);
-//        if (this.explicitRoot != null)
-//        {
-//            node.setTag(this.explicitRoot);
-//        }
+        if (this.explicitRoot != null)
+        {
+            node.setTag(this.explicitRoot);
+        }
 
-        this.serializeNode(node, null);
+        this.serializeNode(node, null, new LinkedList<>());
         this.emitter.emit(new DocumentEndEvent(null, null, this.explicitEnd));
         this.serializedNodes.clear();
         this.anchors.clear();
@@ -169,7 +192,7 @@ public final class Serializer
         {
             node = ((AnchorNode) node).getRealNode();
         }
-//        Tag tag = node.getTag();
+        Tag tag = node.getTag();
 //        if (tag.getValue().startsWith(Tag.PREFIX))
 //        {
 //            try
@@ -220,7 +243,7 @@ public final class Serializer
         }
     }
 
-    private void serializeNode(Node node, @Nullable Node parent) throws IOException
+    private void serializeNode(Node node, @Nullable Node parent, LinkedList<String> commentPath) throws IOException
     {
         if (node.getNodeId() == NodeId.anchor)
         {
@@ -240,7 +263,17 @@ public final class Serializer
                     ScalarNode scalarNode = (ScalarNode) node;
                     Tag detectedTag = this.resolver.resolve(NodeId.scalar, scalarNode.getValue(), true);
                     Tag defaultTag = this.resolver.resolve(NodeId.scalar, scalarNode.getValue(), false);
-                    ImplicitTuple tuple = new ImplicitTuple(node.getTag().equals(detectedTag), node.getTag().equals(defaultTag));
+                    String[] pathNodes = commentPath.toArray(new String[commentPath.size()]);
+                    String comment;
+                    if (this.checkCommentsSet(pathNodes))
+                    {
+                        comment = this.comments.getComment(pathNodes);
+                    }
+                    else
+                    {
+                        comment = null;
+                    }
+                    ImplicitTuple tuple = new ImplicitTupleExtension(node.getTag().equals(detectedTag), node.getTag().equals(defaultTag), comment);
                     ScalarEvent event = new ScalarEvent(tAlias, node.getTag().getValue(), tuple, scalarNode.getValue(), null, null, scalarNode.getStyle());
                     this.emitter.emit(event);
                     break;
@@ -251,7 +284,7 @@ public final class Serializer
                     List<Node> list = seqNode.getValue();
                     for (Node item : list)
                     {
-                        this.serializeNode(item, node);
+                        this.serializeNode(item, node, commentPath);
                     }
                     this.emitter.emit(new SequenceEndEvent(null, null));
                     break;
@@ -265,8 +298,16 @@ public final class Serializer
                     {
                         Node key = row.getKeyNode();
                         Node value = row.getValueNode();
-                        this.serializeNode(key, mnode);
-                        this.serializeNode(value, mnode);
+                        if (key instanceof ScalarNode)
+                        {
+                            commentPath.add(((ScalarNode) key).getValue());
+                        }
+                        this.serializeNode(key, mnode, commentPath);
+                        this.serializeNode(value, mnode, commentPath);
+                        if (key instanceof ScalarNode)
+                        {
+                            commentPath.removeLast();
+                        }
                     }
                     this.emitter.emit(new MappingEndEvent(null, null));
             }

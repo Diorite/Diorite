@@ -1,0 +1,52 @@
+# Header of file, first space of comments is always skipped, if you want indent a comment just use more spaces.
+#     Like this.
+#
+#But first char don't need to be a space.
+
+# Entity list, comments in a list are like in maps, just skip list syntax and add comments directly to list element nodes.
+entities:
+  # Comment for `type` node inside list element.
+  type: CREEPER
+  # This comment will be ignored.
+
+  # Name of entity
+  #    Multiline test
+  #test test
+  name: creeperName
+
+  # age of entity
+  age: write anything here, or just nothing.
+
+  # is it special?
+  special:
+  displayName: # no comments here (this is also ignored)
+
+  # meta objects!
+  metaObjects:
+    # asterisk means that any key may appear here, you can use (*) too to still use valid yaml syntax.
+    *:
+      # name of meta
+      name:
+      # value of meta
+      value:
+
+  # second list example
+  uuidMetaObjectMap:
+    name: specialMeta
+
+    # value!
+    value: val:12
+    uuid: d9f1fe11-d0ec-44d8-a8da-fca77e5ed7ef
+
+  # ugh, uh
+  propertiesCollection:
+    propertyName: propertyValue
+              # also indent of comments is ignored.
+  powered: 'yes'
+
+# Some other object
+beanObject:
+  # Weird map of int arrays:
+  intMap: # You can also skip keys that you don't use, there is `intProperty` and `stringProperty` in bean object, but we ignored it.
+
+# Footer of file.

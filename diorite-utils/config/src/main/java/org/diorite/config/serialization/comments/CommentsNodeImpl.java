@@ -26,21 +26,21 @@ package org.diorite.config.serialization.comments;
 
 import javax.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 class CommentsNodeImpl implements CommentsNode
 {
     @Nullable private final DocumentComments root;
     @Nullable private final CommentsNode     parent;
-    Map<String, CommentsNode> nodes    = new HashMap<>(3);
-    Map<String, String>       comments = new HashMap<>(5);
+    Map<String, MutablePair<String, CommentsNodeImpl>> dataMap = new LinkedHashMap<>(15);
 
     CommentsNodeImpl(CommentsNode parent)
     {
@@ -62,22 +62,6 @@ class CommentsNodeImpl implements CommentsNode
     }
 
     @Override
-    public Map<String, Object> toMap()
-    {
-        LinkedHashMap<String, Object> result = new LinkedHashMap<>(this.nodes.size() + this.comments.size());
-        result.putAll(this.comments);
-        for (Entry<String, CommentsNode> entry : this.nodes.entrySet())
-        {
-            Map<String, Object> objectMap = entry.getValue().toMap();
-            if (! objectMap.isEmpty())
-            {
-                result.put(entry.getKey(), objectMap);
-            }
-        }
-        return result;
-    }
-
-    @Override
     @Nullable
     public CommentsNode getParent()
     {
@@ -85,66 +69,140 @@ class CommentsNodeImpl implements CommentsNode
     }
 
     @Override
+    public void trim()
+    {
+        for (Iterator<Entry<String, MutablePair<String, CommentsNodeImpl>>> iterator = this.dataMap.entrySet().iterator(); iterator.hasNext(); )
+        {
+            Entry<String, MutablePair<String, CommentsNodeImpl>> entry = iterator.next();
+            MutablePair<String, CommentsNodeImpl> value = entry.getValue();
+            CommentsNodeImpl right = value.getRight();
+            if ((right == null) && (value.getLeft() == null))
+            {
+                iterator.remove();
+                continue;
+            }
+            if (right == null)
+            {
+                continue;
+            }
+            right.trim();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    Map<String, MutablePair<String, ?>> buildMap()
+    {
+        Map<String, MutablePair<String, ?>> resultMap = new LinkedHashMap<>(this.dataMap.size());
+        for (Entry<String, MutablePair<String, CommentsNodeImpl>> entry : this.dataMap.entrySet())
+        {
+            MutablePair<String, CommentsNodeImpl> value = entry.getValue();
+            CommentsNodeImpl right = value.getRight();
+            String left = value.getLeft();
+            if ((right == null) && (left == null))
+            {
+                continue;
+            }
+            Map<String, MutablePair<String, ?>> rightMap = null;
+            if (right != null)
+            {
+                rightMap = right.buildMap();
+                if (rightMap.isEmpty())
+                {
+                    rightMap = null;
+                    if (left == null)
+                    {
+                        continue;
+                    }
+                }
+            }
+            resultMap.put(entry.getKey(), new MutablePair<>(left, rightMap));
+        }
+        return resultMap;
+    }
+
+    @Override
+    public String[] fixPath(String... path)
+    {
+        if (path.length == 0)
+        {
+            return path;
+        }
+        CommentsNodeImpl node = this;
+        for (int i = 0; i < path.length; i++)
+        {
+            String fixPath = node.fixPath(path[i]);
+            path[i] = fixPath;
+            node = node.getNode(fixPath);
+        }
+        return path;
+    }
+
+    private String fixPath(String path)
+    {
+        Pair<String, CommentsNodeImpl> node = this.dataMap.get(path);
+        if ((node == null) || (node.getLeft() == null))
+        {
+            Pair<String, CommentsNodeImpl> any = this.dataMap.get(ANY);
+            if ((any != null) && (any.getRight() != null))
+            {
+                return ANY;
+            }
+        }
+        return path;
+    }
+
+    @Override
     public void setComment(String path, @Nullable String comment)
     {
+        MutablePair<String, CommentsNodeImpl> nodePair = this.dataMap.computeIfAbsent(path, k -> new MutablePair<>(null, null));
         if (comment == null)
         {
-            this.comments.remove(path);
+            nodePair.setLeft(null);
+            return;
         }
-        this.comments.put(path, comment);
+        nodePair.setLeft(comment);
     }
 
     @Override
     @Nullable
     public String getComment(String path)
     {
-        return this.comments.get(path);
+        MutablePair<String, CommentsNodeImpl> nodePair = this.dataMap.get(path);
+        if (nodePair != null)
+        {
+            return nodePair.getKey();
+        }
+        MutablePair<String, CommentsNodeImpl> anyNodePair = this.dataMap.get(ANY);
+        if (anyNodePair != null)
+        {
+            return anyNodePair.getKey();
+        }
+        return null;
     }
 
     @Override
-    public CommentsNode getNode(String path)
+    public CommentsNodeImpl getNode(String path)
     {
-        CommentsNode node = this.nodes.get(path);
+        MutablePair<String, CommentsNodeImpl> nodePair = this.dataMap.get(path);
+        CommentsNodeImpl node = (nodePair == null) ? null : nodePair.getRight();
         if (node == null)
         {
-            node = this.nodes.get(ANY);
+            MutablePair<String, CommentsNodeImpl> anyNodePair = this.dataMap.get(ANY);
+            node = (anyNodePair == null) ? null : anyNodePair.getRight();
             if (node == null)
             {
                 CommentsNodeImpl commentsNode = new CommentsNodeImpl(this);
-                this.nodes.put(path, commentsNode);
+                if (nodePair != null)
+                {
+                    nodePair.setRight(commentsNode);
+                }
+                else
+                {
+                    this.dataMap.put(path, new MutablePair<>(null, commentsNode));
+                }
                 return commentsNode;
             }
             return node;
-        }
-        return node;
-    }
-
-    @SuppressWarnings("unchecked")
-    static CommentsNode fromMap(Map<String, Object> map, CommentsNode parent)
-    {
-        CommentsNodeImpl node = new CommentsNodeImpl(parent);
-        for (Entry<String, Object> entry : map.entrySet())
-        {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof String)
-            {
-                node.setComment(key, (String) value);
-            }
-            else if (value instanceof String[])
-            {
-                node.setComment(key, (String[]) value);
-            }
-            else if (value instanceof Collection)
-            {
-                Collection<String> stringCollection = (Collection<String>) value;
-                node.setComment(key, stringCollection.toArray(new String[stringCollection.size()]));
-            }
-            else if (value instanceof Map)
-            {
-                CommentsNode commentsNode = fromMap((Map<String, Object>) value, node);
-                node.nodes.put(key, commentsNode);
-            }
         }
         return node;
     }
@@ -161,18 +219,18 @@ class CommentsNodeImpl implements CommentsNode
             return false;
         }
         CommentsNodeImpl node = (CommentsNodeImpl) object;
-        return Objects.equals(this.comments, node.comments) && Objects.equals(this.nodes, node.nodes);
+        return Objects.equals(this.buildMap(), node.buildMap());
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.nodes, this.comments);
+        return Objects.hash(this.buildMap(), this.buildMap());
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("nodes", this.nodes).append("comments", this.comments).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("nodes", this.dataMap).toString();
     }
 }

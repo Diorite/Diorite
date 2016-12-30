@@ -24,24 +24,54 @@
 
 package org.diorite.config.serialization.comments;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
-import org.diorite.config.serialization.DeserializationData;
-import org.diorite.config.serialization.Serializable;
-import org.diorite.config.serialization.SerializationData;
+import java.io.IOException;
+import java.io.Writer;
+
+import org.apache.commons.lang3.StringUtils;
+
 import org.diorite.config.serialization.annotations.SerializableAs;
 
 /**
  * Root comments node.
  */
 @SerializableAs(DocumentComments.class)
-class DocumentCommentsImpl extends CommentsNodeImpl implements Serializable, DocumentComments
+class DocumentCommentsImpl extends CommentsNodeImpl implements DocumentComments
 {
-    public static DocumentCommentsImpl deserialize(DeserializationData data)
+    private String header = StringUtils.EMPTY;
+    private String footer = StringUtils.EMPTY;
+
+    @Override
+    public String getFooter()
     {
-        return fromMap(data.getMap("", String.class, Object.class));
+        return this.footer;
+    }
+
+    @Override
+    public void setFooter(@Nullable String footer)
+    {
+        if ((footer == null) || footer.trim().isEmpty())
+        {
+            footer = StringUtils.EMPTY;
+        }
+        this.footer = footer;
+    }
+
+    @Override
+    public String getHeader()
+    {
+        return this.header;
+    }
+
+    @Override
+    public void setHeader(@Nullable String header)
+    {
+        if ((header == null) || header.trim().isEmpty())
+        {
+            header = StringUtils.EMPTY;
+        }
+        this.header = header;
     }
 
     @Override
@@ -51,38 +81,9 @@ class DocumentCommentsImpl extends CommentsNodeImpl implements Serializable, Doc
     }
 
     @Override
-    public void serialize(SerializationData data)
+    public void writeTo(Writer writer) throws IOException
     {
-        data.addMap("", this.toMap(), String.class, Object.class);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static DocumentCommentsImpl fromMap(Map<String, Object> map)
-    {
-        DocumentCommentsImpl root = new DocumentCommentsImpl();
-        for (Entry<String, Object> entry : map.entrySet())
-        {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            if (value instanceof String)
-            {
-                root.setComment(key, (String) value);
-            }
-            else if (value instanceof String[])
-            {
-                root.setComment(key, (String[]) value);
-            }
-            else if (value instanceof Collection)
-            {
-                Collection<String> stringCollection = (Collection<String>) value;
-                root.setComment(key, stringCollection.toArray(new String[stringCollection.size()]));
-            }
-            else if (value instanceof Map)
-            {
-                CommentsNode commentsNode = fromMap((Map<String, Object>) value, root);
-                root.nodes.put(key, commentsNode);
-            }
-        }
-        return root;
+        CommentsWriter commentsWriter = new CommentsWriter(writer, this);
+        commentsWriter.writeAll();
     }
 }

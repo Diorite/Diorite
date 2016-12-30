@@ -22,56 +22,26 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.comments;
+package org.diorite.config.serialization.annotations;
 
-import javax.annotation.Nullable;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.io.Writer;
-
-import org.apache.commons.lang3.StringUtils;
-
-class EmptyDocumentComments extends EmptyCommentsNode implements DocumentComments
+/**
+ * Used to setup comments to class.
+ */
+@Documented
+@Target({ElementType.FIELD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Comment
 {
-    private static final EmptyDocumentComments EMPTY = new EmptyDocumentComments();
-
-    @Override
-    public String getFooter()
-    {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public void setFooter(@Nullable String footer)
-    {
-
-    }
-
-    @Override
-    public String getHeader()
-    {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public void setHeader(@Nullable String header)
-    {
-
-    }
-
-    @Override
-    public EmptyDocumentComments getRoot()
-    {
-        return this;
-    }
-
-    @Override
-    public void writeTo(Writer writer)
-    {
-
-    }
-
-    static DocumentComments getEmpty()
-    {
-        return EMPTY;
-    }
+    /**
+     * Comment lines of field/type.
+     *
+     * @return comment lines.
+     */
+    String[] value() default {};
 }
