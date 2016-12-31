@@ -93,9 +93,9 @@ public class SerializationTest
     @Test
     public void jsonTest()
     {
-        Serialization global = this.prepareSerialization();
+        Serialization global = prepareSerialization();
 
-        EntityStorage entityStorage = this.prepareObject();
+        EntityStorage entityStorage = prepareObject();
 
         System.out.println("[JSON] Deserializing javabean: \n");
         {
@@ -120,9 +120,9 @@ public class SerializationTest
     @Test
     public void yamlTest()
     {
-        Serialization global = this.prepareSerialization();
+        Serialization global = prepareSerialization();
 
-        EntityStorage entityStorage = this.prepareObject();
+        EntityStorage entityStorage = prepareObject();
 
         System.out.println("[YAML] Deserializing javabean: \n");
         {

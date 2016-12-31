@@ -38,12 +38,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.diorite.config.serialization.annotations.Comment;
 import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.comments.CommentsNode;
 
 @PredefinedComment(path = "age", value = "age of entity")
 @PredefinedComment(path = {"metaObjects", CommentsNode.ANY},
                    value = "asterisk means that any key may appear here, you can use (*) too to still use valid yaml syntax.")
 @PredefinedComment(path = {"uuidMetaObjectMap", "value"}, value = "value!")
+@SerializableAs(EntityData.class)
 public abstract class AbstractEntityData implements EntityData
 {
     EntityType type;
