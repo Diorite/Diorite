@@ -28,10 +28,13 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.Comment;
+
 @org.diorite.config.serialization.annotations.Serializable
 public class MetaObject
 {
     String    name;
+    @Comment("value of meta")
     MetaValue value;
 
     public MetaObject(String name, MetaValue value)
@@ -51,6 +54,28 @@ public class MetaObject
     public static MetaObject deser(DeserializationData data)
     {
         return new MetaObject(data.getOrThrow("name", String.class), data.getOrThrow("value", MetaValue.class));
+    }
+
+    @Comment("name of meta")
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public MetaValue getValue()
+    {
+        return this.value;
+    }
+
+    @Comment("value of meta")
+    public void setValue(MetaValue value)
+    {
+        this.value = value;
     }
 
     @Override

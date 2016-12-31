@@ -32,17 +32,18 @@ entities:
 
   # second list example
   uuidMetaObjectMap:
-    name: specialMeta
+    name:
 
     # value!
-    value: val:12
-    uuid: d9f1fe11-d0ec-44d8-a8da-fca77e5ed7ef
+    value:
+    uuid:
 
   # ugh, uh
   propertiesCollection:
-    propertyName: propertyValue
+    # Some property value
+    (*):
               # also indent of comments is ignored.
-  powered: 'yes'
+  powered:
 
 # Some other object
 beanObject:

@@ -68,7 +68,7 @@ import org.diorite.config.serialization.comments.DocumentComments;
 public final class Serializer
 {
     private final     Serialization       serialization;
-    private final     Emitable            emitter;
+    private final     EmitableWrapper     emitter;
     private final     Resolver            resolver;
     private           boolean             explicitStart;
     private           boolean             explicitEnd;
@@ -93,7 +93,7 @@ public final class Serializer
     public Serializer(Serialization serialization, Emitable emitter, Resolver resolver, DumperOptions opts, @Nullable Tag rootTag)
     {
         this.serialization = serialization;
-        this.emitter = emitter;
+        this.emitter = EmitableWrapper.wrap(emitter);
         this.resolver = resolver;
         this.explicitStart = opts.isExplicitStart();
         this.explicitEnd = opts.isExplicitEnd();
@@ -180,7 +180,10 @@ public final class Serializer
             node.setTag(this.explicitRoot);
         }
 
-        this.serializeNode(node, null, new LinkedList<>());
+        this.emitter.writeComment(this.comments.getHeader(), 0, 2);
+        this.serializeNode(node, null, new LinkedList<>(), false);
+        this.emitter.writeComment(this.comments.getFooter(), 0, 0);
+
         this.emitter.emit(new DocumentEndEvent(null, null, this.explicitEnd));
         this.serializedNodes.clear();
         this.anchors.clear();
@@ -243,7 +246,7 @@ public final class Serializer
         }
     }
 
-    private void serializeNode(Node node, @Nullable Node parent, LinkedList<String> commentPath) throws IOException
+    private void serializeNode(Node node, @Nullable Node parent, LinkedList<String> commentPath, boolean mappingScalar) throws IOException
     {
         if (node.getNodeId() == NodeId.anchor)
         {
@@ -284,7 +287,7 @@ public final class Serializer
                     List<Node> list = seqNode.getValue();
                     for (Node item : list)
                     {
-                        this.serializeNode(item, node, commentPath);
+                        this.serializeNode(item, node, commentPath, false);
                     }
                     this.emitter.emit(new SequenceEndEvent(null, null));
                     break;
@@ -302,8 +305,8 @@ public final class Serializer
                         {
                             commentPath.add(((ScalarNode) key).getValue());
                         }
-                        this.serializeNode(key, mnode, commentPath);
-                        this.serializeNode(value, mnode, commentPath);
+                        this.serializeNode(key, mnode, commentPath, true);
+                        this.serializeNode(value, mnode, commentPath, false);
                         if (key instanceof ScalarNode)
                         {
                             commentPath.removeLast();

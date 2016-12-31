@@ -51,6 +51,7 @@ import org.yaml.snakeyaml.events.CollectionStartEvent;
 import org.yaml.snakeyaml.events.DocumentEndEvent;
 import org.yaml.snakeyaml.events.DocumentStartEvent;
 import org.yaml.snakeyaml.events.Event;
+import org.yaml.snakeyaml.events.ImplicitTuple;
 import org.yaml.snakeyaml.events.MappingEndEvent;
 import org.yaml.snakeyaml.events.MappingStartEvent;
 import org.yaml.snakeyaml.events.NodeEvent;
@@ -114,6 +115,7 @@ public final class Emitter implements Emitable
         DEFAULT_TAG_PREFIXES.put("!", "!");
         DEFAULT_TAG_PREFIXES.put(Tag.PREFIX, "!!");
     }
+
     private final Serialization serialization;
 
     // The stream should have the methods `write` and possibly `flush`.
@@ -339,6 +341,11 @@ public final class Emitter implements Emitable
 
     void expectNode(boolean root, boolean mapping, boolean simpleKey) throws IOException
     {
+        this.expectNode(root, mapping, simpleKey, this.indent);
+    }
+
+    void expectNode(boolean root, boolean mapping, boolean simpleKey, @Nullable Integer lastIndent) throws IOException
+    {
         this.rootContext = root;
         this.mappingContext = mapping;
         this.simpleKeyContext = simpleKey;
@@ -352,7 +359,7 @@ public final class Emitter implements Emitable
             this.processTag();
             if (this.event instanceof ScalarEvent)
             {
-                this.expectScalar();
+                this.expectScalar(lastIndent);
             }
             else if (this.event instanceof SequenceStartEvent)
             {
@@ -395,8 +402,18 @@ public final class Emitter implements Emitable
         this.state = this.states.pop();
     }
 
-    private void expectScalar() throws IOException
+    private void expectScalar(@Nullable Integer lastIndent) throws IOException
     {
+        assert this.event != null;
+        ScalarEvent ev = (ScalarEvent) this.event;
+
+        ImplicitTuple implicitTuple = ev.getImplicit();
+        if (implicitTuple instanceof ImplicitTupleExtension)
+        {
+            this.writeCommentSafe(((ImplicitTupleExtension) implicitTuple).getComment(), 1, 1);
+        }
+        this.writeIndentForce(lastIndent);
+
         this.increaseIndent(true, false);
         this.processScalar();
         this.indent = this.indents.pop();
@@ -996,7 +1013,7 @@ public final class Emitter implements Emitable
         this.stream.write(indicator);
     }
 
-    void writeIndent() throws IOException
+    void writeIndentMod(int mod) throws IOException
     {
         int indent;
         if (this.indent != null)
@@ -1007,7 +1024,34 @@ public final class Emitter implements Emitable
         {
             indent = 0;
         }
+        if ((indent > 0) && ((indent + mod) < 0))
+        {
+            this.writeIndent(0);
+        }
+        this.writeIndent(indent + mod);
+    }
 
+    void writeIndent() throws IOException
+    {
+        this.writeIndentMod(0);
+    }
+
+    void writeIndentForce(@Nullable Integer realIndent) throws IOException
+    {
+        int indent;
+        if (realIndent != null)
+        {
+            indent = realIndent;
+        }
+        else
+        {
+            indent = 0;
+        }
+        this.writeWhitespace(indent - this.column);
+    }
+
+    void writeIndent(int indent) throws IOException
+    {
         if (! this.indention || (this.column > indent) || ((this.column == indent) && ! this.whitespace))
         {
             this.writeLineBreak(null);
@@ -1336,10 +1380,14 @@ public final class Emitter implements Emitable
             this.stream.write(border);
         }
         boolean hasRightBorder = (border != null) && ! commentRightBorder.isEmpty();
-        for (String comment : comments)
+        for (int i = 0; i < comments.length; i++)
         {
-            this.writeLineBreak(null);
-            this.writeIndent();
+            String comment = comments[i];
+            if (i != 0)
+            {
+                this.writeLineBreak(null);
+            }
+            this.writeIndentMod(0);
             if (hasRightBorder)
             {
                 this.stream.write(this.createRightBorder(comment, longest, commentRightBorder));
@@ -1361,23 +1409,44 @@ public final class Emitter implements Emitable
         }
     }
 
-    void writeComment(String... comment) throws IOException
+    void writeComment(int firstNewLine, int lastNewLine, String... comment) throws IOException
     {
-        this.writeLineBreak(null);
+        while (firstNewLine-- > 0)
+        {
+            this.writeLineBreak(null);
+        }
         List<String> comments = new ArrayList<>(comment.length * 2);
         for (String s : comment)
         {
             Collections.addAll(comments, StringUtils.splitPreserveAllTokens(s, '\n'));
         }
         this.printComments(comments.toArray(new String[comments.size()]));
-        this.writeLineBreak(null);
+        while (lastNewLine-- > 0)
+        {
+            this.writeLineBreak(null);
+        }
     }
 
-    void writeComment(String comment) throws IOException
+    void writeCommentSafe(@Nullable String comment, int firstNewLine, int lastNewLine) throws IOException
     {
-        this.writeLineBreak(null);
+        if ((comment == null) || comment.isEmpty())
+        {
+            return;
+        }
+        this.writeComment(comment, firstNewLine, lastNewLine);
+    }
+
+    void writeComment(String comment, int firstNewLine, int lastNewLine) throws IOException
+    {
+        while (firstNewLine-- > 0)
+        {
+            this.writeLineBreak(null);
+        }
         this.printComments(StringUtils.splitPreserveAllTokens(comment, '\n'));
-        this.writeLineBreak(null);
+        while (lastNewLine-- > 0)
+        {
+            this.writeLineBreak(null);
+        }
     }
 
     void writeFolded(String text, boolean split) throws IOException

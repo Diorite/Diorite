@@ -72,6 +72,45 @@ public interface CommentsNode
     String[] fixPath(String... path);
 
     /**
+     * Join given node to this node.
+     *
+     * @param toJoin
+     *         node to join.
+     */
+    void join(CommentsNode toJoin);
+
+    /**
+     * Join given node to this node, on given path.
+     *
+     * @param path
+     *         join path.
+     * @param toJoin
+     *         node to join.
+     */
+    default void join(String path, CommentsNode toJoin)
+    {
+        this.getNode(path).join(toJoin);
+    }
+
+    /**
+     * Join given node to this node, on given path.
+     *
+     * @param path
+     *         join path.
+     * @param toJoin
+     *         node to join.
+     */
+    default void join(String[] path, CommentsNode toJoin)
+    {
+        if (path.length == 0)
+        {
+            this.join(toJoin);
+            return;
+        }
+        this.getNode(path).join(toJoin);
+    }
+
+    /**
      * Set comment on given path.
      *
      * @param path
@@ -80,6 +119,19 @@ public interface CommentsNode
      *         comment to set.
      */
     void setComment(String path, @Nullable String comment);
+
+    /**
+     * Set comment on given path.
+     *
+     * @param path
+     *         path of comment.
+     * @param comment
+     *         comment to set.
+     */
+    default void setComment(String[] path, @Nullable String... comment)
+    {
+        this.setComment(path, StringUtils.join(comment, '\n'));
+    }
 
     /**
      * Set comment on given path.

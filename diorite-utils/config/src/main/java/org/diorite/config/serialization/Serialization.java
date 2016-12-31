@@ -123,7 +123,9 @@ public final class Serialization
                 return result;
             }
         }
-        return DocumentComments.getEmpty();
+        DocumentComments comments = DocumentComments.parseFromAnnotations(clazz);
+        this.commentsCacheMap.put(clazz, comments);
+        return comments;
     }
 
     public void addComments(Class<?> clazz, DocumentComments comments)
@@ -1322,6 +1324,19 @@ public final class Serialization
      *
      * @param data
      *         Java object to be Serialized to YAML
+     *
+     * @return YAML String
+     */
+    public String toYamlWithComments(Object data)
+    {
+        return this.yaml().toYamlWithComments(data, this.getComments(data.getClass()));
+    }
+
+    /**
+     * Serialize a Java object into a YAML String.
+     *
+     * @param data
+     *         Java object to be Serialized to YAML
      * @param comments
      *         comments node.
      *
@@ -1368,6 +1383,19 @@ public final class Serialization
     public void toYaml(Object data, Writer output)
     {
         this.yaml().toYaml(data, output);
+    }
+
+    /**
+     * Serialize a Java object into a YAML stream.
+     *
+     * @param data
+     *         Java object to be serialized to YAML
+     * @param output
+     *         output for yaml.
+     */
+    public void toYamlWithComments(Object data, Writer output)
+    {
+        this.yaml().toYamlWithComments(data, output, this.getComments(data.getClass()));
     }
 
     /**

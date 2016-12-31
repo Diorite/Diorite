@@ -30,8 +30,11 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.Comment;
+
 public class CreeperEntityData extends AbstractEntityData
 {
+    @Comment("also indent of comments is ignored.")
     boolean powered;
 
     protected CreeperEntityData(String name, int age, boolean special, boolean powered, @Nullable String displayName)

@@ -24,27 +24,26 @@
 
 package org.diorite.config.serialization.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to setup comments to class.
+ * Used to setup comments for class fields.
  */
-@Documented
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Comment
+@Repeatable(PredefinedComments.class)
+public @interface PredefinedComment
 {
     /**
-     * Used when parsing comments from class, can be used to set custom name that is used for serialization. <br>
-     * If value is an empty string name will be extracted from field/method.
+     * Full path of comment, {@link org.diorite.config.serialization.comments.CommentsNode#ANY} can be used for wildcard nodes.
      *
-     * @return custom name that is used for serialization.
+     * @return path of comment.
      */
-    String name() default "";
+    String[] path();
 
     /**
      * Comment lines of field/type.

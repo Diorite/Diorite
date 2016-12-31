@@ -30,6 +30,10 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.serialization.comments.CommentsNode;
+
+@PredefinedComment(path = CommentsNode.ANY, value = "Some property value")
 public class SomeProperties implements Serializable
 {
     Map<String, String> prop = new HashMap<>(20);

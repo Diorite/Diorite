@@ -258,4 +258,17 @@ public interface DocumentComments extends CommentsNode
             throw new CommentsParserException(e);
         }
     }
+
+    /**
+     * Parses comments from class by scanning annotations on class, super class, interfaces, fields and methods.
+     *
+     * @param clazz
+     *         type to scan.
+     *
+     * @return scanned type.
+     */
+    static DocumentComments parseFromAnnotations(Class<?> clazz)
+    {
+        return TypeExtractor.getAnnotationData(clazz);
+    }
 }

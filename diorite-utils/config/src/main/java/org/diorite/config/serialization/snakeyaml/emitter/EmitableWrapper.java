@@ -24,48 +24,26 @@
 
 package org.diorite.config.serialization.snakeyaml.emitter;
 
+import javax.annotation.Nullable;
+
 import java.io.IOException;
 
-import org.yaml.snakeyaml.events.MappingEndEvent;
+import org.yaml.snakeyaml.emitter.Emitable;
 
-class ExpectBlockMappingKey implements EmitterState
+interface EmitableWrapper extends Emitable
 {
-    private boolean first;
+    void writeComment(@Nullable String comment, int topNewLines, int bottomNewLines) throws IOException;
 
-    ExpectBlockMappingKey(boolean first)
+    static EmitableWrapper wrap(Emitable emitable)
     {
-        this.first = first;
-    }
-
-    @Override
-    public void expect(Emitter emitter) throws IOException
-    {
-        expect(emitter, this.first);
-    }
-
-    static void expect(Emitter emitter, boolean first) throws IOException
-    {
-        if (! first && (emitter.event instanceof MappingEndEvent))
+        if (emitable instanceof EmitableWrapper)
         {
-            emitter.indent = emitter.indents.pop();
-            emitter.state = emitter.states.pop();
+            return (EmitableWrapper) emitable;
         }
-        else
+        if (emitable instanceof Emitter)
         {
-            if (emitter.checkSimpleKey())
-            {
-//                emitter.writeComment("This is test comment!"); TODO
-                emitter.writeIndent();
-                emitter.states.push(new ExpectBlockMappingSimpleValue());
-                emitter.expectNode(false, true, true, emitter.indent);
-            }
-            else
-            {
-                emitter.writeIndent();
-                emitter.writeIndicator("?", true, false, true);
-                emitter.states.push(new ExpectBlockMappingValue());
-                emitter.expectNode(false, true, false);
-            }
+            return new EmitterWrapper((Emitter) emitable);
         }
+        return new UnknownEmitableWrapper(emitable);
     }
 }

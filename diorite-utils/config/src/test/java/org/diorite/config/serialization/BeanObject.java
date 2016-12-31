@@ -29,10 +29,13 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.Comment;
+
 public class BeanObject
 {
     private int               intProperty;
     private String            stringProperty;
+    @Comment("Weird map of int arrays:")
     private Map<int[], int[]> intMap;
 
     public int getIntProperty()

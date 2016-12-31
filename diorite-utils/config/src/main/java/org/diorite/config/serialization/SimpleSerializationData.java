@@ -28,20 +28,27 @@ import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
+import org.diorite.config.serialization.comments.CommentsNode;
+import org.diorite.config.serialization.comments.DocumentComments;
 
 class SimpleSerializationData implements SerializationData
 {
     private final SerializationType serializationType;
 
-    private final Class<?>      type;
-    private final Serialization serialization;
+    private final Class<?>         type;
+    private final Serialization    serialization;
+    private final DocumentComments comments;
+
+    private final Set<Class<?>> scannedCommentsClasses = new HashSet<>(20);
 
     private final List<Object>        dataList = new ArrayList<>(20);
     private final Map<Object, Object> dataMap  = new LinkedHashMap<>(20);
@@ -54,6 +61,7 @@ class SimpleSerializationData implements SerializationData
         this.serializationType = serializationType;
         this.serialization = serialization;
         this.type = type;
+        this.comments = DocumentComments.parseFromAnnotations(type);
     }
 
     @Override
@@ -68,8 +76,13 @@ class SimpleSerializationData implements SerializationData
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Object serialize(Class<T> type, T object)
+    @Nullable
+    private <T> Object serialize(Class<T> type, @Nullable T object)
     {
+        if (object == null)
+        {
+            return null;
+        }
         if (type == Object.class)
         {
             type = (Class<T>) object.getClass();
@@ -102,8 +115,13 @@ class SimpleSerializationData implements SerializationData
     }
 
     @SuppressWarnings("unchecked")
-    private <T> String toString(T object, @Nullable Class<T> type)
+    @Nullable
+    private <T> String toString(@Nullable T object, @Nullable Class<T> type)
     {
+        if (object == null)
+        {
+            return null;
+        }
         if ((type == null) || (type == Object.class))
         {
             type = (Class<T>) object.getClass();
@@ -140,6 +158,37 @@ class SimpleSerializationData implements SerializationData
         return this.serialization;
     }
 
+    private void addComments(Class<?> type, String... key)
+    {
+        if (! this.scannedCommentsClasses.add(type))
+        {
+            return;
+        }
+        for (int i = 0; i < key.length; i++)
+        {
+            if (key[i].isEmpty())
+            {
+                key[i] = CommentsNode.ANY;
+            }
+        }
+        DocumentComments comments = DocumentComments.parseFromAnnotations(type);
+        this.comments.join(key, comments);
+    }
+
+    private void addComments(Class<?> type, String key)
+    {
+        if (! this.scannedCommentsClasses.add(type))
+        {
+            return;
+        }
+        DocumentComments comments = DocumentComments.parseFromAnnotations(type);
+        if (key.isEmpty())
+        {
+            this.comments.join(CommentsNode.ANY, comments);
+        }
+        this.comments.join(key, comments);
+    }
+
     @Override
     public <T> void add(String key, @Nullable T value)
     {
@@ -154,6 +203,10 @@ class SimpleSerializationData implements SerializationData
             this.dataMap.put(key, this.toString(value, null));
             return;
         }
+
+        Class<?> valueClass = value.getClass();
+        this.addComments(valueClass, key);
+
         if (! this.serialization.isSerializable(value))
         {
             if (this.serialization.isStringSerializable(value))
@@ -161,7 +214,7 @@ class SimpleSerializationData implements SerializationData
                 this.dataMap.put(key, this.serialization.serializeToString(value));
                 return;
             }
-            if (this.serialization.canBeSerialized(value.getClass()))
+            if (this.serialization.canBeSerialized(valueClass))
             {
                 this.dataMap.put(key, this.serialize(value));
                 return;
@@ -185,6 +238,9 @@ class SimpleSerializationData implements SerializationData
             this.dataMap.put(key, this.toString(value, type));
             return;
         }
+
+        this.addComments(value.getClass(), key);
+
         if (! this.serialization.isSerializable(type))
         {
             if (this.serialization.isStringSerializable(type))
@@ -206,9 +262,20 @@ class SimpleSerializationData implements SerializationData
     public <T> void addMappedList(String key, Class<T> type, Collection<? extends T> value, Function<T, String> mapper)
     {
         this.validateMap(key);
+
+        this.addComments(type, key, CommentsNode.ANY);
+
         Map<String, Object> valueMap = new LinkedHashMap<>(value.size());
         for (T t : value)
         {
+            if (t == null)
+            {
+                valueMap.put(key, null);
+                continue;
+            }
+
+            this.addComments(t.getClass(), key, CommentsNode.ANY);
+
             if (Serialization.isSimple(t))
             {
                 valueMap.put(key, this.toString(t, type));
@@ -223,6 +290,9 @@ class SimpleSerializationData implements SerializationData
     public <T> void addCollection(String key, Collection<? extends T> value, Class<T> type)
     {
         this.validateList(key);
+
+        this.addComments(type, key);
+
         List<Object> result;
         if (key.isEmpty())
         {
@@ -234,11 +304,20 @@ class SimpleSerializationData implements SerializationData
         }
         for (T t : value)
         {
+            if (t == null)
+            {
+                result.add(null);
+                continue;
+            }
+
             if (Serialization.isSimple(t))
             {
                 result.add(this.toString(t, type));
                 continue;
             }
+
+            this.addComments(t.getClass(), key);
+
             result.add(this.serialize(type, t));
         }
         if (! key.isEmpty())
@@ -251,6 +330,9 @@ class SimpleSerializationData implements SerializationData
     public <T> void addMapAsList(String key, Map<?, ? extends T> value, Class<T> type)
     {
         this.validateList(key);
+
+        this.addComments(type, key);
+
         List<Object> result;
         if (key.isEmpty())
         {
@@ -262,12 +344,19 @@ class SimpleSerializationData implements SerializationData
         }
         for (Entry<?, ? extends T> entry : value.entrySet())
         {
-            if (Serialization.isSimple(entry.getValue()))
+            T entryValue = entry.getValue();
+
+            if (entryValue != null)
             {
-                result.add(this.toString(entry.getValue(), type));
+                this.addComments(entryValue.getClass(), key);
+            }
+
+            if (Serialization.isSimple(entryValue))
+            {
+                result.add(this.toString(entryValue, type));
                 continue;
             }
-            result.add(this.serialize(type, entry.getValue()));
+            result.add(this.serialize(type, entryValue));
         }
         if (! key.isEmpty())
         {
@@ -280,6 +369,9 @@ class SimpleSerializationData implements SerializationData
     public <T> void addMapAsListWithKeys(String key, Map<?, ? extends T> value, Class<T> type, String keyPropertyName)
     {
         this.validateList(key);
+
+        this.addComments(type, key);
+
         List<Object> result;
         if (key.isEmpty())
         {
@@ -291,10 +383,21 @@ class SimpleSerializationData implements SerializationData
         }
         for (Entry<?, ? extends T> entry : value.entrySet())
         {
-            Object o = this.serialize(type, entry.getValue());
+            T entryValue = entry.getValue();
+
+            if (entryValue != null)
+            {
+                this.addComments(entryValue.getClass(), key);
+            }
+
+            Object o = this.serialize(type, entryValue);
             if (o instanceof Map)
             {
                 Object entryKey = entry.getKey();
+                if (entryKey != null)
+                {
+                    this.addComments(entryKey.getClass(), key);
+                }
 
                 String keyStr;
                 if (Serialization.isSimple(entryKey))
@@ -327,6 +430,10 @@ class SimpleSerializationData implements SerializationData
     public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type)
     {
         this.validateMap(key);
+
+        this.addComments(type, key, CommentsNode.ANY);
+        this.addComments(keyType, key);
+
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
@@ -339,17 +446,28 @@ class SimpleSerializationData implements SerializationData
         for (Entry<? extends K, ? extends T> entry : value.entrySet())
         {
             K entryKey = entry.getKey();
+            T entryValue = entry.getValue();
+
+            if (entryKey != null)
+            {
+                this.addComments(entryKey.getClass(), key);
+            }
+            if (entryValue != null)
+            {
+                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+            }
+
             if (Serialization.isSimple(entryKey))
             {
-                if (Serialization.isSimple(entry.getValue()))
+                if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entry.getValue(), type));
+                    resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entryValue));
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialize(type, entry.getValue()));
+            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialize(type, entryValue));
         }
         if (! key.isEmpty())
         {
@@ -361,6 +479,9 @@ class SimpleSerializationData implements SerializationData
     public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type)
     {
         this.validateMap(key);
+
+        this.addComments(type, key, CommentsNode.ANY);
+
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
@@ -373,17 +494,28 @@ class SimpleSerializationData implements SerializationData
         for (Entry<? extends K, ? extends T> entry : value.entrySet())
         {
             K entryKey = entry.getKey();
+            T entryValue = entry.getValue();
+
+            if (entryKey != null)
+            {
+                this.addComments(entryKey.getClass(), key);
+            }
+            if (entryValue != null)
+            {
+                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+            }
+
             if (Serialization.isSimple(entryKey))
             {
-                if (Serialization.isSimple(entry.getValue()))
+                if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entry.getValue(), type));
+                    resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entryValue));
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(entryKey), this.serialize(type, entry.getValue()));
+            resultMap.put(this.serialization.serializeToString(entryKey), this.serialize(type, entryValue));
         }
         if (! key.isEmpty())
         {
@@ -395,6 +527,9 @@ class SimpleSerializationData implements SerializationData
     public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type, Function<K, String> keyMapper)
     {
         this.validateMap(key);
+
+        this.addComments(type, key, CommentsNode.ANY);
+
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
@@ -407,17 +542,28 @@ class SimpleSerializationData implements SerializationData
         for (Entry<? extends K, ? extends T> entry : value.entrySet())
         {
             K entryKey = entry.getKey();
+            T entryValue = entry.getValue();
+
+            if (entryKey != null)
+            {
+                this.addComments(entryKey.getClass(), key);
+            }
+            if (entryValue != null)
+            {
+                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+            }
+
             if (Serialization.isSimple(entryKey))
             {
-                if (Serialization.isSimple(entry.getValue()))
+                if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entry.getValue(), type));
+                    resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entry.getValue()));
+                resultMap.put(entryKey, this.serialize(type, entryValue));
                 continue;
             }
-            resultMap.put(keyMapper.apply(entryKey), this.serialize(type, entry.getValue()));
+            resultMap.put(keyMapper.apply(entryKey), this.serialize(type, entryValue));
         }
         if (! key.isEmpty())
         {

@@ -39,7 +39,7 @@ public class SerializationTest
         ToStringBuilder.setDefaultStyle(ToStringStyle.JSON_STYLE);
     }
 
-    private Serialization prepareSerialization()
+    static Serialization prepareSerialization()
     {
         Serialization global = Serialization.getGlobal();
         global.registerSerializable(SomeProperties.class);
@@ -50,7 +50,7 @@ public class SerializationTest
         return global;
     }
 
-    private EntityStorage prepareObject()
+    static EntityStorage prepareObject()
     {
         EntityStorage entityStorage = new EntityStorage();
         {

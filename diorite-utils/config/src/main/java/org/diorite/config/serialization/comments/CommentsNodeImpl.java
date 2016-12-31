@@ -137,6 +137,36 @@ class CommentsNodeImpl implements CommentsNode
         return path;
     }
 
+    @Override
+    public void join(CommentsNode toJoin_)
+    {
+        if (toJoin_ instanceof EmptyCommentsNode)
+        {
+            return;
+        }
+        if (! (toJoin_ instanceof CommentsNodeImpl))
+        {
+            throw new IllegalArgumentException("Can't join to unknown node type.");
+        }
+        CommentsNodeImpl toJoin = (CommentsNodeImpl) toJoin_;
+        for (Entry<String, MutablePair<String, CommentsNodeImpl>> entry : toJoin.dataMap.entrySet())
+        {
+            String nodeKey = entry.getKey();
+            MutablePair<String, CommentsNodeImpl> pair = entry.getValue();
+            String nodeComment = pair.getLeft();
+            CommentsNodeImpl subNode = pair.getRight();
+
+            if (nodeComment != null)
+            {
+                this.setComment(nodeKey, nodeComment);
+            }
+            if (subNode != null)
+            {
+                this.join(nodeKey, subNode);
+            }
+        }
+    }
+
     private String fixPath(String path)
     {
         Pair<String, CommentsNodeImpl> node = this.dataMap.get(path);
@@ -170,7 +200,11 @@ class CommentsNodeImpl implements CommentsNode
         MutablePair<String, CommentsNodeImpl> nodePair = this.dataMap.get(path);
         if (nodePair != null)
         {
-            return nodePair.getKey();
+            String comment = nodePair.getLeft();
+            if (comment != null)
+            {
+                return comment;
+            }
         }
         MutablePair<String, CommentsNodeImpl> anyNodePair = this.dataMap.get(ANY);
         if (anyNodePair != null)

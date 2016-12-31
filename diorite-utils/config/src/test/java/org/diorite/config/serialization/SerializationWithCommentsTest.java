@@ -22,34 +22,32 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.serialization;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.io.IOException;
 
-/**
- * Used to setup comments to class.
- */
-@Documented
-@Target({ElementType.FIELD, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Comment
+import org.junit.Assert;
+import org.junit.Test;
+
+import org.diorite.config.serialization.comments.DocumentComments;
+
+public class SerializationWithCommentsTest
 {
-    /**
-     * Used when parsing comments from class, can be used to set custom name that is used for serialization. <br>
-     * If value is an empty string name will be extracted from field/method.
-     *
-     * @return custom name that is used for serialization.
-     */
-    String name() default "";
+    @Test
+    public void testSaveWithComments() throws IOException
+    {
+        Serialization serialization = SerializationTest.prepareSerialization();
 
-    /**
-     * Comment lines of field/type.
-     *
-     * @return comment lines.
-     */
-    String[] value();
+        EntityStorage entityStorage = SerializationTest.prepareObject();
+        DocumentComments comments = DocumentComments.parse(CommentsConfigTest.class.getResourceAsStream("/entitystorage-comment.yml"));
+
+        System.out.println("[Serializing with manual loaded comments:]");
+        System.out.println(serialization.toYamlWithComments(entityStorage, comments));
+
+
+        System.out.println("\n\n[Serializing with class loaded comments:]");
+        System.out.println(serialization.toYamlWithComments(entityStorage));
+
+        Assert.assertEquals(serialization.toYamlWithComments(entityStorage, comments), serialization.toYamlWithComments(entityStorage));
+    }
 }

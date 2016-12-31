@@ -30,8 +30,23 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.config.serialization.annotations.Comment;
+import org.diorite.config.serialization.annotations.Footer;
+import org.diorite.config.serialization.annotations.Header;
+import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.serialization.comments.CommentsNode;
+
+@Header({"Header of file, first space of comments is always skipped, if you want indent a comment just use more spaces.",
+         "    Like this.",
+         "",
+         "But first char don't need to be a space."})
+@Footer("Footer of file.")
+@PredefinedComment(path = "beanObject", value = "Some other object")
+@PredefinedComment(path = {"entities", "type"}, value = "Comment for `type` node inside list element.")
+@PredefinedComment(path = {"entities", "metaObjects", CommentsNode.ANY, "name"}, value = "name of meta")
 public class EntityStorage implements Serializable
 {
+    @Comment(name = "entities", value = "Entity list, comments in a list are like in maps, just skip list syntax and add comments directly to list element nodes.")
     Collection<EntityData> entityData = new ArrayList<>();
     BeanObject beanObject;
 

@@ -36,25 +36,37 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.SerializableAs;
+import org.diorite.config.serialization.annotations.Comment;
+import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.serialization.comments.CommentsNode;
 
-@SerializableAs(EntityData.class)
+@PredefinedComment(path = "age", value = "age of entity")
+@PredefinedComment(path = {"metaObjects", CommentsNode.ANY},
+                   value = "asterisk means that any key may appear here, you can use (*) too to still use valid yaml syntax.")
+@PredefinedComment(path = {"uuidMetaObjectMap", "value"}, value = "value!")
 public abstract class AbstractEntityData implements EntityData
 {
     EntityType type;
-    String     name;
-    int        age;
-    boolean    special;
+    @Comment(name = "name", value = {"Name of entity",
+                                     "   Multiline test",
+                                     "test test"})
+    String namee; // test for custom name
+    int age;
+    @Comment("is it special?")
+    boolean special;
+    @Comment("meta objects!")
     Collection<MetaObject>     metaObjects          = new ArrayList<>();
+    @Comment("second list example")
     Map<UUID, MetaObject>      uuidMetaObjectMap    = new HashMap<>();
+    @Comment("ugh, uh")
     Collection<SomeProperties> propertiesCollection = new ArrayList<>();
     @Nullable
     String displayName;
 
-    protected AbstractEntityData(EntityType type, String name, int age, boolean special, @Nullable String displayName)
+    protected AbstractEntityData(EntityType type, String namee, int age, boolean special, @Nullable String displayName)
     {
         this.type = type;
-        this.name = name;
+        this.namee = namee;
         this.age = age;
         this.special = special;
         this.displayName = displayName;
@@ -63,7 +75,7 @@ public abstract class AbstractEntityData implements EntityData
     protected AbstractEntityData(DeserializationData data)
     {
         this.type = data.getOrThrow("type", EntityType.class);
-        this.name = data.getOrThrow("name", String.class);
+        this.namee = data.getOrThrow("name", String.class);
         this.age = data.getAsInt("age");
         this.special = data.getOrThrow("special", Boolean.class);
         this.displayName = data.get("displayName", String.class);
@@ -92,7 +104,7 @@ public abstract class AbstractEntityData implements EntityData
     public void serialize(SerializationData data)
     {
         data.add("type", this.type);
-        data.add("name", this.name);
+        data.add("name", this.namee);
         data.addNumber("age", this.age, 3);
         data.add("special", this.special);
         data.add("displayName", this.displayName);
@@ -116,7 +128,7 @@ public abstract class AbstractEntityData implements EntityData
         return (this.age == that.age) &&
                (this.special == that.special) &&
                (this.type == that.type) &&
-               Objects.equals(this.name, that.name) &&
+               Objects.equals(this.namee, that.namee) &&
                Objects.equals(this.metaObjects, that.metaObjects) &&
                Objects.equals(this.uuidMetaObjectMap, that.uuidMetaObjectMap) &&
                Objects.equals(this.propertiesCollection, that.propertiesCollection);
@@ -125,13 +137,13 @@ public abstract class AbstractEntityData implements EntityData
     @Override
     public int hashCode()
     {
-        return Objects.hash(this.type, this.name, this.age, this.special, this.metaObjects, this.uuidMetaObjectMap, this.propertiesCollection);
+        return Objects.hash(this.type, this.namee, this.age, this.special, this.metaObjects, this.uuidMetaObjectMap, this.propertiesCollection);
     }
 
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("type", this.type).append("name", this.name)
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("type", this.type).append("name", this.namee)
                                         .append("age", this.age).append("special", this.special)
                                         .append("metaObjects", this.metaObjects)
                                         .append("uuidMetaObjectMap", this.uuidMetaObjectMap)

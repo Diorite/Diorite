@@ -75,6 +75,12 @@ class EmptyCommentsNode implements CommentsNode
     }
 
     @Override
+    public void join(CommentsNode toJoin)
+    {
+
+    }
+
+    @Override
     public void setComment(String path, @Nullable String comment)
     {
 
