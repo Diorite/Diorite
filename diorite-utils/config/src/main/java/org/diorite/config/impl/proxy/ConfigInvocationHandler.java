@@ -49,6 +49,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigTemplate;
+import org.diorite.config.exceptions.InvalidConfigValueTypeException;
 
 public final class ConfigInvocationHandler implements InvocationHandler
 {
@@ -322,16 +323,21 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     private <T> T getImpl(String[] key, @Nullable T def, Class<T> type)
     {
-        Object value = getImpl(key, def);
+        Object value = this.getImpl(key, def);
         if (value == null)
         {
-            return null;
+            return def;
         }
-        // TODO convert type
-        return (T) value;
+        Class<?> wrapperClass = DioriteReflectionUtils.getWrapperClass(type);
+        if (wrapperClass.isInstance(value))
+        {
+            return (T) value;
+        }
+        throw new InvalidConfigValueTypeException("Expected value of " + type.getName() + " type, but got " + value + " instead.");
     }
 
     @Nullable
@@ -495,6 +501,5 @@ public final class ConfigInvocationHandler implements InvocationHandler
     {
         return this.containsKeyImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR));
     }
-
 
 }

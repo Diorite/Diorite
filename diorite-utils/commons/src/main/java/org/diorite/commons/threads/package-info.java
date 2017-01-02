@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.snakeyaml.emitter;
+/**
+ * Thread related utils.
+ */
+@NonnullByDefault
+package org.diorite.commons.threads;
 
-import javax.annotation.Nullable;
-
-import org.yaml.snakeyaml.events.ImplicitTuple;
-
-class ImplicitTupleExtension extends ImplicitTuple
-{
-    @Nullable private final String comment;
-
-    ImplicitTupleExtension(boolean plain, boolean nonplain, @Nullable String comment)
-    {
-        super(plain, nonplain);
-        this.comment = comment;
-    }
-
-    @Nullable
-    public String getComment()
-    {
-        return this.comment;
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

@@ -216,6 +216,8 @@ import org.yaml.snakeyaml.representer.Represent;
  */
 public class Representer extends BaseRepresenter
 {
+    private static final int MAX_WIDTH = 100;
+
     protected Map<Class<?>, Tag> classTags;
     @Nullable protected TimeZone timeZone = null;
 
@@ -300,7 +302,51 @@ public class Representer extends BaseRepresenter
     @Override
     public Node representSequence(Tag tag, Iterable<?> sequence, @Nullable Boolean flowStyle)
     {
-        return super.representSequence(tag, sequence, flowStyle);
+        int size = 10;// default for ArrayList
+        if (sequence instanceof Collection<?>)
+        {
+            size = ((Collection<?>) sequence).size();
+        }
+        List<Node> value = new ArrayList<>(size);
+        SequenceNode node = new SequenceNode(tag, value, flowStyle);
+        this.representedObjects.put(this.objectToRepresent, node);
+        boolean bestStyle = true;
+        long width = 0;
+        for (Object item : sequence)
+        {
+            Node nodeItem = this.representData(item);
+            if (bestStyle)
+            {
+                if ((nodeItem instanceof ScalarNode) && (((ScalarNode) nodeItem).getStyle() == null))
+                {
+                    String val = ((ScalarNode) nodeItem).getValue();
+                    width += (val == null) ? 0 : val.length();
+                    width += 2; // comma and space.
+                    if (width > MAX_WIDTH)
+                    {
+                        bestStyle = false;
+                    }
+                }
+                else
+                {
+                    bestStyle = false;
+                }
+            }
+            value.add(nodeItem);
+        }
+        if (flowStyle == null)
+        {
+            // we ignore this for diorite representer, configs should look nice.
+//            if (this.defaultFlowStyle != FlowStyle.AUTO)
+//            {
+//                node.setFlowStyle(this.defaultFlowStyle.getStyleBoolean());
+//            }
+//            else
+//            {
+            node.setFlowStyle(bestStyle);
+//            }
+        }
+        return node;
     }
 
     @Override

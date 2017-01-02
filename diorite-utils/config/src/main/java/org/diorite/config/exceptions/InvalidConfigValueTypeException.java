@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.snakeyaml.emitter;
+package org.diorite.config.exceptions;
 
-import javax.annotation.Nullable;
-
-import org.yaml.snakeyaml.events.ImplicitTuple;
-
-class ImplicitTupleExtension extends ImplicitTuple
+public class InvalidConfigValueTypeException extends RuntimeException
 {
-    @Nullable private final String comment;
+    private static final long serialVersionUID = 0;
 
-    ImplicitTupleExtension(boolean plain, boolean nonplain, @Nullable String comment)
+    public InvalidConfigValueTypeException()
     {
-        super(plain, nonplain);
-        this.comment = comment;
     }
 
-    @Nullable
-    public String getComment()
+    public InvalidConfigValueTypeException(String message)
     {
-        return this.comment;
+        super(message);
+    }
+
+    public InvalidConfigValueTypeException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public InvalidConfigValueTypeException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public InvalidConfigValueTypeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)
+    {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

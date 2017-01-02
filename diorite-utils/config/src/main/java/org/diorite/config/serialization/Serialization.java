@@ -69,11 +69,11 @@ import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
-import org.diorite.commons.DioriteThreadUtils;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.commons.reflections.ReflectMethod;
+import org.diorite.commons.threads.DioriteThreadUtils;
 import org.diorite.config.serialization.annotations.DelegateSerializable;
 import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.annotations.StringSerializable;
@@ -89,7 +89,8 @@ import org.diorite.config.serialization.snakeyaml.YamlConstructor;
  */
 public final class Serialization
 {
-    private static final Serialization GLOBAL = new Serialization((Void) null);
+    private static final Serialization GLOBAL     = new Serialization((Void) null);
+    private static final int           BEST_WIDTH = 180;
 
     // gson section
     private final GsonBuilder       gsonBuilder =
@@ -180,6 +181,7 @@ public final class Serialization
         dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
         dumperOptions.setIndent(2);
         dumperOptions.setPrettyFlow(false);
+        dumperOptions.setWidth(BEST_WIDTH);
 
         Resolver resolver = new Resolver();
 

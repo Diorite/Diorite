@@ -25,6 +25,7 @@
 package org.diorite.config.serialization;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -62,6 +63,9 @@ public class SerializationTest
             map.put(new int[]{4, 5, 6}, new int[]{14, 15, 16});
             map.put(new int[]{7, 8, 9}, new int[]{17, 18, 19});
             beanObject.setIntMap(map);
+            beanObject.setList(List.of("some string", "more element", "and more", "dfihefk  fdspbwptn  ifd", "  dju jms jhkror ifjw  ", "du fjfne"));
+            beanObject.setList2(List.of("some string", "more element", "and more", "some string", "more element", "and more", "dfihefk  fdspbwptn  ifd",
+                                       "  dju jms jhkror ifjw  ", "du fjfne", "dfihefk  fdspbwptn  ifd", "  dju jms jhkror ifjw  ", "du fjfne"));
             entityStorage.beanObject = beanObject;
         }
         {

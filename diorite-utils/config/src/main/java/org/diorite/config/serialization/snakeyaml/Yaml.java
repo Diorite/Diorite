@@ -209,7 +209,7 @@ import org.yaml.snakeyaml.reader.StreamReader;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.resolver.Resolver;
 
-import org.diorite.commons.DioriteThreadUtils;
+import org.diorite.commons.threads.DioriteThreadUtils;
 import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.comments.DocumentComments;

@@ -24,6 +24,7 @@
 
 package org.diorite.config.serialization;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -35,6 +36,8 @@ public class BeanObject
 {
     private int               intProperty;
     private String            stringProperty;
+    private List<String>      list;
+    private List<String>      list2;
     @Comment("Weird map of int arrays:")
     private Map<int[], int[]> intMap;
 
@@ -66,6 +69,26 @@ public class BeanObject
     public void setIntMap(Map<int[], int[]> intMap)
     {
         this.intMap = intMap;
+    }
+
+    public List<String> getList()
+    {
+        return this.list;
+    }
+
+    public void setList(List<String> list)
+    {
+        this.list = list;
+    }
+
+    public List<String> getList2()
+    {
+        return this.list2;
+    }
+
+    public void setList2(List<String> list2)
+    {
+        this.list2 = list2;
     }
 
     @Override

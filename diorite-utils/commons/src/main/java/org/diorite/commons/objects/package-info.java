@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons;
+/**
+ * Basic object utils.
+ */
+@NonnullByDefault
+package org.diorite.commons.objects;
 
-import java.io.File;
-import java.io.IOException;
-
-public final class DioriteFileUtils
-{
-    private DioriteFileUtils()
-    {
-    }
-
-    /**
-     * Create file directory, and then create file.
-     *
-     * @param file
-     *         file to create.
-     *
-     * @throws IOException
-     *         from {@link File#createNewFile()}
-     */
-    public static void createFile(File file) throws IOException
-    {
-        if (file.exists())
-        {
-            return;
-        }
-        file.getAbsoluteFile().getParentFile().mkdirs();
-        file.createNewFile();
-    }
-}
+import org.diorite.annotations.NonnullByDefault;
