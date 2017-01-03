@@ -47,21 +47,40 @@ import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
+import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.Config;
+import org.diorite.config.ConfigPropertyAction;
+import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
+import org.diorite.config.MethodSignature;
 import org.diorite.config.exceptions.InvalidConfigValueTypeException;
+import org.diorite.config.impl.ConfigPropertyValueImpl;
 
 public final class ConfigInvocationHandler implements InvocationHandler
 {
     private final ConfigTemplate<?> template;
 
-    private final Map<Method, Function<Object[], Object>> basicMethods = new ConcurrentHashMap<>(20);
+    private final Map<Method, Function<Object[], Object>>      basicMethods     = new ConcurrentHashMap<>(20);
+    private final Map<String, ConfigPropertyValueImpl<Object>> predefinedValues = new ConcurrentHashMap<>(10);
 
     private Config config;
 
     public ConfigInvocationHandler(ConfigTemplate<?> template)
     {
         this.template = template;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private ConfigPropertyValueImpl<Object> getOrCreatePredefinedValue(ConfigPropertyTemplate template)
+    {
+        ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(template.getName());
+        if (propertyValue != null)
+        {
+            return propertyValue;
+        }
+        propertyValue = new ConfigPropertyValueImpl<>(template, template.getDefault(this.config));
+        this.predefinedValues.put(template.getName(), propertyValue);
+        return propertyValue;
     }
 
     @Nullable
@@ -82,6 +101,28 @@ public final class ConfigInvocationHandler implements InvocationHandler
         if (function != null)
         {
             return function.apply(args);
+        }
+        // check for dispatcher:
+        ConfigPropertyAction actionFor = this.template.getActionFor(new MethodSignature(method));
+        if (actionFor != null)
+        {
+            MethodInvoker methodInvoker = new MethodInvoker(method);
+            ConfigPropertyTemplate<?> templateFor = this.template.getTemplateFor(actionFor);
+            if (templateFor != null)
+            {
+                ConfigPropertyValueImpl<Object> propertyValue = this.getOrCreatePredefinedValue(templateFor);
+                if (methodInvoker.getReturnType() == void.class)
+                {
+                    this.registerVoidMethod(method, arg -> actionFor.perform(methodInvoker, propertyValue, arg));
+                    actionFor.perform(methodInvoker, propertyValue, args);
+                    return null;
+                }
+                else
+                {
+                    this.registerMethod(method, arg -> actionFor.perform(methodInvoker, propertyValue, arg));
+                    return actionFor.perform(methodInvoker, propertyValue, args);
+                }
+            }
         }
 
         // check for default implementation

@@ -430,7 +430,7 @@ import it.unimi.dsi.fastutil.shorts.ShortSet;
 import it.unimi.dsi.fastutil.shorts.ShortSortedSet;
 import it.unimi.dsi.fastutil.shorts.ShortStack;
 
-final class YamlCollectionCreator
+public final class YamlCollectionCreator
 {
     private static final Map<Class<?>, IntFunction<?>> collectionCreators = new ConcurrentHashMap<>(20);
 
@@ -481,7 +481,7 @@ final class YamlCollectionCreator
     }
 
     @SuppressWarnings("unchecked")
-    static <T> T createCollection(Class<?> clazz, int size)
+    public static <T> T createCollection(Class<?> clazz, int size)
     {
         return create(collectionCreators, (Class<T>) clazz, size);
     }

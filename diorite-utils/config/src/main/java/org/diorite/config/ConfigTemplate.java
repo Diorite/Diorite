@@ -24,6 +24,8 @@
 
 package org.diorite.config;
 
+import javax.annotation.Nullable;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,6 +36,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.util.Map;
 
 import org.diorite.config.exceptions.ConfigLoadException;
 
@@ -56,6 +59,52 @@ public interface ConfigTemplate<T extends Config>
      * @return config type class.
      */
     Class<T> getConfigType();
+
+    /**
+     * Returns map of properties of this config class.
+     *
+     * @return map of properties of this config class.
+     */
+    Map<String, ? extends ConfigPropertyTemplate<?>> getProperties();
+
+    /**
+     * Returns map of available actions.
+     *
+     * @return map of available actions.
+     */
+    Map<? extends ConfigPropertyAction, ? extends ConfigPropertyTemplate<?>> getActionsMap();
+
+    /**
+     * Returns template for given property.
+     *
+     * @param property
+     *         config property.
+     *
+     * @return template for given property.
+     */
+    ConfigPropertyTemplate<?> getTemplateFor(String property);
+
+    /**
+     * Returns property template for given action.
+     *
+     * @param action
+     *         property action.
+     *
+     * @return property template for given action.
+     */
+    @Nullable
+    ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyAction action);
+
+    /**
+     * Returns property action for given method signature object.
+     *
+     * @param method
+     *         method signature.
+     *
+     * @return property action for given method signature object.
+     */
+    @Nullable
+    ConfigPropertyAction getActionFor(MethodSignature method);
 
     /**
      * Returns name of config, config class name if not provided. <br/>
