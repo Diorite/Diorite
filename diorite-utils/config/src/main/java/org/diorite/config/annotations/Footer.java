@@ -22,36 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.diorite.config.serialization.StringSerializer;
-
 /**
- * Used to mark class and methods that should be used for string serialization. <br>
- * Serialization method must be matching one of this patterns:
- * <ol>
- * <li>static String nameOfMethod(T)</li>
- * <li>static String nameOfMethod(Object)</li>
- * <li>String nameOfMethod()</li>
- * </ol>
- * Deserialization method must be matching one of this patterns:
- * <ol>
- * <li>static T nameOfMethod(String)</li>
- * <li>constructor(String)</li>
- * </ol>
- *
- * @see org.diorite.config.serialization.StringSerializable
- * @see StringSerializer
+ * Used to add footer to type that will be parsed into {@link org.diorite.config.serialization.comments.DocumentComments}
  */
-@Documented
-@Target({ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.TYPE})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StringSerializable
+public @interface Footer
 {
+    /**
+     * Footer value.
+     *
+     * @return footer content.
+     */
+    String[] value();
 }

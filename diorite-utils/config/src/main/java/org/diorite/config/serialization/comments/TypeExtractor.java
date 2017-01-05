@@ -36,10 +36,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
-import org.diorite.config.serialization.annotations.Comment;
-import org.diorite.config.serialization.annotations.Footer;
-import org.diorite.config.serialization.annotations.Header;
-import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.Footer;
+import org.diorite.config.annotations.Header;
+import org.diorite.config.annotations.PredefinedComment;
 
 final class TypeExtractor
 {

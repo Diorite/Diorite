@@ -31,7 +31,7 @@ import java.io.Writer;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.diorite.config.serialization.annotations.SerializableAs;
+import org.diorite.config.annotations.SerializableAs;
 
 /**
  * Root comments node.

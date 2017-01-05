@@ -30,7 +30,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.Comment;
+import org.diorite.config.annotations.Comment;
 
 public class CreeperEntityData extends AbstractEntityData
 {

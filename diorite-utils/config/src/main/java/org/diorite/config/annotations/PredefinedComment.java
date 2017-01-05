@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;

@@ -30,7 +30,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.annotations.PredefinedComment;
 import org.diorite.config.serialization.comments.CommentsNode;
 
 @PredefinedComment(path = CommentsNode.ANY, value = "Some property value")

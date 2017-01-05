@@ -22,34 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Used to setup comments to class.
+ * Annotations used by serialization API.
  */
-@Documented
-@Target({ElementType.FIELD, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Comment
-{
-    /**
-     * Used when parsing comments from class, can be used to set custom name that is used for serialization. <br>
-     * If value is an empty string name will be extracted from field/method.
-     *
-     * @return custom name that is used for serialization.
-     */
-    String name() default "";
+@NonnullByDefault
+package org.diorite.config.annotations;
 
-    /**
-     * Comment lines of field/type.
-     *
-     * @return comment lines.
-     */
-    String[] value();
-}
+import org.diorite.annotations.NonnullByDefault;

@@ -22,24 +22,26 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.annotations;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to add header to type that will be parsed into {@link org.diorite.config.serialization.comments.DocumentComments}
+ * Allows to use other class in method lookup, useful when implementation class in package-private but api is in this same package.
  */
+@Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Header
+public @interface DelegateSerializable
 {
     /**
-     * Header value.
+     * Class to use instead.
      *
-     * @return header content.
+     * @return class used to method lookup.
      */
-    String[] value();
+    Class<?> value();
 }

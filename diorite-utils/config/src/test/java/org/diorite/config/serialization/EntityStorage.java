@@ -30,10 +30,10 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.Comment;
-import org.diorite.config.serialization.annotations.Footer;
-import org.diorite.config.serialization.annotations.Header;
-import org.diorite.config.serialization.annotations.PredefinedComment;
+import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.Footer;
+import org.diorite.config.annotations.Header;
+import org.diorite.config.annotations.PredefinedComment;
 import org.diorite.config.serialization.comments.CommentsNode;
 
 @Header({"Header of file, first space of comments is always skipped, if you want indent a comment just use more spaces.",

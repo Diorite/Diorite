@@ -41,6 +41,6 @@ public interface StringSerializable
      *
      * @return string representation of object.
      */
-    @org.diorite.config.serialization.annotations.StringSerializable
+    @org.diorite.config.annotations.StringSerializable
     String serializeToString();
 }

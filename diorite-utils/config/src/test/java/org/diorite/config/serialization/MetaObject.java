@@ -28,9 +28,9 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.Comment;
+import org.diorite.config.annotations.Comment;
 
-@org.diorite.config.serialization.annotations.Serializable
+@org.diorite.config.annotations.Serializable
 public class MetaObject
 {
     String    name;
@@ -43,14 +43,14 @@ public class MetaObject
         this.value = value;
     }
 
-    @org.diorite.config.serialization.annotations.Serializable
+    @org.diorite.config.annotations.Serializable
     public static void ser(MetaObject metaObject, SerializationData data)
     {
         data.add("name", metaObject.name);
         data.add("value", metaObject.value);
     }
 
-    @org.diorite.config.serialization.annotations.Serializable
+    @org.diorite.config.annotations.Serializable
     public static MetaObject deser(DeserializationData data)
     {
         return new MetaObject(data.getOrThrow("name", String.class), data.getOrThrow("value", MetaValue.class));

@@ -22,26 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.annotations;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows to serialize given type as different type, like you can implement serialization in implementation class, but use API class as type.
+ * Used to add header to type that will be parsed into {@link org.diorite.config.serialization.comments.DocumentComments}
  */
-@Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SerializableAs
+public @interface Header
 {
     /**
-     * Class to use instead.
+     * Header value.
      *
-     * @return class used to registration.
+     * @return header content.
      */
-    Class<?> value();
+    String[] value();
 }

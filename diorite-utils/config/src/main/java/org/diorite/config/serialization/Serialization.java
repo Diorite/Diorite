@@ -77,9 +77,9 @@ import org.diorite.commons.reflections.ReflectMethod;
 import org.diorite.commons.threads.DioriteThreadUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigTemplate;
-import org.diorite.config.serialization.annotations.DelegateSerializable;
-import org.diorite.config.serialization.annotations.SerializableAs;
-import org.diorite.config.serialization.annotations.StringSerializable;
+import org.diorite.config.annotations.DelegateSerializable;
+import org.diorite.config.annotations.SerializableAs;
+import org.diorite.config.annotations.StringSerializable;
 import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
@@ -327,7 +327,7 @@ public final class Serialization
      * @param clazz
      *         serializable clazz to register.
      * @param <T>
-     *         type of serializable class, must implement {@link Serializable} or contain {@link org.diorite.config.serialization.annotations.Serializable}
+     *         type of serializable class, must implement {@link Serializable} or contain {@link org.diorite.config.annotations.Serializable}
      *         annotations.
      *
      * @return old serializer if exists.
@@ -337,7 +337,7 @@ public final class Serialization
     {
         Class target = getDelegatedLookupClass(clazz);
         Serializer serializer;
-        if (clazz.isAnnotationPresent(org.diorite.config.serialization.annotations.Serializable.class))
+        if (clazz.isAnnotationPresent(org.diorite.config.annotations.Serializable.class))
         {
             serializer = this.registerSerializableByAnnotations(target);
         }
@@ -718,7 +718,7 @@ public final class Serialization
         {
             Class<?> returnType = method.getReturnType();
             Class<?>[] params = method.getParameterTypes();
-            if (method.isAnnotationPresent(org.diorite.config.serialization.annotations.Serializable.class))
+            if (method.isAnnotationPresent(org.diorite.config.annotations.Serializable.class))
             {
                 if (Modifier.isStatic(method.getModifiers()))
                 {
@@ -769,7 +769,7 @@ public final class Serialization
         {
             for (Constructor<?> constructor : clazz.getDeclaredConstructors())
             {
-                if (constructor.isAnnotationPresent(org.diorite.config.serialization.annotations.Serializable.class))
+                if (constructor.isAnnotationPresent(org.diorite.config.annotations.Serializable.class))
                 {
                     Class<?>[] params = constructor.getParameterTypes();
                     if ((params.length == 1) && params[0].equals(DeserializationData.class))

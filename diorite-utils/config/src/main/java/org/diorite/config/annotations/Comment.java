@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.serialization.annotations;
+package org.diorite.config.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -31,17 +31,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows to use other class in method lookup, useful when implementation class in package-private but api is in this same package.
+ * Used to setup comments to class.
  */
 @Documented
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DelegateSerializable
+public @interface Comment
 {
     /**
-     * Class to use instead.
+     * Used when parsing comments from class, can be used to set custom name that is used for serialization. <br>
+     * If value is an empty string name will be extracted from field/method.
      *
-     * @return class used to method lookup.
+     * @return custom name that is used for serialization.
      */
-    Class<?> value();
+    String name() default "";
+
+    /**
+     * Comment lines of field/type.
+     *
+     * @return comment lines.
+     */
+    String[] value();
 }

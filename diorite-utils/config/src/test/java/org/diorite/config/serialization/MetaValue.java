@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.diorite.commons.math.DioriteMathUtils;
 
-@org.diorite.config.serialization.annotations.StringSerializable
+@org.diorite.config.annotations.StringSerializable
 public class MetaValue
 {
     String value;
@@ -43,14 +43,14 @@ public class MetaValue
         this.power = power;
     }
 
-    @org.diorite.config.serialization.annotations.StringSerializable
+    @org.diorite.config.annotations.StringSerializable
     public static MetaValue deserialize(String str)
     {
         String[] split = StringUtils.split(str, ':');
         return new MetaValue(split[0], DioriteMathUtils.asInt(split[1], - 1));
     }
 
-    @org.diorite.config.serialization.annotations.StringSerializable
+    @org.diorite.config.annotations.StringSerializable
     public String serializeToString()
     {
         return this.value + ":" + this.power;

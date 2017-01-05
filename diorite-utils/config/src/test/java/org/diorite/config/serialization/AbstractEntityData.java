@@ -36,9 +36,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.config.serialization.annotations.Comment;
-import org.diorite.config.serialization.annotations.PredefinedComment;
-import org.diorite.config.serialization.annotations.SerializableAs;
+import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.PredefinedComment;
+import org.diorite.config.annotations.SerializableAs;
 import org.diorite.config.serialization.comments.CommentsNode;
 
 @PredefinedComment(path = "age", value = "age of entity")
