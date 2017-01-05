@@ -22,22 +22,59 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.config.impl;
 
-import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import java.util.Objects;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class DivideNumericPropertyAction extends NumericPropertyAction
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+class CacheKey
 {
-    public DivideNumericPropertyAction()
+    private final Class<?> clazz;
+    private final String   field;
+
+    CacheKey(Class<?> clazz, String field)
     {
-        super("divide", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By|)");
+        this.clazz = clazz;
+        this.field = field;
+    }
+
+    public Class<?> getClazz()
+    {
+        return this.clazz;
+    }
+
+    public String getField()
+    {
+        return this.field;
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    public boolean equals(Object object)
     {
-        return performNumericDiv(value, args);
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof CacheKey))
+        {
+            return false;
+        }
+        CacheKey cacheKey = (CacheKey) object;
+        return Objects.equals(this.clazz, cacheKey.clazz) &&
+               Objects.equals(this.field, cacheKey.field);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.clazz, this.field);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("clazz", this.clazz).append("field", this.field)
+                                        .toString();
     }
 }

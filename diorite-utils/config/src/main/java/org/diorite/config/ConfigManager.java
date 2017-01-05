@@ -47,7 +47,7 @@ public final class ConfigManager
 
     private final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);
 
-    private ConfigImplementationProvider implementationProvider = new ProxyImplementationProvider();
+    private ConfigImplementationProvider implementationProvider = ProxyImplementationProvider.getInstance();
 
     /**
      * Change config implementation provider.

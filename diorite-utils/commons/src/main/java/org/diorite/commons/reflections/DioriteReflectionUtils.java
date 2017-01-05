@@ -129,7 +129,7 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectedProperty<T> getReflectElement(String fieldName, Class<?> clazz)
+    public static <T> ReflectedProperty<T> getReflectedProperty(String fieldName, Class<?> clazz)
     {
         ReflectGetter<T> getter = getReflectGetter(fieldName, clazz);
         if (getter instanceof ReflectField)
@@ -154,9 +154,9 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectedProperty<T> getReflectElement(Field field)
+    public static <T> ReflectedProperty<T> getReflectedProperty(Field field)
     {
-        return getReflectElement(field, field.getDeclaringClass());
+        return getReflectedProperty(field, field.getDeclaringClass());
     }
 
     /**
@@ -172,7 +172,7 @@ public final class DioriteReflectionUtils
      *
      * @return Element for field value.
      */
-    public static <T> ReflectedProperty<T> getReflectElement(Field field, Class<?> clazz)
+    public static <T> ReflectedProperty<T> getReflectedProperty(Field field, Class<?> clazz)
     {
         ReflectGetter<T> getter = getReflectGetter(field, clazz);
         if (getter instanceof ReflectField)
@@ -204,26 +204,19 @@ public final class DioriteReflectionUtils
         String fieldNameCpy = fieldName;
         fieldName = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
         Method m = null;
+
         try
         {
-            m = clazz.getMethod("get" + fieldName);
+            m = clazz.getMethod("set" + fieldName);
         }
-        catch (NoSuchMethodException ignored1)
+        catch (NoSuchMethodException ignored2)
         {
-            try
+            for (Method cm : clazz.getMethods())
             {
-                m = clazz.getMethod("is" + fieldName);
-            }
-            catch (NoSuchMethodException ignored2)
-            {
-                for (Method cm : clazz.getMethods())
+                if ((cm.getName().equalsIgnoreCase("set" + fieldName)) && (cm.getReturnType() == void.class) && (cm.getParameterCount() == 1))
                 {
-                    if ((cm.getName().equalsIgnoreCase("get" + fieldName) || cm.getName().equalsIgnoreCase("is" + fieldName)) &&
-                        (cm.getReturnType() != Void.class) && (cm.getReturnType() != void.class) && (cm.getParameterCount() == 0))
-                    {
-                        m = cm;
-                        break;
-                    }
+                    m = cm;
+                    break;
                 }
             }
         }

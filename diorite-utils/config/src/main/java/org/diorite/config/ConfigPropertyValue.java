@@ -56,4 +56,45 @@ public interface ConfigPropertyValue<T>
      *         new value.
      */
     void setRawValue(@Nullable T value);
+
+    /**
+     * Look for nested value on given path and set their value to given one.
+     *
+     * @param path
+     *         path of value.
+     * @param value
+     *         new value.
+     *
+     * @throws IllegalStateException
+     *         if property do not contain given path.
+     */
+    void set(String[] path, @Nullable Object value) throws IllegalStateException;
+
+    /**
+     * Returns object on given nested path.
+     *
+     * @param path
+     *         path of value.
+     *
+     * @return object on given nested path.
+     *
+     * @throws IllegalStateException
+     *         if property do not contain given path.
+     */
+    @Nullable
+    Object get(String[] path) throws IllegalStateException;
+
+    /**
+     * Removes and returns object on given nested path.
+     *
+     * @param path
+     *         path of value.
+     *
+     * @return removed object on given nested path.
+     *
+     * @throws IllegalStateException
+     *         if property do not contain given path, or property can not nbe removed.
+     */
+    @Nullable
+    Object remove(String[] path) throws IllegalStateException;
 }

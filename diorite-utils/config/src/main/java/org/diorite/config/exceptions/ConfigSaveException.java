@@ -34,38 +34,38 @@ public class ConfigSaveException extends RuntimeException
 {
     private static final long serialVersionUID = 0;
 
-    public ConfigSaveException(ConfigTemplate<?> configTemplate, File file)
+    public ConfigSaveException(ConfigTemplate<?> configTemplate, @Nullable File file)
     {
         super(fixMessage(configTemplate, file, null));
     }
 
-    public ConfigSaveException(ConfigTemplate<?> configTemplate, File file, @Nullable String message)
+    public ConfigSaveException(ConfigTemplate<?> configTemplate, @Nullable File file, @Nullable String message)
     {
         super(fixMessage(configTemplate, file, message));
     }
 
-    public ConfigSaveException(ConfigTemplate<?> configTemplate, File file, @Nullable String message, Throwable cause)
+    public ConfigSaveException(ConfigTemplate<?> configTemplate, @Nullable File file, @Nullable String message, Throwable cause)
     {
         super(fixMessage(configTemplate, file, message), cause);
     }
 
-    public ConfigSaveException(ConfigTemplate<?> configTemplate, File file, Throwable cause)
+    public ConfigSaveException(ConfigTemplate<?> configTemplate, @Nullable File file, Throwable cause)
     {
         super(fixMessage(configTemplate, file, null), cause);
     }
 
-    public ConfigSaveException(ConfigTemplate<?> configTemplate, File file, @Nullable String message, Throwable cause, boolean enableSuppression,
+    public ConfigSaveException(ConfigTemplate<?> configTemplate, @Nullable File file, @Nullable String message, Throwable cause, boolean enableSuppression,
                                boolean writableStackTrace)
     {
         super(fixMessage(configTemplate, file, message), cause, enableSuppression, writableStackTrace);
     }
 
-    private static String fixMessage(ConfigTemplate<?> configTemplate, File file, @Nullable String message)
+    private static String fixMessage(ConfigTemplate<?> configTemplate, @Nullable File file, @Nullable String message)
     {
         StringBuilder error = new StringBuilder();
         error.append("There was an exception while saving config file '")
              .append(configTemplate.getName())
-             .append("', from: '").append(file.getAbsolutePath()).append("'");
+             .append("', from: '").append((file == null) ? "<unknown>" : file.getAbsolutePath()).append("'");
         if (message == null)
         {
             return error.toString();

@@ -65,10 +65,54 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         return this.name;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T getDefault(Config config)
     {
-        return this.defaultValueSupplier.apply(config);
+        T def = this.defaultValueSupplier.apply(config);
+        if ((def == null) && this.rawType.isPrimitive())
+        {
+            return (T) this.getPrimitiveDefault();
+        }
+        return def;
+    }
+
+    private Object getPrimitiveDefault()
+    {
+        Class<T> rawType = this.rawType;
+        if (rawType == boolean.class)
+        {
+            return false;
+        }
+        if (rawType == byte.class)
+        {
+            return (byte) 0;
+        }
+        if (rawType == short.class)
+        {
+            return (short) 0;
+        }
+        if (rawType == char.class)
+        {
+            return '\0';
+        }
+        if (rawType == int.class)
+        {
+            return 0;
+        }
+        if (rawType == long.class)
+        {
+            return 0L;
+        }
+        if (rawType == float.class)
+        {
+            return 0.0F;
+        }
+        if (rawType == double.class)
+        {
+            return 0.0;
+        }
+        throw new InternalError("Unknown primitive type:" + rawType);
     }
 
     public void setDefaultValueSupplier(Function<Config, T> defaultValueSupplier)

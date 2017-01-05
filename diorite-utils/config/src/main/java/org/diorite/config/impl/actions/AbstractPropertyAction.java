@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.ConfigPropertyAction;
@@ -95,6 +97,13 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
     public String getActionName()
     {
         return this.name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("name", this.name).append("patterns", this.patterns)
+                                        .toString();
     }
 }
 

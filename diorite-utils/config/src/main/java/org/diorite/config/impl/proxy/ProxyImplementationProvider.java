@@ -24,37 +24,50 @@
 
 package org.diorite.config.impl.proxy;
 
+import javax.annotation.Nullable;
+
 import java.lang.reflect.Proxy;
 
 import org.diorite.commons.arrays.DioriteArrayUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.impl.ConfigImplementationProvider;
+import org.diorite.config.impl.ConfigTemplateImpl;
 
 public class ProxyImplementationProvider implements ConfigImplementationProvider
 {
+    private static final ProxyImplementationProvider INSTANCE = new ProxyImplementationProvider();
+
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Config> T createImplementation(Class<?> clazz, ConfigTemplate<T> template)
+    public <T extends Config> T createImplementation(Class<T> clazz, ConfigTemplate<T> template)
     {
         if (! clazz.isInterface())
         {
             throw new IllegalArgumentException("Class must be a interface!");
         }
         Class<?>[] interfaces = clazz.getInterfaces();
-        if (! Config.class.isAssignableFrom(clazz))
-        {
-            interfaces = DioriteArrayUtils.prepend(interfaces, clazz, Config.class);
-        }
-        else
-        {
-            interfaces = DioriteArrayUtils.prepend(interfaces, clazz);
-        }
+        interfaces = DioriteArrayUtils.prepend(interfaces, clazz);
         ConfigInvocationHandler configInvocationHandler = new ConfigInvocationHandler(template);
         Config proxyInstance = (Config) Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, configInvocationHandler);
         configInvocationHandler.prepare(proxyInstance);
-        System.out.println(proxyInstance);
-        System.out.println(proxyInstance);
         return (T) proxyInstance;
+    }
+
+    public static ProxyImplementationProvider getInstance()
+    {
+        return INSTANCE;
+    }
+
+    @Nullable
+    private static ConfigTemplateImpl<ConfigNode> nodeTemplate;
+
+    static ConfigNode createNodeInstance()
+    {
+        if (nodeTemplate == null)
+        {
+            nodeTemplate = new ConfigTemplateImpl<>(ConfigNode.class, INSTANCE);
+        }
+        return INSTANCE.createImplementation(ConfigNode.class, nodeTemplate);
     }
 }

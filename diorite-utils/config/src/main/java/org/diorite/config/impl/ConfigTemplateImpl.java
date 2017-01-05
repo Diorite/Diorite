@@ -249,8 +249,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     @Override
     public T load(Reader reader)
     {
-        T inst = this.implementationProvider.createImplementation(this.type, this);
-        return inst;
+        return this.implementationProvider.createImplementation(this.type, this);
     }
 
 }

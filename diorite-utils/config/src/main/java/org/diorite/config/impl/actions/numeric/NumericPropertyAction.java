@@ -50,7 +50,7 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
         }
         Class<?> parameterType = parameters[0];
 
-        if ((returnType != void.class) && ! returnType.isAssignableFrom(parameterType))
+        if ((returnType != void.class) && (! returnType.isAssignableFrom(parameterType) && ! (returnType.isPrimitive() && parameterType.isPrimitive())))
         {
             return false;
         }
@@ -104,7 +104,11 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
                 double rawValue = numberValue.doubleValue();
                 value.setRawValue(rawValue + argNumber.doubleValue());
             }
-            throw new IllegalStateException("Unexpected type: " + rawType);
+            else
+            {
+                throw new IllegalStateException("Unexpected type: " + rawType);
+            }
+            return numberValue;
         }
         if (argNumber == null)
         {
@@ -194,7 +198,11 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
                 double rawValue = numberValue.doubleValue();
                 value.setRawValue(rawValue - argNumber.doubleValue());
             }
-            throw new IllegalStateException("Unexpected type: " + rawType);
+            else
+            {
+                throw new IllegalStateException("Unexpected type: " + rawType);
+            }
+            return numberValue;
         }
         if (argNumber == null)
         {
@@ -284,7 +292,11 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
                 double rawValue = numberValue.doubleValue();
                 value.setRawValue(rawValue * argNumber.doubleValue());
             }
-            throw new IllegalStateException("Unexpected type: " + rawType);
+            else
+            {
+                throw new IllegalStateException("Unexpected type: " + rawType);
+            }
+            return numberValue;
         }
         if (argNumber == null)
         {
@@ -374,7 +386,11 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
                 double rawValue = numberValue.doubleValue();
                 value.setRawValue(rawValue / argNumber.doubleValue());
             }
-            throw new IllegalStateException("Unexpected type: " + rawType);
+            else
+            {
+                throw new IllegalStateException("Unexpected type: " + rawType);
+            }
+            return numberValue;
         }
         if (argNumber == null)
         {

@@ -196,8 +196,6 @@ import java.util.regex.Pattern;
 
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.composer.Composer;
-import org.yaml.snakeyaml.constructor.BaseConstructor;
-import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.events.Event;
 import org.yaml.snakeyaml.introspector.BeanAccess;
@@ -209,8 +207,8 @@ import org.yaml.snakeyaml.reader.StreamReader;
 import org.yaml.snakeyaml.reader.UnicodeReader;
 import org.yaml.snakeyaml.resolver.Resolver;
 
-import org.diorite.commons.threads.DioriteThreadUtils;
 import org.diorite.commons.io.StringBuilderWriter;
+import org.diorite.commons.threads.DioriteThreadUtils;
 import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.emitter.Emitter;
@@ -224,7 +222,7 @@ public class Yaml
     protected final Serialization   serialization;
     protected final Resolver        resolver;
     private         String          name;
-    protected       BaseConstructor constructor;
+    protected       YamlConstructor constructor;
     protected       Representer     representer;
     protected       DumperOptions   dumperOptions;
 
@@ -237,7 +235,7 @@ public class Yaml
      */
     public Yaml(Serialization serialization)
     {
-        this(serialization, new Constructor(), new Representer(), new DumperOptions(), new Resolver());
+        this(serialization, new YamlConstructor(), new Representer(), new DumperOptions(), new Resolver());
     }
 
     /**
@@ -254,7 +252,7 @@ public class Yaml
      *         DumperOptions to configure outgoing objects
      * @param resolver
      */
-    public Yaml(Serialization serialization, BaseConstructor constructor, Representer representer, DumperOptions dumperOptions,
+    public Yaml(Serialization serialization, YamlConstructor constructor, Representer representer, DumperOptions dumperOptions,
                 Resolver resolver)
     {
         this.serialization = serialization;
@@ -319,7 +317,7 @@ public class Yaml
      *
      * @see <a href="http://yaml.org/spec/1.1/#id859333">Figure 3.1. Processing Overview</a>
      */
-    public Node represent(Object data)
+    public Node represent(@Nullable Object data)
     {
         return this.representer.represent(data);
     }
@@ -615,6 +613,43 @@ public class Yaml
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(new UnicodeReader(input)), type);
+    }
+
+    /**
+     * Construct object from given node, node must have set type tags.
+     *
+     * @param node
+     *         node to load.
+     * @param <T>
+     *         type of node.
+     *
+     * @return loaded object.
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public <T> T fromYamlNode(Node node)
+    {
+        return (T) this.constructor.constructFromNode(node);
+    }
+
+    /**
+     * Construct object from given node.
+     *
+     * @param node
+     *         node to load.
+     * @param type
+     *         type of node.
+     * @param <T>
+     *         type of node.
+     *
+     * @return loaded object.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T fromYamlNode(Node node, Class<T> type)
+    {
+        node.setTag(new Tag(type));
+        node.setType(type);
+        return (T) this.constructor.constructFromNode(node);
     }
 
     private Object loadFromReader(StreamReader sreader, Class<?> type)

@@ -25,6 +25,9 @@
 package org.diorite.config.impl.actions.collections;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.diorite.commons.reflections.MethodInvoker;
@@ -36,7 +39,7 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
 {
     public RemoveFromCollectionIfPropertyAction()
     {
-        super("removeFromCollectionIf", "removeFrom(?<property>[A-Z0-9].*?)If");
+        super("removeFromCollectionIf", "removeFrom(?<property>[A-Z0-9].*?)If", "removeIf(?<property>[A-Z0-9].*?)");
     }
 
     @Override
@@ -62,12 +65,33 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
     @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
-        Collection<Object> rawValue = (Collection<Object>) value.getRawValue();
+        Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
             return false;
         }
+
         Predicate<Object> predicate = (Predicate<Object>) args[0];
-        return rawValue.removeIf(predicate);
+        if (rawValue instanceof Collection)
+        {
+            Collection<Object> collection = (Collection<Object>) rawValue;
+            return collection.removeIf(predicate);
+        }
+        if (rawValue instanceof Map)
+        {
+            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            boolean any = false;
+            for (Iterator<Entry<Object, Object>> iterator = map.entrySet().iterator(); iterator.hasNext(); )
+            {
+                Entry<Object, Object> entry = iterator.next();
+                if (predicate.test(entry))
+                {
+                    iterator.remove();
+                    any = true;
+                }
+            }
+            return any;
+        }
+        throw new IllegalStateException("Expected collection on " + value);
     }
 }

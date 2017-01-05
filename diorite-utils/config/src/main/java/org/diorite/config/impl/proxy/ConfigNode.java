@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,61 +24,8 @@
 
 package org.diorite.config.impl.proxy;
 
-import javax.annotation.Nullable;
-
-import java.util.List;
-import java.util.Map;
-
 import org.diorite.config.Config;
 
-class ConfigNode
+interface ConfigNode extends Config
 {
-    private final Map<String, ConfigNode> parent;
-
-    private final String key;
-    private final Class<?> type;
-    @Nullable
-    private Object value;
-
-    ConfigNode(Map<String, ConfigNode> parent, String key, Class<?> type, @Nullable Object value)
-    {
-        this.parent = parent;
-        this.key = key;
-        this.type = type;
-        this.value = value;
-    }
-
-    public String getKey()
-    {
-        return this.key;
-    }
-
-    public Class<?> getType()
-    {
-        return this.type;
-    }
-
-    @Nullable
-    public Object getValue()
-    {
-        return this.value;
-    }
-
-    public void setValue(@Nullable Object value)
-    {
-        this.value = value;
-    }
-
-    @SuppressWarnings("PointlessNullCheck")
-    boolean canStoreNodes()
-    {
-        return (this.value != null) && ((this.value instanceof Config) || (this.value instanceof Map) || (this.value instanceof List));
-    }
-
-    Object getNode(String key)
-    {
-        return null;
-        // TODO
-    }
-
 }

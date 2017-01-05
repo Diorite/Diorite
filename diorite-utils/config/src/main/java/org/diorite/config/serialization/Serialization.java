@@ -66,6 +66,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
@@ -1350,6 +1351,28 @@ public final class Serialization
     }
 
     /**
+     * Serialize a Java object into a YAML Node.
+     *
+     * @param data
+     *         Java object to be Serialized to YAML
+     *
+     * @return YAML Node
+     */
+    public Node toYamlNode(@Nullable Object data)
+    {
+        Node represent = this.yaml().represent(data);
+        if (data != null)
+        {
+            if (! (data instanceof Map) && ! (data instanceof Collection))
+            {
+                represent.setType(data.getClass());
+                represent.setTag(new Tag(data.getClass()));
+            }
+        }
+        return represent;
+    }
+
+    /**
      * Serialize a Java object into a YAML String.
      *
      * @param data
@@ -1492,6 +1515,35 @@ public final class Serialization
     public String toYamlAsMap(Object data)
     {
         return this.yaml().toYamlAsMap(data);
+    }
+
+    /**
+     * Construct object from given node, node must have set type tags.
+     *
+     * @param node
+     *         node to load.
+     *
+     * @return loaded object.
+     */
+    @Nullable
+    public <T> T fromYamlNode(Node node)
+    {
+        return this.yaml().fromYamlNode(node);
+    }
+
+    /**
+     * Construct object from given node.
+     *
+     * @param node
+     *         node to load.
+     * @param type
+     *         type of node.
+     *
+     * @return loaded object.
+     */
+    public <T> T fromYamlNode(Node node, Class<T> type)
+    {
+        return this.yaml().fromYamlNode(node, type);
     }
 
     /**

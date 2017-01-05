@@ -33,18 +33,25 @@ import java.io.Writer;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.yaml.snakeyaml.nodes.Node;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
@@ -53,16 +60,29 @@ import org.diorite.config.ConfigPropertyAction;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
-import org.diorite.config.exceptions.InvalidConfigValueTypeException;
+import org.diorite.config.exceptions.ConfigLoadException;
+import org.diorite.config.exceptions.ConfigSaveException;
 import org.diorite.config.impl.ConfigPropertyValueImpl;
+import org.diorite.config.impl.NestedNodesHelper;
+import org.diorite.config.serialization.Serialization;
 
 public final class ConfigInvocationHandler implements InvocationHandler
 {
     private final ConfigTemplate<?> template;
 
-    private final Map<Method, Function<Object[], Object>>      basicMethods     = new ConcurrentHashMap<>(20);
-    private final Map<String, ConfigPropertyValueImpl<Object>> predefinedValues = new ConcurrentHashMap<>(10);
+    private final Map<Method, Function<Object[], Object>>      basicMethods        = new ConcurrentHashMap<>(20);
+    private final Map<String, ConfigPropertyValueImpl<Object>> predefinedValues    = new ConcurrentHashMap<>(10);
+    private final Map<String, ConfigNode>                      dynamicValues       = new ConcurrentHashMap<>(10);
+    private final Map<String, Node>                            simpleDynamicValues = new ConcurrentHashMap<>(10);
 
+    @SuppressWarnings("NullableProblems")
+    private volatile CharsetEncoder charsetEncoder;
+    @SuppressWarnings("NullableProblems")
+    private volatile CharsetDecoder charsetDecoder;
+    @Nullable
+    private volatile File           bindFile;
+
+    @SuppressWarnings("NullableProblems")
     private Config config;
 
     public ConfigInvocationHandler(ConfigTemplate<?> template)
@@ -195,6 +215,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
     public void prepare(Config config)
     {
         this.config = config;
+
+        // load defaults
+        this.fillWithDefaultsImpl();
+
         try
         {
             Class<? extends Config> clazz = config.getClass();
@@ -211,24 +235,48 @@ public final class ConfigInvocationHandler implements InvocationHandler
                 this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0]));
             }
             {
+                Method m = clazz.getMethod("get", String[].class);
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String[]) args[0], null, null));
+            }
+            {
                 Method m = clazz.getMethod("get", String.class, Object.class);
                 this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], args[1]));
+            }
+            {
+                Method m = clazz.getMethod("get", String[].class, Object.class);
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String[]) args[0], args[1], null));
             }
             {
                 Method m = clazz.getMethod("get", String.class, Object.class, Class.class);
                 this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], args[1], (Class) args[2]));
             }
             {
+                Method m = clazz.getMethod("get", String[].class, Object.class, Class.class);
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String[]) args[0], args[1], (Class) args[2]));
+            }
+            {
                 Method m = clazz.getMethod("get", String.class, Class.class);
                 this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0], (Class) args[1]));
             }
             {
+                Method m = clazz.getMethod("get", String[].class, Class.class);
+                this.registerMethod(clazz, m, (args) -> this.getImpl((String[]) args[0], (Class) args[1], null));
+            }
+            {
                 Method m = clazz.getMethod("set", String.class, Object.class);
-                this.registerMethod(clazz, m, (args) -> this.setImpl((String) args[0], args[1]));
+                this.registerVoidMethod(clazz, m, (args) -> this.setImpl((String) args[0], args[1]));
+            }
+            {
+                Method m = clazz.getMethod("set", String[].class, Object.class);
+                this.registerVoidMethod(clazz, m, (args) -> this.setImpl((String[]) args[0], args[1]));
             }
             {
                 Method m = clazz.getMethod("remove", String.class);
                 this.registerMethod(clazz, m, (args) -> this.removeImpl((String) args[0]));
+            }
+            {
+                Method m = clazz.getMethod("remove", String[].class);
+                this.registerMethod(clazz, m, (args) -> this.removeImpl((String[]) args[0]));
             }
             {
                 Method m = clazz.getMethod("encoder");
@@ -287,6 +335,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
                 this.registerMethod(clazz, m, (args) -> this.containsKeyImpl((String) args[0]));
             }
             {
+                Method m = clazz.getMethod("containsKey", String[].class);
+                this.registerMethod(clazz, m, (args) -> this.containsKeyImpl((String[]) args[0]));
+            }
+            {
                 Method m = clazz.getMethod("containsValue", Object.class);
                 this.registerMethod(clazz, m, (args) -> this.containsValueImpl(args[0]));
             }
@@ -326,8 +378,6 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
     }
 
-    private final Map<String, ConfigNode> data = new LinkedHashMap<>(20);
-
     private ConfigTemplate<?> templateImpl()
     {
         return this.template;
@@ -335,97 +385,220 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private void fillWithDefaultsImpl()
     {
-
-    }
-
-    @Nullable
-    private Object getImpl(String[] keys, @Nullable Object def)
-    {
-        if (keys.length == 0)
+        for (ConfigPropertyValueImpl<Object> propertyValue : this.predefinedValues.values())
         {
-            return def;
+            propertyValue.setRawValue(propertyValue.getProperty().getDefault(this.config));
         }
-        ConfigNode configNode = this.data.get(keys[0]);
-        if (configNode == null)
-        {
-            return def;
-        }
-        Object value = configNode.getValue();
-//        if (keys.length == 1)
-//        {
-//            return value;
-//        }
-//        for (int i = 1; i < keys.length; i++)
-//        {
-//            String key = keys[i];
-//            if ()
-//
-//        }
-        return null;
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private <T> T getImpl(String[] key, @Nullable T def, Class<T> type)
+    private <T> T getImpl(String[] keys, @Nullable T def, @Nullable Class<T> type)
     {
-        Object value = this.getImpl(key, def);
-        if (value == null)
+        if (keys.length == 0)
         {
-            return def;
+            throw new IllegalStateException("Empty key given");
         }
-        Class<?> wrapperClass = DioriteReflectionUtils.getWrapperClass(type);
-        if (wrapperClass.isInstance(value))
+        Serialization serialization = Serialization.getGlobal();
+
+        String key = keys[0];
+        if (keys.length == 1)
         {
-            return (T) value;
+            ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+            if (propertyValue != null)
+            {
+                return (T) propertyValue.getRawValue();
+            }
+            Node node = this.simpleDynamicValues.get(key);
+            if (node == null)
+            {
+                ConfigNode configNode = this.dynamicValues.get(key);
+                if (configNode != null)
+                {
+                    return (T) configNode;
+                }
+                return def;
+            }
+            if (type == null)
+            {
+                return serialization.fromYamlNode(node);
+            }
+            else
+            {
+                return serialization.fromYamlNode(node, type);
+            }
         }
-        throw new InvalidConfigValueTypeException("Expected value of " + type.getName() + " type, but got " + value + " instead.");
+        String[] newPath = new String[keys.length - 1];
+        System.arraycopy(keys, 1, newPath, 0, keys.length - 1);
+
+        ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+        if (propertyValue != null)
+        {
+            return (T) propertyValue.get(newPath);
+        }
+        ConfigNode configNode = this.dynamicValues.get(key);
+        if (configNode != null)
+        {
+            if (type == null)
+            {
+                return (T) configNode.get(newPath, def);
+            }
+            return configNode.get(newPath, def, type);
+        }
+        Node node = this.simpleDynamicValues.get(key);
+        if (node != null)
+        {
+            Object o;
+            if (type == null)
+            {
+                o = serialization.fromYamlNode(node);
+            }
+            else
+            {
+                o = serialization.fromYamlNode(node, type);
+            }
+            if (o == null)
+            {
+                return def;
+            }
+            return (T) NestedNodesHelper.get(o, newPath);
+        }
+        return def;
+    }
+
+    private void setImpl(String[] keys, @Nullable Object value)
+    {
+        if (keys.length == 0)
+        {
+            throw new IllegalStateException("Empty key given");
+        }
+        Serialization serialization = Serialization.getGlobal();
+
+        String key = keys[0];
+        if (keys.length == 1)
+        {
+            ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+            if (propertyValue != null)
+            {
+                propertyValue.setRawValue(value);
+                return;
+            }
+            this.simpleDynamicValues.put(key, serialization.toYamlNode(value));
+            return;
+        }
+        String[] newPath = new String[keys.length - 1];
+        System.arraycopy(keys, 1, newPath, 0, keys.length - 1);
+
+        ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+        if (propertyValue != null)
+        {
+            propertyValue.set(newPath, value);
+            return;
+        }
+        Node node = this.simpleDynamicValues.get(key);
+        if (node != null)
+        {
+            Object o = serialization.fromYamlNode(node);
+            Validate.notNull(o);
+            NestedNodesHelper.set(o, newPath, value);
+            this.simpleDynamicValues.put(key, serialization.toYamlNode(o));
+            return;
+        }
+        ConfigNode configNode = this.dynamicValues.computeIfAbsent(key, k -> ProxyImplementationProvider.createNodeInstance());
+        configNode.set(newPath, value);
     }
 
     @Nullable
-    private Object setImpl(String[] key, @Nullable Object value)
+    private Object removeImpl(String[] keys)
     {
-        return null;
-    }
+        if (keys.length == 0)
+        {
+            throw new IllegalStateException("Empty key given");
+        }
+        Serialization serialization = Serialization.getGlobal();
 
-    private Object removeImpl(String[] key)
-    {
+        String key = keys[0];
+        if (keys.length == 1)
+        {
+            ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+            if (propertyValue != null)
+            {
+                throw new IllegalStateException("Can't remove predefined value: " + propertyValue.getProperty().getName() + " from " +
+                                                this.template.getConfigType());
+            }
+            Node node = this.simpleDynamicValues.remove(key);
+            if (node == null)
+            {
+                return this.dynamicValues.remove(key);
+            }
+            return serialization.fromYamlNode(node);
+        }
+        String[] newPath = new String[keys.length - 1];
+        System.arraycopy(keys, 1, newPath, 0, keys.length - 1);
+
+        ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+        if (propertyValue != null)
+        {
+            return propertyValue.remove(newPath);
+        }
+        ConfigNode configNode = this.dynamicValues.get(key);
+        if (configNode != null)
+        {
+            return configNode.remove(newPath);
+        }
+        Node node = this.simpleDynamicValues.get(key);
+        if (node != null)
+        {
+            Object o = serialization.fromYamlNode(node);
+            if (o != null)
+            {
+                Object removed = NestedNodesHelper.remove(o, newPath);
+                this.simpleDynamicValues.put(key, serialization.toYamlNode(o));
+                return removed;
+            }
+        }
         return null;
     }
 
     private CharsetEncoder encoderImpl()
     {
-        return null;
+        return this.charsetEncoder;
     }
 
     private void encoderImpl(CharsetEncoder encoder)
     {
-
+        this.charsetEncoder = encoder;
     }
 
     private CharsetDecoder decoderImpl()
     {
-        return null;
+        return this.charsetDecoder;
     }
 
     private void decoderImpl(CharsetDecoder decoder)
     {
-
+        this.charsetDecoder = decoder;
     }
 
     @Nullable
     private File bindFileImpl()
     {
-        return null;
+        return this.bindFile;
     }
 
     private void bindFileImpl(@Nullable File file)
     {
-
+        this.bindFile = file;
     }
 
     private void saveImpl()
     {
-
+        File bindFile = this.bindFile;
+        if (bindFile == null)
+        {
+            throw new ConfigSaveException(this.template, null, "Config isn't bound to file!");
+        }
+        this.config.save(bindFile);
     }
 
     private void saveImpl(@WillNotClose Writer writer)
@@ -440,79 +613,240 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private void loadImpl(@WillNotClose Reader reader)
     {
-
+        File bindFile = this.bindFile;
+        if (bindFile == null)
+        {
+            throw new ConfigLoadException(this.template, null, "Config isn't bound to file!");
+        }
+        this.config.load(bindFile);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Config cloneImpl()
     {
-        return null;
-    }
+        Config copy = ProxyImplementationProvider.getInstance().createImplementation(this.config.getClass(), (ConfigTemplate) this.template);
+        ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(copy);
 
-    private int sizeImpl()
-    {
-        return 0;
+        invocationHandler.charsetDecoder = this.charsetDecoder;
+        invocationHandler.charsetEncoder = this.charsetEncoder;
+        invocationHandler.bindFile = this.bindFile;
+
+        for (Entry<String, ConfigPropertyValueImpl<Object>> valueEntry : this.predefinedValues.entrySet())
+        {
+            String key = valueEntry.getKey();
+            ConfigPropertyValueImpl<Object> value = valueEntry.getValue();
+            ConfigPropertyValueImpl<Object> copyValue = invocationHandler.getOrCreatePredefinedValue(value.getProperty());
+            copyValue.setRawValue(value.getRawValue());
+        }
+
+        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+        {
+            invocationHandler.dynamicValues.put(entry.getKey(), (ConfigNode) entry.getValue().clone());
+        }
+
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            // should be safe to use this same node instance, as it will be deserialized and get/set anyway.
+            invocationHandler.simpleDynamicValues.put(entry.getKey(), entry.getValue());
+        }
+
+        return copy;
     }
 
     private boolean isEmptyImpl()
     {
+        return this.predefinedValues.isEmpty() && this.dynamicValues.isEmpty() && this.simpleDynamicValues.isEmpty();
+    }
+
+    private boolean containsKeyImpl(String[] keys)
+    {
+        if (keys.length == 0)
+        {
+            throw new IllegalStateException("Empty key given");
+        }
+        Serialization serialization = Serialization.getGlobal();
+
+        String key = keys[0];
+        if (keys.length == 1)
+        {
+            ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+            if (propertyValue != null)
+            {
+                return true;
+            }
+            Node node = this.simpleDynamicValues.get(key);
+            if (node == null)
+            {
+                return this.dynamicValues.containsKey(key);
+            }
+            return true;
+        }
+        String[] newPath = new String[keys.length - 1];
+        System.arraycopy(keys, 1, newPath, 0, keys.length - 1);
+
+        ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
+        if (propertyValue != null)
+        {
+            return true;
+        }
+        ConfigNode configNode = this.dynamicValues.get(key);
+        if (configNode != null)
+        {
+            return configNode.containsKey(newPath);
+        }
+        Node node = this.simpleDynamicValues.get(key);
+        if (node != null)
+        {
+            Object o = serialization.fromYamlNode(node);
+            if (o == null)
+            {
+                return false;
+            }
+            try
+            {
+                Object v = NestedNodesHelper.get(o, newPath);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         return false;
     }
 
-    private boolean containsKeyImpl(String[] key)
+    private boolean containsValueImpl(Object toCheck)
     {
+        for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
+        {
+            if (Objects.equals(toCheck, value.getRawValue()))
+            {
+                return true;
+            }
+        }
+        for (ConfigNode configNode : this.dynamicValues.values())
+        {
+            if (Objects.equals(toCheck, configNode))
+            {
+                return true;
+            }
+        }
+        for (Node node : this.simpleDynamicValues.values())
+        {
+            if (Objects.equals(toCheck, Serialization.getGlobal().fromYamlNode(node)))
+            {
+                return true;
+            }
+        }
         return false;
     }
 
-    private boolean containsValueImpl(Object value)
+    private int sizeImpl()
     {
-        return false;
+        return this.predefinedValues.size() + this.dynamicValues.size() + this.simpleDynamicValues.size();
     }
 
     private void clearImpl()
     {
-
+        for (ConfigPropertyValueImpl<Object> propertyValue : this.predefinedValues.values())
+        {
+            propertyValue.setRawValue(null);
+        }
+        this.dynamicValues.clear();
+        this.simpleDynamicValues.clear();
     }
 
     private Set<String> keySetImpl()
     {
-        return null;
+        Set<String> keys = new HashSet<>(20);
+        keys.addAll(this.predefinedValues.keySet());
+        keys.addAll(this.dynamicValues.keySet());
+        keys.addAll(this.simpleDynamicValues.keySet());
+        return keys;
     }
 
     private Collection<Object> valuesImpl()
     {
-        return null;
+        Collection<Object> values = new ArrayList<>(20);
+        for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
+        {
+            values.add(value.getRawValue());
+        }
+        for (Node node : this.simpleDynamicValues.values())
+        {
+            values.add(Serialization.getGlobal().fromYamlNode(node));
+        }
+        values.addAll(this.dynamicValues.values());
+        return values;
     }
 
     private Set<Entry<String, Object>> entrySetImpl()
     {
-        return null;
+        Set<Entry<String, Object>> result = new HashSet<>(20);
+
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
+        {
+            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getRawValue()));
+        }
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            result.add(new SimpleEntry<>(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue())));
+        }
+        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+        {
+            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue()));
+        }
+
+        return result;
     }
 
     private String toStringImpl()
     {
-        return "toString!";
+        ToStringBuilder builder = new ToStringBuilder(this.config);
+        builder.append("bindFile", this.bindFile);
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
+        {
+            builder.append(entry.getKey(), entry.getValue().getRawValue());
+        }
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            builder.append(entry.getKey(), (Object) Serialization.getGlobal().fromYamlNode(entry.getValue()));
+        }
+        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+        {
+            builder.append(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
     }
 
     private int hashCodeImpl()
     {
-        return 0;
+        return this.entrySetImpl().hashCode();
     }
 
     private boolean equalsImpl(Object object)
     {
-        return false;
+        if (object == this)
+        {
+            return true;
+        }
+        if (! (object instanceof Config))
+        {
+            return false;
+        }
+        return this.entrySetImpl().equals(((Config) object).entrySet());
     }
 
     @Nullable
     private Object getImpl(String key)
     {
-        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), null, Object.class);
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), null, null);
     }
 
     @Nullable
     private Object getImpl(String key, @Nullable Object def)
     {
-        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), def, Object.class);
+        return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), def, null);
     }
 
     @Nullable
@@ -527,15 +861,15 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return this.getImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), null, type);
     }
 
-    @Nullable
-    private Object setImpl(String key, @Nullable Object value)
+    private void setImpl(String key, @Nullable Object value)
     {
-        return this.setImpl(StringUtils.splitPreserveAllTokens(key), value);
+        this.setImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR), value);
     }
 
+    @Nullable
     private Object removeImpl(String key)
     {
-        return this.removeImpl(StringUtils.splitPreserveAllTokens(key));
+        return this.removeImpl(StringUtils.splitPreserveAllTokens(key, ConfigTemplate.SEPARATOR));
     }
 
     private boolean containsKeyImpl(String key)

@@ -78,11 +78,21 @@ public interface Config extends Map<String, Object>
      * Check if config contains given key, note that value on that key still might be null!
      *
      * @param key
-     *         key to get, you can use dots to access nested values like other config instances or maps.
+     *         key to check, you can use dots to access nested values like other config instances or maps.
      *
      * @return true if config contains given key.
      */
     boolean containsKey(String key);
+
+    /**
+     * Check if config contains given key, note that value on that key still might be null!
+     *
+     * @param key
+     *         key to check, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     *
+     * @return true if config contains given key.
+     */
+    boolean containsKey(String... key);
 
     /**
      * Get selected value from config.
@@ -96,6 +106,17 @@ public interface Config extends Map<String, Object>
     Object get(String key);
 
     /**
+     * Get selected value from config.
+     *
+     * @param key
+     *         key to get, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     *
+     * @return value on that key.
+     */
+    @Nullable
+    Object get(String[] key);
+
+    /**
      * Get selected value from config or default one.
      *
      * @param key
@@ -105,7 +126,21 @@ public interface Config extends Map<String, Object>
      *
      * @return value on that key.
      */
-    Object get(String key, Object def);
+    @Nullable
+    Object get(String key, @Nullable Object def);
+
+    /**
+     * Get selected value from config or default one.
+     *
+     * @param key
+     *         key to get, you can use dots to access nested values like other config instances or maps.
+     * @param def
+     *         default value to use.
+     *
+     * @return value on that key.
+     */
+    @Nullable
+    Object get(String[] key, @Nullable Object def);
 
     /**
      * Get selected value from config (or default value) as given type, library will try convert types where possible. (like from String to Integer, List of
@@ -126,7 +161,30 @@ public interface Config extends Map<String, Object>
      * @throws ClassCastException
      *         if type can't be converted.
      */
-    <T> T get(String key, T def, Class<T> type);
+    @Nullable
+    <T> T get(String key, @Nullable T def, Class<T> type);
+
+    /**
+     * Get selected value from config (or default value) as given type, library will try convert types where possible. (like from String to Integer, List of
+     * strings to int array
+     * etc)
+     *
+     * @param key
+     *         key to get, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     * @param def
+     *         default value to use.
+     * @param type
+     *         type of value.
+     * @param <T>
+     *         type of value.
+     *
+     * @return value on that key.
+     *
+     * @throws ClassCastException
+     *         if type can't be converted.
+     */
+    @Nullable
+    <T> T get(String[] key, @Nullable T def, Class<T> type);
 
     /**
      * Get selected value from config as given type, library will try convert types where possible. (like from String to Integer, List of strings to int array
@@ -148,6 +206,25 @@ public interface Config extends Map<String, Object>
     <T> T get(String key, Class<T> type);
 
     /**
+     * Get selected value from config as given type, library will try convert types where possible. (like from String to Integer, List of strings to int array
+     * etc)
+     *
+     * @param key
+     *         key to get, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     * @param type
+     *         type of value.
+     * @param <T>
+     *         type of value.
+     *
+     * @return value on that key.
+     *
+     * @throws ClassCastException
+     *         if type can't be converted.
+     */
+    @Nullable
+    <T> T get(String[] key, Class<T> type);
+
+    /**
      * Set value on given key to given value. <br/>
      * Null values are allowed, note that key isn't removed on null value!
      *
@@ -155,11 +232,19 @@ public interface Config extends Map<String, Object>
      *         key to set, you can use dots to access nested values like other config instances or maps.
      * @param value
      *         value to set.
-     *
-     * @return previous value.
      */
-    @Nullable
-    Object set(String key, @Nullable Object value);
+    void set(String key, @Nullable Object value);
+
+    /**
+     * Set value on given key to given value. <br/>
+     * Null values are allowed, note that key isn't removed on null value!
+     *
+     * @param key
+     *         key to set, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     * @param value
+     *         value to set.
+     */
+    void set(String[] key, @Nullable Object value);
 
     /**
      * Removes given key from config file.
@@ -171,6 +256,17 @@ public interface Config extends Map<String, Object>
      */
     @Nullable
     Object remove(String key);
+
+    /**
+     * Removes given key from config file.
+     *
+     * @param key
+     *         key to remove, each string in next nested level so it can be used to access nested values of other config instances or maps.
+     *
+     * @return removed value.
+     */
+    @Nullable
+    Object remove(String... key);
 
     /**
      * Returns encoder used by this config file.
@@ -391,7 +487,9 @@ public interface Config extends Map<String, Object>
     @Override
     default Object put(String key, Object value)
     {
-        return this.set(key, value);
+        Object prev = this.get(key);
+        this.set(key, value);
+        return prev;
     }
 
     @Nullable

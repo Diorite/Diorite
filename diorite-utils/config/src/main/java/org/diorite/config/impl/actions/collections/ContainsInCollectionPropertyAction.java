@@ -26,6 +26,7 @@ package org.diorite.config.impl.actions.collections;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
@@ -36,7 +37,8 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
 {
     public ContainsInCollectionPropertyAction()
     {
-        super("containsInCollection", "(?:contains|isIn)(?<property>[A-Z0-9].*)");
+        super("containsInCollection", "(?:contains(?:Key|)(?:In|)|isIn)(?<property>[A-Z0-9].*)", "(?:contains(?:In|)|isIn)(?<property>[A-Z0-9].*)",
+              "(?:contains|isIn)(?<property>[A-Z0-9].*)");
     }
 
     @Override
@@ -47,22 +49,48 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
             return false;
         }
         Class<?> returnType = method.getReturnType();
-        return  (returnType == boolean.class);
+        return (returnType == boolean.class);
     }
 
     @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
-        Collection<Object> rawValue = (Collection<Object>) value.getRawValue();
+        Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
             return false;
         }
-        if (method.isVarArgs())
+        if (rawValue instanceof Collection)
         {
-            Object[] arg = (Object[]) args[0];
-            return rawValue.containsAll(Arrays.asList(arg));
+            Collection<Object> collection = (Collection<Object>) rawValue;
+            if (method.isVarArgs())
+            {
+                Object[] arg = (Object[]) args[0];
+                return collection.containsAll(Arrays.asList(arg));
+            }
+            return collection.contains(args[0]);
         }
-        return rawValue.contains(args[0]);
+        if (rawValue instanceof Map)
+        {
+            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            if (method.isVarArgs())
+            {
+                Object[] arg = (Object[]) args[0];
+                if (arg.length == 0)
+                {
+                    return false;
+                }
+                for (Object o : arg)
+                {
+                    if (! map.containsKey(o))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return map.containsKey(args[0]);
+        }
+        throw new IllegalStateException("Expected collection on " + value);
     }
 }

@@ -24,8 +24,12 @@
 
 package org.diorite.config.impl.actions.collections;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
@@ -42,27 +46,50 @@ public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
     @Override
     protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
     {
-        if (parameters.length != 1)
-        {
-            return false;
-        }
-        Class<?> returnType = method.getReturnType();
-        return (returnType == void.class) || (returnType == boolean.class);
+        return parameters.length == 1;
     }
 
     @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
-        Collection<Object> rawValue = (Collection<Object>) value.getRawValue();
+        Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
-            return false;
+            if (Collection.class.isAssignableFrom(value.getProperty().getRawType()))
+            {
+                return false;
+            }
+            return null;
         }
-        if (method.isVarArgs())
+        if (rawValue instanceof Collection)
         {
-            Object[] arg = (Object[]) args[0];
-            return rawValue.removeAll(Arrays.asList(arg));
+            Collection<Object> collection = (Collection<Object>) rawValue;
+            if (method.isVarArgs())
+            {
+                Object[] arg = (Object[]) args[0];
+                return collection.removeAll(Arrays.asList(arg));
+            }
+            return collection.remove(args[0]);
         }
-        return rawValue.remove(args[0]);
+        if (rawValue instanceof Map)
+        {
+            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            if (method.isVarArgs())
+            {
+                Object[] arg = (Object[]) args[0];
+                if (arg.length == 0)
+                {
+                    return Collections.emptyList();
+                }
+                List<Object> removed = new ArrayList<>(arg.length);
+                for (Object anArg : arg)
+                {
+                    removed.add(map.remove(anArg));
+                }
+                return removed;
+            }
+            return map.remove(args[0]);
+        }
+        throw new IllegalStateException("Expected collection on " + value);
     }
 }

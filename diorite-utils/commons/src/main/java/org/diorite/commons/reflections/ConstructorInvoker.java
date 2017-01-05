@@ -24,6 +24,7 @@
 
 package org.diorite.commons.reflections;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.lang.invoke.MethodHandle;
@@ -62,6 +63,7 @@ public class ConstructorInvoker<T> implements ReflectMethod
      * @return new object.
      */
     @Override
+    @Nonnull
     public T invokeWith(Object... arguments)
     {
         try

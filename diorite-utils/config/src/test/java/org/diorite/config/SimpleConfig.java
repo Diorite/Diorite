@@ -29,4 +29,12 @@ public interface SimpleConfig extends Config
     double getMoney();
 
     void setMoney(double money);
+
+    double addMoney(double money);
+
+    void subtractMoney(byte money);
+
+    double multipleMoneyBy(float multi);
+
+    double divideMoney(int div);
 }

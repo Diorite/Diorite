@@ -26,6 +26,9 @@ package org.diorite.config.impl;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.Validate;
+
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
 
@@ -61,6 +64,32 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
     @Override
     public void setRawValue(@Nullable T value)
     {
+        if (! this.template.getRawType().isInstance(value) && ! DioriteReflectionUtils.getWrapperClass(this.template.getRawType()).isInstance(value))
+        {
+            throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
+                                               this.template.getGenericType() + ")");
+        }
         this.rawValue = value;
+    }
+
+    @Override
+    public void set(String[] path, @Nullable Object value) throws IllegalStateException
+    {
+        Validate.notNull(this.rawValue);
+        NestedNodesHelper.set(this.rawValue, path, value);
+    }
+
+    @Override
+    public Object get(String[] path) throws IllegalStateException
+    {
+        Validate.notNull(this.rawValue);
+        return NestedNodesHelper.get(this.rawValue, path);
+    }
+
+    @Override
+    public Object remove(String[] path) throws IllegalStateException
+    {
+        Validate.notNull(this.rawValue);
+        return NestedNodesHelper.remove(this.rawValue, path);
     }
 }

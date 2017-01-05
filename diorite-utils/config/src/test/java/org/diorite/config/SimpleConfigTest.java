@@ -26,9 +26,13 @@ package org.diorite.config;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import org.diorite.config.serialization.BeanObject;
 
 public class SimpleConfigTest
 {
@@ -58,7 +62,72 @@ public class SimpleConfigTest
 
             Assert.assertEquals("def", config.get("invalid", "def", String.class));
 
-            System.out.println("[SimpleConfigTest] testing basic values");
+            System.out.println("[SimpleConfigTest] testing custom values: ");
+            {
+                Assert.assertSame(null, config.get("nope"));
+                config.set("nope", 54);
+                Assert.assertEquals(54, config.get("nope"));
+                Assert.assertEquals(54, config.remove("nope"));
+            }
+            {
+                BeanObject beanObject = new BeanObject();
+                beanObject.setIntMap(new LinkedHashMap<>(5));
+                beanObject.setList(List.of("a", "b", "c"));
+                beanObject.setIntProperty(12);
+                Assert.assertSame(null, config.get("bean"));
+                config.set("bean", beanObject);
+
+                Assert.assertEquals(beanObject, config.get("bean"));
+                Assert.assertEquals(12, config.get("bean.intProperty"));
+                Assert.assertSame(null, config.get("bean.stringProperty"));
+                Assert.assertSame(null, config.get("bean.list2"));
+
+                config.set("bean.stringProperty", "test");
+                Assert.assertEquals("test", config.get("bean.stringProperty"));
+                config.set("bean.stringProperty", null);
+                Assert.assertSame(null, config.get("bean.stringProperty"));
+
+                config.set("bean.list.0", "A");
+                Assert.assertEquals("b", config.get("bean.list.1"));
+                Assert.assertEquals(List.of("A", "b", "c"), config.get("bean.list"));
+
+                Assert.assertEquals(beanObject, config.remove("bean"));
+                Assert.assertSame(null, config.get("bean"));
+            }
+            {
+                Assert.assertSame(null, config.get("nope.more"));
+                config.set("nope.more", List.of("a", "b", "c"));
+                Assert.assertEquals(List.of("a", "b", "c"), config.get("nope.more"));
+                Assert.assertEquals("b", config.get("nope.more.1"));
+                config.set("nope.more.3", "d");
+                Assert.assertEquals("d", config.get("nope.more.3"));
+                Assert.assertEquals("b", config.remove("nope.more.1"));
+                Assert.assertEquals(List.of("a", "c", "d"), config.remove("nope.more"));
+            }
+
+
+            double configMoney = config.getMoney();
+            System.out.println("[SimpleConfigTest] testing basic operations: " + configMoney);
+
+            double oldMoney = config.addMoney(10);
+            Assert.assertEquals(oldMoney, configMoney, 0.1);
+            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.1);
+            System.out.println("[SimpleConfigTest] add test: " + config.getMoney());
+
+            config.multipleMoneyBy(2);
+            Assert.assertEquals((configMoney + 10) * 2, config.getMoney(), 0.1);
+            System.out.println("[SimpleConfigTest] multiple test: " + config.getMoney());
+
+            config.divideMoney(2);
+            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.1);
+            System.out.println("[SimpleConfigTest] divide test: " + config.getMoney());
+
+            config.subtractMoney((byte) 10);
+            Assert.assertEquals(configMoney, config.getMoney(), 0.1);
+            System.out.println("[SimpleConfigTest] subtract test: " + config.getMoney());
+
+            System.out.println("[SimpleConfigTest] testing basic values: ");
+
             Assert.assertEquals(10, config.getMoney(), 0.1);
             config.setMoney(20);
             Assert.assertEquals(20, config.get("money", 0.0, double.class), 0.1);

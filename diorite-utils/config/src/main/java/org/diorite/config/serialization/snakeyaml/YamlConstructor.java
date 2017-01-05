@@ -24,6 +24,8 @@
 
 package org.diorite.config.serialization.snakeyaml;
 
+import javax.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,12 @@ public class YamlConstructor extends Constructor
     public Map<Class<?>, TypeDescription> getTypeDefinitions()
     {
         return this.typeDefinitions;
+    }
+
+    @Nullable
+    public Object constructFromNode(Node node)
+    {
+        return this.constructDocument(node);
     }
 
     @Override

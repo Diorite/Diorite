@@ -27,7 +27,22 @@ package org.diorite.config.impl;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigTemplate;
 
+/**
+ * This class provides implementations of config classes.
+ */
 public interface ConfigImplementationProvider
 {
-    <T extends Config> T createImplementation(Class<?> clazz, ConfigTemplate<T> template);
+    /**
+     * Create implementation for given config class.
+     *
+     * @param clazz
+     *         config class.
+     * @param template
+     *         template of config.
+     * @param <T>
+     *         type of config.
+     *
+     * @return created implementation of config.
+     */
+    <T extends Config> T createImplementation(Class<T> clazz, ConfigTemplate<T> template);
 }
