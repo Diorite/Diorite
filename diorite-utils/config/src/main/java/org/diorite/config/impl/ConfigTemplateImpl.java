@@ -26,19 +26,25 @@ package org.diorite.config.impl;
 
 import javax.annotation.Nullable;
 
-import java.io.Reader;
+import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import org.diorite.commons.DioriteUtils;
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.Config;
@@ -48,6 +54,7 @@ import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
 import org.diorite.config.Property;
 import org.diorite.config.impl.actions.ActionsRegistry;
+import org.diorite.config.serialization.comments.DocumentComments;
 
 public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
 {
@@ -57,13 +64,16 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     private       CharsetDecoder               charsetDecoder;
     private final ConfigImplementationProvider implementationProvider;
 
-    private final Map<String, ConfigPropertyTemplateImpl<?>> mutableProperties = new ConcurrentHashMap<>(10);
+    private final List<String>                               order             = new ArrayList<>(10);
+    private final Map<String, ConfigPropertyTemplateImpl<?>> mutableProperties = new ConcurrentSkipListMap<>(Comparator.comparingInt(this.order::indexOf));
     private final Map<String, ConfigPropertyTemplate<?>>     properties        = Collections.unmodifiableMap(this.mutableProperties);
 
     private final Map<ConfigPropertyAction, ConfigPropertyTemplate<?>> mutableActions = new ConcurrentHashMap<>(15);
     private final Map<ConfigPropertyAction, ConfigPropertyTemplate<?>> actions        = Collections.unmodifiableMap(this.mutableActions);
 
     private final Map<MethodSignature, ConfigPropertyAction> actionsDispatcher = new ConcurrentHashMap<>(10);
+
+    private final DocumentComments comments = DocumentComments.create();
 
     public ConfigTemplateImpl(Class<T> type, ConfigImplementationProvider provider)
     {
@@ -107,7 +117,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private void setupActions()
+    private synchronized void setupActions()
     {
         LinkedList<MethodInvoker> methods = new LinkedList<>();
         this.scanInterface(this.type, methods);
@@ -118,6 +128,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             ConfigPropertyTemplateImpl templateImpl;
             Class<?> returnType = methodInvoker.getReturnType();
             String name;
+            Method method = methodInvoker.getMethod();
             if (methodInvoker.isPrivate())
             {
                 Property annotation = methodInvoker.getAnnotation(Property.class);
@@ -131,14 +142,14 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 }
                 if (this.mutableProperties.containsKey(name))
                 {
-                    throw new RuntimeException("Duplicated property found in " + this.type + ": " + name + ", " + methodInvoker.getMethod());
+                    throw new RuntimeException("Duplicated property found in " + this.type + ": " + name + ", " + method);
                 }
                 methodInvoker.ensureAccessible();
                 templateImpl = new ConfigPropertyTemplateImpl(returnType, methodInvoker.getGenericReturnType(), name, cfg -> methodInvoker.invoke(cfg));
             }
             else
             {
-                Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(methodInvoker.getMethod());
+                Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method);
                 if (resultPair == null)
                 {
                     continue;
@@ -146,7 +157,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 ConfigPropertyAction propertyAction = resultPair.getLeft();
                 if (! propertyAction.getActionName().equals("get") && methodInvoker.isDefault())
                 {
-                    throw new RuntimeException("Unexpected default implementation of: " + methodInvoker.getMethod());
+                    throw new RuntimeException("Unexpected default implementation of: " + method);
                 }
                 name = resultPair.getRight().getPropertyName();
 
@@ -164,12 +175,32 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                     if (propertyAction.getActionName().equals("get") && methodInvoker.isDefault())
                     {
                         methodInvoker.ensureAccessible();
-                        templateImpl.setDefaultValueSupplier(cfg -> methodInvoker.invoke(cfg));
+                        try
+                        {
+                            MethodHandle methodHandle =
+                                    DioriteReflectionUtils.createLookup(method.getDeclaringClass(), - 1).unreflectSpecial(method, method.getDeclaringClass());
+                            templateImpl.setDefaultValueSupplier(cfg ->
+                                                                 {
+                                                                     try
+                                                                     {
+                                                                         return methodHandle.invoke(cfg);
+                                                                     }
+                                                                     catch (Throwable t)
+                                                                     {
+                                                                         throw DioriteUtils.sneakyThrow(t);
+                                                                     }
+                                                                 });
+                        }
+                        catch (Exception e)
+                        {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
                 this.mutableActions.put(propertyAction, templateImpl);
-                this.actionsDispatcher.put(new MethodSignature(methodInvoker.getMethod()), propertyAction);
+                this.actionsDispatcher.put(new MethodSignature(method), propertyAction);
             }
+            this.order.add(name);
             this.mutableProperties.put(name, templateImpl);
         }
     }
@@ -178,6 +209,12 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     public Class<T> getConfigType()
     {
         return this.type;
+    }
+
+    @Override
+    public DocumentComments getComments()
+    {
+        return this.comments;
     }
 
     @Override
@@ -193,12 +230,14 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @Override
+    @Nullable
     public ConfigPropertyTemplate<?> getTemplateFor(String property)
     {
         return this.properties.get(property);
     }
 
     @Override
+    @Nullable
     public ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyAction action)
     {
         return this.actions.get(action);
@@ -247,9 +286,8 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @Override
-    public T load(Reader reader)
+    public T create()
     {
         return this.implementationProvider.createImplementation(this.type, this);
     }
-
 }

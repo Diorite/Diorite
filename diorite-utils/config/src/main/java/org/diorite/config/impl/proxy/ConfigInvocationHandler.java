@@ -29,6 +29,7 @@ import javax.annotation.WillNotClose;
 
 import java.io.File;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
@@ -39,7 +40,9 @@ import java.nio.charset.CharsetEncoder;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -53,6 +56,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yaml.snakeyaml.nodes.Node;
 
+import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.Config;
@@ -60,6 +64,7 @@ import org.diorite.config.ConfigPropertyAction;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
+import org.diorite.config.SimpleConfig;
 import org.diorite.config.exceptions.ConfigLoadException;
 import org.diorite.config.exceptions.ConfigSaveException;
 import org.diorite.config.impl.ConfigPropertyValueImpl;
@@ -68,12 +73,12 @@ import org.diorite.config.serialization.Serialization;
 
 public final class ConfigInvocationHandler implements InvocationHandler
 {
-    private final ConfigTemplate<?> template;
+    final ConfigTemplate<?> template;
 
-    private final Map<Method, Function<Object[], Object>>      basicMethods        = new ConcurrentHashMap<>(20);
-    private final Map<String, ConfigPropertyValueImpl<Object>> predefinedValues    = new ConcurrentHashMap<>(10);
-    private final Map<String, ConfigNode>                      dynamicValues       = new ConcurrentHashMap<>(10);
-    private final Map<String, Node>                            simpleDynamicValues = new ConcurrentHashMap<>(10);
+    final Map<Method, Function<Object[], Object>>      basicMethods        = new ConcurrentHashMap<>(20);
+    final Map<String, ConfigPropertyValueImpl<Object>> predefinedValues    = new LinkedHashMap<>(20);
+    final Map<String, SimpleConfig>                    dynamicValues       = Collections.synchronizedMap(new LinkedHashMap<>(10));
+    final Map<String, Node>                            simpleDynamicValues = Collections.synchronizedMap(new LinkedHashMap<>(10));
 
     @SuppressWarnings("NullableProblems")
     private volatile CharsetEncoder charsetEncoder;
@@ -155,7 +160,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             {
                 try
                 {
-                    return methodHandle.invokeWithArguments(args);
+                    return methodHandle.invokeWithArguments(arg);
                 }
                 catch (Throwable throwable)
                 {
@@ -163,6 +168,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
                 }
             });
             return r;
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
         }
         catch (Exception e)
         {
@@ -215,6 +224,11 @@ public final class ConfigInvocationHandler implements InvocationHandler
     public void prepare(Config config)
     {
         this.config = config;
+
+        for (ConfigPropertyTemplate<?> propertyTemplate : this.template.getProperties().values())
+        {
+            this.getOrCreatePredefinedValue(propertyTemplate);
+        }
 
         // load defaults
         this.fillWithDefaultsImpl();
@@ -407,12 +421,30 @@ public final class ConfigInvocationHandler implements InvocationHandler
             ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
             if (propertyValue != null)
             {
-                return (T) propertyValue.getRawValue();
+                Object rawValue = propertyValue.getRawValue();
+
+                Class<?> ensureNonPrimitive;
+                if (type != null)
+                {
+                    ensureNonPrimitive = DioriteReflectionUtils.getWrapperClass(type);
+                }
+                else
+                {
+                    ensureNonPrimitive = null;
+                }
+                if ((ensureNonPrimitive == null) || (rawValue == null) || ensureNonPrimitive.isInstance(rawValue))
+                {
+                    return (T) rawValue;
+                }
+
+                ConfigPropertyTemplate<Object> prop = propertyValue.getProperty();
+                throw new IllegalArgumentException("Can't change type of predefined value: '" + prop.getName() + "' (" + prop.getGenericType() + ") to: " +
+                                                   type);
             }
             Node node = this.simpleDynamicValues.get(key);
             if (node == null)
             {
-                ConfigNode configNode = this.dynamicValues.get(key);
+                SimpleConfig configNode = this.dynamicValues.get(key);
                 if (configNode != null)
                 {
                     return (T) configNode;
@@ -436,7 +468,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return (T) propertyValue.get(newPath);
         }
-        ConfigNode configNode = this.dynamicValues.get(key);
+        SimpleConfig configNode = this.dynamicValues.get(key);
         if (configNode != null)
         {
             if (type == null)
@@ -504,7 +536,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             this.simpleDynamicValues.put(key, serialization.toYamlNode(o));
             return;
         }
-        ConfigNode configNode = this.dynamicValues.computeIfAbsent(key, k -> ProxyImplementationProvider.createNodeInstance());
+        SimpleConfig configNode = this.dynamicValues.computeIfAbsent(key, k -> ProxyImplementationProvider.createNodeInstance());
         configNode.set(newPath, value);
     }
 
@@ -523,8 +555,9 @@ public final class ConfigInvocationHandler implements InvocationHandler
             ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
             if (propertyValue != null)
             {
-                throw new IllegalStateException("Can't remove predefined value: " + propertyValue.getProperty().getName() + " from " +
-                                                this.template.getConfigType());
+                Object rawValue = propertyValue.getRawValue();
+                propertyValue.setRawValue(propertyValue.getProperty().getDefault(this.config));
+                return rawValue;
             }
             Node node = this.simpleDynamicValues.remove(key);
             if (node == null)
@@ -541,7 +574,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return propertyValue.remove(newPath);
         }
-        ConfigNode configNode = this.dynamicValues.get(key);
+        SimpleConfig configNode = this.dynamicValues.get(key);
         if (configNode != null)
         {
             return configNode.remove(newPath);
@@ -601,17 +634,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         this.config.save(bindFile);
     }
 
-    private void saveImpl(@WillNotClose Writer writer)
-    {
-
-    }
-
     private void loadImpl()
-    {
-
-    }
-
-    private void loadImpl(@WillNotClose Reader reader)
     {
         File bindFile = this.bindFile;
         if (bindFile == null)
@@ -621,34 +644,58 @@ public final class ConfigInvocationHandler implements InvocationHandler
         this.config.load(bindFile);
     }
 
+    private void saveImpl(@WillNotClose Writer writer)
+    {
+        Serialization.getGlobal().toYamlWithComments(this.toMap(), writer, this.template.getComments());
+    }
+
+    private void loadImpl(@WillNotClose Reader reader)
+    {
+        this.predefinedValues.clear();
+        this.dynamicValues.clear();
+        this.simpleDynamicValues.clear();
+
+        Config fromYaml = Serialization.getGlobal().fromYaml(this.template, reader);
+        ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(fromYaml);
+
+        this.predefinedValues.putAll(invocationHandler.predefinedValues);
+        this.dynamicValues.putAll(invocationHandler.dynamicValues);
+        this.simpleDynamicValues.putAll(invocationHandler.simpleDynamicValues);
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Config cloneImpl()
     {
-        Config copy = ProxyImplementationProvider.getInstance().createImplementation(this.config.getClass(), (ConfigTemplate) this.template);
+        Config copy = ProxyImplementationProvider.getInstance().createImplementation(this.template.getConfigType(), (ConfigTemplate) this.template);
         ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(copy);
 
         invocationHandler.charsetDecoder = this.charsetDecoder;
         invocationHandler.charsetEncoder = this.charsetEncoder;
         invocationHandler.bindFile = this.bindFile;
 
-        for (Entry<String, ConfigPropertyValueImpl<Object>> valueEntry : this.predefinedValues.entrySet())
-        {
-            String key = valueEntry.getKey();
-            ConfigPropertyValueImpl<Object> value = valueEntry.getValue();
-            ConfigPropertyValueImpl<Object> copyValue = invocationHandler.getOrCreatePredefinedValue(value.getProperty());
-            copyValue.setRawValue(value.getRawValue());
-        }
+        StringBuilderWriter writer =
+                new StringBuilderWriter((this.simpleDynamicValues.size() * 100) + ((this.dynamicValues.size() + this.predefinedValues.size()) * 1000));
+        this.saveImpl(writer);
+        invocationHandler.loadImpl(new StringReader(writer.toString()));
 
-        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
-        {
-            invocationHandler.dynamicValues.put(entry.getKey(), (ConfigNode) entry.getValue().clone());
-        }
-
-        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
-        {
-            // should be safe to use this same node instance, as it will be deserialized and get/set anyway.
-            invocationHandler.simpleDynamicValues.put(entry.getKey(), entry.getValue());
-        }
+//        for (Entry<String, ConfigPropertyValueImpl<Object>> valueEntry : this.predefinedValues.entrySet())
+//        {
+//            String key = valueEntry.getKey();
+//            ConfigPropertyValueImpl<Object> value = valueEntry.getValue();
+//            ConfigPropertyValueImpl<Object> copyValue = invocationHandler.getOrCreatePredefinedValue(value.getProperty());
+//            copyValue.setRawValue(value.getRawValue());
+//        }
+//
+//        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+//        {
+//            invocationHandler.dynamicValues.put(entry.getKey(), (ConfigNode) entry.getValue().clone());
+//        }
+//
+//        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+//        {
+//            // should be safe to use this same node instance, as it will be deserialized and get/set anyway.
+//            invocationHandler.simpleDynamicValues.put(entry.getKey(), entry.getValue());
+//        }
 
         return copy;
     }
@@ -689,7 +736,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return true;
         }
-        ConfigNode configNode = this.dynamicValues.get(key);
+        SimpleConfig configNode = this.dynamicValues.get(key);
         if (configNode != null)
         {
             return configNode.containsKey(newPath);
@@ -724,7 +771,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
                 return true;
             }
         }
-        for (ConfigNode configNode : this.dynamicValues.values())
+        for (SimpleConfig configNode : this.dynamicValues.values())
         {
             if (Objects.equals(toCheck, configNode))
             {
@@ -792,9 +839,29 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             result.add(new SimpleEntry<>(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue())));
         }
-        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+        for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
             result.add(new SimpleEntry<>(entry.getKey(), entry.getValue()));
+        }
+
+        return result;
+    }
+
+    private Map<String, Object> toMap()
+    {
+        Map<String, Object> result = new LinkedHashMap<>(20);
+
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
+        {
+            result.put(entry.getKey(), entry.getValue().getRawValue());
+        }
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue()));
+        }
+        for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toMap());
         }
 
         return result;
@@ -803,7 +870,8 @@ public final class ConfigInvocationHandler implements InvocationHandler
     private String toStringImpl()
     {
         ToStringBuilder builder = new ToStringBuilder(this.config);
-        builder.append("bindFile", this.bindFile);
+        builder.append(this.template.getClass().getName());
+        builder.append(this.bindFile);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
             builder.append(entry.getKey(), entry.getValue().getRawValue());
@@ -812,7 +880,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             builder.append(entry.getKey(), (Object) Serialization.getGlobal().fromYamlNode(entry.getValue()));
         }
-        for (Entry<String, ConfigNode> entry : this.dynamicValues.entrySet())
+        for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
             builder.append(entry.getKey(), entry.getValue());
         }

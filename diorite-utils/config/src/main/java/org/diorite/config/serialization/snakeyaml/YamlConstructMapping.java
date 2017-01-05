@@ -44,6 +44,9 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
+import org.diorite.config.Config;
+import org.diorite.config.ConfigManager;
+import org.diorite.config.ConfigTemplate;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor.ConstructorException;
 
 /**
@@ -68,7 +71,7 @@ class YamlConstructMapping implements Construct
      *
      * @return constructed JavaBean
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Object construct(Node node)
     {
@@ -76,6 +79,14 @@ class YamlConstructMapping implements Construct
         Class<?> nodeType = node.getType();
         if (Map.class.isAssignableFrom(nodeType) || Collection.class.isAssignableFrom(nodeType))
         {
+            if (Config.class.isAssignableFrom(nodeType))
+            {
+                ConfigManager configManager = ConfigManager.get();
+                ConfigTemplate configTemplate = configManager.getConfigFile((Class) nodeType);
+                Config config = configTemplate.create();
+                this.yamlConstructor.constructMapping2ndStep(mnode, (Map) config);
+                return config;
+            }
             Object created = YamlCollectionCreator.createCollection(nodeType, mnode.getValue().size());
             if (Properties.class.isAssignableFrom(nodeType))
             {

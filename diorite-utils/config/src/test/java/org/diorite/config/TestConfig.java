@@ -24,9 +24,12 @@
 
 package org.diorite.config;
 
-public interface SimpleConfig extends Config
+public interface TestConfig extends Config
 {
-    double getMoney();
+    default double getMoney()
+    {
+        return 0.1;
+    }
 
     void setMoney(double money);
 

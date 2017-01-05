@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.proxy;
+package org.diorite.config;
 
-import org.diorite.config.Config;
-
-interface ConfigNode extends Config
+/**
+ * Simple config instance, can be used to create raw config instances and manually use set/get methods.
+ */
+public interface SimpleConfig extends Config
 {
 }

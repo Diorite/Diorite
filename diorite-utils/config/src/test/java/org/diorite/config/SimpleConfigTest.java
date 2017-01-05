@@ -29,6 +29,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,14 +38,16 @@ import org.diorite.config.serialization.BeanObject;
 
 public class SimpleConfigTest
 {
-    private final ConfigManager configManager = ConfigManager.create();
+    private final ConfigManager configManager = ConfigManager.get();
 
     @Test
     public void loadTest() throws Exception
     {
-        ConfigTemplate<SimpleConfig> configTemplate = this.configManager.getConfigFile(SimpleConfig.class);
+        ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
+        ConfigTemplate<TestConfig> configTemplate = this.configManager.getConfigFile(TestConfig.class);
         Assert.assertNotNull(configTemplate);
-        Assert.assertEquals(SimpleConfig.class.getSimpleName(), configTemplate.getName());
+        Assert.assertEquals(TestConfig.class.getSimpleName(), configTemplate.getName());
         Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultDecoder().charset());
         Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultEncoder().charset());
 
@@ -52,12 +56,12 @@ public class SimpleConfigTest
         {
             Assert.assertNotNull(stream);
 
-            SimpleConfig config = configTemplate.load(stream);
+            TestConfig config = configTemplate.load(stream);
             Assert.assertNotNull(config);
             Assert.assertNotNull(config.template());
             Assert.assertSame(config.template(), configTemplate);
             Assert.assertNotNull(config.name());
-            Assert.assertEquals("SimpleConfig", config.name());
+            Assert.assertEquals("TestConfig", config.name());
             System.out.println("[SimpleConfigTest] loaded simpleConfig.yml (" + config.name() + ")");
 
             Assert.assertEquals("def", config.get("invalid", "def", String.class));
@@ -103,45 +107,61 @@ public class SimpleConfigTest
                 Assert.assertEquals("d", config.get("nope.more.3"));
                 Assert.assertEquals("b", config.remove("nope.more.1"));
                 Assert.assertEquals(List.of("a", "c", "d"), config.remove("nope.more"));
+                config.remove("nope");
             }
+            config.set("SomeString", "Some str");
+            config.set("more.A", "Some str1");
+            config.set("more.B", "Some str2");
+            System.out.println("[SimpleConfigTest] to string: ");
+            System.out.println(config.toString());
+            System.out.println("[SimpleConfigTest] hashcode: " + config.hashCode());
+            Assert.assertEquals(config.hashCode(), config.hashCode());
+            System.out.println("[SimpleConfigTest] clone test...");
+            Config clone = config.clone();
+            Assert.assertEquals(config, clone);
+            clone.set("more.C", "Some str3");
+            Assert.assertNotEquals(config, clone);
 
 
             double configMoney = config.getMoney();
             System.out.println("[SimpleConfigTest] testing basic operations: " + configMoney);
 
             double oldMoney = config.addMoney(10);
-            Assert.assertEquals(oldMoney, configMoney, 0.1);
-            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.1);
+            Assert.assertEquals(oldMoney, configMoney, 0.001);
+            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.001);
             System.out.println("[SimpleConfigTest] add test: " + config.getMoney());
 
             config.multipleMoneyBy(2);
-            Assert.assertEquals((configMoney + 10) * 2, config.getMoney(), 0.1);
+            Assert.assertEquals((configMoney + 10) * 2, config.getMoney(), 0.001);
             System.out.println("[SimpleConfigTest] multiple test: " + config.getMoney());
 
             config.divideMoney(2);
-            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.1);
+            Assert.assertEquals(configMoney + 10, config.getMoney(), 0.001);
             System.out.println("[SimpleConfigTest] divide test: " + config.getMoney());
 
             config.subtractMoney((byte) 10);
-            Assert.assertEquals(configMoney, config.getMoney(), 0.1);
+            Assert.assertEquals(configMoney, config.getMoney(), 0.001);
             System.out.println("[SimpleConfigTest] subtract test: " + config.getMoney());
 
             System.out.println("[SimpleConfigTest] testing basic values: ");
 
-            Assert.assertEquals(10, config.getMoney(), 0.1);
+            Assert.assertEquals(10, config.getMoney(), 0.001);
             config.setMoney(20);
-            Assert.assertEquals(20, config.get("money", 0.0, double.class), 0.1);
+            Assert.assertEquals(20, config.get("money", 0.0, double.class), 0.001);
             config.set("money", 5);
-            Assert.assertEquals(5, config.getMoney(), 0.1);
+            Assert.assertEquals(5, config.getMoney(), 0.001);
 
-            System.out.println("[SimpleConfigTest] testing remove");
+            System.out.print("[SimpleConfigTest] testing remove, default value of money: ");
             config.remove("money");
-            Assert.assertEquals(0, config.getMoney(), 0.1);
+            System.out.println(config.getMoney());
+            Assert.assertEquals(0.1, config.getMoney(), 0.001);
+            config.addMoney(0.1);
+            Assert.assertEquals(0.2, config.getMoney(), 0.001);
 
             config.setMoney(20);
-            Assert.assertEquals(20, config.getMoney(), 0.1);
+            Assert.assertEquals(20, config.getMoney(), 0.001);
             config.setMoney(0);
-            Assert.assertEquals("0", config.get("money", "0", String.class));
+            Assert.assertEquals(0.0, (Double) config.get("money"), 0.001);
             System.out.println("[SimpleConfigTest] done\n");
         }
     }

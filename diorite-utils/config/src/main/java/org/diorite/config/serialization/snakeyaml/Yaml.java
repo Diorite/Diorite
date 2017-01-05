@@ -209,6 +209,9 @@ import org.yaml.snakeyaml.resolver.Resolver;
 
 import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.commons.threads.DioriteThreadUtils;
+import org.diorite.config.Config;
+import org.diorite.config.ConfigTemplate;
+import org.diorite.config.impl.ConfigTemplateResolver;
 import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.emitter.Emitter;
@@ -556,6 +559,24 @@ public class Yaml
     public Object fromYaml(Reader io)
     {
         return this.loadFromReader(new StreamReader(io), Object.class);
+    }
+
+    /**
+     * Parse the only YAML document in a stream as configuration object.
+     *
+     * @param template
+     *         template of config object.
+     * @param io
+     *         data to load from (BOM must not be present)
+     *
+     * @return parsed object
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
+    {
+        Composer composer = new Composer(new ParserImpl(new StreamReader(io)), new ConfigTemplateResolver(template));
+        this.constructor.setComposer(composer);
+        return (T) this.constructor.getSingleData(template.getConfigType());
     }
 
     /**

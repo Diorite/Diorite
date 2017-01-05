@@ -61,10 +61,51 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
         return this.rawValue;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setRawValue(@Nullable T value)
     {
-        if (! this.template.getRawType().isInstance(value) && ! DioriteReflectionUtils.getWrapperClass(this.template.getRawType()).isInstance(value))
+        Class<T> rawType = this.template.getRawType();
+        Class<?> primitiveRawType = DioriteReflectionUtils.getPrimitive(rawType);
+        if (! primitiveRawType.isPrimitive())
+        {
+            if (! rawType.isInstance(value) && ! DioriteReflectionUtils.getWrapperClass(rawType).isInstance(value))
+            {
+                throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
+                                                   this.template.getGenericType() + ")");
+            }
+        }
+        else if (value instanceof Number)
+        {
+            Number num = (Number) value;
+            if (primitiveRawType == byte.class)
+            {
+                num = num.byteValue();
+            }
+            if (primitiveRawType == short.class)
+            {
+                num = num.shortValue();
+            }
+            if (primitiveRawType == int.class)
+            {
+                num = num.intValue();
+            }
+            if (primitiveRawType == long.class)
+            {
+                num = num.longValue();
+            }
+            if (primitiveRawType == float.class)
+            {
+                num = num.floatValue();
+            }
+            if (primitiveRawType == double.class)
+            {
+                num = num.doubleValue();
+            }
+            this.rawValue = (T) num;
+            return;
+        }
+        else
         {
             throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
                                                this.template.getGenericType() + ")");

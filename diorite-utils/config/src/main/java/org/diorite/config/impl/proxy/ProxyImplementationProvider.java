@@ -31,8 +31,10 @@ import java.lang.reflect.Proxy;
 import org.diorite.commons.arrays.DioriteArrayUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigTemplate;
+import org.diorite.config.SimpleConfig;
 import org.diorite.config.impl.ConfigImplementationProvider;
 import org.diorite.config.impl.ConfigTemplateImpl;
+import org.diorite.config.serialization.Serialization;
 
 public class ProxyImplementationProvider implements ConfigImplementationProvider
 {
@@ -46,6 +48,12 @@ public class ProxyImplementationProvider implements ConfigImplementationProvider
         {
             throw new IllegalArgumentException("Class must be a interface!");
         }
+
+        if (! Serialization.getGlobal().isSerializable(clazz))
+        {
+            Serialization.getGlobal().registerSerializer(new ConfigDeserializer<>(clazz));
+        }
+
         Class<?>[] interfaces = clazz.getInterfaces();
         interfaces = DioriteArrayUtils.prepend(interfaces, clazz);
         ConfigInvocationHandler configInvocationHandler = new ConfigInvocationHandler(template);
@@ -60,14 +68,14 @@ public class ProxyImplementationProvider implements ConfigImplementationProvider
     }
 
     @Nullable
-    private static ConfigTemplateImpl<ConfigNode> nodeTemplate;
+    private static ConfigTemplateImpl<SimpleConfig> nodeTemplate;
 
-    static ConfigNode createNodeInstance()
+    static SimpleConfig createNodeInstance()
     {
         if (nodeTemplate == null)
         {
-            nodeTemplate = new ConfigTemplateImpl<>(ConfigNode.class, INSTANCE);
+            nodeTemplate = new ConfigTemplateImpl<>(SimpleConfig.class, INSTANCE);
         }
-        return INSTANCE.createImplementation(ConfigNode.class, nodeTemplate);
+        return INSTANCE.createImplementation(SimpleConfig.class, nodeTemplate);
     }
 }

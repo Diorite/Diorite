@@ -24,6 +24,8 @@
 
 package org.diorite.config;
 
+import javax.annotation.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,9 +42,16 @@ public final class ConfigManager
     {
     }
 
-    public static ConfigManager create()
+    @Nullable
+    private static ConfigManager configManager;
+
+    public static ConfigManager get()
     {
-        return new ConfigManager();
+        if (configManager == null)
+        {
+            configManager = new ConfigManager();
+        }
+        return configManager;
     }
 
     private final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);

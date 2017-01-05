@@ -25,6 +25,7 @@
 package org.diorite.config;
 
 import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +40,7 @@ import java.nio.charset.CodingErrorAction;
 import java.util.Map;
 
 import org.diorite.config.exceptions.ConfigLoadException;
+import org.diorite.config.serialization.comments.DocumentComments;
 
 /**
  * Represents config file template.
@@ -59,6 +61,13 @@ public interface ConfigTemplate<T extends Config>
      * @return config type class.
      */
     Class<T> getConfigType();
+
+    /**
+     * Returns comments for this config template.
+     *
+     * @return comments for this config template.
+     */
+    DocumentComments getComments();
 
     /**
      * Returns map of properties of this config class.
@@ -82,6 +91,7 @@ public interface ConfigTemplate<T extends Config>
      *
      * @return template for given property.
      */
+    @Nullable
     ConfigPropertyTemplate<?> getTemplateFor(String property);
 
     /**
@@ -164,6 +174,13 @@ public interface ConfigTemplate<T extends Config>
     }
 
     /**
+     * Create empty config.
+     *
+     * @return new empty config instance.
+     */
+    T create();
+
+    /**
      * Load config from given file.
      *
      * @param file
@@ -171,7 +188,14 @@ public interface ConfigTemplate<T extends Config>
      */
     default T load(File file)
     {
-        return this.load(this.createInputStreamReader(file));
+        try (InputStreamReader inputStreamReader = this.createInputStreamReader(file))
+        {
+            return this.load(inputStreamReader);
+        }
+        catch (IOException e)
+        {
+            throw new ConfigLoadException(this, file, e);
+        }
     }
 
     /**
@@ -181,7 +205,7 @@ public interface ConfigTemplate<T extends Config>
      * @param inputStream
      *         stream to use.
      */
-    default T load(InputStream inputStream)
+    default T load(@WillNotClose InputStream inputStream)
     {
         return this.load(new InputStreamReader(inputStream, this.getDefaultDecoder()));
     }
@@ -193,7 +217,12 @@ public interface ConfigTemplate<T extends Config>
      * @param reader
      *         reader to use.
      */
-    T load(Reader reader);
+    default T load(@WillNotClose Reader reader)
+    {
+        T implementation = this.create();
+        implementation.load(reader);
+        return implementation;
+    }
 
     private InputStreamReader createInputStreamReader(File file)
     {

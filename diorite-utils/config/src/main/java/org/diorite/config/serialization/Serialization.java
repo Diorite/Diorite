@@ -75,6 +75,8 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.commons.reflections.ReflectMethod;
 import org.diorite.commons.threads.DioriteThreadUtils;
+import org.diorite.config.Config;
+import org.diorite.config.ConfigTemplate;
 import org.diorite.config.serialization.annotations.DelegateSerializable;
 import org.diorite.config.serialization.annotations.SerializableAs;
 import org.diorite.config.serialization.annotations.StringSerializable;
@@ -1586,6 +1588,21 @@ public final class Serialization
     public Object fromYaml(Reader io)
     {
         return this.yaml().fromYaml(io);
+    }
+
+    /**
+     * Parse the only YAML document in a stream as configuration object.
+     *
+     * @param template
+     *         template of config object.
+     * @param io
+     *         data to load from (BOM must not be present)
+     *
+     * @return parsed object
+     */
+    public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
+    {
+        return this.yaml().fromYaml(template, io);
     }
 
     /**
