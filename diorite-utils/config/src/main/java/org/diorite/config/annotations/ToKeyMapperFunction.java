@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,27 @@
  * SOFTWARE.
  */
 
-package org.diorite.config;
+package org.diorite.config.annotations;
 
-import org.diorite.config.annotations.Comment;
-import org.diorite.config.annotations.Footer;
-import org.diorite.config.annotations.Header;
-import org.diorite.config.annotations.PredefinedComment;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Header("Test config")
-@Footer("Footer!")
-@PredefinedComment(path = {"nope", "more"}, value = "Some list!")
-@PredefinedComment(path = {"nested", "bean", "intProperty"}, value = "This is very important settings!")
-public interface TestConfig extends Config
+/**
+ * {@link ToKeyMapperFunction} is used to annotate method that change strings to map keys for given property.<br>
+ * {@link ToStringMapperFunction} should be also used to annotate method that change map key objects to strings.
+ */
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ToKeyMapperFunction
 {
-    @Comment("Player money.")
-    default double getMoney()
-    {
-        return 0.1;
-    }
-
-    void setMoney(double money);
-
-    double addMoney(double money);
-
-    void subtractMoney(byte money);
-
-    double multipleMoneyBy(float multi);
-
-    double divideMoney(int div);
+    /**
+     * Returns property name that use this mapping function.
+     *
+     * @return property name that use this mapping function.
+     */
+    String property();
 }

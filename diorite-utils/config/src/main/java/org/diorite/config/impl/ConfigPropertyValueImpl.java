@@ -29,23 +29,34 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
+import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
 
 public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
 {
+    private final Config config;
+
     private final     ConfigPropertyTemplate<T> template;
     @Nullable private T                         rawValue;
 
-    public ConfigPropertyValueImpl(ConfigPropertyTemplate<T> template)
+    public ConfigPropertyValueImpl(Config config, ConfigPropertyTemplate<T> template)
     {
+        this.config = config;
         this.template = template;
     }
 
-    public ConfigPropertyValueImpl(ConfigPropertyTemplate<T> template, @Nullable T value)
+    public ConfigPropertyValueImpl(Config config, ConfigPropertyTemplate<T> template, @Nullable T value)
     {
+        this.config = config;
         this.template = template;
         this.rawValue = value;
+    }
+
+    @Override
+    public Config getDeclaringConfig()
+    {
+        return this.config;
     }
 
     @Override

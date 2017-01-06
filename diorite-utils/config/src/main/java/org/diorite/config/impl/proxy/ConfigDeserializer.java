@@ -26,12 +26,20 @@ package org.diorite.config.impl.proxy;
 
 import java.lang.reflect.Proxy;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.Tag;
 
 import org.diorite.config.Config;
+import org.diorite.config.ConfigManager;
+import org.diorite.config.SimpleConfig;
 import org.diorite.config.impl.ConfigPropertyValueImpl;
 import org.diorite.config.serialization.DeserializationData;
+import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.SerializationData;
 import org.diorite.config.serialization.Serializer;
+import org.diorite.config.serialization.YamlDeserializationData;
 
 public class ConfigDeserializer<T extends Config> implements Serializer<T>
 {
@@ -52,15 +60,51 @@ public class ConfigDeserializer<T extends Config> implements Serializer<T>
     public void serialize(T object, SerializationData data)
     {
         ConfigInvocationHandler handler = (ConfigInvocationHandler) Proxy.getInvocationHandler(object);
-        for (Entry<String, ConfigPropertyValueImpl<Object>> stringConfigPropertyValueEntry : handler.predefinedValues.entrySet())
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : handler.predefinedValues.entrySet())
         {
-
+            entry.getValue().serialize(data);
+        }
+        for (Entry<String, SimpleConfig> entry : handler.dynamicValues.entrySet())
+        {
+            data.add(entry.getKey(), entry.getValue(), SimpleConfig.class);
+        }
+        for (Entry<String, Node> entry : handler.simpleDynamicValues.entrySet())
+        {
+            Object fromYamlNode = Serialization.getGlobal().fromYamlNode(entry.getValue());
+            data.add(entry.getKey(), fromYamlNode);
         }
     }
 
+    private static final Set<Tag> sectionTags = Set.of(Tag.MAP, Tag.OMAP, new Tag(SimpleConfig.class));
     @Override
-    public T deserialize(DeserializationData data)
+    public T deserialize(DeserializationData abstractData)
     {
-        return null;
+        if (! (abstractData instanceof YamlDeserializationData))
+        {
+            throw new IllegalStateException("Diorite configs can be only deserialized from YAML!");
+        }
+        YamlDeserializationData data = ((YamlDeserializationData) abstractData);
+        T t = ConfigManager.get().getConfigFile(this.clazz).create();
+        ConfigInvocationHandler handler = (ConfigInvocationHandler) Proxy.getInvocationHandler(t);
+
+        for (String key : data.getKeys())
+        {
+            ConfigPropertyValueImpl<Object> propertyValue = handler.predefinedValues.get(key);
+            if (propertyValue != null)
+            {
+                propertyValue.deserialize(data);
+                continue;
+            }
+            if (sectionTags.contains(data.getTag(key)))
+            {
+                SimpleConfig simpleConfig = data.get(key, SimpleConfig.class);
+                handler.dynamicValues.put(key, simpleConfig);
+            }
+            else
+            {
+                t.set(key, data.get(key, Object.class));
+            }
+        }
+        return t;
     }
 }

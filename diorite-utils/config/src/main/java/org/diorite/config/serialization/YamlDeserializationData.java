@@ -27,9 +27,12 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -46,7 +49,7 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor;
 
-class YamlDeserializationData extends AbstractDeserializationData
+public class YamlDeserializationData extends AbstractDeserializationData
 {
     private final Node            node;
     private final Representer     representer;
@@ -70,6 +73,37 @@ class YamlDeserializationData extends AbstractDeserializationData
     public SerializationType getSerializationType()
     {
         return SerializationType.YAML;
+    }
+
+    @Override
+    public Set<String> getKeys()
+    {
+        if (this.node instanceof MappingNode)
+        {
+            List<NodeTuple> tuples = ((MappingNode) this.node).getValue();
+            Set<String> result = new LinkedHashSet<>(tuples.size());
+            for (NodeTuple tuple : tuples)
+            {
+                Node keyNode = tuple.getKeyNode();
+                if (keyNode instanceof ScalarNode)
+                {
+                    result.add(((ScalarNode) keyNode).getValue());
+                }
+            }
+            return result;
+        }
+        return Collections.emptySet();
+    }
+
+    @Nullable
+    public Tag getTag(String key)
+    {
+        Node node = this.getNode(this.node, key);
+        if (node == null)
+        {
+            return null;
+        }
+        return node.getTag();
     }
 
     @Override
@@ -194,7 +228,7 @@ class YamlDeserializationData extends AbstractDeserializationData
                 }
             }
         }
-        if (type != Object.class)
+        else if (type != Object.class)
         {
             node.setTag(new Tag(type));
         }

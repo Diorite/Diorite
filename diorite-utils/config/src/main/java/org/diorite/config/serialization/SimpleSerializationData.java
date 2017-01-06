@@ -36,6 +36,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.Validate;
+
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.comments.CommentsNode;
 import org.diorite.config.serialization.comments.DocumentComments;
@@ -259,11 +261,17 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <T> void addMappedList(String key, Class<T> type, Collection<? extends T> value, Function<T, String> mapper)
+    public <T> void addMappedList(String key, Class<T> type, @Nullable Collection<? extends T> value, Function<T, String> mapper)
     {
         this.validateMap(key);
 
         this.addComments(type, key, CommentsNode.ANY);
+
+        if (value == null)
+        {
+            this.add(key, null);
+            return;
+        }
 
         Map<String, Object> valueMap = new LinkedHashMap<>(value.size());
         for (T t : value)
@@ -287,7 +295,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <T> void addCollection(String key, Collection<? extends T> value, Class<T> type)
+    public <T> void addCollection(String key, @Nullable Collection<? extends T> value, Class<T> type)
     {
         this.validateList(key);
 
@@ -296,10 +304,16 @@ class SimpleSerializationData implements SerializationData
         List<Object> result;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             result = this.dataList;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             result = new ArrayList<>(value.size());
         }
         for (T t : value)
@@ -327,7 +341,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <T> void addMapAsList(String key, Map<?, ? extends T> value, Class<T> type)
+    public <T> void addMapAsList(String key, @Nullable Map<?, ? extends T> value, Class<T> type)
     {
         this.validateList(key);
 
@@ -336,10 +350,16 @@ class SimpleSerializationData implements SerializationData
         List<Object> result;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             result = this.dataList;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             result = new ArrayList<>(value.size());
         }
         for (Entry<?, ? extends T> entry : value.entrySet())
@@ -366,7 +386,7 @@ class SimpleSerializationData implements SerializationData
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T> void addMapAsListWithKeys(String key, Map<?, ? extends T> value, Class<T> type, String keyPropertyName)
+    public <T> void addMapAsListWithKeys(String key, @Nullable Map<?, ? extends T> value, Class<T> type, String keyPropertyName)
     {
         this.validateList(key);
 
@@ -375,10 +395,16 @@ class SimpleSerializationData implements SerializationData
         List<Object> result;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             result = this.dataList;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             result = new ArrayList<>(value.size());
         }
         for (Entry<?, ? extends T> entry : value.entrySet())
@@ -427,7 +453,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type)
+    public <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type)
     {
         this.validateMap(key);
 
@@ -437,10 +463,16 @@ class SimpleSerializationData implements SerializationData
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             resultMap = this.dataMap;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             resultMap = new LinkedHashMap<>(value.size());
         }
         for (Entry<? extends K, ? extends T> entry : value.entrySet())
@@ -476,7 +508,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type)
+    public <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<T> type)
     {
         this.validateMap(key);
 
@@ -485,10 +517,16 @@ class SimpleSerializationData implements SerializationData
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             resultMap = this.dataMap;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             resultMap = new LinkedHashMap<>(value.size());
         }
         for (Entry<? extends K, ? extends T> entry : value.entrySet())
@@ -524,7 +562,7 @@ class SimpleSerializationData implements SerializationData
     }
 
     @Override
-    public <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type, Function<K, String> keyMapper)
+    public <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<T> type, Function<K, String> keyMapper)
     {
         this.validateMap(key);
 
@@ -533,10 +571,16 @@ class SimpleSerializationData implements SerializationData
         Map<Object, Object> resultMap;
         if (key.isEmpty())
         {
+            Validate.notNull(value);
             resultMap = this.dataMap;
         }
         else
         {
+            if (value == null)
+            {
+                this.add(key, null);
+                return;
+            }
             resultMap = new LinkedHashMap<>(value.size());
         }
         for (Entry<? extends K, ? extends T> entry : value.entrySet())

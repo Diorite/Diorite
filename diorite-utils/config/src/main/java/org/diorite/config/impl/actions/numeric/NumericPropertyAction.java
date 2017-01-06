@@ -61,7 +61,7 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
     @Nullable
     static Object performNumericAdd(ConfigPropertyValue value, Object... args)
     {
-        Class rawType = value.getProperty().getRawType();
+        Class rawType = value.getRawType();
         Number numberValue = (Number) value.getRawValue();
         Number argNumber = (Number) args[0];
         if (numberValue == null)
@@ -155,7 +155,7 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
     @Nullable
     static Object performNumericSub(ConfigPropertyValue value, Object... args)
     {
-        Class rawType = value.getProperty().getRawType();
+        Class rawType = value.getRawType();
         Number numberValue = (Number) value.getRawValue();
         Number argNumber = (Number) args[0];
         if (numberValue == null)
@@ -249,7 +249,7 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
     @Nullable
     static Object performNumericMulti(ConfigPropertyValue value, Object... args)
     {
-        Class rawType = value.getProperty().getRawType();
+        Class rawType = value.getRawType();
         Number numberValue = (Number) value.getRawValue();
         Number argNumber = (Number) args[0];
         if (numberValue == null)
@@ -343,7 +343,7 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
     @Nullable
     static Object performNumericDiv(ConfigPropertyValue value, Object... args)
     {
-        Class rawType = value.getProperty().getRawType();
+        Class rawType = value.getRawType();
         Number numberValue = (Number) value.getRawValue();
         Number argNumber = (Number) args[0];
         if (numberValue == null)

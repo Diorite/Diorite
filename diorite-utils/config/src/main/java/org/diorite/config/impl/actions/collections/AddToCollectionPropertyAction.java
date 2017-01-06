@@ -54,7 +54,7 @@ public class AddToCollectionPropertyAction extends AbstractPropertyAction
         Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
-            rawValue = YamlCollectionCreator.createCollection(value.getProperty().getRawType(), 5);
+            rawValue = YamlCollectionCreator.createCollection(value.getRawType(), 5);
         }
         if (rawValue instanceof Collection)
         {

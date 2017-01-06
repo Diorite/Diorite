@@ -25,6 +25,7 @@
 package org.diorite.config;
 
 import java.io.InputStream;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 import org.junit.Test;
 
+import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.config.serialization.BeanObject;
 
 public class SimpleConfigTest
@@ -78,25 +80,22 @@ public class SimpleConfigTest
                 beanObject.setIntMap(new LinkedHashMap<>(5));
                 beanObject.setList(List.of("a", "b", "c"));
                 beanObject.setIntProperty(12);
-                Assert.assertSame(null, config.get("bean"));
-                config.set("bean", beanObject);
+                Assert.assertSame(null, config.get("nested.bean"));
+                config.set("nested.bean", beanObject);
 
-                Assert.assertEquals(beanObject, config.get("bean"));
-                Assert.assertEquals(12, config.get("bean.intProperty"));
-                Assert.assertSame(null, config.get("bean.stringProperty"));
-                Assert.assertSame(null, config.get("bean.list2"));
+                Assert.assertEquals(beanObject, config.get("nested.bean"));
+                Assert.assertEquals(12, config.get("nested.bean.intProperty"));
+                Assert.assertSame(null, config.get("nested.bean.stringProperty"));
+                Assert.assertSame(null, config.get("nested.bean.list2"));
 
-                config.set("bean.stringProperty", "test");
-                Assert.assertEquals("test", config.get("bean.stringProperty"));
-                config.set("bean.stringProperty", null);
-                Assert.assertSame(null, config.get("bean.stringProperty"));
+                config.set("nested.bean.stringProperty", "test");
+                Assert.assertEquals("test", config.get("nested.bean.stringProperty"));
+                config.set("nested.bean.stringProperty", null);
+                Assert.assertSame(null, config.get("nested.bean.stringProperty"));
 
-                config.set("bean.list.0", "A");
-                Assert.assertEquals("b", config.get("bean.list.1"));
-                Assert.assertEquals(List.of("A", "b", "c"), config.get("bean.list"));
-
-                Assert.assertEquals(beanObject, config.remove("bean"));
-                Assert.assertSame(null, config.get("bean"));
+                config.set("nested.bean.list.0", "A");
+                Assert.assertEquals("b", config.get("nested.bean.list.1"));
+                Assert.assertEquals(List.of("A", "b", "c"), config.get("nested.bean.list"));
             }
             {
                 Assert.assertSame(null, config.get("nope.more"));
@@ -106,8 +105,8 @@ public class SimpleConfigTest
                 config.set("nope.more.3", "d");
                 Assert.assertEquals("d", config.get("nope.more.3"));
                 Assert.assertEquals("b", config.remove("nope.more.1"));
-                Assert.assertEquals(List.of("a", "c", "d"), config.remove("nope.more"));
-                config.remove("nope");
+//                Assert.assertEquals(List.of("a", "c", "d"), config.remove("nope.more"));
+//                config.remove("nope");
             }
             config.set("SomeString", "Some str");
             config.set("more.A", "Some str1");
@@ -117,6 +116,7 @@ public class SimpleConfigTest
             System.out.println("[SimpleConfigTest] hashcode: " + config.hashCode());
             Assert.assertEquals(config.hashCode(), config.hashCode());
             System.out.println("[SimpleConfigTest] clone test...");
+            config.save(System.out);
             Config clone = config.clone();
             Assert.assertEquals(config, clone);
             clone.set("more.C", "Some str3");
@@ -124,7 +124,7 @@ public class SimpleConfigTest
 
 
             double configMoney = config.getMoney();
-            System.out.println("[SimpleConfigTest] testing basic operations: " + configMoney);
+            System.out.println("\n[SimpleConfigTest] testing basic operations: " + configMoney);
 
             double oldMoney = config.addMoney(10);
             Assert.assertEquals(oldMoney, configMoney, 0.001);
@@ -163,6 +163,10 @@ public class SimpleConfigTest
             config.setMoney(0);
             Assert.assertEquals(0.0, (Double) config.get("money"), 0.001);
             System.out.println("[SimpleConfigTest] done\n");
+
+            StringBuilderWriter writer = new StringBuilderWriter(200);
+            config.save(writer);
+            Assert.assertEquals(config, configTemplate.load(new StringReader(writer.toString())));
         }
     }
 }

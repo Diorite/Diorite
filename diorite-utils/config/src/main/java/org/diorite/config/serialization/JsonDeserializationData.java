@@ -27,8 +27,11 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.google.gson.JsonArray;
@@ -42,7 +45,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
-class JsonDeserializationData extends AbstractDeserializationData
+public class JsonDeserializationData extends AbstractDeserializationData
 {
     private final JsonElement                element;
     private final JsonDeserializationContext context;
@@ -58,6 +61,22 @@ class JsonDeserializationData extends AbstractDeserializationData
     public SerializationType getSerializationType()
     {
         return SerializationType.JSON;
+    }
+
+    @Override
+    public Set<String> getKeys()
+    {
+        if (this.element.isJsonObject())
+        {
+            Set<Entry<String, JsonElement>> entries = element.getAsJsonObject().entrySet();
+            Set<String> result = new LinkedHashSet<>(entries.size());
+            for (Entry<String, JsonElement> entry : entries)
+            {
+                result.add(entry.getKey());
+            }
+            return result;
+        }
+        return Collections.emptySet();
     }
 
     @Override

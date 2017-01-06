@@ -55,7 +55,7 @@ public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
         Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
-            if (Collection.class.isAssignableFrom(value.getProperty().getRawType()))
+            if (Collection.class.isAssignableFrom(value.getRawType()))
             {
                 return false;
             }

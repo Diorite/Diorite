@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.config;
+package org.diorite.config.annotations;
 
-import org.diorite.config.annotations.Comment;
-import org.diorite.config.annotations.Footer;
-import org.diorite.config.annotations.Header;
-import org.diorite.config.annotations.PredefinedComment;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Header("Test config")
-@Footer("Footer!")
-@PredefinedComment(path = {"nope", "more"}, value = "Some list!")
-@PredefinedComment(path = {"nested", "bean", "intProperty"}, value = "This is very important settings!")
-public interface TestConfig extends Config
+/**
+ * Used to mark map key/value type of property in config interface.
+ */
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MapTypes
 {
-    @Comment("Player money.")
-    default double getMoney()
-    {
-        return 0.1;
-    }
+    /**
+     * Returns type of map keys.
+     *
+     * @return type of map keys.
+     */
+    Class<?> keyType() default Object.class;
 
-    void setMoney(double money);
-
-    double addMoney(double money);
-
-    void subtractMoney(byte money);
-
-    double multipleMoneyBy(float multi);
-
-    double divideMoney(int div);
+    /**
+     * Returns type of map values.
+     *
+     * @return type of map values.
+     */
+    Class<?> valueType() default Object.class;
 }

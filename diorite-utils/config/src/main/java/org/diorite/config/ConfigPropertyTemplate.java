@@ -28,6 +28,9 @@ import javax.annotation.Nullable;
 
 import java.lang.reflect.Type;
 
+import org.diorite.config.serialization.DeserializationData;
+import org.diorite.config.serialization.SerializationData;
+
 /**
  * Represents config property, each property can support multiple config property actions. <br>
  * Config properties don't need to support get or set operations at all.
@@ -69,4 +72,24 @@ public interface ConfigPropertyTemplate<T>
      */
     @Nullable
     T getDefault(Config config);
+
+    /**
+     * Serialize given value to given serialization object using valid style and type.
+     *
+     * @param data
+     *         serialization data instance.
+     * @param value
+     *         config property value.
+     */
+    void serialize(SerializationData data, ConfigPropertyValue<T> value);
+
+    /**
+     * Deserialize value from given deserialization object.
+     *
+     * @param data
+     *         deserialization data instance.
+     * @param value
+     *         config property value.
+     */
+    void deserialize(DeserializationData data, ConfigPropertyValue<T> value);
 }

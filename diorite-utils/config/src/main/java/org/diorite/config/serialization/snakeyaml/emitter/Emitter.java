@@ -27,12 +27,9 @@ import javax.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
@@ -1409,23 +1406,23 @@ public final class Emitter implements Emitable
         }
     }
 
-    void writeComment(int firstNewLine, int lastNewLine, String... comment) throws IOException
-    {
-        while (firstNewLine-- > 0)
-        {
-            this.writeLineBreak(null);
-        }
-        List<String> comments = new ArrayList<>(comment.length * 2);
-        for (String s : comment)
-        {
-            Collections.addAll(comments, StringUtils.splitPreserveAllTokens(s, '\n'));
-        }
-        this.printComments(comments.toArray(new String[comments.size()]));
-        while (lastNewLine-- > 0)
-        {
-            this.writeLineBreak(null);
-        }
-    }
+//    void writeComment(int firstNewLine, int lastNewLine, String... comment) throws IOException
+//    {
+//        while (firstNewLine-- > 0)
+//        {
+//            this.writeLineBreak(null);
+//        }
+//        List<String> comments = new ArrayList<>(comment.length * 2);
+//        for (String s : comment)
+//        {
+//            Collections.addAll(comments, StringUtils.splitPreserveAllTokens(s, '\n'));
+//        }
+//        this.printComments(comments.toArray(new String[comments.size()]));
+//        while (lastNewLine-- > 0)
+//        {
+//            this.writeLineBreak(null);
+//        }
+//    }
 
     void writeCommentSafe(@Nullable String comment, int firstNewLine, int lastNewLine) throws IOException
     {

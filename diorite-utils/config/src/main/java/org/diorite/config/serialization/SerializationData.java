@@ -245,7 +245,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <T> void addMappedList(String key, Class<T> type, Collection<? extends T> value, Function<T, String> mapper);
+    <T> void addMappedList(String key, Class<T> type, @Nullable Collection<? extends T> value, Function<T, String> mapper);
 
     /**
      * Add list value.
@@ -259,7 +259,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <T> void addCollection(String key, Collection<? extends T> value, Class<T> type);
+    <T> void addCollection(String key, @Nullable Collection<? extends T> value, Class<T> type);
 
     /**
      * Add map values as list, keys are lost.
@@ -273,7 +273,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <T> void addMapAsList(String key, Map<?, ? extends T> value, Class<T> type);
+    <T> void addMapAsList(String key, @Nullable Map<?, ? extends T> value, Class<T> type);
 
     /**
      * Add map values as list, keys are save as one of values using {@link #DEFAULT_KEY_PROPERTY} as key.
@@ -287,7 +287,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    default <T> void addMapAsListWithKeys(String key, Map<?, ? extends T> value, Class<T> type)
+    default <T> void addMapAsListWithKeys(String key, @Nullable Map<?, ? extends T> value, Class<T> type)
     {
         this.addMapAsListWithKeys(key, value, type, DEFAULT_KEY_PROPERTY);
     }
@@ -306,7 +306,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <T> void addMapAsListWithKeys(String key, Map<?, ? extends T> value, Class<T> type, String keyPropertyName);
+    <T> void addMapAsListWithKeys(String key, @Nullable Map<?, ? extends T> value, Class<T> type, String keyPropertyName);
 
     /**
      * Adds all map values to this data. <br/>
@@ -325,7 +325,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type);
+    <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type);
 
     /**
      * Adds all map values to this data. <br/>
@@ -340,7 +340,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type);
+    <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<T> type);
 
     /**
      * Adds all map values to this data.
@@ -358,7 +358,7 @@ public interface SerializationData
      * @param <T>
      *         type of elements.
      */
-    <K, T> void addMap(String key, Map<? extends K, ? extends T> value, Class<T> type, Function<K, String> keyMapper);
+    <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<T> type, Function<K, String> keyMapper);
 
     /**
      * Create serialization data instance for given manager.

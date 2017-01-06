@@ -180,9 +180,9 @@ public final class Serializer
             node.setTag(this.explicitRoot);
         }
 
-        this.emitter.writeComment(this.comments.getHeader(), 0, 2);
+        this.emitter.writeComment(this.comments.getHeader(), 0, 1);
         this.serializeNode(node, null, new LinkedList<>(), false);
-        this.emitter.writeComment(this.comments.getFooter(), 0, 0);
+        this.emitter.writeComment(this.comments.getFooter(), 2, 0);
 
         this.emitter.emit(new DocumentEndEvent(null, null, this.explicitEnd));
         this.serializedNodes.clear();

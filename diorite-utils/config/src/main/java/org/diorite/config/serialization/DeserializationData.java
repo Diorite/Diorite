@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -73,6 +74,13 @@ public interface DeserializationData
      *         string representations of {@link Boolean#FALSE} value.
      */
     void addFalseValues(String... strings);
+
+    /**
+     * Returns set of root level keys.
+     *
+     * @return set of root level keys.
+     */
+    Set<String> getKeys();
 
     /**
      * Check if this data instance contains given key, note that value on that key might be still a null value.
@@ -468,6 +476,82 @@ public interface DeserializationData
             return def;
         }
         return v;
+    }
+
+    /**
+     * Get and deserialize given number value from this data instance, method will throw {@link NullPointerException} if type is primitive and value don't
+     * exists or it's null.
+     *
+     * @param key
+     *         value to deserialize.
+     * @param type
+     *         type of number.
+     * @param def
+     *         default value.
+     * @param <T>
+     *         type of number.
+     *
+     * @return deserialized value.
+     *
+     * @throws NullPointerException
+     *         when type is primitive and value don't exists or it's null.
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    default <T extends Number> T getAsHexNumber(String key, Class<T> type, @Nullable T def)
+    {
+        if (type == byte.class)
+        {
+            return (T) (Byte) this.getAsHexByte(key);
+        }
+        if (type == short.class)
+        {
+            return (T) (Short) this.getAsHexShort(key);
+        }
+        if (type == int.class)
+        {
+            return (T) (Integer) this.getAsHexInt(key);
+        }
+        if (type == long.class)
+        {
+            return (T) (Long) this.getAsHexLong(key);
+        }
+
+        String val = this.get(key, String.class, null);
+        if (val == null)
+        {
+            return def;
+        }
+        val = val.substring(2);
+        try
+        {
+            Object r;
+            if (type == Byte.class)
+            {
+                r = Byte.parseByte(val, 16);
+            }
+            else if (type == Short.class)
+            {
+                r = Short.parseShort(val, 16);
+            }
+            else if (type == Integer.class)
+            {
+                r = Integer.parseInt(val, 16);
+            }
+            else if (type == Long.class)
+            {
+                r = Long.parseLong(val, 16);
+            }
+            else
+            {
+                throw new RuntimeException("Can't deserialize " + type + " as hex number.");
+            }
+            return (T) r;
+        }
+        catch (NumberFormatException e)
+        {
+            return def;
+        }
     }
 
     /**

@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -103,7 +104,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return propertyValue;
         }
-        propertyValue = new ConfigPropertyValueImpl<>(template, template.getDefault(this.config));
+        propertyValue = new ConfigPropertyValueImpl<>(this.config, template, template.getDefault(this.config));
         this.predefinedValues.put(template.getName(), propertyValue);
         return propertyValue;
     }
@@ -390,6 +391,8 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new RuntimeException(e);
         }
+
+        config.encoding(StandardCharsets.UTF_8);
     }
 
     private ConfigTemplate<?> templateImpl()
@@ -401,7 +404,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
     {
         for (ConfigPropertyValueImpl<Object> propertyValue : this.predefinedValues.values())
         {
-            propertyValue.setRawValue(propertyValue.getProperty().getDefault(this.config));
+            propertyValue.setRawValue(propertyValue.getDefault());
         }
     }
 
@@ -556,7 +559,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             if (propertyValue != null)
             {
                 Object rawValue = propertyValue.getRawValue();
-                propertyValue.setRawValue(propertyValue.getProperty().getDefault(this.config));
+                propertyValue.setRawValue(propertyValue.getDefault());
                 return rawValue;
             }
             Node node = this.simpleDynamicValues.remove(key);
@@ -870,7 +873,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
     private String toStringImpl()
     {
         ToStringBuilder builder = new ToStringBuilder(this.config);
-        builder.append(this.template.getClass().getName());
+        builder.append(this.template.getConfigType().getName());
         builder.append(this.bindFile);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
