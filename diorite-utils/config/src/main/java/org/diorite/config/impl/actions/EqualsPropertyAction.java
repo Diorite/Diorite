@@ -51,6 +51,6 @@ public class EqualsPropertyAction extends AbstractPropertyAction
     @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
-        return Objects.equals(value.getRawValue(), args[0]);
+        return Objects.equals(value.getPropertyValue(), args[0]);
     }
 }

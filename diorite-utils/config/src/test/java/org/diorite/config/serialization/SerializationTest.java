@@ -24,6 +24,7 @@
 
 package org.diorite.config.serialization;
 
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 import org.junit.Test;
 
+import org.diorite.config.ConfigManager;
+import org.diorite.config.ConfigTemplate;
+import org.diorite.config.SomeConfig;
+
 public class SerializationTest
 {
     static
@@ -40,7 +45,7 @@ public class SerializationTest
         ToStringBuilder.setDefaultStyle(ToStringStyle.JSON_STYLE);
     }
 
-    static Serialization prepareSerialization()
+    public static Serialization prepareSerialization()
     {
         Serialization global = Serialization.getGlobal();
         global.registerSerializable(SomeProperties.class);
@@ -51,7 +56,7 @@ public class SerializationTest
         return global;
     }
 
-    static EntityStorage prepareObject()
+    public static EntityStorage prepareObject()
     {
         EntityStorage entityStorage = new EntityStorage();
         {
@@ -65,7 +70,7 @@ public class SerializationTest
             beanObject.setIntMap(map);
             beanObject.setList(List.of("some string", "more element", "and more", "dfihefk  fdspbwptn  ifd", "  dju jms jhkror ifjw  ", "du fjfne"));
             beanObject.setList2(List.of("some string", "more element", "and more", "some string", "more element", "and more", "dfihefk  fdspbwptn  ifd",
-                                       "  dju jms jhkror ifjw  ", "du fjfne", "dfihefk  fdspbwptn  ifd", "  dju jms jhkror ifjw  ", "du fjfne"));
+                                        "  dju jms jhkror ifjw  ", "du fjfne", "dfihefk  fdspbwptn  ifd", "  dju jms jhkror ifjw  ", "du fjfne"));
             entityStorage.beanObject = beanObject;
         }
         {
@@ -119,6 +124,86 @@ public class SerializationTest
         Assert.assertEquals(entityStorage, storage);
 
         System.out.println("\n[JSON] Objects equals!");
+    }
+
+    private final ConfigManager configManager = ConfigManager.get();
+
+    public void test() throws Exception
+    {
+        SerializationTest.prepareSerialization();
+        ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
+
+        ConfigTemplate<SomeConfig> configTemplate = this.configManager.getConfigFile(SomeConfig.class);
+        Assert.assertNotNull(configTemplate);
+        Assert.assertEquals(SomeConfig.class.getSimpleName(), configTemplate.getName());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultDecoder().charset());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultEncoder().charset());
+
+        System.out.println("[ConfigTest] creating config instance.");
+        SomeConfig someConfig = configTemplate.create();
+        Assert.assertNotNull(someConfig);
+//
+        this.testNicknames(someConfig);
+        Assert.assertNotNull(someConfig.getSpecialData());
+        someConfig.setStorage(SerializationTest.prepareObject());
+//
+        someConfig.save(System.out);
+//
+//        try
+//        {
+//            someConfig.getSpecialData().clear();
+//            Assert.assertTrue("This should never happen, special data should be immutable.", false);
+//        }
+//        catch (UnsupportedOperationException e)
+//        {
+//        }
+//        MetaObject snowflake = new MetaObject("snowflake", new MetaValue("so special", 25));
+//        someConfig.putInSpecialData(snowflake);
+//        Assert.assertEquals(List.of(snowflake), someConfig.getSpecialData());
+//
+//        UUID randomUUID = UUID.randomUUID();
+//        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+//        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
+//
+//        System.out.println("\n====================\n");
+//        someConfig.save(System.out);
+//
+//        Assert.assertEquals(snowflake, someConfig.removeFromEvenMoreSpecialData(randomUUID));
+//        Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
+//
+//
+//        // check if all data is still valid after reload of config.
+//        StringBuilderWriter writer = new StringBuilderWriter(500);
+//        someConfig.save(writer);
+//        Assert.assertEquals(someConfig, configTemplate.load(new StringReader(writer.toString())));
+    }
+
+    private void testNicknames(SomeConfig someConfig)
+    {
+        Assert.assertEquals(2, someConfig.sizeOfNicknames());
+        Assert.assertEquals("GotoFinal", someConfig.getFromNicknames(0));
+        Assert.assertEquals("NorthPL", someConfig.getFromNicknames(1));
+
+        someConfig.addToNicknames("skprime");
+        someConfig.putInNicknames("Dzikoysk", "joda17");
+        Assert.assertEquals("skprime", someConfig.getNicknamesBy(2));
+        Assert.assertEquals("Dzikoysk", someConfig.getNicknamesBy(3));
+        Assert.assertEquals("joda17", someConfig.getNicknamesBy(4));
+        Assert.assertEquals(5, someConfig.nicknamesSize());
+
+        Assert.assertFalse(someConfig.isInNicknames("Someone"));
+        Assert.assertTrue(someConfig.isInNicknames("GotoFinal"));
+        Assert.assertFalse(someConfig.containsNicknames("GotoFinal", "NorthPL", "Someone"));
+        Assert.assertTrue(someConfig.containsInNicknames("GotoFinal", "NorthPL", "skprime"));
+
+        Assert.assertTrue(someConfig.removeFromNicknames("Dzikoysk"));
+        Assert.assertEquals(4, someConfig.nicknamesSize());
+        someConfig.removeFromNicknamesIf(s -> s.contains("17"));
+        Assert.assertEquals(3, someConfig.nicknamesSize());
+        Assert.assertTrue(someConfig.removeFromNicknames("skprime", "GotoFinal"));
+        Assert.assertEquals(1, someConfig.nicknamesSize());
+        Assert.assertEquals("NorthPL", someConfig.getFromNicknames(0));
     }
 
     @Test

@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -39,8 +40,10 @@ import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.ConfigPropertyAction;
 import org.diorite.config.impl.actions.collections.AddToCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.ContainsInCollectionPropertyAction;
+import org.diorite.config.impl.actions.collections.GetFromCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionPropertyAction;
+import org.diorite.config.impl.actions.collections.SizeOfCollectionPropertyAction;
 import org.diorite.config.impl.actions.numeric.AddNumericPropertyAction;
 import org.diorite.config.impl.actions.numeric.DivideNumericPropertyAction;
 import org.diorite.config.impl.actions.numeric.MultipleNumericPropertyAction;
@@ -49,6 +52,7 @@ import org.diorite.config.impl.actions.numeric.SubtractNumericPropertyAction;
 /**
  * Registry for actions.
  */
+@SuppressWarnings("MagicNumber")
 public final class ActionsRegistry
 {
     private static final SortedSet<ConfigPropertyActionEntry> actions = new TreeSet<>();
@@ -70,6 +74,8 @@ public final class ActionsRegistry
         registerAction(new ContainsInCollectionPropertyAction(), 100);
         registerAction(new RemoveFromCollectionIfPropertyAction(), 100);
         registerAction(new RemoveFromCollectionPropertyAction(), 100);
+        registerAction(new GetFromCollectionPropertyAction(), 90);
+        registerAction(new SizeOfCollectionPropertyAction(), 90);
     }
 
     /**
@@ -88,16 +94,28 @@ public final class ActionsRegistry
     @Nullable
     public static Pair<ConfigPropertyAction, ActionMatcherResult> findMethod(Method method)
     {
+        return findMethod(method, s -> true);
+    }
+
+    @Nullable
+    public static Pair<ConfigPropertyAction, ActionMatcherResult> findMethod(Method method, Predicate<String> propertyNameChecker)
+    {
+        Pair<ConfigPropertyAction, ActionMatcherResult> lastMatching = null;
         for (ConfigPropertyActionEntry actionEntry : actions)
         {
             ConfigPropertyAction action = actionEntry.action;
             ActionMatcherResult actionMatcherResult = action.matchesAction(method);
             if (actionMatcherResult.isMatching())
             {
-                return new ImmutablePair<>(action, actionMatcherResult);
+                actionMatcherResult.setValidatedName(action.declaresProperty() || propertyNameChecker.test(actionMatcherResult.getPropertyName()));
+                lastMatching = new ImmutablePair<>(action, actionMatcherResult);
+                if (actionMatcherResult.isValidatedName())
+                {
+                    return lastMatching;
+                }
             }
         }
-        return null;
+        return lastMatching;
     }
 
     static class ConfigPropertyActionEntry implements Comparable<ConfigPropertyActionEntry>

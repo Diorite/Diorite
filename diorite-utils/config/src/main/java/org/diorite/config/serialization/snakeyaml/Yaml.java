@@ -258,6 +258,7 @@ public class Yaml
     public Yaml(Serialization serialization, YamlConstructor constructor, Representer representer, DumperOptions dumperOptions,
                 Resolver resolver)
     {
+        representer.initMultiRepresenters();
         this.serialization = serialization;
         if (! constructor.isExplicitPropertyUtils())
         {

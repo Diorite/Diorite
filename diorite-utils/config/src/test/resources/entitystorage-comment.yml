@@ -32,9 +32,10 @@ entities:
 
   # second list example
   uuidMetaObjectMap:
+    #name of meta
     name:
 
-    # value!
+    # value of meta
     value:
     uuid:
 

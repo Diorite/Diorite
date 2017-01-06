@@ -74,6 +74,27 @@ public interface ConfigPropertyTemplate<T>
     T getDefault(Config config);
 
     /**
+     * Set given value to given property value, template might edit given value according to template settings.
+     *
+     * @param propertyValue
+     *         template value instance.
+     * @param value
+     *         new value to set.
+     */
+    void set(ConfigPropertyValue<T> propertyValue, @Nullable T value);
+
+    /**
+     * Get balue from given property value, template might edit value before returning according to template settings.
+     *
+     * @param propertyValue
+     *         template value instance.
+     *
+     * @return value of property value.
+     */
+    @Nullable
+    T get(ConfigPropertyValue<T> propertyValue);
+
+    /**
      * Serialize given value to given serialization object using valid style and type.
      *
      * @param data

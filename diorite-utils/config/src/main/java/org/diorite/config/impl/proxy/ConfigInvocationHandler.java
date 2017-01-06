@@ -61,7 +61,7 @@ import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.Config;
-import org.diorite.config.ConfigPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
@@ -129,7 +129,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             return function.apply(args);
         }
         // check for dispatcher:
-        ConfigPropertyAction actionFor = this.template.getActionFor(new MethodSignature(method));
+        ConfigPropertyActionInstance actionFor = this.template.getActionFor(new MethodSignature(method));
         if (actionFor != null)
         {
             MethodInvoker methodInvoker = new MethodInvoker(method);
@@ -404,7 +404,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
     {
         for (ConfigPropertyValueImpl<Object> propertyValue : this.predefinedValues.values())
         {
-            propertyValue.setRawValue(propertyValue.getDefault());
+            propertyValue.setPropertyValue(propertyValue.getDefault());
         }
     }
 
@@ -424,7 +424,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
             if (propertyValue != null)
             {
-                Object rawValue = propertyValue.getRawValue();
+                Object rawValue = propertyValue.getPropertyValue();
 
                 Class<?> ensureNonPrimitive;
                 if (type != null)
@@ -515,7 +515,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
             ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
             if (propertyValue != null)
             {
-                propertyValue.setRawValue(value);
+                propertyValue.setPropertyValue(value);
                 return;
             }
             this.simpleDynamicValues.put(key, serialization.toYamlNode(value));
@@ -558,8 +558,8 @@ public final class ConfigInvocationHandler implements InvocationHandler
             ConfigPropertyValueImpl<Object> propertyValue = this.predefinedValues.get(key);
             if (propertyValue != null)
             {
-                Object rawValue = propertyValue.getRawValue();
-                propertyValue.setRawValue(propertyValue.getDefault());
+                Object rawValue = propertyValue.getPropertyValue();
+                propertyValue.setPropertyValue(propertyValue.getDefault());
                 return rawValue;
             }
             Node node = this.simpleDynamicValues.remove(key);
@@ -649,16 +649,12 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private void saveImpl(@WillNotClose Writer writer)
     {
-        Serialization.getGlobal().toYamlWithComments(this.toMap(), writer, this.template.getComments());
+        Serialization.getGlobal().toYamlWithComments(this.config, writer, this.template.getComments());
     }
 
     private void loadImpl(@WillNotClose Reader reader)
     {
-        this.predefinedValues.clear();
-        this.dynamicValues.clear();
-        this.simpleDynamicValues.clear();
-
-        Config fromYaml = Serialization.getGlobal().fromYaml(this.template, reader);
+        Config fromYaml = Serialization.getGlobal().fromYaml(reader, this.template.getConfigType());
         ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(fromYaml);
 
         this.predefinedValues.putAll(invocationHandler.predefinedValues);
@@ -769,7 +765,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
     {
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            if (Objects.equals(toCheck, value.getRawValue()))
+            if (Objects.equals(toCheck, value.getPropertyValue()))
             {
                 return true;
             }
@@ -800,7 +796,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
     {
         for (ConfigPropertyValueImpl<Object> propertyValue : this.predefinedValues.values())
         {
-            propertyValue.setRawValue(null);
+            propertyValue.setPropertyValue(null);
         }
         this.dynamicValues.clear();
         this.simpleDynamicValues.clear();
@@ -820,7 +816,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         Collection<Object> values = new ArrayList<>(20);
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            values.add(value.getRawValue());
+            values.add(value.getPropertyValue());
         }
         for (Node node : this.simpleDynamicValues.values())
         {
@@ -836,7 +832,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getRawValue()));
+            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getPropertyValue()));
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
@@ -856,7 +852,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.put(entry.getKey(), entry.getValue().getRawValue());
+            result.put(entry.getKey(), entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
@@ -877,7 +873,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         builder.append(this.bindFile);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            builder.append(entry.getKey(), entry.getValue().getRawValue());
+            builder.append(entry.getKey(), entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {

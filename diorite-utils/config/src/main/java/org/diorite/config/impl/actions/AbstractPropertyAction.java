@@ -28,7 +28,8 @@ import javax.annotation.RegEx;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,13 +52,13 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
         {
             patterns[i] = Pattern.compile("^" + strPatterns[i] + "$");
         }
-        this.patterns = Set.of(patterns);
+        this.patterns = List.of(patterns);
     }
 
     protected AbstractPropertyAction(String name, Pattern... patterns)
     {
         this.name = name;
-        this.patterns = Set.of(patterns);
+        this.patterns = List.of(patterns);
     }
 
     protected abstract boolean matchesAction0(MethodInvoker method, Class<?>[] parameters);
@@ -97,6 +98,27 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
     public String getActionName()
     {
         return this.name;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (! (object instanceof AbstractPropertyAction))
+        {
+            return false;
+        }
+        AbstractPropertyAction that = (AbstractPropertyAction) object;
+        return Objects.equals(this.name, that.name);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.name);
     }
 
     @Override

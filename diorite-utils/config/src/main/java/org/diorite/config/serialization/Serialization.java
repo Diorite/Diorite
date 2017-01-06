@@ -25,11 +25,9 @@
 package org.diorite.config.serialization;
 
 import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.invoke.MethodHandle;
@@ -37,14 +35,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,6 +75,7 @@ import org.diorite.config.ConfigTemplate;
 import org.diorite.config.annotations.DelegateSerializable;
 import org.diorite.config.annotations.SerializableAs;
 import org.diorite.config.annotations.StringSerializable;
+import org.diorite.config.serialization.comments.CommentsManager;
 import org.diorite.config.serialization.comments.DocumentComments;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
@@ -107,48 +103,16 @@ public final class Serialization
     private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
     private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
 
-    // comments section
-    private Map<Class<?>, DocumentComments> commentsMap      = new ConcurrentHashMap<>(10);
-    private Map<Class<?>, DocumentComments> commentsCacheMap = new ConcurrentHashMap<>(10);
+    private final CommentsManager commentsManager = new CommentsManager();
 
-    public DocumentComments getComments(Class<?> clazz)
+    /**
+     * Returns instance of comments manager.
+     *
+     * @return instance of comments manager.
+     */
+    public CommentsManager getCommentsManager()
     {
-        DocumentComments documentComments = this.commentsCacheMap.get(clazz);
-        if (documentComments != null)
-        {
-            return documentComments;
-        }
-        for (Entry<Class<?>, DocumentComments> entry : this.commentsCacheMap.entrySet())
-        {
-            if (entry.getKey().isAssignableFrom(clazz))
-            {
-                DocumentComments result = entry.getValue();
-                this.commentsCacheMap.put(clazz, result);
-                return result;
-            }
-        }
-        DocumentComments comments = DocumentComments.parseFromAnnotations(clazz);
-        this.commentsCacheMap.put(clazz, comments);
-        return comments;
-    }
-
-    public void addComments(Class<?> clazz, DocumentComments comments)
-    {
-        this.commentsCacheMap.clear();
-        this.commentsMap.put(clazz, comments);
-        this.commentsCacheMap.putAll(this.commentsMap);
-    }
-
-    public void addComments(Class<?> clazz, @WillNotClose InputStream stream)
-    {
-        this.addComments(clazz, new InputStreamReader(stream, StandardCharsets.UTF_8.newDecoder()
-                                                                                    .onMalformedInput(CodingErrorAction.REPORT)
-                                                                                    .onUnmappableCharacter(CodingErrorAction.REPORT)));
-    }
-
-    public void addComments(Class<?> clazz, @WillNotClose Reader reader)
-    {
-        this.addComments(clazz, this.fromYaml(reader, DocumentComments.class));
+        return this.commentsManager;
     }
 
     private Yaml createYaml()
@@ -327,8 +291,7 @@ public final class Serialization
      * @param clazz
      *         serializable clazz to register.
      * @param <T>
-     *         type of serializable class, must implement {@link Serializable} or contain {@link org.diorite.config.annotations.Serializable}
-     *         annotations.
+     *         type of serializable class, must implement {@link Serializable} or contain {@link org.diorite.config.annotations.Serializable} annotations.
      *
      * @return old serializer if exists.
      */
@@ -430,7 +393,7 @@ public final class Serialization
         try
         {
             TypeAdapter<?> adapter = this.gson().getAdapter(clazz);
-            this.yamlIgnoredClasses.add(clazz);
+//            this.yamlIgnoredClasses.add(clazz);
             return adapter != null;
         }
         catch (Exception e)
@@ -513,17 +476,17 @@ public final class Serialization
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    Object serialize(Object object, SerializationType serializationType)
+    Object serialize(Object object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
         {
             return object;
         }
-        return this.serialize((Class) object.getClass(), object, serializationType);
+        return this.serialize((Class) object.getClass(), object, serializationType, comments);
     }
 
     @SuppressWarnings("unchecked")
-    <T> Object serialize(Class<T> type, T object, SerializationType serializationType)
+    <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
         {
@@ -535,7 +498,7 @@ public final class Serialization
             {
                 if (serializationType == SerializationType.YAML)
                 {
-                    return this.fromYaml(this.toYamlAsMap(object), Map.class);
+                    return this.fromYaml(this.toYaml(object), Map.class);
                 }
                 else
                 {
@@ -546,6 +509,11 @@ public final class Serialization
             throw new IllegalArgumentException("Given object isn't serializable: (" + type.getName() + ") -> " + object);
         }
         SimpleSerializationData serializationData = (SimpleSerializationData) SerializationData.create(serializationType, this, type);
+        if (comments != null)
+        {
+            serializationData.setComments(comments);
+        }
+
         ((Serializer<T>) this.serializerMap.get(type)).serialize(object, serializationData);
         return serializationData.rawValue();
     }
@@ -1334,7 +1302,7 @@ public final class Serialization
      */
     public String toYamlWithComments(Object data)
     {
-        return this.yaml().toYamlWithComments(data, this.getComments(data.getClass()));
+        return this.yaml().toYamlWithComments(data, this.commentsManager.getComments(data.getClass()));
     }
 
     /**
@@ -1422,7 +1390,7 @@ public final class Serialization
      */
     public void toYamlWithComments(Object data, Writer output)
     {
-        this.yaml().toYamlWithComments(data, output, this.getComments(data.getClass()));
+        this.yaml().toYamlWithComments(data, output, this.commentsManager.getComments(data.getClass()));
     }
 
     /**

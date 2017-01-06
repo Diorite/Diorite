@@ -77,32 +77,32 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
             if (rawType == byte.class)
             {
                 byte rawValue = numberValue.byteValue();
-                value.setRawValue(rawValue + argNumber.byteValue());
+                value.setPropertyValue(rawValue + argNumber.byteValue());
             }
             else if (rawType == short.class)
             {
                 short rawValue = numberValue.shortValue();
-                value.setRawValue(rawValue + argNumber.shortValue());
+                value.setPropertyValue(rawValue + argNumber.shortValue());
             }
             else if (rawType == int.class)
             {
                 int rawValue = numberValue.intValue();
-                value.setRawValue(rawValue + argNumber.intValue());
+                value.setPropertyValue(rawValue + argNumber.intValue());
             }
             else if (rawType == long.class)
             {
                 long rawValue = numberValue.longValue();
-                value.setRawValue(rawValue + argNumber.longValue());
+                value.setPropertyValue(rawValue + argNumber.longValue());
             }
             else if (rawType == float.class)
             {
                 float rawValue = numberValue.floatValue();
-                value.setRawValue(rawValue + argNumber.floatValue());
+                value.setPropertyValue(rawValue + argNumber.floatValue());
             }
             else if (rawType == double.class)
             {
                 double rawValue = numberValue.doubleValue();
-                value.setRawValue(rawValue + argNumber.doubleValue());
+                value.setPropertyValue(rawValue + argNumber.doubleValue());
             }
             else
             {
@@ -112,38 +112,38 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
         }
         if (argNumber == null)
         {
-            value.setRawValue(null);
+            value.setPropertyValue(null);
             return numberValue;
         }
         if (rawType == Byte.class)
         {
             byte rawValue = numberValue.byteValue();
-            value.setRawValue(rawValue + argNumber.byteValue());
+            value.setPropertyValue(rawValue + argNumber.byteValue());
         }
         else if (rawType == Short.class)
         {
             short rawValue = numberValue.shortValue();
-            value.setRawValue(rawValue + argNumber.shortValue());
+            value.setPropertyValue(rawValue + argNumber.shortValue());
         }
         else if (rawType == Integer.class)
         {
             int rawValue = numberValue.intValue();
-            value.setRawValue(rawValue + argNumber.intValue());
+            value.setPropertyValue(rawValue + argNumber.intValue());
         }
         else if (rawType == Long.class)
         {
             long rawValue = numberValue.longValue();
-            value.setRawValue(rawValue + argNumber.longValue());
+            value.setPropertyValue(rawValue + argNumber.longValue());
         }
         else if (rawType == Float.class)
         {
             float rawValue = numberValue.floatValue();
-            value.setRawValue(rawValue + argNumber.floatValue());
+            value.setPropertyValue(rawValue + argNumber.floatValue());
         }
         else if (rawType == Double.class)
         {
             double rawValue = numberValue.doubleValue();
-            value.setRawValue(rawValue + argNumber.doubleValue());
+            value.setPropertyValue(rawValue + argNumber.doubleValue());
         }
         else
         {
@@ -171,32 +171,32 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
             if (rawType == byte.class)
             {
                 byte rawValue = numberValue.byteValue();
-                value.setRawValue(rawValue - argNumber.byteValue());
+                value.setPropertyValue(rawValue - argNumber.byteValue());
             }
             else if (rawType == short.class)
             {
                 short rawValue = numberValue.shortValue();
-                value.setRawValue(rawValue - argNumber.shortValue());
+                value.setPropertyValue(rawValue - argNumber.shortValue());
             }
             else if (rawType == int.class)
             {
                 int rawValue = numberValue.intValue();
-                value.setRawValue(rawValue - argNumber.intValue());
+                value.setPropertyValue(rawValue - argNumber.intValue());
             }
             else if (rawType == long.class)
             {
                 long rawValue = numberValue.longValue();
-                value.setRawValue(rawValue - argNumber.longValue());
+                value.setPropertyValue(rawValue - argNumber.longValue());
             }
             else if (rawType == float.class)
             {
                 float rawValue = numberValue.floatValue();
-                value.setRawValue(rawValue - argNumber.floatValue());
+                value.setPropertyValue(rawValue - argNumber.floatValue());
             }
             else if (rawType == double.class)
             {
                 double rawValue = numberValue.doubleValue();
-                value.setRawValue(rawValue - argNumber.doubleValue());
+                value.setPropertyValue(rawValue - argNumber.doubleValue());
             }
             else
             {
@@ -206,38 +206,38 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
         }
         if (argNumber == null)
         {
-            value.setRawValue(null);
+            value.setPropertyValue(null);
             return numberValue;
         }
         if (rawType == Byte.class)
         {
             byte rawValue = numberValue.byteValue();
-            value.setRawValue(rawValue - argNumber.byteValue());
+            value.setPropertyValue(rawValue - argNumber.byteValue());
         }
         else if (rawType == Short.class)
         {
             short rawValue = numberValue.shortValue();
-            value.setRawValue(rawValue - argNumber.shortValue());
+            value.setPropertyValue(rawValue - argNumber.shortValue());
         }
         else if (rawType == Integer.class)
         {
             int rawValue = numberValue.intValue();
-            value.setRawValue(rawValue - argNumber.intValue());
+            value.setPropertyValue(rawValue - argNumber.intValue());
         }
         else if (rawType == Long.class)
         {
             long rawValue = numberValue.longValue();
-            value.setRawValue(rawValue - argNumber.longValue());
+            value.setPropertyValue(rawValue - argNumber.longValue());
         }
         else if (rawType == Float.class)
         {
             float rawValue = numberValue.floatValue();
-            value.setRawValue(rawValue - argNumber.floatValue());
+            value.setPropertyValue(rawValue - argNumber.floatValue());
         }
         else if (rawType == Double.class)
         {
             double rawValue = numberValue.doubleValue();
-            value.setRawValue(rawValue - argNumber.doubleValue());
+            value.setPropertyValue(rawValue - argNumber.doubleValue());
         }
         else
         {
@@ -265,32 +265,32 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
             if (rawType == byte.class)
             {
                 byte rawValue = numberValue.byteValue();
-                value.setRawValue(rawValue * argNumber.byteValue());
+                value.setPropertyValue(rawValue * argNumber.byteValue());
             }
             else if (rawType == short.class)
             {
                 short rawValue = numberValue.shortValue();
-                value.setRawValue(rawValue * argNumber.shortValue());
+                value.setPropertyValue(rawValue * argNumber.shortValue());
             }
             else if (rawType == int.class)
             {
                 int rawValue = numberValue.intValue();
-                value.setRawValue(rawValue * argNumber.intValue());
+                value.setPropertyValue(rawValue * argNumber.intValue());
             }
             else if (rawType == long.class)
             {
                 long rawValue = numberValue.longValue();
-                value.setRawValue(rawValue * argNumber.longValue());
+                value.setPropertyValue(rawValue * argNumber.longValue());
             }
             else if (rawType == float.class)
             {
                 float rawValue = numberValue.floatValue();
-                value.setRawValue(rawValue * argNumber.floatValue());
+                value.setPropertyValue(rawValue * argNumber.floatValue());
             }
             else if (rawType == double.class)
             {
                 double rawValue = numberValue.doubleValue();
-                value.setRawValue(rawValue * argNumber.doubleValue());
+                value.setPropertyValue(rawValue * argNumber.doubleValue());
             }
             else
             {
@@ -300,38 +300,38 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
         }
         if (argNumber == null)
         {
-            value.setRawValue(null);
+            value.setPropertyValue(null);
             return numberValue;
         }
         if (rawType == Byte.class)
         {
             byte rawValue = numberValue.byteValue();
-            value.setRawValue(rawValue * argNumber.byteValue());
+            value.setPropertyValue(rawValue * argNumber.byteValue());
         }
         else if (rawType == Short.class)
         {
             short rawValue = numberValue.shortValue();
-            value.setRawValue(rawValue * argNumber.shortValue());
+            value.setPropertyValue(rawValue * argNumber.shortValue());
         }
         else if (rawType == Integer.class)
         {
             int rawValue = numberValue.intValue();
-            value.setRawValue(rawValue * argNumber.intValue());
+            value.setPropertyValue(rawValue * argNumber.intValue());
         }
         else if (rawType == Long.class)
         {
             long rawValue = numberValue.longValue();
-            value.setRawValue(rawValue * argNumber.longValue());
+            value.setPropertyValue(rawValue * argNumber.longValue());
         }
         else if (rawType == Float.class)
         {
             float rawValue = numberValue.floatValue();
-            value.setRawValue(rawValue * argNumber.floatValue());
+            value.setPropertyValue(rawValue * argNumber.floatValue());
         }
         else if (rawType == Double.class)
         {
             double rawValue = numberValue.doubleValue();
-            value.setRawValue(rawValue * argNumber.doubleValue());
+            value.setPropertyValue(rawValue * argNumber.doubleValue());
         }
         else
         {
@@ -359,32 +359,32 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
             if (rawType == byte.class)
             {
                 byte rawValue = numberValue.byteValue();
-                value.setRawValue(rawValue / argNumber.byteValue());
+                value.setPropertyValue(rawValue / argNumber.byteValue());
             }
             else if (rawType == short.class)
             {
                 short rawValue = numberValue.shortValue();
-                value.setRawValue(rawValue / argNumber.shortValue());
+                value.setPropertyValue(rawValue / argNumber.shortValue());
             }
             else if (rawType == int.class)
             {
                 int rawValue = numberValue.intValue();
-                value.setRawValue(rawValue / argNumber.intValue());
+                value.setPropertyValue(rawValue / argNumber.intValue());
             }
             else if (rawType == long.class)
             {
                 long rawValue = numberValue.longValue();
-                value.setRawValue(rawValue / argNumber.longValue());
+                value.setPropertyValue(rawValue / argNumber.longValue());
             }
             else if (rawType == float.class)
             {
                 float rawValue = numberValue.floatValue();
-                value.setRawValue(rawValue / argNumber.floatValue());
+                value.setPropertyValue(rawValue / argNumber.floatValue());
             }
             else if (rawType == double.class)
             {
                 double rawValue = numberValue.doubleValue();
-                value.setRawValue(rawValue / argNumber.doubleValue());
+                value.setPropertyValue(rawValue / argNumber.doubleValue());
             }
             else
             {
@@ -394,38 +394,38 @@ public abstract class NumericPropertyAction extends AbstractPropertyAction
         }
         if (argNumber == null)
         {
-            value.setRawValue(null);
+            value.setPropertyValue(null);
             return numberValue;
         }
         if (rawType == Byte.class)
         {
             byte rawValue = numberValue.byteValue();
-            value.setRawValue(rawValue / argNumber.byteValue());
+            value.setPropertyValue(rawValue / argNumber.byteValue());
         }
         else if (rawType == Short.class)
         {
             short rawValue = numberValue.shortValue();
-            value.setRawValue(rawValue / argNumber.shortValue());
+            value.setPropertyValue(rawValue / argNumber.shortValue());
         }
         else if (rawType == Integer.class)
         {
             int rawValue = numberValue.intValue();
-            value.setRawValue(rawValue / argNumber.intValue());
+            value.setPropertyValue(rawValue / argNumber.intValue());
         }
         else if (rawType == Long.class)
         {
             long rawValue = numberValue.longValue();
-            value.setRawValue(rawValue / argNumber.longValue());
+            value.setPropertyValue(rawValue / argNumber.longValue());
         }
         else if (rawType == Float.class)
         {
             float rawValue = numberValue.floatValue();
-            value.setRawValue(rawValue / argNumber.floatValue());
+            value.setPropertyValue(rawValue / argNumber.floatValue());
         }
         else if (rawType == Double.class)
         {
             double rawValue = numberValue.doubleValue();
-            value.setRawValue(rawValue / argNumber.doubleValue());
+            value.setPropertyValue(rawValue / argNumber.doubleValue());
         }
         else
         {

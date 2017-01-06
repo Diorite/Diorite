@@ -39,7 +39,7 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
 {
     public RemoveFromCollectionIfPropertyAction()
     {
-        super("removeFromCollectionIf", "removeFrom(?<property>[A-Z0-9].*?)If", "removeIf(?<property>[A-Z0-9].*?)");
+        super("removeFromCollectionIf", "removeFrom(?<property>[A-Z0-9].*?)If", "remove(?<property>[A-Z0-9].*?)If");
     }
 
     @Override

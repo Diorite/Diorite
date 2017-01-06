@@ -25,27 +25,26 @@
 package org.diorite.config.impl.actions.collections;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
 import org.diorite.config.impl.actions.AbstractPropertyAction;
-import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class AddToCollectionPropertyAction extends AbstractPropertyAction
+public class GetFromCollectionPropertyAction extends AbstractPropertyAction
 {
-    public AddToCollectionPropertyAction()
+    public GetFromCollectionPropertyAction()
     {
-        super("addToCollection", "(?:addTo|putIn)(?<property>[A-Z0-9].*)");
+        super("getFromCollection", "getFrom(?<property>[A-Z0-9].*)", "get(?<property>[A-Z0-9].*?)By");
     }
 
     @Override
     protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
     {
-        return (parameters.length == 1) || (parameters.length == 2);
+        return (parameters.length == 1) && (method.getReturnType() != void.class);
     }
 
     @Override
@@ -54,48 +53,44 @@ public class AddToCollectionPropertyAction extends AbstractPropertyAction
         Object rawValue = value.getRawValue();
         if (rawValue == null)
         {
-            rawValue = YamlCollectionCreator.createCollection(value.getRawType(), 5);
-            value.setRawValue(rawValue);
+            return null;
         }
         if (rawValue instanceof Collection)
         {
-            Collection<Object> collection = (Collection<Object>) rawValue;
-            if (method.isVarArgs())
+            Number index;
+            if (! (args[0] instanceof Number))
             {
-                Object[] arg = (Object[]) args[0];
-                return Collections.addAll(collection, arg);
+                String arg0 = String.valueOf(args[0]);
+                index = DioriteMathUtils.asInt(arg0);
+                if (index == null)
+                {
+                    throw new IllegalStateException("Expected index of list but got: " + args[0]);
+                }
             }
-            return collection.add(args[0]);
+            else
+            {
+                index = (Number) args[0];
+            }
+            int intIndex = index.intValue();
+            if (rawValue instanceof List)
+            {
+                List<Object> collection = (List<Object>) rawValue;
+                return collection.get(intIndex);
+            }
+            Collection<Object> collection = (Collection<Object>) rawValue;
+            for (Object o : collection)
+            {
+                if (intIndex-- == 0)
+                {
+                    return o;
+                }
+            }
+            throw new IndexOutOfBoundsException(index.intValue());
         }
         if (rawValue instanceof Map)
         {
             Map<Object, Object> map = (Map<Object, Object>) rawValue;
-            if (method.isVarArgs())
-            {
-                if (Entry.class.isAssignableFrom(method.getParameterTypes()[0]))
-                {
-                    Entry<Object, Object>[] arg = (Entry<Object, Object>[]) args[0];
-                    for (Entry<Object, Object> entry : arg)
-                    {
-                        map.put(entry.getKey(), entry.getValue());
-                    }
-                    return arg.length != 0;
-                }
-                else
-                {
-                    Object[] arg = (Object[]) args[0];
-                    if ((arg.length % 2) != 0)
-                    {
-                        throw new IllegalStateException("Expected key-value arguments in: " + method.getMethod() + " of " + value);
-                    }
-                    for (int i = 0; i < arg.length; i += 2)
-                    {
-                        map.put(arg[0], arg[1]);
-                    }
-                    return arg.length != 0;
-                }
-            }
-            return map.put(args[0], args[1]);
+            return map.get(args[0]);
         }
         throw new IllegalStateException("Expected collection on " + value);
     }

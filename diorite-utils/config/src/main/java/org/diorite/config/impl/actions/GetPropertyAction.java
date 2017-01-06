@@ -41,9 +41,15 @@ public class GetPropertyAction extends AbstractPropertyAction
     }
 
     @Override
+    public boolean declaresProperty()
+    {
+        return true;
+    }
+
+    @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args)
     {
-        Object rawValue = value.getRawValue();
+        Object rawValue = value.getPropertyValue();
         Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive() && (rawValue == null))
         {

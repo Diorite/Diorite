@@ -26,12 +26,16 @@ package org.diorite.config.impl;
 
 import javax.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
 
 public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
 {
@@ -80,10 +84,29 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
         Class<?> primitiveRawType = DioriteReflectionUtils.getPrimitive(rawType);
         if (! primitiveRawType.isPrimitive())
         {
-            if (! rawType.isInstance(value) && ! DioriteReflectionUtils.getWrapperClass(rawType).isInstance(value))
+            if (value != null)
             {
-                throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
-                                                   this.template.getGenericType() + ")");
+                if (! rawType.isInstance(value) && ! DioriteReflectionUtils.getWrapperClass(rawType).isInstance(value))
+                {
+                    throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
+                                                       this.template.getGenericType() + ")");
+                }
+            }
+            else
+            {
+                // keep collections not null if possible.
+                try
+                {
+                    if (Collection.class.isAssignableFrom(rawType) || (Map.class.isAssignableFrom(rawType) && ! Config.class.isAssignableFrom(rawType)))
+                    {
+                        this.rawValue = YamlCollectionCreator.createCollection(rawType, 10);
+                        return;
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else if (value instanceof Number)

@@ -54,6 +54,27 @@ public interface ConfigPropertyValue<T>
     ConfigPropertyTemplate<T> getProperty();
 
     /**
+     * Returns property value after needed transformations by template.
+     *
+     * @return property value after needed transformations by template.
+     */
+    @Nullable
+    default T getPropertyValue()
+    {
+        return this.getProperty().get(this);
+    }
+
+    /**
+     * Sets property value after needed transformations by template.
+     *
+     * @param value
+     *         new value.
+     */
+    default void setPropertyValue(@Nullable T value)
+    {
+        this.getProperty().set(this, value);
+    }
+    /**
      * Returns raw property value.
      *
      * @return raw property value.

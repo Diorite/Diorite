@@ -22,39 +22,21 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions;
+package org.diorite.config.annotations;
 
-import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class SetPropertyAction extends AbstractPropertyAction
+/**
+ * Used to mark properties in config interfaces that should be returned as unmodifiable collections, note that return type of method must be compatible with
+ * unmodifiable type.
+ */
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Unmodifiable
 {
-    protected SetPropertyAction()
-    {
-        super("set", "set(?<property>[A-Z0-9].*)");
-    }
-
-    @Override
-    protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
-    {
-        if (parameters.length != 1)
-        {
-            return true;
-        }
-        Class<?> parameterType = parameters[0];
-        if (method.getReturnType() == void.class)
-        {
-            return true;
-        }
-        return method.getReturnType().isAssignableFrom(parameterType);
-    }
-
-    @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
-    {
-        Object rawValue = value.getPropertyValue();
-        value.setPropertyValue(args[0]);
-        return rawValue;
-    }
 }

@@ -206,29 +206,34 @@ public class YamlDeserializationData extends AbstractDeserializationData
         if (Number.class.isAssignableFrom(DioriteReflectionUtils.getWrapperClass(type)))
         {
             Class<?> numType = DioriteReflectionUtils.getWrapperClass(type);
-            if ((numType == Byte.class) || (numType == Short.class) || (numType == Integer.class) || (numType == Long.class))
+            node.setTag(new Tag(String.class));
+            String deserialize = this.constructor.constructObject(node).toString();
+            if (numType == Byte.class)
             {
-                node.setTag(new Tag(String.class));
-                String deserialize = this.constructor.constructObject(node).toString();
-                if (numType == Byte.class)
-                {
-                    return (T) (Byte) Byte.parseByte(deserialize);
-                }
-                else if (numType == Short.class)
-                {
-                    return (T) (Short) Short.parseShort(deserialize);
-                }
-                else if (numType == Integer.class)
-                {
-                    return (T) (Integer) Integer.parseInt(deserialize);
-                }
-                else if (numType == Long.class)
-                {
-                    return (T) (Long) Long.parseLong(deserialize);
-                }
+                return (T) (Byte) Byte.parseByte(deserialize);
+            }
+            else if (numType == Short.class)
+            {
+                return (T) (Short) Short.parseShort(deserialize);
+            }
+            else if (numType == Integer.class)
+            {
+                return (T) (Integer) Integer.parseInt(deserialize);
+            }
+            else if (numType == Long.class)
+            {
+                return (T) (Long) Long.parseLong(deserialize);
+            }
+            else if (numType == Float.class)
+            {
+                return (T) (Float) Float.parseFloat(deserialize);
+            }
+            else if (numType == Double.class)
+            {
+                return (T) (Double) Double.parseDouble(deserialize);
             }
         }
-        else if (type != Object.class)
+        if (type != Object.class)
         {
             node.setTag(new Tag(type));
         }

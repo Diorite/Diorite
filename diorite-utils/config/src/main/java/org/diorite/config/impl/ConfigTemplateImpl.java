@@ -37,10 +37,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -52,6 +55,7 @@ import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
@@ -59,6 +63,7 @@ import org.diorite.config.Property;
 import org.diorite.config.annotations.ToKeyMapperFunction;
 import org.diorite.config.annotations.ToStringMapperFunction;
 import org.diorite.config.impl.actions.ActionsRegistry;
+import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.comments.DocumentComments;
 
 public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
@@ -73,27 +78,22 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     private final Map<String, ConfigPropertyTemplateImpl<?>> mutableProperties = new ConcurrentSkipListMap<>(Comparator.comparingInt(this.order::indexOf));
     private final Map<String, ConfigPropertyTemplate<?>>     properties        = Collections.unmodifiableMap(this.mutableProperties);
 
-    private final Map<ConfigPropertyAction, ConfigPropertyTemplate<?>> mutableActions = new ConcurrentHashMap<>(15);
-    private final Map<ConfigPropertyAction, ConfigPropertyTemplate<?>> actions        = Collections.unmodifiableMap(this.mutableActions);
+    private final Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> mutableActions = new ConcurrentHashMap<>(15);
+    private final Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> actions        = Collections.unmodifiableMap(this.mutableActions);
 
-    private final Map<MethodSignature, ConfigPropertyAction> actionsDispatcher = new ConcurrentHashMap<>(10);
+    private final Map<MethodSignature, ConfigPropertyActionInstance> actionsDispatcher = new ConcurrentHashMap<>(10);
 
     private final DocumentComments comments;
 
     public ConfigTemplateImpl(Class<T> type, ConfigImplementationProvider provider)
     {
         this.type = type;
-        this.comments = DocumentComments.parseFromAnnotations(type);
+        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
         this.implementationProvider = provider;
         this.name = type.getSimpleName();
         this.charsetEncoder = StandardCharsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
         this.charsetDecoder = StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
         this.setupActions();
-    }
-
-    public Map<MethodSignature, ConfigPropertyAction> getActionsDispatcher()
-    {
-        return this.actionsDispatcher;
     }
 
     private void scanInterface(@Nullable Class<?> type, LinkedList<MethodInvoker> methods)
@@ -126,18 +126,64 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private synchronized void setupActions()
+    private void scanStringMapper(MethodInvoker methodInvoker, Map<String, MethodInvoker> toStringMappers)
     {
-        LinkedList<MethodInvoker> methods = new LinkedList<>();
-        this.scanInterface(this.type, methods);
-
-
-        Map<String, MethodInvoker> toKeyMappers = new HashMap<>(methods.size());
-        Map<String, MethodInvoker> toStringMappers = new HashMap<>(methods.size());
-        for (MethodInvoker methodInvoker : methods)
+        if ((methodInvoker.getParameterCount() != 1) || (methodInvoker.getReturnType() != String.class))
         {
-            ConfigPropertyTemplateImpl templateImpl;
+            throw new IllegalStateException("This isn't valid to string mapper function, valid function must have signature matching: 'String " +
+                                            "anyName(KeyType)'");
+        }
+        String property = methodInvoker.getAnnotation(ToStringMapperFunction.class).property();
+        if (toStringMappers.put(property, methodInvoker) != null)
+        {
+            throw new IllegalStateException("Duplicated " + ToStringMapperFunction.class.getSimpleName() + " for '" + property + "' in: " + this.type);
+        }
+    }
+
+    private void scanKeyMapper(MethodInvoker methodInvoker, Map<String, MethodInvoker> toKeyMappers)
+    {
+
+        if ((methodInvoker.getParameterCount() != 0) || (methodInvoker.getParameterTypes()[0] != String.class) ||
+            (methodInvoker.getReturnType() == void.class))
+        {
+            throw new IllegalStateException("This isn't valid to key mapper function, valid function must have signature matching: 'KeyType " +
+                                            "anyName(String)'");
+        }
+        String property = methodInvoker.getAnnotation(ToKeyMapperFunction.class).property();
+        if (toKeyMappers.put(property, methodInvoker) != null)
+        {
+            throw new IllegalStateException("Duplicated " + ToKeyMapperFunction.class.getSimpleName() + " for '" + property + "' in: " + this.type);
+        }
+    }
+
+    private String extractName(MethodInvoker methodInvoker)
+    {
+        String name;
+        Property annotation = methodInvoker.getAnnotation(Property.class);
+        if (annotation.name().isEmpty())
+        {
+            name = methodInvoker.getName();
+        }
+        else
+        {
+            name = annotation.name();
+        }
+        if (this.mutableProperties.containsKey(name))
+        {
+            throw new RuntimeException("Duplicated property found in " + this.type + ": " + name + ", " + methodInvoker.getMethod());
+        }
+        return name;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void scanMethods(LinkedList<MethodInvoker> methods, Map<String, MethodInvoker> toKeyMappers,
+                             Map<String, MethodInvoker> toStringMappers, Set<String> knownProperties)
+    {
+        int sizeBefore = methods.size();
+        for (Iterator<MethodInvoker> iterator = methods.iterator(); iterator.hasNext(); )
+        {
+            MethodInvoker methodInvoker = iterator.next();
+            ConfigPropertyTemplateImpl template;
             Class<?> returnType = methodInvoker.getReturnType();
             Type genericReturnType = methodInvoker.getGenericReturnType();
             String name;
@@ -146,55 +192,31 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             {
                 if (methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class))
                 {
-                    if ((methodInvoker.getParameterCount() != 0) || (methodInvoker.getParameterTypes()[0] != String.class) ||
-                        (methodInvoker.getReturnType() == void.class))
-                    {
-                        throw new IllegalStateException("This isn't valid to key mapper function, valid function must have signature matching: 'KeyType " +
-                                                        "anyName(String)'");
-                    }
-                    String property = methodInvoker.getAnnotation(ToKeyMapperFunction.class).property();
-                    if (toKeyMappers.put(property, methodInvoker) != null)
-                    {
-                        throw new IllegalStateException("Duplicated " + ToKeyMapperFunction.class.getSimpleName() + " for '" + property + "' in: " + this.type);
-                    }
+                    this.scanKeyMapper(methodInvoker, toKeyMappers);
+                    iterator.remove();
                     continue;
                 }
                 if (methodInvoker.isAnnotationPresent(ToStringMapperFunction.class))
                 {
-                    if ((methodInvoker.getParameterCount() != 0) || (methodInvoker.getReturnType() != String.class))
-                    {
-                        throw new IllegalStateException("This isn't valid to string mapper function, valid function must have signature matching: 'String " +
-                                                        "anyName(KeyType)'");
-                    }
-                    String property = methodInvoker.getAnnotation(ToStringMapperFunction.class).property();
-                    if (toStringMappers.put(property, methodInvoker) != null)
-                    {
-                        throw new IllegalStateException("Duplicated " + ToStringMapperFunction.class.getSimpleName() + " for '" + property + "' in: " +
-                                                        this.type);
-                    }
+                    this.scanStringMapper(methodInvoker, toStringMappers);
+                    iterator.remove();
                     continue;
                 }
-                Property annotation = methodInvoker.getAnnotation(Property.class);
-                if (annotation.name().isEmpty())
-                {
-                    name = methodInvoker.getName();
-                }
-                else
-                {
-                    name = annotation.name();
-                }
-                if (this.mutableProperties.containsKey(name))
-                {
-                    throw new RuntimeException("Duplicated property found in " + this.type + ": " + name + ", " + method);
-                }
+                name = this.extractName(methodInvoker);
+
                 methodInvoker.ensureAccessible();
-                templateImpl = new ConfigPropertyTemplateImpl(this, returnType, genericReturnType, name, cfg -> methodInvoker.invoke(cfg), method);
+                if (! knownProperties.add(name))
+                {
+                    throw new IllegalStateException("Duplicated property: " + name);
+                }
+                template = new ConfigPropertyTemplateImpl(this, returnType, genericReturnType, name, cfg -> methodInvoker.invoke(cfg), method);
             }
             else
             {
-                Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method);
+                Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method, knownProperties::contains);
                 if (resultPair == null)
                 {
+                    iterator.remove();
                     continue;
                 }
                 ConfigPropertyAction propertyAction = resultPair.getLeft();
@@ -202,50 +224,92 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 {
                     throw new RuntimeException("Unexpected default implementation of: " + method);
                 }
-                name = resultPair.getRight().getPropertyName();
-
+                ActionMatcherResult matcherResult = resultPair.getRight();
+                if (! matcherResult.isValidatedName())
                 {
-                    ConfigPropertyTemplateImpl<?> oldTemplate = this.mutableProperties.get(name);
-                    if (oldTemplate != null)
-                    {
-                        templateImpl = oldTemplate;
-                    }
-                    else
-                    {
-                        templateImpl = new ConfigPropertyTemplateImpl(this, returnType, genericReturnType, name, cfg -> null, method);
-                    }
-
-                    if (propertyAction.getActionName().equals("get") && methodInvoker.isDefault())
-                    {
-                        methodInvoker.ensureAccessible();
-                        try
-                        {
-                            MethodHandle methodHandle =
-                                    DioriteReflectionUtils.createLookup(method.getDeclaringClass(), - 1).unreflectSpecial(method, method.getDeclaringClass());
-                            templateImpl.setDefaultValueSupplier(cfg ->
-                                                                 {
-                                                                     try
-                                                                     {
-                                                                         return methodHandle.invoke(cfg);
-                                                                     }
-                                                                     catch (Throwable t)
-                                                                     {
-                                                                         throw DioriteUtils.sneakyThrow(t);
-                                                                     }
-                                                                 });
-                        }
-                        catch (Exception e)
-                        {
-                            throw new RuntimeException(e);
-                        }
-                    }
+                    continue; // wait for validation.
                 }
-                this.mutableActions.put(propertyAction, templateImpl);
-                this.actionsDispatcher.put(new MethodSignature(method), propertyAction);
+                name = matcherResult.getPropertyName();
+
+                ConfigPropertyTemplateImpl<?> oldTemplate = this.mutableProperties.get(name);
+                if (oldTemplate != null)
+                {
+                    template = oldTemplate;
+                }
+                else
+                {
+                    if (! propertyAction.declaresProperty())
+                    {
+                        continue;
+                    }
+                    if (! knownProperties.add(name))
+                    {
+                        throw new IllegalStateException("Duplicated property: " + name);
+                    }
+                    template = new ConfigPropertyTemplateImpl(this, returnType, genericReturnType, name, cfg -> null, method);
+                }
+
+                if (propertyAction.getActionName().equals("get") && methodInvoker.isDefault())
+                {
+                    this.defaultValueFromDefaultMethod(methodInvoker, template);
+                }
+
+                MethodSignature methodSignature = new MethodSignature(method);
+                PropertyActionKey propertyActionKey = new PropertyActionKey(propertyAction, methodSignature);
+                this.mutableActions.put(propertyActionKey, template);
+                this.actionsDispatcher.put(methodSignature, propertyActionKey);
             }
             this.order.add(name);
-            this.mutableProperties.put(name, templateImpl);
+            this.mutableProperties.put(name, template);
+            iterator.remove();
         }
+        if (methods.isEmpty())
+        {
+            return;
+        }
+        if (sizeBefore == methods.size())
+        {
+            throw new IllegalStateException("Can't create config template, can't find how to implement: " + methods);
+        }
+        this.scanMethods(methods, toKeyMappers, toStringMappers, knownProperties);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void defaultValueFromDefaultMethod(MethodInvoker methodInvoker, ConfigPropertyTemplateImpl template)
+    {
+        Method method = methodInvoker.getMethod();
+        methodInvoker.ensureAccessible();
+        try
+        {
+            MethodHandle methodHandle =
+                    DioriteReflectionUtils.createLookup(method.getDeclaringClass(), - 1).unreflectSpecial(method, method.getDeclaringClass());
+            template.setDefaultValueSupplier(cfg ->
+                                             {
+                                                 try
+                                                 {
+                                                     return methodHandle.invoke(cfg);
+                                                 }
+                                                 catch (Throwable t)
+                                                 {
+                                                     throw DioriteUtils.sneakyThrow(t);
+                                                 }
+                                             });
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private synchronized void setupActions()
+    {
+        LinkedList<MethodInvoker> methods = new LinkedList<>();
+        this.scanInterface(this.type, methods);
+
+        Map<String, MethodInvoker> toKeyMappers = new HashMap<>(methods.size());
+        Map<String, MethodInvoker> toStringMappers = new HashMap<>(methods.size());
+        this.scanMethods(new LinkedList<>(methods), toKeyMappers, toStringMappers, new HashSet<>(10));
 
         for (Entry<String, MethodInvoker> entry : toKeyMappers.entrySet())
         {
@@ -291,7 +355,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @Override
-    public Map<? extends ConfigPropertyAction, ? extends ConfigPropertyTemplate<?>> getActionsMap()
+    public Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getActionsMap()
     {
         return this.actions;
     }
@@ -305,13 +369,13 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
 
     @Override
     @Nullable
-    public ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyAction action)
+    public ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyActionInstance action)
     {
         return this.actions.get(action);
     }
 
     @Override
-    public ConfigPropertyAction getActionFor(MethodSignature method)
+    public ConfigPropertyActionInstance getActionFor(MethodSignature method)
     {
         return this.actionsDispatcher.get(method);
     }

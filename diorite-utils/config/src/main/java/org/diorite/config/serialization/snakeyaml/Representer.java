@@ -192,6 +192,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -239,6 +240,28 @@ public class Representer extends BaseRepresenter
         this.representers.put(char[].class, primitiveArray);
         this.representers.put(boolean[].class, primitiveArray);
 
+        this.classTags = new HashMap<>(10);
+
+
+        this.representers.put(null, new RepresentJavaBean(this));
+    }
+
+    public void addRepresenter(Class<?> type, Represent represent)
+    {
+        this.representers.put(type, represent);
+        LinkedHashMap<Class<?>, Represent> multiRepresenters = (LinkedHashMap<Class<?>, Represent>) this.multiRepresenters;
+        multiRepresenters.put(type, represent);
+    }
+
+    private boolean init = false;
+
+    public void initMultiRepresenters()
+    {
+        if (this.init)
+        {
+            return;
+        }
+        this.init = true;
         this.multiRepresenters.put(Number.class, new RepresentNumber(this));
         this.multiRepresenters.put(List.class, new RepresentList(this));
         this.multiRepresenters.put(Map.class, new RepresentMap(this));
@@ -249,16 +272,6 @@ public class Representer extends BaseRepresenter
         this.multiRepresenters.put(Enum.class, new RepresentEnum(this));
         this.multiRepresenters.put(Calendar.class, new RepresentDate(this));
         this.multiRepresenters.put(Collection.class, new RepresentCollection(this));
-        this.classTags = new HashMap<>(10);
-
-
-        this.representers.put(null, new RepresentJavaBean(this));
-    }
-
-    public void addRepresenter(Class<?> type, Represent represent)
-    {
-        this.representers.put(type, represent);
-        this.multiRepresenters.put(type, represent);
     }
 
     public Tag getTag(Class<?> clazz, Tag defaultTag)

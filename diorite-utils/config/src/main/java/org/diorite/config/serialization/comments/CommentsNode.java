@@ -145,7 +145,8 @@ public interface CommentsNode
     {
         if (path.length == 0)
         {
-            throw new IllegalArgumentException("Can't get comment on empty path.");
+            this.setComment(ANY, comment);
+            return;
         }
         if (path.length == 1)
         {
@@ -220,7 +221,7 @@ public interface CommentsNode
     {
         if (pathNodes.length == 0)
         {
-            throw new IllegalArgumentException("Can't get comment on empty path.");
+            return this.getComment(ANY);
         }
         if (pathNodes.length == 1)
         {

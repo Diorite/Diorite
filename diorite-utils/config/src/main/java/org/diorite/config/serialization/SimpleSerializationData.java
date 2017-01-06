@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,29 +42,31 @@ import org.apache.commons.lang3.Validate;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.comments.CommentsNode;
 import org.diorite.config.serialization.comments.DocumentComments;
+import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
 
 class SimpleSerializationData implements SerializationData
 {
     private final SerializationType serializationType;
 
-    private final Class<?>         type;
-    private final Serialization    serialization;
-    private final DocumentComments comments;
+    protected final Class<?>         type;
+    protected final Serialization    serialization;
+    private         DocumentComments comments;
 
-    private final Set<Class<?>> scannedCommentsClasses = new HashSet<>(20);
+    private final Map<Class<?>, DocumentComments> scannedCommentsClasses = new HashMap<>(20);
+    private final Set<String>                     joinedKeys             = new HashSet<>(20);
 
-    private final List<Object>        dataList = new ArrayList<>(20);
-    private final Map<Object, Object> dataMap  = new LinkedHashMap<>(20);
+    private final   List<Object>        dataList = new ArrayList<>(20);
+    protected final Map<Object, Object> dataMap  = new LinkedHashMap<>(20);
 
     private String trueValue  = "true";
     private String falseValue = "false";
 
-    SimpleSerializationData(SerializationType serializationType, Serialization serialization, Class<?> type)
+    protected SimpleSerializationData(SerializationType serializationType, Serialization serialization, Class<?> type)
     {
         this.serializationType = serializationType;
         this.serialization = serialization;
         this.type = type;
-        this.comments = DocumentComments.parseFromAnnotations(type);
+        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
     }
 
     @Override
@@ -72,14 +75,26 @@ class SimpleSerializationData implements SerializationData
         return this.serializationType;
     }
 
-    private <T> Object serialize(T object)
+    @Override
+    public DocumentComments getComments()
     {
-        return this.serialization.serialize(object, this.serializationType);
+        return this.comments;
+    }
+
+    @Override
+    public void setComments(DocumentComments comments)
+    {
+        this.comments = comments;
+    }
+
+    protected <T> Object serialize(T object, @Nullable DocumentComments comments)
+    {
+        return this.serialization.serialize(object, this.serializationType, comments);
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private <T> Object serialize(Class<T> type, @Nullable T object)
+    protected <T> Object serialize(Class<T> type, @Nullable T object, @Nullable DocumentComments comments)
     {
         if (object == null)
         {
@@ -89,7 +104,7 @@ class SimpleSerializationData implements SerializationData
         {
             type = (Class<T>) object.getClass();
         }
-        return this.serialization.serialize(type, object, this.serializationType);
+        return this.serialization.serialize(type, object, this.serializationType, comments);
     }
 
     private void validateList(String key)
@@ -104,7 +119,7 @@ class SimpleSerializationData implements SerializationData
         }
     }
 
-    private void validateMap(String key)
+    protected void validateMap(String key)
     {
         if (! key.isEmpty())
         {
@@ -118,7 +133,7 @@ class SimpleSerializationData implements SerializationData
 
     @SuppressWarnings("unchecked")
     @Nullable
-    private <T> String toString(@Nullable T object, @Nullable Class<T> type)
+    protected <T> String toString(@Nullable T object, @Nullable Class<T> type)
     {
         if (object == null)
         {
@@ -160,11 +175,12 @@ class SimpleSerializationData implements SerializationData
         return this.serialization;
     }
 
-    private void addComments(Class<?> type, String... key)
+    protected DocumentComments addComments(Class<?> type, String... key)
     {
-        if (! this.scannedCommentsClasses.add(type))
+        DocumentComments cached = this.scannedCommentsClasses.get(type);
+        if (cached != null)
         {
-            return;
+            return cached;
         }
         for (int i = 0; i < key.length; i++)
         {
@@ -173,22 +189,46 @@ class SimpleSerializationData implements SerializationData
                 key[i] = CommentsNode.ANY;
             }
         }
-        DocumentComments comments = DocumentComments.parseFromAnnotations(type);
+        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
         this.comments.join(key, comments);
+        this.scannedCommentsClasses.put(type, comments);
+        return comments;
     }
 
-    private void addComments(Class<?> type, String key)
+    protected void joinComments(String key, @Nullable DocumentComments comments)
     {
-        if (! this.scannedCommentsClasses.add(type))
+        if ((comments == null) || ! this.joinedKeys.add(key))
         {
             return;
         }
-        DocumentComments comments = DocumentComments.parseFromAnnotations(type);
         if (key.isEmpty())
         {
             this.comments.join(CommentsNode.ANY, comments);
         }
-        this.comments.join(key, comments);
+        else
+        {
+            this.comments.join(key, comments);
+        }
+    }
+
+    private DocumentComments addComments(Class<?> type, String key)
+    {
+        DocumentComments cached = this.scannedCommentsClasses.get(type);
+        if (cached != null)
+        {
+            return cached;
+        }
+        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        if (key.isEmpty())
+        {
+            this.comments.join(CommentsNode.ANY, comments);
+        }
+        else
+        {
+            this.comments.join(key, comments);
+        }
+        this.scannedCommentsClasses.put(type, comments);
+        return comments;
     }
 
     @Override
@@ -207,7 +247,7 @@ class SimpleSerializationData implements SerializationData
         }
 
         Class<?> valueClass = value.getClass();
-        this.addComments(valueClass, key);
+        DocumentComments comments = this.addComments(valueClass, key);
 
         if (! this.serialization.isSerializable(value))
         {
@@ -218,12 +258,14 @@ class SimpleSerializationData implements SerializationData
             }
             if (this.serialization.canBeSerialized(valueClass))
             {
-                this.dataMap.put(key, this.serialize(value));
+                this.dataMap.put(key, this.serialize(value, comments));
+                this.joinComments(key, comments);
                 return;
             }
             throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: " + value);
         }
-        this.dataMap.put(key, this.serialize(value));
+        this.dataMap.put(key, this.serialize(value, comments));
+        this.joinComments(key, comments);
     }
 
     @Override
@@ -241,7 +283,7 @@ class SimpleSerializationData implements SerializationData
             return;
         }
 
-        this.addComments(value.getClass(), key);
+        DocumentComments comments = this.addComments(value.getClass(), key);
 
         if (! this.serialization.isSerializable(type))
         {
@@ -252,12 +294,14 @@ class SimpleSerializationData implements SerializationData
             }
             if (this.serialization.canBeSerialized(value.getClass()))
             {
-                this.dataMap.put(key, this.serialize(type, value));
+                this.dataMap.put(key, this.serialize(type, value, comments));
+                this.joinComments(key, comments);
                 return;
             }
             throw new SerializationException(this.type, "Given value must be serializable! key: " + key + ", value: (" + type.getName() + ") -> " + value);
         }
-        this.dataMap.put(key, this.serialize(type, value));
+        this.dataMap.put(key, this.serialize(type, value, comments));
+        this.joinComments(key, comments);
     }
 
     @Override
@@ -282,14 +326,15 @@ class SimpleSerializationData implements SerializationData
                 continue;
             }
 
-            this.addComments(t.getClass(), key, CommentsNode.ANY);
+            DocumentComments comments = this.addComments(t.getClass(), key, CommentsNode.ANY);
 
             if (Serialization.isSimple(t))
             {
                 valueMap.put(key, this.toString(t, type));
                 continue;
             }
-            valueMap.put(mapper.apply(t), this.serialize(type, t));
+            valueMap.put(mapper.apply(t), this.serialize(type, t, comments));
+            this.joinComments(key, comments);
         }
         this.dataMap.put(key, valueMap);
     }
@@ -330,9 +375,10 @@ class SimpleSerializationData implements SerializationData
                 continue;
             }
 
-            this.addComments(t.getClass(), key);
+            DocumentComments comments = this.addComments(t.getClass(), key);
 
-            result.add(this.serialize(type, t));
+            result.add(this.serialize(type, t, comments));
+            this.joinComments(key, comments);
         }
         if (! key.isEmpty())
         {
@@ -366,9 +412,10 @@ class SimpleSerializationData implements SerializationData
         {
             T entryValue = entry.getValue();
 
+            DocumentComments comments = null;
             if (entryValue != null)
             {
-                this.addComments(entryValue.getClass(), key);
+                comments = this.addComments(entryValue.getClass(), key);
             }
 
             if (Serialization.isSimple(entryValue))
@@ -376,7 +423,8 @@ class SimpleSerializationData implements SerializationData
                 result.add(this.toString(entryValue, type));
                 continue;
             }
-            result.add(this.serialize(type, entryValue));
+            result.add(this.serialize(type, entryValue, comments));
+            this.joinComments(key, comments);
         }
         if (! key.isEmpty())
         {
@@ -411,12 +459,14 @@ class SimpleSerializationData implements SerializationData
         {
             T entryValue = entry.getValue();
 
+            DocumentComments comments = null;
             if (entryValue != null)
             {
-                this.addComments(entryValue.getClass(), key);
+                comments = this.addComments(entryValue.getClass(), key);
             }
 
-            Object o = this.serialize(type, entryValue);
+            Object o = this.serialize(type, entryValue, comments);
+            this.joinComments(key, comments);
             if (o instanceof Map)
             {
                 Object entryKey = entry.getKey();
@@ -438,7 +488,18 @@ class SimpleSerializationData implements SerializationData
                 {
                     throw new SerializationException(this.type, "(key: '" + key + "') Invalid, not serializable, key found" + entryKey);
                 }
-                ((Map) o).put(keyPropertyName, keyStr);
+                try
+                {
+                    Map collection = YamlCollectionCreator.createCollection(o.getClass(), ((Map) o).size());
+                    collection.put(keyPropertyName, keyStr);
+                    collection.putAll(((Map) o));
+                    o = collection;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    ((Map) o).put(keyPropertyName, keyStr);
+                }
             }
             else
             {
@@ -484,9 +545,10 @@ class SimpleSerializationData implements SerializationData
             {
                 this.addComments(entryKey.getClass(), key);
             }
+            DocumentComments comments = null;
             if (entryValue != null)
             {
-                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+                comments = this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
             }
 
             if (Serialization.isSimple(entryKey))
@@ -496,10 +558,12 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entryValue));
+                resultMap.put(entryKey, this.serialize(type, entryValue, comments));
+                this.joinComments(key, comments);
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialize(type, entryValue));
+            resultMap.put(this.serialization.serializeToString(keyType, entryKey), this.serialize(type, entryValue, comments));
+            this.joinComments(key, comments);
         }
         if (! key.isEmpty())
         {
@@ -538,9 +602,11 @@ class SimpleSerializationData implements SerializationData
             {
                 this.addComments(entryKey.getClass(), key);
             }
+
+            DocumentComments comments = null;
             if (entryValue != null)
             {
-                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+                comments = this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
             }
 
             if (Serialization.isSimple(entryKey))
@@ -550,10 +616,12 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entryValue));
+                resultMap.put(entryKey, this.serialize(type, entryValue, comments));
+                this.joinComments(key, comments);
                 continue;
             }
-            resultMap.put(this.serialization.serializeToString(entryKey), this.serialize(type, entryValue));
+            resultMap.put(this.serialization.serializeToString(entryKey), this.serialize(type, entryValue, comments));
+            this.joinComments(key, comments);
         }
         if (! key.isEmpty())
         {
@@ -592,9 +660,10 @@ class SimpleSerializationData implements SerializationData
             {
                 this.addComments(entryKey.getClass(), key);
             }
+            DocumentComments comments = null;
             if (entryValue != null)
             {
-                this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
+                comments = this.addComments(entryValue.getClass(), key, CommentsNode.ANY);
             }
 
             if (Serialization.isSimple(entryKey))
@@ -604,10 +673,12 @@ class SimpleSerializationData implements SerializationData
                     resultMap.put(entryKey, this.toString(entryValue, type));
                     continue;
                 }
-                resultMap.put(entryKey, this.serialize(type, entryValue));
+                resultMap.put(entryKey, this.serialize(type, entryValue, comments));
+                this.joinComments(key, comments);
                 continue;
             }
-            resultMap.put(keyMapper.apply(entryKey), this.serialize(type, entryValue));
+            resultMap.put(keyMapper.apply(entryKey), this.serialize(type, entryValue, comments));
+            this.joinComments(key, comments);
         }
         if (! key.isEmpty())
         {
@@ -622,5 +693,14 @@ class SimpleSerializationData implements SerializationData
             return this.dataList;
         }
         return this.dataMap;
+    }
+
+    static SimpleSerializationData createSerializationData(SerializationType serializationType, Serialization serialization, Class<?> type)
+    {
+        if (serializationType == SerializationType.YAML)
+        {
+            return new YamlSerializationData(serialization, type);
+        }
+        return new SimpleSerializationData(serializationType, serialization, type);
     }
 }

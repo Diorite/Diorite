@@ -167,6 +167,13 @@ public interface DocumentComments extends CommentsNode
     void writeTo(@WillNotClose Writer writer) throws IOException, CommentsParserException;
 
     /**
+     * Clone all comments nodes to new document object.
+     *
+     * @return cloned object.
+     */
+    DocumentComments copy();
+
+    /**
      * Returns always empty instance of Document Comments
      *
      * @return always empty instance of Document Comments

@@ -81,7 +81,7 @@ public interface ConfigTemplate<T extends Config>
      *
      * @return map of available actions.
      */
-    Map<? extends ConfigPropertyAction, ? extends ConfigPropertyTemplate<?>> getActionsMap();
+    Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getActionsMap();
 
     /**
      * Returns template for given property.
@@ -103,7 +103,7 @@ public interface ConfigTemplate<T extends Config>
      * @return property template for given action.
      */
     @Nullable
-    ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyAction action);
+    ConfigPropertyTemplate<?> getTemplateFor(ConfigPropertyActionInstance action);
 
     /**
      * Returns property action for given method signature object.
@@ -114,7 +114,7 @@ public interface ConfigTemplate<T extends Config>
      * @return property action for given method signature object.
      */
     @Nullable
-    ConfigPropertyAction getActionFor(MethodSignature method);
+    ConfigPropertyActionInstance getActionFor(MethodSignature method);
 
     /**
      * Returns name of config, config class name if not provided. <br/>

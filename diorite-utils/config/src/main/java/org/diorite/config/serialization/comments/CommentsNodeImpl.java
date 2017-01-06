@@ -26,6 +26,7 @@ package org.diorite.config.serialization.comments;
 
 import javax.annotation.Nullable;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,6 +69,30 @@ class CommentsNodeImpl implements CommentsNode
         return this.parent;
     }
 
+    public Map<String, MutablePair<String, CommentsNodeImpl>> copyMap(CommentsNodeImpl parent)
+    {
+        Map<String, MutablePair<String, CommentsNodeImpl>> result = new HashMap<>(this.dataMap.size());
+        for (Entry<String, MutablePair<String, CommentsNodeImpl>> entry : this.dataMap.entrySet())
+        {
+            String keyToCpy = entry.getKey();
+            MutablePair<String, CommentsNodeImpl> valueToCpy = entry.getValue();
+            CommentsNodeImpl nodeToCpy = valueToCpy.getRight();
+            CommentsNodeImpl copiedNode;
+            if (nodeToCpy == null)
+            {
+                copiedNode = null;
+            }
+            else
+            {
+                copiedNode = new CommentsNodeImpl(parent);
+                copiedNode.dataMap.putAll(nodeToCpy.copyMap(parent));
+            }
+            MutablePair<String, CommentsNodeImpl> copied = new MutablePair<>(valueToCpy.getLeft(), copiedNode);
+            result.put(keyToCpy, copied);
+        }
+        return result;
+    }
+
     @Override
     public void trim()
     {
@@ -76,7 +101,11 @@ class CommentsNodeImpl implements CommentsNode
             Entry<String, MutablePair<String, CommentsNodeImpl>> entry = iterator.next();
             MutablePair<String, CommentsNodeImpl> value = entry.getValue();
             CommentsNodeImpl right = value.getRight();
-            if ((right == null) && (value.getLeft() == null))
+            if (right != null)
+            {
+                right.trim();
+            }
+            if (((right == null) || right.dataMap.isEmpty()) && (value.getLeft() == null))
             {
                 iterator.remove();
                 continue;

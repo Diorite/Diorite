@@ -22,38 +22,41 @@
  * SOFTWARE.
  */
 
-package org.diorite.config;
+package org.diorite.config.impl;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class MethodSignature
+import org.diorite.config.ConfigPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.MethodSignature;
+
+class PropertyActionKey implements ConfigPropertyActionInstance
 {
-    private final String     name;
-    private final Class<?>[] arguments;
-    private final Class<?>   returnType;
+    private final ConfigPropertyAction propertyAction;
+    private final MethodSignature      methodSignature;
 
     private final int hashCode;
 
-    public MethodSignature(String name, Class<?>[] arguments, Class<?> returnType)
+    PropertyActionKey(ConfigPropertyAction propertyAction, MethodSignature methodSignature)
     {
-        this.name = name;
-        this.arguments = arguments;
-        this.returnType = returnType;
+        this.propertyAction = propertyAction;
+        this.methodSignature = methodSignature;
 
-        this.hashCode = Objects.hash(this.name, this.returnType) + Arrays.hashCode(this.arguments);
+        this.hashCode = Objects.hash(this.propertyAction, this.methodSignature);
     }
 
-    public MethodSignature(Method method)
+    @Override
+    public ConfigPropertyAction getPropertyAction()
     {
-        this.name = method.getName();
-        this.arguments = method.getParameterTypes();
-        this.returnType = method.getReturnType();
+        return this.propertyAction;
+    }
 
-        this.hashCode = Objects.hash(this.name, this.returnType) + Arrays.hashCode(this.arguments);
+    @Override
+    public MethodSignature getMethodSignature()
+    {
+        return this.methodSignature;
     }
 
     @Override
@@ -63,14 +66,12 @@ public class MethodSignature
         {
             return true;
         }
-        if (! (object instanceof MethodSignature))
+        if (! (object instanceof PropertyActionKey))
         {
             return false;
         }
-        MethodSignature that = (MethodSignature) object;
-        return Objects.equals(this.name, that.name) &&
-               Arrays.equals(this.arguments, that.arguments) &&
-               Objects.equals(this.returnType, that.returnType);
+        PropertyActionKey that = (PropertyActionKey) object;
+        return Objects.equals(this.propertyAction, that.propertyAction) && Objects.equals(this.methodSignature, that.methodSignature);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class MethodSignature
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("name", this.name).append("returnType", this.returnType)
-                                        .append("arguments", this.arguments).toString();
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("propertyAction", this.propertyAction)
+                                        .append("methodSignature", this.methodSignature).toString();
     }
 }

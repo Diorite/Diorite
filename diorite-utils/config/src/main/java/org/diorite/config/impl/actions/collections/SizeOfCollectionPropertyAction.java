@@ -22,39 +22,45 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions;
+package org.diorite.config.impl.actions.collections;
+
+import java.util.Collection;
+import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.impl.actions.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class SetPropertyAction extends AbstractPropertyAction
+public class SizeOfCollectionPropertyAction extends AbstractPropertyAction
 {
-    protected SetPropertyAction()
+    public SizeOfCollectionPropertyAction()
     {
-        super("set", "set(?<property>[A-Z0-9].*)");
+        super("sizeOfCollection", "(?:sizeOf)(?<property>[A-Z0-9].*)", "(?<property>[a-z0-9].*?)(?:Size)");
     }
 
     @Override
     protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
     {
-        if (parameters.length != 1)
-        {
-            return true;
-        }
-        Class<?> parameterType = parameters[0];
-        if (method.getReturnType() == void.class)
-        {
-            return true;
-        }
-        return method.getReturnType().isAssignableFrom(parameterType);
+        return (parameters.length == 0) && (method.getReturnType() == int.class);
     }
 
     @Override
     public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
-        Object rawValue = value.getPropertyValue();
-        value.setPropertyValue(args[0]);
-        return rawValue;
+        Object rawValue = value.getRawValue();
+        if (rawValue == null)
+        {
+            return 0;
+        }
+        if (rawValue instanceof Collection)
+        {
+            return ((Collection) rawValue).size();
+        }
+        if (rawValue instanceof Map)
+        {
+            return ((Map) rawValue).size();
+        }
+        throw new IllegalStateException("Expected collection on " + value);
     }
 }

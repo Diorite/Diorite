@@ -31,7 +31,14 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -56,6 +63,7 @@ import org.diorite.config.annotations.MapTypes;
 import org.diorite.config.annotations.Mapped;
 import org.diorite.config.annotations.PaddedNumber;
 import org.diorite.config.annotations.PropertyType;
+import org.diorite.config.annotations.Unmodifiable;
 import org.diorite.config.serialization.DeserializationData;
 import org.diorite.config.serialization.SerializationData;
 import org.diorite.config.serialization.comments.DocumentComments;
@@ -81,6 +89,8 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
     private MethodInvoker toKeyMapper;
     @Nullable
     private MethodInvoker toStringMapper;
+
+    private boolean returnUnmodifiableCollections;
 
     public ConfigPropertyTemplateImpl(ConfigTemplate<?> template, Class<T> rawType, Type genericType, String name, Function<Config, T> defaultValueSupplier,
                                       AnnotatedElement annotatedElement)
@@ -118,16 +128,26 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
             DocumentComments comments = this.template.getComments();
             comments.setComment(key, comment.value());
         }
+
+        this.returnUnmodifiableCollections = this.annotatedElement.isAnnotationPresent(Unmodifiable.class);
     }
 
     public void setToKeyMapper(@Nullable MethodInvoker toKeyMapper)
     {
         this.toKeyMapper = toKeyMapper;
+        if (toKeyMapper != null)
+        {
+            toKeyMapper.ensureAccessible();
+        }
     }
 
     public void setToStringMapper(@Nullable MethodInvoker toStringMapper)
     {
         this.toStringMapper = toStringMapper;
+        if (toStringMapper != null)
+        {
+            toStringMapper.ensureAccessible();
+        }
     }
 
     private void initSerializeFunc(String key)
@@ -171,8 +191,8 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         {
             type = this.rawType;
         }
-        this.serializeFunc = (data, val) -> data.add(key, val.getRawValue(), type);
-        this.deserializeFunc = (data, val) -> val.setRawValue(data.get(key, type, val.getDefault()));
+        this.serializeFunc = (data, val) -> data.add(key, val.getPropertyValue(), type);
+        this.deserializeFunc = (data, val) -> val.setPropertyValue(data.get(key, type, val.getDefault()));
     }
 
     private void initForMap(String key)
@@ -193,22 +213,22 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                         throw new IllegalStateException("Missing toKeyMapper/toStringMapper/keyType for: '" + this.name + "' (" + this.genericType + ") in: " +
                                                         this.template.getConfigType());
                     }
-                    this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getRawValue()), valueType);
+                    this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getPropertyValue()), valueType);
                     this.deserializeFunc = (data, val) ->
                     {
                         Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                         data.getMap(key, s -> this.toKeyMapper.invoke(val.getDeclaringConfig(), s), valueType);
-                        val.setRawValue(collection);
+                        val.setPropertyValue(collection);
                     };
                 }
                 else
                 {
-                    this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getRawValue()), keyType, valueType);
+                    this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getPropertyValue()), keyType, valueType);
                     this.deserializeFunc = (data, val) ->
                     {
                         Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                         data.getMap(key, keyType, valueType);
-                        val.setRawValue(collection);
+                        val.setPropertyValue(collection);
                     };
                 }
             }
@@ -219,13 +239,13 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                     throw new IllegalStateException("Missing toKeyMapper for: '" + this.name + "' (" + this.genericType + ") in: " +
                                                     this.template.getConfigType());
                 }
-                this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getRawValue()), valueType,
+                this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getPropertyValue()), valueType,
                                                                 s -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), s)));
                 this.deserializeFunc = (data, val) ->
                 {
                     Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                     data.getMap(key, s -> this.toKeyMapper.invoke(val.getDeclaringConfig(), s), valueType);
-                    val.setRawValue(collection);
+                    val.setPropertyValue(collection);
                 };
             }
         }
@@ -239,22 +259,22 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                     throw new IllegalStateException("Missing toStringMapper for: '" + this.name + "' (" + this.genericType + ") in: " +
                                                     this.template.getConfigType());
                 }
-                this.serializeFunc = (data, val) -> data.addMapAsList(key, ((Map) val.getRawValue()), valueType);
+                this.serializeFunc = (data, val) -> data.addMapAsList(key, ((Map) val.getPropertyValue()), valueType);
                 this.deserializeFunc = (data, val) ->
                 {
                     Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                     data.getAsMap(key, valueType, s -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), s)), (Map) collection);
-                    val.setRawValue(collection);
+                    val.setPropertyValue(collection);
                 };
             }
             else
             {
-                this.serializeFunc = (data, val) -> data.addMapAsListWithKeys(key, ((Map) val.getRawValue()), valueType, keyProperty);
+                this.serializeFunc = (data, val) -> data.addMapAsListWithKeys(key, ((Map) val.getPropertyValue()), valueType, keyProperty);
                 this.deserializeFunc = (data, val) ->
                 {
                     Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                     data.getAsMapWithKeys(key, keyType, valueType, keyProperty, (Map) collection);
-                    val.setRawValue(collection);
+                    val.setPropertyValue(collection);
                 };
             }
         }
@@ -267,12 +287,12 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         if (mapped == null)
         {
 
-            this.serializeFunc = (data, val) -> data.addCollection(key, (Collection) val.getRawValue(), collectionType);
+            this.serializeFunc = (data, val) -> data.addCollection(key, (Collection) val.getPropertyValue(), collectionType);
             this.deserializeFunc = (data, val) ->
             {
                 Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                 data.getAsCollection(key, collectionType, (Collection) collection);
-                val.setRawValue(collection);
+                val.setPropertyValue(collection);
             };
         }
         else
@@ -282,13 +302,13 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                 throw new IllegalStateException("Missing toStringMapper for: '" + this.name + "' (" + this.genericType + ") in: " +
                                                 this.template.getConfigType());
             }
-            this.serializeFunc = (data, val) -> data.addMappedList(key, collectionType, (Collection) val.getRawValue(),
+            this.serializeFunc = (data, val) -> data.addMappedList(key, collectionType, (Collection) val.getPropertyValue(),
                                                                    o -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), o)));
             this.deserializeFunc = (data, val) ->
             {
                 Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
                 data.getAsCollection(key, collectionType, (Collection) collection);
-                val.setRawValue(collection);
+                val.setPropertyValue(collection);
             };
         }
     }
@@ -383,18 +403,18 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         }
         if (hex)
         {
-            this.serializeFunc = (data, val) -> data.addHexNumber(key, (Number) val.getRawValue(), padding);
-            this.deserializeFunc = (data, val) -> val.setRawValue(data.getAsHexNumber(key, (Class) this.rawType, (Number) val.getDefault()));
+            this.serializeFunc = (data, val) -> data.addHexNumber(key, (Number) val.getPropertyValue(), padding);
+            this.deserializeFunc = (data, val) -> val.setPropertyValue(data.getAsHexNumber(key, (Class) this.rawType, (Number) val.getDefault()));
         }
         else if ((padding == 0) && (format != null))
         {
-            this.serializeFunc = (data, val) -> data.addFormatted(key, format, val.getRawValue());
-            this.deserializeFunc = (data, val) -> val.setRawValue(data.get(key, (Class) this.rawType, val.getDefault()));
+            this.serializeFunc = (data, val) -> data.addFormatted(key, format, val.getPropertyValue());
+            this.deserializeFunc = (data, val) -> val.setPropertyValue(data.get(key, (Class) this.rawType, val.getDefault()));
         }
         else
         {
-            this.serializeFunc = (data, val) -> data.addNumber(key, (Number) val.getRawValue(), padding);
-            this.deserializeFunc = (data, val) -> val.setRawValue(data.get(key, (Class) this.rawType, val.getDefault()));
+            this.serializeFunc = (data, val) -> data.addNumber(key, (Number) val.getPropertyValue(), padding);
+            this.deserializeFunc = (data, val) -> val.setPropertyValue(data.get(key, (Class) this.rawType, val.getDefault()));
         }
     }
 
@@ -415,8 +435,8 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         }
         else if (format != null)
         {
-            this.serializeFunc = (data, val) -> data.addFormatted(key, format, val.getRawValue());
-            this.deserializeFunc = (data, val) -> val.setRawValue(data.getAsBoolean(key, (boolean) val.getDefault()));
+            this.serializeFunc = (data, val) -> data.addFormatted(key, format, val.getPropertyValue());
+            this.deserializeFunc = (data, val) -> val.setPropertyValue(data.getAsBoolean(key, (boolean) val.getDefault()));
             return;
         }
         else
@@ -427,12 +447,12 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
             falseValues = DioriteArrayUtils.EMPTY_STRINGS;
         }
 
-        this.serializeFunc = (data, val) -> data.addBoolean(key, (Boolean) val.getRawValue(), trueValue, falseValue);
+        this.serializeFunc = (data, val) -> data.addBoolean(key, (Boolean) val.getPropertyValue(), trueValue, falseValue);
         this.deserializeFunc = (data, val) ->
         {
             data.addTrueValues(trueValues);
             data.addFalseValues(falseValues);
-            val.setRawValue(data.getAsBoolean(key, (boolean) val.getDefault()));
+            val.setPropertyValue(data.getAsBoolean(key, (boolean) val.getDefault()));
         };
     }
 
@@ -464,6 +484,59 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
             return (T) this.getPrimitiveDefault();
         }
         return def;
+    }
+
+    @Override
+    public void set(ConfigPropertyValue<T> propertyValue, @Nullable T value)
+    {
+        propertyValue.setRawValue(value);
+    }
+
+    @Nullable
+    @Override
+    public T get(ConfigPropertyValue<T> propertyValue)
+    {
+        T rawValue = propertyValue.getRawValue();
+        if (rawValue == null)
+        {
+            return null;
+        }
+        if (this.returnUnmodifiableCollections)
+        {
+            if (rawValue instanceof Collection)
+            {
+                if (rawValue instanceof Set)
+                {
+                    if (rawValue instanceof NavigableSet)
+                    {
+                        return (T) Collections.unmodifiableNavigableSet((NavigableSet<?>) rawValue);
+                    }
+                    if (rawValue instanceof SortedSet)
+                    {
+                        return (T) Collections.unmodifiableSortedSet((SortedSet<?>) rawValue);
+                    }
+                    return (T) Collections.unmodifiableSet((Set<?>) rawValue);
+                }
+                if (rawValue instanceof List)
+                {
+                    return (T) Collections.unmodifiableList((List<?>) rawValue);
+                }
+                return (T) Collections.unmodifiableCollection((Collection<?>) rawValue);
+            }
+            else if (rawValue instanceof Map)
+            {
+                if (rawValue instanceof NavigableMap)
+                {
+                    return (T) Collections.unmodifiableNavigableMap((NavigableMap<?, ?>) rawValue);
+                }
+                if (rawValue instanceof SortedMap)
+                {
+                    return (T) Collections.unmodifiableSortedMap((SortedMap<?, ?>) rawValue);
+                }
+                return (T) Collections.unmodifiableMap((Map<?, ?>) rawValue);
+            }
+        }
+        return rawValue;
     }
 
     @Override

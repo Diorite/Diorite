@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.diorite.config.serialization.comments.DocumentComments;
+
 /**
  * Interface used in serialization methods to help with serializaing different types of data.
  */
@@ -44,6 +46,10 @@ public interface SerializationData
      * @return type of serializer data.
      */
     SerializationType getSerializationType();
+
+    DocumentComments getComments();
+
+    void setComments(DocumentComments comments);
 
     /**
      * Change how {@link Boolean#TRUE} value is saved to config. <br/>
@@ -170,6 +176,11 @@ public interface SerializationData
         if (value == null)
         {
             this.add(key, null);
+        }
+        if (padding <= 0)
+        {
+            this.add(key, value);
+            return;
         }
         if ((value instanceof Float) || (value instanceof Double))
         {
@@ -374,6 +385,6 @@ public interface SerializationData
      */
     static SerializationData create(SerializationType serializationType, Serialization serialization, Class<?> type)
     {
-        return new SimpleSerializationData(serializationType, serialization, type);
+        return SimpleSerializationData.createSerializationData(serializationType, serialization, type);
     }
 }

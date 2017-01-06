@@ -25,6 +25,8 @@
 package org.diorite.config.impl.proxy;
 
 import java.lang.reflect.Proxy;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -40,6 +42,7 @@ import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.SerializationData;
 import org.diorite.config.serialization.Serializer;
 import org.diorite.config.serialization.YamlDeserializationData;
+import org.diorite.config.serialization.YamlSerializationData;
 
 public class ConfigDeserializer<T extends Config> implements Serializer<T>
 {
@@ -56,9 +59,15 @@ public class ConfigDeserializer<T extends Config> implements Serializer<T>
         return this.clazz;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void serialize(T object, SerializationData data)
+    public void serialize(T object, SerializationData abstractData)
     {
+        if (! (abstractData instanceof YamlSerializationData))
+        {
+            throw new IllegalStateException("Diorite configs can be only serialized from YAML!");
+        }
+        YamlSerializationData data = (YamlSerializationData) abstractData;
         ConfigInvocationHandler handler = (ConfigInvocationHandler) Proxy.getInvocationHandler(object);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : handler.predefinedValues.entrySet())
         {
@@ -71,11 +80,23 @@ public class ConfigDeserializer<T extends Config> implements Serializer<T>
         for (Entry<String, Node> entry : handler.simpleDynamicValues.entrySet())
         {
             Object fromYamlNode = Serialization.getGlobal().fromYamlNode(entry.getValue());
-            data.add(entry.getKey(), fromYamlNode);
+            if (fromYamlNode instanceof Collection)
+            {
+                data.addCollection(entry.getKey(), (Collection<?>) fromYamlNode, Object.class);
+            }
+            else if ((fromYamlNode instanceof Map) && ! (fromYamlNode instanceof Config))
+            {
+                data.addMap(entry.getKey(), (Map<?, ?>) fromYamlNode, Object.class);
+            }
+            else
+            {
+                data.addRaw(entry.getKey(), fromYamlNode);
+            }
         }
     }
 
     private static final Set<Tag> sectionTags = Set.of(Tag.MAP, Tag.OMAP, new Tag(SimpleConfig.class));
+
     @Override
     public T deserialize(DeserializationData abstractData)
     {

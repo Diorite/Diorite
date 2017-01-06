@@ -34,12 +34,24 @@ import java.lang.reflect.Method;
 public final class ActionMatcherResult
 {
     private final           boolean matching;
+    private                 boolean validatedName;
     @Nullable private final String  propertyName;
 
     public ActionMatcherResult(boolean matching, @Nullable String propertyName)
     {
         this.matching = matching;
         this.propertyName = propertyName;
+        this.validatedName = false;
+    }
+
+    public boolean isValidatedName()
+    {
+        return this.validatedName;
+    }
+
+    public void setValidatedName(boolean validatedName)
+    {
+        this.validatedName = validatedName;
     }
 
     /**

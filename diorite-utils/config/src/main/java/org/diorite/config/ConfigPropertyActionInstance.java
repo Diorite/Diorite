@@ -31,17 +31,23 @@ import java.lang.reflect.Method;
 import org.diorite.commons.reflections.MethodInvoker;
 
 /**
- * Represent config property action, like get/set/add methods.
+ * Represents instance of property action, pair of the action and a method signature.
  */
-public interface ConfigPropertyAction
+public interface ConfigPropertyActionInstance
 {
-//    /**
-//     * Returns property regex pattern. <br>
-//     * Action pattern MUST contains one named matching group named `property` that will match property name: {@literal (?<property>[A-Z0-9].*)}
-//     *
-//     * @return property regex pattern.
-//     */
-//    Pattern getActionPattern();
+    /**
+     * Returns property action object.
+     *
+     * @return property action object.
+     */
+    ConfigPropertyAction getPropertyAction();
+
+    /**
+     * Returns method signature.
+     *
+     * @return method signature.
+     */
+    MethodSignature getMethodSignature();
 
     /**
      * Returns true if this action is used to declare property type.
@@ -50,7 +56,7 @@ public interface ConfigPropertyAction
      */
     default boolean declaresProperty()
     {
-        return false;
+        return this.getPropertyAction().declaresProperty();
     }
 
     /**
@@ -61,14 +67,20 @@ public interface ConfigPropertyAction
      *
      * @return result object with data if given method matches action patterns and name of property.
      */
-    ActionMatcherResult matchesAction(Method method);
+    default ActionMatcherResult matchesAction(Method method)
+    {
+        return this.getPropertyAction().matchesAction(method);
+    }
 
     /**
      * Returns property action name.
      *
      * @return property action name.
      */
-    String getActionName();
+    default String getActionName()
+    {
+        return this.getPropertyAction().getActionName();
+    }
 
     /**
      * Perform this operation on given object with given values.
@@ -83,5 +95,8 @@ public interface ConfigPropertyAction
      * @return result of action.
      */
     @Nullable
-    Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args);
+    default Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args)
+    {
+        return this.getPropertyAction().perform(method, value, args);
+    }
 }

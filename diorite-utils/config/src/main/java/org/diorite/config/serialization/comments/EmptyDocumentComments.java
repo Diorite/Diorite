@@ -70,6 +70,12 @@ class EmptyDocumentComments extends EmptyCommentsNode implements DocumentComment
 
     }
 
+    @Override
+    public DocumentComments copy()
+    {
+        return EMPTY;
+    }
+
     static DocumentComments getEmpty()
     {
         return EMPTY;

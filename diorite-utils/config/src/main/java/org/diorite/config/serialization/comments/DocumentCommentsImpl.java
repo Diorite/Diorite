@@ -86,4 +86,12 @@ class DocumentCommentsImpl extends CommentsNodeImpl implements DocumentComments
         CommentsWriter commentsWriter = new CommentsWriter(writer, this);
         commentsWriter.writeAll();
     }
+
+    @Override
+    public DocumentComments copy()
+    {
+        DocumentCommentsImpl copy = new DocumentCommentsImpl();
+        copy.dataMap.putAll(this.copyMap(copy));
+        return copy;
+    }
 }
