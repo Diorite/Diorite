@@ -45,6 +45,7 @@ import org.diorite.inject.impl.utils.Constants;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodDescription.InDefinedShape;
 import net.bytebuddy.description.method.MethodList;
@@ -86,7 +87,8 @@ final class TransformerInvokerGenerator implements ClassFileTransformer, Opcodes
         }
 
         @Override
-        public ClassVisitor wrap(TypeDescription typeDescription, ClassVisitor cv, Context context, TypePool typePool, int i, int i1)
+        public ClassVisitor wrap(TypeDescription typeDescription, ClassVisitor cv, Context context, TypePool typePool,
+                                 FieldList<FieldDescription.InDefinedShape> fieldList, MethodList<?> methodList, int i, int i1)
         {
 //            public void visit(int version, int modifiers, String name, String signature, String superName, String[] interfaces) {
             cv.visit(ClassFileVersion.JAVA_V9.getMinorMajorVersion(), typeDescription.getModifiers(), typeDescription.getInternalName(), null,

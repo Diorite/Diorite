@@ -50,6 +50,8 @@ import org.diorite.inject.impl.utils.Constants;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription.InDefinedShape;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
@@ -153,7 +155,8 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
         }
 
         @Override
-        public ClassVisitor wrap(TypeDescription typeDescription, ClassVisitor cv, Context context, TypePool typePool, int i, int i1)
+        public ClassVisitor wrap(TypeDescription typeDescription, ClassVisitor cv, Context context, TypePool typePool,
+                                 FieldList<FieldDescription.InDefinedShape> fieldList, MethodList<?> methodList, int i, int i1)
         {
             cv.visit(ClassFileVersion.JAVA_V9.getMinorMajorVersion(), typeDescription.getModifiers(), typeDescription.getInternalName(), null,
                      typeDescription.getSuperClass().asErasure().getInternalName(), typeDescription.getInterfaces().asErasures().toInternalNames());
