@@ -39,7 +39,7 @@
         <version.library.snakeyaml>1.17</version.library.snakeyaml>
         <version.library.gson>2.8.0</version.library.gson>
         <version.library.vecmath>1.5.2</version.library.vecmath>
-        <version.library.byte-buddy>1.5.8</version.library.byte-buddy>
+        <version.library.byte-buddy>1.6.1</version.library.byte-buddy>
         <version.library.javassist>3.22.0-CR1</version.library.javassist>
         <version.library.log4j>2.7</version.library.log4j>
         <version.library.asm>6.0_ALPHA</version.library.asm>
