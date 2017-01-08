@@ -24,6 +24,8 @@
 
 package org.diorite.inject.impl.controller;
 
+import javax.annotation.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -98,7 +100,7 @@ class ControllerInjectValueData<T> implements org.diorite.inject.impl.data.Injec
     }
 
     @Override
-    public void setProvider(DynamicProvider<T> provider)
+    public void setProvider(@Nullable DynamicProvider<T> provider)
     {
         if (provider == null)
         {

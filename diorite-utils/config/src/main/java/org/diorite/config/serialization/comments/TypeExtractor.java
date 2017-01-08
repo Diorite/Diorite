@@ -55,7 +55,7 @@ final class TypeExtractor
         if ((clazz == null) || clazz.isPrimitive() || (clazz == Object.class) || (clazz.getClassLoader() == null) || (clazz.getPackageName() == null) ||
             clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("jdk."))
         {
-            return DocumentComments.getEmpty();
+            return DocumentComments.empty();
         }
         DocumentComments documentComments = cache.get(clazz);
         if (documentComments == null)
@@ -73,7 +73,7 @@ final class TypeExtractor
     {
         if ((type == null) || this.scanned.contains(type))
         {
-            return DocumentComments.getEmpty();
+            return DocumentComments.empty();
         }
         return getAnnotationData(type);
     }

@@ -87,6 +87,7 @@ class SimpleSerializationData implements SerializationData
         this.comments = comments;
     }
 
+    @Nullable
     protected <T> Object serialize(T object, @Nullable DocumentComments comments)
     {
         return this.serialization.serialize(object, this.serializationType, comments);

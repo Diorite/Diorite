@@ -77,7 +77,7 @@ public class AddClinitClassFileTransformer extends AbstractClassTransformer
         boolean clinitExists = false;
         boolean added        = false;
 
-        String name;
+        @Nullable String name;
 
         ClinitClassVisitor(ClassWriter classWriter)
         {

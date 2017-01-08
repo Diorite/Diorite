@@ -132,7 +132,7 @@ public class ReflectedProperty<E> implements ReflectGetter<E>, ReflectSetter<E>
         {
             return this.setter.getName();
         }
-        String baseName = null;
+        String baseName;
         if (this.getter != null)
         {
             baseName = this.getter.getName();

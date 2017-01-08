@@ -480,6 +480,7 @@ public final class Serialization
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
     Object serialize(Object object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
@@ -489,6 +490,7 @@ public final class Serialization
         return this.serialize((Class) object.getClass(), object, serializationType, comments);
     }
 
+    @Nullable
     @SuppressWarnings("unchecked") <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
@@ -1542,6 +1544,7 @@ public final class Serialization
      *
      * @return loaded object.
      */
+    @Nullable
     public <T> T fromYamlNode(Node node, Class<T> type)
     {
         return this.yaml().fromYamlNode(node, type);
@@ -1556,6 +1559,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(String yaml)
     {
         return this.yaml().fromYaml(yaml);
@@ -1570,6 +1574,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(InputStream io)
     {
         return this.yaml().fromYaml(io);
@@ -1584,6 +1589,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(Reader io)
     {
         return this.yaml().fromYaml(io);
@@ -1601,6 +1607,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
     {
         return this.yaml().fromYaml(template, io);
@@ -1619,6 +1626,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(Reader io, Class<T> type)
     {
         return this.yaml().fromYaml(io, type);
@@ -1637,6 +1645,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(String yaml, Class<T> type)
     {
         return this.yaml().fromYaml(yaml, type);
@@ -1655,6 +1664,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return this.yaml().fromYaml(input, type);

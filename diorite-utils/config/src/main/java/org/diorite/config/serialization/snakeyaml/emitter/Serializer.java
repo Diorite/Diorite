@@ -80,7 +80,7 @@ public final class Serializer
     @Nullable private Boolean             closed;
     @Nullable private Tag                 explicitRoot;
 
-    private DocumentComments        comments    = DocumentComments.getEmpty();
+    private DocumentComments        comments    = DocumentComments.empty();
     private Set<Collection<String>> commentsSet = new HashSet<>(20);
 
     boolean checkCommentsSet(String[] path)

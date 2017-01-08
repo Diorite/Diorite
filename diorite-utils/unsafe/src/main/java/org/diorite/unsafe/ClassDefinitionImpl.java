@@ -34,12 +34,12 @@ import org.objectweb.asm.ClassReader;
 class ClassDefinitionImpl implements ClassDefinition
 {
     boolean isValid = false;
-    private                 byte[]           bytecode;
-    @Nullable private final String           name;
-    private final           Module           module;
-    private final           ClassLoader      classLoader;
-    private final           ProtectionDomain protectionDomain;
-    @Nullable private       ClassReader      classReader;
+    private           byte[]           bytecode;
+    private final     String           name;
+    private final     Module           module;
+    private final     ClassLoader      classLoader;
+    private final     ProtectionDomain protectionDomain;
+    @Nullable private ClassReader      classReader;
 
     ClassDefinitionImpl(byte[] bytecode, String name, Module module, ClassLoader classLoader, ProtectionDomain protectionDomain)
     {

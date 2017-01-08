@@ -655,6 +655,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
     private void loadImpl(@WillNotClose Reader reader)
     {
         Config fromYaml = Serialization.getGlobal().fromYaml(reader, this.template.getConfigType());
+        if (fromYaml == null)
+        {
+            return;
+        }
         ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(fromYaml);
 
         this.predefinedValues.putAll(invocationHandler.predefinedValues);
