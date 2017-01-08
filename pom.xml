@@ -39,21 +39,26 @@
         <maven.compiler.target>9</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <version.library.netty>4.1.6.Final</version.library.netty>
         <version.library.jopt>6.0-alpha-1</version.library.jopt>
-        <version.library.slf4j>1.7.22</version.library.slf4j>
-        <version.library.log4j>2.7</version.library.log4j>
-        <version.library.jline>3.0.0.M1</version.library.jline>
+        <version.library.jline>2.14.3</version.library.jline>
+        <version.library.vecmath>1.5.2</version.library.vecmath>
         <version.library.fastutil>7.0.13</version.library.fastutil>
         <version.library.guava>20.0</version.library.guava>
         <version.library.commons-lang3>3.5</version.library.commons-lang3>
         <version.library.snakeyaml>1.17</version.library.snakeyaml>
         <version.library.gson>2.8.0</version.library.gson>
-        <version.library.vecmath>1.5.2</version.library.vecmath>
+
         <version.library.byte-buddy>1.6.1</version.library.byte-buddy>
         <version.library.javassist>3.22.0-CR1</version.library.javassist>
-        <version.library.log4j>2.7</version.library.log4j>
         <version.library.asm>6.0_ALPHA</version.library.asm>
+
+        <version.library.log4j>2.7</version.library.log4j>
+        <version.library.slf4j>1.7.22</version.library.slf4j>
+        <version.library.log4j>2.7</version.library.log4j>
+
         <version.library.jsr305>3.0.1</version.library.jsr305>
+
         <version.library.junit>6.0_ALPHA</version.library.junit>
 
         <build>unspecified</build>
@@ -149,6 +154,16 @@
             </dependency>
 
             <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${version.library.netty}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.vecmath</groupId>
+                <artifactId>vecmath</artifactId>
+                <version>${version.library.vecmath}</version>
+            </dependency>
+            <dependency>
                 <groupId>it.unimi.dsi</groupId>
                 <artifactId>fastutil</artifactId>
                 <version>${version.library.fastutil}</version>
@@ -173,11 +188,7 @@
                 <artifactId>gson</artifactId>
                 <version>${version.library.gson}</version>
             </dependency>
-            <dependency>
-                <groupId>javax.vecmath</groupId>
-                <artifactId>vecmath</artifactId>
-                <version>${version.library.vecmath}</version>
-            </dependency>
+
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy-dep</artifactId>
@@ -199,6 +210,7 @@
                 <artifactId>asm-all</artifactId>
                 <version>${version.library.asm}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
@@ -245,6 +257,11 @@
 
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
