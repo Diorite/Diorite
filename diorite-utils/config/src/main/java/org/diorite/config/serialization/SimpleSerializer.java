@@ -61,12 +61,26 @@ class SimpleSerializer<T> implements Serializer<T>
     @Override
     public void serialize(T object, SerializationData data)
     {
-        this.serializer.accept(object, data);
+        try
+        {
+            this.serializer.accept(object, data);
+        }
+        catch (Throwable e)
+        {
+            throw new SerializationException(this.type, "toSerialize: " + object, e);
+        }
     }
 
     @Override
     public T deserialize(DeserializationData data)
     {
-        return this.deserializer.apply(data);
+        try
+        {
+            return this.deserializer.apply(data);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, data, e);
+        }
     }
 }

@@ -60,12 +60,26 @@ class SimpleStringSerializer<T> implements StringSerializer<T>
     @Override
     public T deserialize(String data)
     {
-        return this.deserializer.apply(data);
+        try
+        {
+            return this.deserializer.apply(data);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, "toDeserialize: " + data, e);
+        }
     }
 
     @Override
     public String serialize(T data)
     {
-        return this.serializer.apply(data);
+        try
+        {
+            return this.serializer.apply(data);
+        }
+        catch (Throwable e)
+        {
+            throw new SerializationException(this.type, "toSerialize: " + data, e);
+        }
     }
 }

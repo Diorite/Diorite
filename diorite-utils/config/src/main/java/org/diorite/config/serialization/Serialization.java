@@ -26,6 +26,7 @@ package org.diorite.config.serialization;
 
 import javax.annotation.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -35,6 +36,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -65,6 +67,7 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
+import org.diorite.commons.function.function.ExceptionalFunction;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
@@ -241,6 +244,9 @@ public final class Serialization
     private Serialization(@Nullable Void v)
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
+        this.registerStringSerializer(StringSerializer.of(File.class, File::getPath, File::new));
+        this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
+        this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
     }
 
     /**
@@ -481,8 +487,7 @@ public final class Serialization
         return this.serialize((Class) object.getClass(), object, serializationType, comments);
     }
 
-    @SuppressWarnings("unchecked")
-    <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
+    @SuppressWarnings("unchecked") <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
         {
