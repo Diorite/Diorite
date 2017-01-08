@@ -77,6 +77,8 @@ public interface Serializer<T>
      *
      * @param data
      *         target data object to use.
+     *
+     * @return deserialized object.
      */
     T deserialize(DeserializationData data);
 

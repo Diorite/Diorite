@@ -48,7 +48,7 @@ import org.diorite.inject.InjectionException;
  *
  * <pre>
  *   class Car {
- *     &#064;Inject Car(Provider&lt;Seat> seatProvider) {
+ *     &#064;Inject Car(Provider&lt;Seat&gt; seatProvider) {
  *       Seat driver = seatProvider.get();
  *       Seat passenger = seatProvider.get();
  *       ...

@@ -60,7 +60,7 @@ public interface Config extends Map<String, Object>
     ConfigTemplate<?> template();
 
     /**
-     * Returns name of config file, class name if not provided. <br/>
+     * Returns name of config file, class name if not provided. <br>
      *
      * @return name of config file, class name if not provided.
      */
@@ -225,7 +225,7 @@ public interface Config extends Map<String, Object>
     <T> T get(String[] key, Class<T> type);
 
     /**
-     * Set value on given key to given value. <br/>
+     * Set value on given key to given value. <br>
      * Null values are allowed, note that key isn't removed on null value!
      *
      * @param key
@@ -236,7 +236,7 @@ public interface Config extends Map<String, Object>
     void set(String key, @Nullable Object value);
 
     /**
-     * Set value on given key to given value. <br/>
+     * Set value on given key to given value. <br>
      * Null values are allowed, note that key isn't removed on null value!
      *
      * @param key
@@ -350,7 +350,7 @@ public interface Config extends Map<String, Object>
     }
 
     /**
-     * Save config to selected output stream. <br/>
+     * Save config to selected output stream. <br>
      * Stream isn't automatically closed here!
      *
      * @param outputStream
@@ -362,7 +362,7 @@ public interface Config extends Map<String, Object>
     }
 
     /**
-     * Save config to selected writer. <br/>
+     * Save config to selected writer. <br>
      * Writer isn't automatically closed here!
      *
      * @param writer
@@ -394,7 +394,7 @@ public interface Config extends Map<String, Object>
     }
 
     /**
-     * Reloads config from selected input stream. <br/>
+     * Reloads config from selected input stream. <br>
      * Stream isn't automatically closed here!
      *
      * @param inputStream
@@ -406,7 +406,7 @@ public interface Config extends Map<String, Object>
     }
 
     /**
-     * Reloads config from selected reader. <br/>
+     * Reloads config from selected reader. <br>
      * Reader isn't automatically closed here!
      *
      * @param reader

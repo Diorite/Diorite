@@ -162,7 +162,7 @@ public interface ConfigPropertyValue<T>
     }
 
     /**
-     * Generate and returns default value for this template. <br/>
+     * Generate and returns default value for this template. <br>
      * This value should never return null for primitive types!
      *
      * @return default value for this template.

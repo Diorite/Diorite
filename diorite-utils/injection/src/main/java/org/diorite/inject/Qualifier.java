@@ -45,8 +45,7 @@ import java.lang.annotation.Target;
  *      API.</li>
  *   <li>may have restricted usage if annotated with {@code @Target}. While
  *      this specification covers applying qualifiers to fields and
- *      parameters only, some injector configurations might use qualifier
- *      annotations in other places (on methods or classes for example).</li>
+ *      parameters only.</li>
  * </ul>
  *
  * <p>For example:

@@ -74,6 +74,9 @@ public interface ReflectSetter<E> extends ReflectElement
     /**
      * Returns {@link MethodHandle} for this setter method, and binds it to given object.
      *
+     * @param object
+     *         method handle will be bound to this object.
+     *
      * @return {@link MethodHandle} for this setter method.
      *
      * @see MethodHandle#bindTo(Object)

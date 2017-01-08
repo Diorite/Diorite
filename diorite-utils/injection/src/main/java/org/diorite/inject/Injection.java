@@ -59,7 +59,7 @@ public final class Injection
     private static final Supplier<Object> NULL = () -> null;
 
     /**
-     * Any use of that method will be removed from bytecode and replaced with valid injection call. <br/>
+     * Any use of that method will be removed from bytecode and replaced with valid injection call. <br>
      * Throws error on null injection.
      *
      * @param <T>

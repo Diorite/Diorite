@@ -417,9 +417,9 @@ public class Representer extends BaseRepresenter
     }
 
     /**
-     * Tag logic:<br/>
-     * - explicit root tag is set in serializer <br/>
-     * - if there is a predefined class tag it is used<br/>
+     * Tag logic:<br>
+     * - explicit root tag is set in serializer <br>
+     * - if there is a predefined class tag it is used<br>
      * - a global tag with class name is always used as tag. The JavaBean parent
      * of the specified JavaBean may set another tag (tag:yaml.org,2002:map)
      * when the property class is the same as runtime class
@@ -649,6 +649,9 @@ public class Representer extends BaseRepresenter
      *         - JavaBean to inspect the properties
      *
      * @return properties to serialise
+     *
+     * @throws IntrospectionException
+     *         if property scan fails.
      */
     protected Set<Property> getProperties(Class<?> type) throws IntrospectionException
     {

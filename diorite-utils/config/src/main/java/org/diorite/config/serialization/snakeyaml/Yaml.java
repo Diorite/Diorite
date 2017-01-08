@@ -254,9 +254,9 @@ public class Yaml
      * @param dumperOptions
      *         DumperOptions to configure outgoing objects
      * @param resolver
+     *         Resolver to detect implicit type
      */
-    public Yaml(Serialization serialization, YamlConstructor constructor, Representer representer, DumperOptions dumperOptions,
-                Resolver resolver)
+    public Yaml(Serialization serialization, YamlConstructor constructor, Representer representer, DumperOptions dumperOptions, Resolver resolver)
     {
         representer.initMultiRepresenters();
         this.serialization = serialization;
@@ -569,6 +569,8 @@ public class Yaml
      *         template of config object.
      * @param io
      *         data to load from (BOM must not be present)
+     * @param <T>
+     *         type of config object.
      *
      * @return parsed object
      */

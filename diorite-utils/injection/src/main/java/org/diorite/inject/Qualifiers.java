@@ -51,6 +51,8 @@ public final class Qualifiers
      *         type of annotation, must be annotated with {@link Qualifier} or {@link Scope}
      * @param constructor
      *         constructor function.
+     * @param unproxy
+     *         function that change proxied class instance to generated class instance.
      * @param <T>
      *         type of annotation
      */

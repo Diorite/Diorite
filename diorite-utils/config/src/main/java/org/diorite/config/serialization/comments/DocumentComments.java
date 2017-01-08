@@ -136,6 +136,9 @@ public interface DocumentComments extends CommentsNode
      *
      * @param file
      *         output to use.
+     *
+     * @throws IOException
+     *         if any operation on file will throw it.
      */
     default void writeTo(File file) throws IOException, CommentsParserException
     {
@@ -151,6 +154,9 @@ public interface DocumentComments extends CommentsNode
      *
      * @param outputStream
      *         output to use.
+     *
+     * @throws IOException
+     *         if any operation on stream will throw it.
      */
     default void writeTo(@WillNotClose OutputStream outputStream) throws IOException, CommentsParserException
     {
@@ -163,6 +169,9 @@ public interface DocumentComments extends CommentsNode
      *
      * @param writer
      *         output to use.
+     *
+     * @throws IOException
+     *         if any operation on writer will throw it.
      */
     void writeTo(@WillNotClose Writer writer) throws IOException, CommentsParserException;
 
@@ -200,6 +209,9 @@ public interface DocumentComments extends CommentsNode
      *         source with comments.
      *
      * @return comments as {@link DocumentComments} object instance.
+     *
+     * @throws IOException
+     *         if any operation on file will throw it.
      */
     static DocumentComments parse(File file) throws CommentsParserException, IOException
     {

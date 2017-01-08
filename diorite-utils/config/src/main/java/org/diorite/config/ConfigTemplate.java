@@ -117,7 +117,7 @@ public interface ConfigTemplate<T extends Config>
     ConfigPropertyActionInstance getActionFor(MethodSignature method);
 
     /**
-     * Returns name of config, config class name if not provided. <br/>
+     * Returns name of config, config class name if not provided. <br>
      *
      * @return name of config, config class name if not provided.
      */
@@ -185,6 +185,8 @@ public interface ConfigTemplate<T extends Config>
      *
      * @param file
      *         file to use.
+     *
+     * @return loaded config file.
      */
     default T load(File file)
     {
@@ -204,6 +206,8 @@ public interface ConfigTemplate<T extends Config>
      *
      * @param inputStream
      *         stream to use.
+     *
+     * @return loaded config file.
      */
     default T load(@WillNotClose InputStream inputStream)
     {
@@ -216,6 +220,8 @@ public interface ConfigTemplate<T extends Config>
      *
      * @param reader
      *         reader to use.
+     *
+     * @return loaded config file.
      */
     default T load(@WillNotClose Reader reader)
     {

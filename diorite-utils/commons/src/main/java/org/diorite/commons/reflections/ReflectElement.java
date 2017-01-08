@@ -34,12 +34,12 @@ import java.lang.reflect.Modifier;
 public interface ReflectElement
 {
     /**
-     * Invoke this reflect element: <br/>
-     * For constructor - invoke with all arguments. <br/>
-     * For static method - invoke with all arguments. <br/>
-     * For non-static method - first argument is object instance. <br/>
-     * For static fields - get -> no arguments, set -> single argument. <br/>
-     * For non-static fields - get -> object instance, set -> object instance and value. <br/>
+     * Invoke this reflect element: <br>
+     * For constructor - invoke with all arguments. <br>
+     * For static method - invoke with all arguments. <br>
+     * For non-static method - first argument is object instance. <br>
+     * For static fields - get -&gt; no arguments, set -&gt; single argument. <br>
+     * For non-static fields - get -&gt; object instance, set -&gt; object instance and value. <br>
      *
      * @param args
      *         all arguments to use for invoking.
@@ -64,7 +64,7 @@ public interface ReflectElement
     int getModifiers();
 
     /**
-     * Returns true if this element is static. <br/>
+     * Returns true if this element is static. <br>
      * Returns false for constructor.
      *
      * @return true if this element is static.

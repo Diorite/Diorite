@@ -79,6 +79,9 @@ public interface ReflectMethod extends ReflectElement
     /**
      * Returns {@link MethodHandle} for this method, and binds it to given object.
      *
+     * @param object
+     *         method handle will be bound to this object.
+     *
      * @return {@link MethodHandle} for this method.
      *
      * @see MethodHandle#bindTo(Object)
