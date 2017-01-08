@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Formatter;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
@@ -39,8 +41,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 
+import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.Diorite;
+import org.diorite.DioriteConfig;
+import org.diorite.DioriteConfig.OnlineMode;
 import org.diorite.commons.math.DioriteMathUtils;
+import org.diorite.config.ConfigManager;
+import org.diorite.config.ConfigTemplate;
+import org.diorite.inject.Injection;
 
 import io.netty.util.ResourceLeakDetector;
 import joptsimple.OptionParser;
@@ -87,8 +95,8 @@ public final class DioriteMain
               .defaultsTo(Diorite.DEFAULT_PORT);
         parser.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname")
               .defaultsTo("localhost");
-        parser.acceptsAll(Arrays.asList("online-mode", "online", "o"), "online mode of server").withRequiredArg().ofType(Boolean.class)
-              .describedAs("online").defaultsTo(true);
+        parser.acceptsAll(Arrays.asList("online-mode", "online", "o"), "online mode of server").withRequiredArg().ofType(OnlineMode.class)
+              .describedAs("online").defaultsTo(OnlineMode.TRUE);
         parser.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config")
               .defaultsTo(new File("diorite.yml"));
         parser.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players")
@@ -112,6 +120,7 @@ public final class DioriteMain
         {
             case RUN:
                 logger.info("Diorite version: " + Diorite.class.getPackage().getImplementationVersion() + " (MC: " + Diorite.getMinecraftVersion() + ")");
+                startDiorite(options);
                 return;
             case VERSION:
                 logger.info("Diorite version: " + Diorite.class.getPackage().getImplementationVersion() + " (MC: " + Diorite.getMinecraftVersion() + ")");
@@ -130,6 +139,59 @@ public final class DioriteMain
                 return;
         }
         throw new RuntimeException("Unexpected result.");
+    }
+
+    public static void startDiorite(OptionSet options)
+    {
+        ConfigTemplate<DioriteConfig> configTemplate = ConfigManager.get().getConfigFile(DioriteConfig.class);
+        File configFile = (File) options.valueOf("config");
+        DioriteConfig dioriteConfig = configTemplate.create();
+        dioriteConfig.bindFile(configFile);
+        if (! configFile.exists())
+        {
+            logger.info("Config file ('" + configFile.getAbsolutePath() + "') don't exist yet! Creating new one...");
+            try
+            {
+                configFile.createNewFile();
+                dioriteConfig.save(configFile);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException("Can't crate config file: " + configFile.getAbsolutePath(), e);
+            }
+        }
+        else
+        {
+            dioriteConfig.load();
+        }
+        printDioriteHello(dioriteConfig);
+    }
+
+    private static void addLoggerBinder()
+    {
+        Injection.getController().bindToClass(Logger.class).with().toInstance(logger);
+    }
+
+    private static void printDioriteHello(DioriteConfig config)
+    {
+        try (Formatter out = new Formatter(new LoggerOutputStream(logger, java.util.logging.Level.INFO)))
+        {
+            out.format("%s%n", "Starting diorite server: '" + config.getServerName() + "'");
+            out.format("%-30s %s%n", "  Enabled languages: ", Arrays.toString(config.getLanguages()));
+            out.format("%-30s %s%n", "  Resource pack: ", config.getResourcePack());
+            out.format("%-30s %s%n", "  Max players: ", config.getMaxPlayers());
+            out.format("%-30s %s%n", "  Netty threads: ", config.getNettyThreads());
+            out.format("%-30s %s%n", "  Compression threshold: ", config.getNetworkCompressionThreshold());
+            out.format("%-30s %s%n", "  Online mode: ", config.getOnlineMode().toString().toLowerCase());
+            out.format("%-30s %s%n", "  Native transport: ", config.getUseNativeTransport());
+            out.format("%-30s %s%n", "  View distance: ", config.getViewDistance());
+            out.format("%-30s %s%n", "  Whitelist: ", config.getWhiteListEnabled() + " (" + config.getWhiteListFile().getPath() + ")");
+            out.format("%-30s %s%n", "  Query port: ", config.getQueryPort());
+            out.format("%-30s %s%n", "  Rcon port: ", config.getRconPort());
+            out.format("%-30s %s%n", "  Hosts: ",
+                       config.getHosts().object2IntEntrySet().stream().map(e -> e.getKey() + ":" + e.getIntValue()).collect(Collectors.joining(", ")));
+            out.flush();
+        }
     }
 
     public static InitResult init(OptionSet options)
