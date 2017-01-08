@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -245,6 +246,7 @@ public final class Serialization
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
         this.registerStringSerializer(StringSerializer.of(File.class, File::getPath, File::new));
+        this.registerStringSerializer(StringSerializer.of(Locale.class, Locale::toLanguageTag, Locale::forLanguageTag));
         this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
         this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
     }
