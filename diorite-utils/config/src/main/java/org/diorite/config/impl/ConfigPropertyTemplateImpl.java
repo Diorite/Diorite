@@ -31,14 +31,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -503,38 +496,7 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         }
         if (this.returnUnmodifiableCollections)
         {
-            if (rawValue instanceof Collection)
-            {
-                if (rawValue instanceof Set)
-                {
-                    if (rawValue instanceof NavigableSet)
-                    {
-                        return (T) Collections.unmodifiableNavigableSet((NavigableSet<?>) rawValue);
-                    }
-                    if (rawValue instanceof SortedSet)
-                    {
-                        return (T) Collections.unmodifiableSortedSet((SortedSet<?>) rawValue);
-                    }
-                    return (T) Collections.unmodifiableSet((Set<?>) rawValue);
-                }
-                if (rawValue instanceof List)
-                {
-                    return (T) Collections.unmodifiableList((List<?>) rawValue);
-                }
-                return (T) Collections.unmodifiableCollection((Collection<?>) rawValue);
-            }
-            else if (rawValue instanceof Map)
-            {
-                if (rawValue instanceof NavigableMap)
-                {
-                    return (T) Collections.unmodifiableNavigableMap((NavigableMap<?, ?>) rawValue);
-                }
-                if (rawValue instanceof SortedMap)
-                {
-                    return (T) Collections.unmodifiableSortedMap((SortedMap<?, ?>) rawValue);
-                }
-                return (T) Collections.unmodifiableMap((Map<?, ?>) rawValue);
-            }
+            return YamlCollectionCreator.makeUnmodifiable(rawValue);
         }
         return rawValue;
     }

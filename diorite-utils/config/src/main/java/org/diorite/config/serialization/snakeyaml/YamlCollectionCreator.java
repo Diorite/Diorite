@@ -24,9 +24,12 @@
 
 package org.diorite.config.serialization.snakeyaml;
 
+import javax.annotation.Nullable;
+
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +39,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
@@ -53,6 +58,7 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 
 import org.yaml.snakeyaml.error.YAMLException;
@@ -71,38 +77,47 @@ import it.unimi.dsi.fastutil.booleans.BooleanStack;
 import it.unimi.dsi.fastutil.bytes.Byte2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2BooleanMap;
+import it.unimi.dsi.fastutil.bytes.Byte2BooleanMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2BooleanSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ByteMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ByteMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2ByteSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2CharMap;
+import it.unimi.dsi.fastutil.bytes.Byte2CharMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2CharSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2DoubleMap;
+import it.unimi.dsi.fastutil.bytes.Byte2DoubleMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2DoubleSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2FloatMap;
+import it.unimi.dsi.fastutil.bytes.Byte2FloatMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2FloatSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2IntMap;
+import it.unimi.dsi.fastutil.bytes.Byte2IntMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2IntSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2LongMap;
+import it.unimi.dsi.fastutil.bytes.Byte2LongMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2LongSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectSortedMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ShortMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ShortMaps;
 import it.unimi.dsi.fastutil.bytes.Byte2ShortSortedMap;
 import it.unimi.dsi.fastutil.bytes.ByteAVLTreeSet;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
@@ -117,38 +132,47 @@ import it.unimi.dsi.fastutil.bytes.ByteStack;
 import it.unimi.dsi.fastutil.chars.Char2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2BooleanMap;
+import it.unimi.dsi.fastutil.chars.Char2BooleanMaps;
 import it.unimi.dsi.fastutil.chars.Char2BooleanSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2ByteMap;
+import it.unimi.dsi.fastutil.chars.Char2ByteMaps;
 import it.unimi.dsi.fastutil.chars.Char2ByteSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
+import it.unimi.dsi.fastutil.chars.Char2CharMaps;
 import it.unimi.dsi.fastutil.chars.Char2CharSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2DoubleMap;
+import it.unimi.dsi.fastutil.chars.Char2DoubleMaps;
 import it.unimi.dsi.fastutil.chars.Char2DoubleSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2FloatMap;
+import it.unimi.dsi.fastutil.chars.Char2FloatMaps;
 import it.unimi.dsi.fastutil.chars.Char2FloatSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2IntMap;
+import it.unimi.dsi.fastutil.chars.Char2IntMaps;
 import it.unimi.dsi.fastutil.chars.Char2IntSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2LongMap;
+import it.unimi.dsi.fastutil.chars.Char2LongMaps;
 import it.unimi.dsi.fastutil.chars.Char2LongSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMaps;
 import it.unimi.dsi.fastutil.chars.Char2ObjectSortedMap;
 import it.unimi.dsi.fastutil.chars.Char2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.chars.Char2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.chars.Char2ShortMap;
+import it.unimi.dsi.fastutil.chars.Char2ShortMaps;
 import it.unimi.dsi.fastutil.chars.Char2ShortSortedMap;
 import it.unimi.dsi.fastutil.chars.CharAVLTreeSet;
 import it.unimi.dsi.fastutil.chars.CharArrayList;
@@ -163,38 +187,47 @@ import it.unimi.dsi.fastutil.chars.CharStack;
 import it.unimi.dsi.fastutil.doubles.Double2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2BooleanMap;
+import it.unimi.dsi.fastutil.doubles.Double2BooleanMaps;
 import it.unimi.dsi.fastutil.doubles.Double2BooleanSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2ByteMap;
+import it.unimi.dsi.fastutil.doubles.Double2ByteMaps;
 import it.unimi.dsi.fastutil.doubles.Double2ByteSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2CharMap;
+import it.unimi.dsi.fastutil.doubles.Double2CharMaps;
 import it.unimi.dsi.fastutil.doubles.Double2CharSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleMap;
+import it.unimi.dsi.fastutil.doubles.Double2DoubleMaps;
 import it.unimi.dsi.fastutil.doubles.Double2DoubleSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2FloatMap;
+import it.unimi.dsi.fastutil.doubles.Double2FloatMaps;
 import it.unimi.dsi.fastutil.doubles.Double2FloatSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2IntMap;
+import it.unimi.dsi.fastutil.doubles.Double2IntMaps;
 import it.unimi.dsi.fastutil.doubles.Double2IntSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2LongMap;
+import it.unimi.dsi.fastutil.doubles.Double2LongMaps;
 import it.unimi.dsi.fastutil.doubles.Double2LongSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectMap;
+import it.unimi.dsi.fastutil.doubles.Double2ObjectMaps;
 import it.unimi.dsi.fastutil.doubles.Double2ObjectSortedMap;
 import it.unimi.dsi.fastutil.doubles.Double2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.doubles.Double2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.doubles.Double2ShortMap;
+import it.unimi.dsi.fastutil.doubles.Double2ShortMaps;
 import it.unimi.dsi.fastutil.doubles.Double2ShortSortedMap;
 import it.unimi.dsi.fastutil.doubles.DoubleAVLTreeSet;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
@@ -209,38 +242,47 @@ import it.unimi.dsi.fastutil.doubles.DoubleStack;
 import it.unimi.dsi.fastutil.floats.Float2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2BooleanMap;
+import it.unimi.dsi.fastutil.floats.Float2BooleanMaps;
 import it.unimi.dsi.fastutil.floats.Float2BooleanSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2ByteMap;
+import it.unimi.dsi.fastutil.floats.Float2ByteMaps;
 import it.unimi.dsi.fastutil.floats.Float2ByteSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2CharMap;
+import it.unimi.dsi.fastutil.floats.Float2CharMaps;
 import it.unimi.dsi.fastutil.floats.Float2CharSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2DoubleMap;
+import it.unimi.dsi.fastutil.floats.Float2DoubleMaps;
 import it.unimi.dsi.fastutil.floats.Float2DoubleSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2FloatMap;
+import it.unimi.dsi.fastutil.floats.Float2FloatMaps;
 import it.unimi.dsi.fastutil.floats.Float2FloatSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2IntMap;
+import it.unimi.dsi.fastutil.floats.Float2IntMaps;
 import it.unimi.dsi.fastutil.floats.Float2IntSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2LongMap;
+import it.unimi.dsi.fastutil.floats.Float2LongMaps;
 import it.unimi.dsi.fastutil.floats.Float2LongSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectMap;
+import it.unimi.dsi.fastutil.floats.Float2ObjectMaps;
 import it.unimi.dsi.fastutil.floats.Float2ObjectSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.floats.Float2ShortMap;
+import it.unimi.dsi.fastutil.floats.Float2ShortMaps;
 import it.unimi.dsi.fastutil.floats.Float2ShortSortedMap;
 import it.unimi.dsi.fastutil.floats.FloatAVLTreeSet;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
@@ -255,38 +297,47 @@ import it.unimi.dsi.fastutil.floats.FloatStack;
 import it.unimi.dsi.fastutil.ints.Int2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2BooleanMap;
+import it.unimi.dsi.fastutil.ints.Int2BooleanMaps;
 import it.unimi.dsi.fastutil.ints.Int2BooleanSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ByteMap;
+import it.unimi.dsi.fastutil.ints.Int2ByteMaps;
 import it.unimi.dsi.fastutil.ints.Int2ByteSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2CharMap;
+import it.unimi.dsi.fastutil.ints.Int2CharMaps;
 import it.unimi.dsi.fastutil.ints.Int2CharSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
+import it.unimi.dsi.fastutil.ints.Int2DoubleMaps;
 import it.unimi.dsi.fastutil.ints.Int2DoubleSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
+import it.unimi.dsi.fastutil.ints.Int2FloatMaps;
 import it.unimi.dsi.fastutil.ints.Int2FloatSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMaps;
 import it.unimi.dsi.fastutil.ints.Int2IntSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2LongMap;
+import it.unimi.dsi.fastutil.ints.Int2LongMaps;
 import it.unimi.dsi.fastutil.ints.Int2LongSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
 import it.unimi.dsi.fastutil.ints.Int2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ShortMap;
+import it.unimi.dsi.fastutil.ints.Int2ShortMaps;
 import it.unimi.dsi.fastutil.ints.Int2ShortSortedMap;
 import it.unimi.dsi.fastutil.ints.IntAVLTreeSet;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -301,38 +352,47 @@ import it.unimi.dsi.fastutil.ints.IntStack;
 import it.unimi.dsi.fastutil.longs.Long2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2BooleanMap;
+import it.unimi.dsi.fastutil.longs.Long2BooleanMaps;
 import it.unimi.dsi.fastutil.longs.Long2BooleanSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
+import it.unimi.dsi.fastutil.longs.Long2ByteMaps;
 import it.unimi.dsi.fastutil.longs.Long2ByteSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2CharMap;
+import it.unimi.dsi.fastutil.longs.Long2CharMaps;
 import it.unimi.dsi.fastutil.longs.Long2CharSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
+import it.unimi.dsi.fastutil.longs.Long2DoubleMaps;
 import it.unimi.dsi.fastutil.longs.Long2DoubleSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2FloatMap;
+import it.unimi.dsi.fastutil.longs.Long2FloatMaps;
 import it.unimi.dsi.fastutil.longs.Long2FloatSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
+import it.unimi.dsi.fastutil.longs.Long2IntMaps;
 import it.unimi.dsi.fastutil.longs.Long2IntSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongMaps;
 import it.unimi.dsi.fastutil.longs.Long2LongSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectSortedMap;
 import it.unimi.dsi.fastutil.longs.Long2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.longs.Long2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ShortMap;
+import it.unimi.dsi.fastutil.longs.Long2ShortMaps;
 import it.unimi.dsi.fastutil.longs.Long2ShortSortedMap;
 import it.unimi.dsi.fastutil.longs.LongAVLTreeSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -347,38 +407,47 @@ import it.unimi.dsi.fastutil.longs.LongStack;
 import it.unimi.dsi.fastutil.objects.Object2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
 import it.unimi.dsi.fastutil.objects.Object2BooleanSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
+import it.unimi.dsi.fastutil.objects.Object2ByteMaps;
 import it.unimi.dsi.fastutil.objects.Object2ByteSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2CharMap;
+import it.unimi.dsi.fastutil.objects.Object2CharMaps;
 import it.unimi.dsi.fastutil.objects.Object2CharSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMaps;
 import it.unimi.dsi.fastutil.objects.Object2DoubleSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMaps;
 import it.unimi.dsi.fastutil.objects.Object2LongSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectSortedMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMaps;
 import it.unimi.dsi.fastutil.objects.Object2ShortSortedMap;
 import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -386,38 +455,47 @@ import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.shorts.Short2BooleanAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2BooleanMap;
+import it.unimi.dsi.fastutil.shorts.Short2BooleanMaps;
 import it.unimi.dsi.fastutil.shorts.Short2BooleanSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2ByteAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2ByteLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ByteMap;
+import it.unimi.dsi.fastutil.shorts.Short2ByteMaps;
 import it.unimi.dsi.fastutil.shorts.Short2ByteSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2CharAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2CharLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2CharMap;
+import it.unimi.dsi.fastutil.shorts.Short2CharMaps;
 import it.unimi.dsi.fastutil.shorts.Short2CharSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2DoubleAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2DoubleLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2DoubleMap;
+import it.unimi.dsi.fastutil.shorts.Short2DoubleMaps;
 import it.unimi.dsi.fastutil.shorts.Short2DoubleSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2FloatAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2FloatLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2FloatMap;
+import it.unimi.dsi.fastutil.shorts.Short2FloatMaps;
 import it.unimi.dsi.fastutil.shorts.Short2FloatSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2IntAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2IntLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2IntMap;
+import it.unimi.dsi.fastutil.shorts.Short2IntMaps;
 import it.unimi.dsi.fastutil.shorts.Short2IntSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2LongAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2LongLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2LongMap;
+import it.unimi.dsi.fastutil.shorts.Short2LongMaps;
 import it.unimi.dsi.fastutil.shorts.Short2LongSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMaps;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectSortedMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortAVLTreeMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortMap;
+import it.unimi.dsi.fastutil.shorts.Short2ShortMaps;
 import it.unimi.dsi.fastutil.shorts.Short2ShortSortedMap;
 import it.unimi.dsi.fastutil.shorts.ShortAVLTreeSet;
 import it.unimi.dsi.fastutil.shorts.ShortArrayList;
@@ -432,7 +510,8 @@ import it.unimi.dsi.fastutil.shorts.ShortStack;
 
 public final class YamlCollectionCreator
 {
-    private static final Map<Class<?>, IntFunction<?>> collectionCreators = new ConcurrentHashMap<>(20);
+    private static final Map<Class<?>, IntFunction<?>> collectionCreators   = new ConcurrentHashMap<>(20);
+    private static final Map<Class<?>, Function<?, ?>> unmodifiableWrappers = new ConcurrentHashMap<>(20);
 
     private YamlCollectionCreator()
     {
@@ -440,11 +519,11 @@ public final class YamlCollectionCreator
 
     static
     {
-        JavaCollections.putAllCollections(collectionCreators);
+        JavaCollections.putAllCollections(collectionCreators, unmodifiableWrappers);
         Class<?> aClass = DioriteReflectionUtils.tryGetCanonicalClass("it.unimi.dsi.fastutil.Maps");
         if (aClass != null)
         {
-            FastUtilsCollections.putAllCollections(collectionCreators);
+            FastUtilsCollections.putAllCollections(collectionCreators, unmodifiableWrappers);
         }
     }
 
@@ -480,6 +559,68 @@ public final class YamlCollectionCreator
         throw new YAMLException("Can't create collection: " + clazz);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
+    public static <T> T makeUnmodifiable(Object collection)
+    {
+        Function function = unmodifiableWrappers.get(collection.getClass());
+        if (function == null)
+        {
+            for (Entry<Class<?>, Function<?, ?>> entry : unmodifiableWrappers.entrySet())
+            {
+                if (entry.getKey().isInstance(collection))
+                {
+                    function = entry.getValue();
+                    break;
+                }
+            }
+            if (function != null)
+            {
+                unmodifiableWrappers.put(collection.getClass(), function);
+                return (T) function.apply(collection);
+            }
+
+            if (collection instanceof Collection)
+            {
+                if (collection instanceof Set)
+                {
+                    if (collection instanceof NavigableSet)
+                    {
+                        return (T) Collections.unmodifiableNavigableSet((NavigableSet<?>) collection);
+                    }
+                    if (collection instanceof SortedSet)
+                    {
+                        return (T) Collections.unmodifiableSortedSet((SortedSet<?>) collection);
+                    }
+                    return (T) Collections.unmodifiableSet((Set<?>) collection);
+                }
+                if (collection instanceof List)
+                {
+                    return (T) Collections.unmodifiableList((List<?>) collection);
+                }
+                return (T) Collections.unmodifiableCollection((Collection<?>) collection);
+            }
+            else if (collection instanceof Map)
+            {
+                if (collection instanceof NavigableMap)
+                {
+                    return (T) Collections.unmodifiableNavigableMap((NavigableMap<?, ?>) collection);
+                }
+                if (collection instanceof SortedMap)
+                {
+                    return (T) Collections.unmodifiableSortedMap((SortedMap<?, ?>) collection);
+                }
+                return (T) Collections.unmodifiableMap((Map<?, ?>) collection);
+            }
+            else
+            {
+                new RuntimeException("Can't make this collection unmodifiable: " + collection.getClass().getName()).printStackTrace();
+                return (T) collection;
+            }
+        }
+        return (T) function.apply(collection);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T createCollection(Class<?> clazz, int size)
     {
@@ -489,6 +630,11 @@ public final class YamlCollectionCreator
     public static <T> void addCollection(Class<T> type, IntFunction<T> func)
     {
         collectionCreators.put(type, func);
+    }
+
+    private static <T> void safePutUnmodf(Map<Class<?>, Function<?, ?>> map, Class<T> type, Function<T, Object> func)
+    {
+        map.put(type, func);
     }
 
     private static <T> void safePut(Map<Class<?>, IntFunction<?>> map, Class<T> type, IntFunction<T> func)
@@ -502,7 +648,7 @@ public final class YamlCollectionCreator
         {
         }
 
-        static void putAllCollections(Map<Class<?>, IntFunction<?>> map)
+        static void putAllCollections(Map<Class<?>, IntFunction<?>> map, Map<Class<?>, Function<?, ?>> unmodMap)
         {
             safePut(map, ArrayList.class, ArrayList::new);
             safePut(map, HashSet.class, LinkedHashSet::new);
@@ -536,7 +682,7 @@ public final class YamlCollectionCreator
         {
         }
 
-        static void putAllCollections(Map<Class<?>, IntFunction<?>> map)
+        static void putAllCollections(Map<Class<?>, IntFunction<?>> map, Map<Class<?>, Function<?, ?>> unmodMap)
         {
             safePut(map, Collection.class, ObjectArrayList::new);
             {
@@ -771,6 +917,87 @@ public final class YamlCollectionCreator
                 safePut(map, Double2FloatSortedMap.class, x -> new Double2FloatAVLTreeMap());
                 safePut(map, Double2DoubleSortedMap.class, x -> new Double2DoubleAVLTreeMap());
             }
+
+            safePutUnmodf(unmodMap, Object2ObjectMap.class, Object2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2ObjectMap.class, Object2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2BooleanMap.class, Object2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2ByteMap.class, Object2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2CharMap.class, Object2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2ShortMap.class, Object2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2IntMap.class, Object2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2LongMap.class, Object2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2FloatMap.class, Object2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Object2DoubleMap.class, Object2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Byte2ObjectMap.class, Byte2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2BooleanMap.class, Byte2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2ByteMap.class, Byte2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2CharMap.class, Byte2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2ShortMap.class, Byte2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2IntMap.class, Byte2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2LongMap.class, Byte2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2FloatMap.class, Byte2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Byte2DoubleMap.class, Byte2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Char2ObjectMap.class, Char2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2BooleanMap.class, Char2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2ByteMap.class, Char2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2CharMap.class, Char2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2ShortMap.class, Char2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2IntMap.class, Char2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2LongMap.class, Char2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2FloatMap.class, Char2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Char2DoubleMap.class, Char2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Short2ObjectMap.class, Short2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2BooleanMap.class, Short2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2ByteMap.class, Short2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2CharMap.class, Short2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2ShortMap.class, Short2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2IntMap.class, Short2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2LongMap.class, Short2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2FloatMap.class, Short2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Short2DoubleMap.class, Short2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Int2ObjectMap.class, Int2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2BooleanMap.class, Int2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2ByteMap.class, Int2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2CharMap.class, Int2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2ShortMap.class, Int2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2IntMap.class, Int2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2LongMap.class, Int2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2FloatMap.class, Int2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Int2DoubleMap.class, Int2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Long2ObjectMap.class, Long2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2BooleanMap.class, Long2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2ByteMap.class, Long2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2CharMap.class, Long2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2ShortMap.class, Long2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2IntMap.class, Long2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2LongMap.class, Long2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2FloatMap.class, Long2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Long2DoubleMap.class, Long2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Float2ObjectMap.class, Float2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2BooleanMap.class, Float2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2ByteMap.class, Float2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2CharMap.class, Float2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2ShortMap.class, Float2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2IntMap.class, Float2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2LongMap.class, Float2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2FloatMap.class, Float2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Float2DoubleMap.class, Float2DoubleMaps::unmodifiable);
+
+            safePutUnmodf(unmodMap, Double2ObjectMap.class, Double2ObjectMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2BooleanMap.class, Double2BooleanMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2ByteMap.class, Double2ByteMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2CharMap.class, Double2CharMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2ShortMap.class, Double2ShortMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2IntMap.class, Double2IntMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2LongMap.class, Double2LongMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2FloatMap.class, Double2FloatMaps::unmodifiable);
+            safePutUnmodf(unmodMap, Double2DoubleMap.class, Double2DoubleMaps::unmodifiable);
         }
     }
 }
