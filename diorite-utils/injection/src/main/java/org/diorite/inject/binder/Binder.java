@@ -369,6 +369,8 @@ public interface Binder<T>
      *
      * @param a
      *         requested qualifier type.
+     * @param <A>
+     *         requested qualifier type.
      * @param predicate
      *         predicate for qualifier data.
      *
@@ -392,7 +394,11 @@ public interface Binder<T>
      *
      * @param a
      *         requested qualifier type.
+     * @param <A>
+     *         requested qualifier type.
      * @param b
+     *         requested qualifier type.
+     * @param <B>
      *         requested qualifier type.
      * @param predicate
      *         predicate for qualifier data.
@@ -422,9 +428,15 @@ public interface Binder<T>
      *
      * @param a
      *         requested qualifier type.
+     * @param <A>
+     *         requested qualifier type.
      * @param b
      *         requested qualifier type.
+     * @param <B>
+     *         requested qualifier type.
      * @param c
+     *         requested qualifier type.
+     * @param <C>
      *         requested qualifier type.
      * @param predicate
      *         predicate for qualifier data.
@@ -456,10 +468,12 @@ public interface Binder<T>
     }
 
     /**
-     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br>
      * Adding dynamic qualifier register and ends binder configuration.
      *
      * @param a
+     *         requested qualifier type.
+     * @param <A>
      *         requested qualifier type.
      * @param dynamicPattern
      *         predicate for qualifier data, and function returning value to inject.
@@ -478,12 +492,16 @@ public interface Binder<T>
     }
 
     /**
-     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br>
      * Adding dynamic qualifier register and ends binder configuration.
      *
      * @param a
      *         requested qualifier type.
+     * @param <A>
+     *         requested qualifier type.
      * @param b
+     *         requested qualifier type.
+     * @param <B>
      *         requested qualifier type.
      * @param dynamicPattern
      *         predicate for qualifier data, and function returning value to inject.
@@ -507,14 +525,20 @@ public interface Binder<T>
     }
 
     /**
-     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br/>
+     * Adds dynamic qualifier pattern that checks if member is annotated with given qualifier and if qualifier data matches given pattern. <br>
      * Adding dynamic qualifier register and ends binder configuration.
      *
      * @param a
      *         requested qualifier type.
+     * @param <A>
+     *         requested qualifier type.
      * @param b
      *         requested qualifier type.
+     * @param <B>
+     *         requested qualifier type.
      * @param c
+     *         requested qualifier type.
+     * @param <C>
      *         requested qualifier type.
      * @param dynamicPattern
      *         predicate for qualifier data, and function returning value to inject.

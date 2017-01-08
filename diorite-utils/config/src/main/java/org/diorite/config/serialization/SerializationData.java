@@ -52,7 +52,7 @@ public interface SerializationData
     void setComments(DocumentComments comments);
 
     /**
-     * Change how {@link Boolean#TRUE} value is saved to config. <br/>
+     * Change how {@link Boolean#TRUE} value is saved to config. <br>
      * Note that this value must be supported by serializer.
      *
      * @param str
@@ -61,7 +61,7 @@ public interface SerializationData
     void setTrueValue(String str);
 
     /**
-     * Change how {@link Boolean#FALSE} value is saved to config. <br/>
+     * Change how {@link Boolean#FALSE} value is saved to config. <br>
      * Note that this value must be supported by serializer.
      *
      * @param str
@@ -103,7 +103,7 @@ public interface SerializationData
     <T> void add(String key, @Nullable T value, Class<T> type);
 
     /**
-     * Adds value to serializer data instance with given formatting, note that you need to manually deserialize that value in deserializer. <br/>
+     * Adds value to serializer data instance with given formatting, note that you need to manually deserialize that value in deserializer. <br>
      * Null values are saved without formatting.
      *
      * @param key
@@ -156,7 +156,7 @@ public interface SerializationData
     }
 
     /**
-     * Adds numeric value to serializer with padding. <br/>
+     * Adds numeric value to serializer with padding. <br>
      * Like setting padding to 3 and saving value of 35 will be saved as '035'
      *
      * @param key
@@ -214,7 +214,7 @@ public interface SerializationData
 
     /**
      * Adds numeric value to serializer as hex value (like 0xABCDEF), it must be later read back by proper function in {@link DeserializationData}.
-     * <br/>
+     * <br>
      * You can also set custom padding value, so values like 0xff, will be saved as 0x0000ff (padding = 6)
      *
      * @param key
@@ -320,7 +320,7 @@ public interface SerializationData
     <T> void addMapAsListWithKeys(String key, @Nullable Map<?, ? extends T> value, Class<T> type, String keyPropertyName);
 
     /**
-     * Adds all map values to this data. <br/>
+     * Adds all map values to this data. <br>
      * This method works only if key type has registered String serializer or it is some primitive/simple type.
      *
      * @param key
@@ -339,13 +339,15 @@ public interface SerializationData
     <K, T> void addMap(String key, @Nullable Map<? extends K, ? extends T> value, Class<K> keyType, Class<T> type);
 
     /**
-     * Adds all map values to this data. <br/>
+     * Adds all map values to this data. <br>
      * This method works only if key type has registered String serializer.
      *
      * @param key
      *         key of value, use empty string to add values directly to backing map.
      * @param value
      *         value to serialize.
+     * @param type
+     *         type of elements.
      * @param <K>
      *         type of map keys.
      * @param <T>

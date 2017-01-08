@@ -25,14 +25,14 @@
 package org.diorite.config.serialization;
 
 /**
- * Represent type that is serializable from/to string. <br/>
+ * Represent type that is serializable from/to string. <br>
  * Type implementing that interface must also implement one of following methods: (in order of searching)
  * <ol>
  * <li>static T deserializeFromString(String)</li>
  * <li>static T valueOf(String)</li>
  * <li>constructor(String)</li>
  * </ol>
- * Each method can also throw DeserializationException. <br/>
+ * Each method can also throw DeserializationException. <br>
  */
 public interface StringSerializable
 {

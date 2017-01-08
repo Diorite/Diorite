@@ -48,7 +48,7 @@ public interface Controller
     @SuppressWarnings("rawtypes") DynamicProvider NULL_DYNAMIC_PROVIDER = (a, b) -> null;
 
     /**
-     * Register custom scope handler, like {@link org.diorite.inject.impl.scopes.SingletonScopeHandler} for {@link Singleton} annotation. <br/>
+     * Register custom scope handler, like {@link org.diorite.inject.impl.scopes.SingletonScopeHandler} for {@link Singleton} annotation. <br>
      * Each value have own scope handler instance, so Supplier should always return new instance of handler.
      *
      * @param scope
@@ -60,12 +60,12 @@ public interface Controller
      * @param <S>
      *         type of scope annotation.
      *
-     * @return
+     * @return previous supplier if any.
      */
     <T, S extends Annotation> Supplier<ScopeHandler<T, S>> registerScopeHandler(Class<S> scope, Supplier<ScopeHandler<T, S>> handler);
 
     /**
-     * Adds transformer of annotation, transformers are used to alert annotation data based on member. <br/>
+     * Adds transformer of annotation, transformers are used to alert annotation data based on member. <br>
      * Like empty name in {@link Named} annotation can be replaced with member name.
      *
      * @param type
@@ -131,7 +131,7 @@ public interface Controller
     <T> Binder<T> bindToClass(Predicate<Class<?>> typePredicate);
 
     /**
-     * Register class in controller. <br/>
+     * Register class in controller. <br>
      * Only for usage of redefined classes.
      *
      * @param clazz

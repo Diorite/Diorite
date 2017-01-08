@@ -39,7 +39,7 @@ import org.objectweb.asm.Type;
 public interface ClassDefinition
 {
     /**
-     * Returns raw bytecode of class. <br/>
+     * Returns raw bytecode of class. <br>
      * The content of this array must not be modified.
      *
      * @return raw bytecode of class.
@@ -69,7 +69,7 @@ public interface ClassDefinition
     ProtectionDomain getProtectedDomain();
 
     /**
-     * Apply new bytecode for this class. <br/>
+     * Apply new bytecode for this class. <br>
      * Method can be only used in {@link ClassTransformerListener#onClassDefinition(Instrumentation, ClassDefinition)}
      *
      * @param bytecode

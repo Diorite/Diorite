@@ -27,13 +27,13 @@ package org.diorite.unsafe;
 import java.lang.instrument.Instrumentation;
 
 /**
- * Class load listener interface, allows for interacting with classes that aren't yet loaded. <br/>
+ * Class load listener interface, allows for interacting with classes that aren't yet loaded. <br>
  * It is based on java instrumentation, so all rules from instrumentations applies here too.
  */
 public interface ClassTransformerListener
 {
     /**
-     * Invoked when instrumentation {@link java.lang.instrument.ClassFileTransformer} will find class matching this listener pattern. <br/>
+     * Invoked when instrumentation {@link java.lang.instrument.ClassFileTransformer} will find class matching this listener pattern. <br>
      * Invoked only once, when class is defined.
      *
      * @param instrumentation
@@ -46,7 +46,7 @@ public interface ClassTransformerListener
     }
 
     /**
-     * Invoked when instrumentation {@link java.lang.instrument.ClassFileTransformer} will find class matching this listener pattern.<br/>
+     * Invoked when instrumentation {@link java.lang.instrument.ClassFileTransformer} will find class matching this listener pattern.<br>
      * Invoked on each retransform.
      *
      * @param instrumentation

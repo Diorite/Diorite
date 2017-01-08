@@ -79,6 +79,9 @@ public interface ReflectGetter<E> extends ReflectElement
     /**
      * Returns {@link MethodHandle} for this getter method, and binds it to given object.
      *
+     * @param object
+     *         method handle will be bound to this object.
+     *
      * @return {@link MethodHandle} for this getter method.
      *
      * @see MethodHandle#bindTo(Object)

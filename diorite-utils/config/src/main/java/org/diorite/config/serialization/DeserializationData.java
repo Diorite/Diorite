@@ -58,7 +58,7 @@ public interface DeserializationData
     Serialization getSerializationInstance();
 
     /**
-     * Add string values that can be interpreted as {@link Boolean#TRUE} value when reading from config. <br/>
+     * Add string values that can be interpreted as {@link Boolean#TRUE} value when reading from config. <br>
      * Note that this value must be supported by deserializer too.
      *
      * @param strings
@@ -67,7 +67,7 @@ public interface DeserializationData
     void addTrueValues(String... strings);
 
     /**
-     * Add string values that can be interpreted as {@link Boolean#FALSE} value when reading from config. <br/>
+     * Add string values that can be interpreted as {@link Boolean#FALSE} value when reading from config. <br>
      * Note that this value must be supported by deserializer too.
      *
      * @param strings
@@ -93,7 +93,7 @@ public interface DeserializationData
     boolean containsKey(String key);
 
     /**
-     * Get and deserialize given object from this data instance. <br/>
+     * Get and deserialize given object from this data instance. <br>
      * If there is no value, or it is null, throw error.
      *
      * @param key
@@ -727,7 +727,7 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized and returned as list of values.<br/>
+     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized and returned as list of values.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -748,8 +748,8 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized as list of values. <br/>
-     * All deserialized values are added to given collection.<br/>
+     * Deserialize list on given key, if key contains Map instead of List, it will be deserialized as list of values. <br>
+     * All deserialized values are added to given collection.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -766,8 +766,8 @@ public interface DeserializationData
     <T, C extends Collection<T>> void getAsCollection(String key, Class<T> type, C collection);
 
     /**
-     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br/>
-     * If key contains Map value, keyMapper is still used, and all keys are updated.<br/>
+     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br>
+     * If key contains Map value, keyMapper is still used, and all keys are updated.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -790,8 +790,8 @@ public interface DeserializationData
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using {@link
-     * SerializationData#DEFAULT_KEY_PROPERTY} value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.<br/>
+     * SerializationData#DEFAULT_KEY_PROPERTY} value as map key. <br>
+     * If key contains Map value, key will be still updated if key property exists.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -815,8 +815,8 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.<br/>
+     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br>
+     * If key contains Map value, key will be still updated if key property exists.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -825,6 +825,8 @@ public interface DeserializationData
      *         type of keys.
      * @param type
      *         type of elements.
+     * @param keyPropertyName
+     *         name of key property for map.
      * @param <T>
      *         type of elements.
      * @param <K>
@@ -840,7 +842,7 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key, key type must be serializable to string.<br/>
+     * Deserialize map on given key, key type must be serializable to string.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -864,7 +866,7 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key using keyMapper to change string keys to key objects. <br/>
+     * Deserialize map on given key using keyMapper to change string keys to key objects. <br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -888,9 +890,9 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br/>
-     * If key contains Map value, keyMapper is still used, and all keys are updated.<br/>
-     * All deserialized values are added to given map.<br/>
+     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given key mapper. <br>
+     * If key contains Map value, keyMapper is still used, and all keys are updated.<br>
+     * All deserialized values are added to given map.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -910,8 +912,8 @@ public interface DeserializationData
 
     /**
      * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using {@link
-     * SerializationData#DEFAULT_KEY_PROPERTY} value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.<br/>
+     * SerializationData#DEFAULT_KEY_PROPERTY} value as map key. <br>
+     * If key contains Map value, key will be still updated if key property exists.<br>
      * All deserialized values are added to given map.
      *
      * @param key
@@ -935,9 +937,9 @@ public interface DeserializationData
     }
 
     /**
-     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br/>
-     * If key contains Map value, key will be still updated if key property exists.<br/>
-     * All deserialized values are added to given map.<br/>
+     * Deserialize map on given key, if key contains Collection instead of Map, all elements are added to map using given property value as map key. <br>
+     * If key contains Map value, key will be still updated if key property exists.<br>
+     * All deserialized values are added to given map.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -948,6 +950,8 @@ public interface DeserializationData
      *         type of elements.
      * @param map
      *         target map for deserialized elements.
+     * @param keyPropertyName
+     *         name of key property for map.
      * @param <K>
      *         type of keys
      * @param <T>
@@ -958,8 +962,8 @@ public interface DeserializationData
     <K, T, M extends Map<K, T>> void getAsMapWithKeys(String key, Class<K> keyType, Class<T> type, String keyPropertyName, M map);
 
     /**
-     * Deserialize map on given key, key type must be serializable to string.<br/>
-     * All deserialized values are added to given map.<br/>
+     * Deserialize map on given key, key type must be serializable to string.<br>
+     * All deserialized values are added to given map.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -976,14 +980,12 @@ public interface DeserializationData
      *         type of elements
      * @param <M>
      *         type of map.
-     *
-     * @return deserialized value.
      */
     <K, T, M extends Map<K, T>> void getMap(String key, Class<K> keyType, Class<T> type, M map);
 
     /**
-     * Deserialize map on given key using keyMapper to change string keys to key objects.<br/>
-     * All deserialized values are added to given map.<br/>
+     * Deserialize map on given key using keyMapper to change string keys to key objects.<br>
+     * All deserialized values are added to given map.<br>
      * Use empty key to deserialize map from root element.
      *
      * @param key
@@ -999,9 +1001,7 @@ public interface DeserializationData
      * @param <T>
      *         type of elements
      * @param <M>
-     *         type of map.
-     *
-     * @return deserialized value.
+     *         type of map.\
      */
     <K, T, M extends Map<K, T>> void getMap(String key, Function<String, K> keyMapper, Class<T> type, M map);
 

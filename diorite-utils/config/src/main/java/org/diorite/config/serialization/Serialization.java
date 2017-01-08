@@ -83,7 +83,7 @@ import org.diorite.config.serialization.snakeyaml.Yaml;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor;
 
 /**
- * Serialization manager, it allows to serialize and deserialize all registered types. <br/>
+ * Serialization manager, it allows to serialize and deserialize all registered types. <br>
  * It is used to serialize and deserialize both json and yaml.
  */
 public final class Serialization
@@ -273,8 +273,6 @@ public final class Serialization
      *         string serializer to register.
      * @param <T>
      *         serializer value type.
-     *
-     * @return old serializer if exists.
      */
     @SuppressWarnings("unchecked")
     public <T> void registerStringSerializer(StringSerializer<T> stringSerializer)
@@ -292,8 +290,6 @@ public final class Serialization
      *         serializable clazz to register.
      * @param <T>
      *         type of serializable class, must implement {@link Serializable} or contain {@link org.diorite.config.annotations.Serializable} annotations.
-     *
-     * @return old serializer if exists.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> void registerSerializable(Class<T> clazz)
@@ -922,8 +918,6 @@ public final class Serialization
      *         the object for which Json representation is to be created setting for Gson
      *
      * @return Json representation of {@code src}.
-     *
-     * @since 1.4
      */
     public JsonElement toJsonTree(Object src)
     {
@@ -944,8 +938,6 @@ public final class Serialization
      *         <pre> Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
      *
      * @return Json representation of {@code src}
-     *
-     * @since 1.4
      */
     public JsonElement toJsonTree(Object src, Type typeOfSrc)
     {
@@ -1008,7 +1000,6 @@ public final class Serialization
      *
      * @throws JsonIOException
      *         if there was a problem writing to the writer
-     * @since 1.2
      */
     public void toJson(Object src, Appendable writer) throws JsonIOException
     {
@@ -1031,7 +1022,6 @@ public final class Serialization
      *
      * @throws JsonIOException
      *         if there was a problem writing to the writer
-     * @since 1.2
      */
     public void toJson(Object src, Type typeOfSrc, Appendable writer) throws JsonIOException
     {
@@ -1043,8 +1033,13 @@ public final class Serialization
      * {@code writer}.
      *
      * @param src
+     *         the object for which JSON representation is to be created
      * @param typeOfSrc
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
      * @param writer
+     *         Writer to which the Json representation of src needs to be written.
      *
      * @throws JsonIOException
      *         if there was a problem writing to the writer
@@ -1061,8 +1056,6 @@ public final class Serialization
      *         root of a tree of {@link JsonElement}s
      *
      * @return JSON String representation of the tree
-     *
-     * @since 1.4
      */
     public String toJson(JsonElement jsonElement)
     {
@@ -1079,7 +1072,6 @@ public final class Serialization
      *
      * @throws JsonIOException
      *         if there was a problem writing to the writer
-     * @since 1.4
      */
     public void toJson(JsonElement jsonElement, Appendable writer) throws JsonIOException
     {
@@ -1090,6 +1082,12 @@ public final class Serialization
      * Returns a new JSON writer configured for the settings on this Gson instance.
      *
      * @param writer
+     *         writer to wrap.
+     *
+     * @return created json writer.
+     *
+     * @throws IOException
+     *         if write to writer fails.
      */
     public JsonWriter newJsonWriter(Writer writer) throws IOException
     {
@@ -1100,6 +1098,9 @@ public final class Serialization
      * Returns a new JSON reader configured for the settings on this Gson instance.
      *
      * @param reader
+     *         reader to wrap.
+     *
+     * @return created json reader.
      */
     public JsonReader newJsonReader(Reader reader)
     {
@@ -1109,8 +1110,10 @@ public final class Serialization
     /**
      * Writes the JSON for {@code jsonElement} to {@code writer}.
      *
-     * @param jsonElement
      * @param writer
+     *         Writer to which the Json representation needs to be written
+     * @param jsonElement
+     *         root of a tree of {@link JsonElement}s
      *
      * @throws JsonIOException
      *         if there was a problem writing to the writer
@@ -1134,6 +1137,8 @@ public final class Serialization
      *         the string from which the object is to be deserialized
      * @param classOfT
      *         the class of T
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      *
@@ -1157,6 +1162,8 @@ public final class Serialization
      *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
      *         Collection<Foo>}, you should use:
      *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is {@code null}.
      *
@@ -1184,6 +1191,8 @@ public final class Serialization
      *         the reader producing the Json from which the object is to be deserialized.
      * @param classOfT
      *         the class of T
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the string. Returns {@code null} if {@code json} is at EOF.
      *
@@ -1191,7 +1200,6 @@ public final class Serialization
      *         if there was a problem reading from the Reader
      * @throws JsonSyntaxException
      *         if json is not a valid representation for an object of type
-     * @since 1.2
      */
     public <T> T fromJson(Reader json, Class<T> classOfT) throws JsonSyntaxException, JsonIOException
     {
@@ -1210,6 +1218,8 @@ public final class Serialization
      *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
      *         Collection<Foo>}, you should use:
      *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is at EOF.
      *
@@ -1217,7 +1227,6 @@ public final class Serialization
      *         if there was a problem reading from the Reader
      * @throws JsonSyntaxException
      *         if json is not a valid representation for an object of type
-     * @since 1.2
      */
     public <T> T fromJson(Reader json, Type typeOfT) throws JsonIOException, JsonSyntaxException
     {
@@ -1230,7 +1239,15 @@ public final class Serialization
      * Since Type is not parameterized by T, this method is type unsafe and should be used carefully
      *
      * @param reader
+     *         the reader producing Json from which the object is to be deserialized
      * @param typeOfT
+     *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
+     *         Collection<Foo>}, you should use:
+     *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){} </pre>
+     * @param <T>
+     *         type of class.
+     *
+     * @return an object of type T from the json. Returns {@code null} if {@code json} is at EOF.
      *
      * @throws JsonIOException
      *         if there was a problem writing to the Reader
@@ -1255,12 +1272,13 @@ public final class Serialization
      *         the root of the parse tree of {@link JsonElement}s from which the object is to be deserialized
      * @param classOfT
      *         The class of T
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is {@code null}.
      *
      * @throws JsonSyntaxException
      *         if json is not a valid representation for an object of type typeOfT
-     * @since 1.3
      */
     public <T> T fromJson(JsonElement json, Class<T> classOfT) throws JsonSyntaxException
     {
@@ -1278,12 +1296,13 @@ public final class Serialization
      *         The specific genericized type of src. You can obtain this type by using the {@link TypeToken} class. For example, to get the type for {@code
      *         Collection<Foo>}, you should use:
      *         <pre> new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType(); </pre>
+     * @param <T>
+     *         type of class.
      *
      * @return an object of type T from the json. Returns {@code null} if {@code json} is {@code null}.
      *
      * @throws JsonSyntaxException
      *         if json is not a valid representation for an object of type typeOfT
-     * @since 1.3
      */
     public <T> T fromJson(JsonElement json, Type typeOfT) throws JsonSyntaxException
     {
@@ -1374,6 +1393,7 @@ public final class Serialization
      * @param data
      *         Java object to be serialized to YAML
      * @param output
+     *         output for yaml.
      */
     public void toYaml(Object data, Writer output)
     {
@@ -1492,6 +1512,8 @@ public final class Serialization
      *
      * @param node
      *         node to load.
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return loaded object.
      */
@@ -1508,6 +1530,8 @@ public final class Serialization
      *         node to load.
      * @param type
      *         type of node.
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return loaded object.
      */
@@ -1565,6 +1589,8 @@ public final class Serialization
      *         template of config object.
      * @param io
      *         data to load from (BOM must not be present)
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return parsed object
      */
@@ -1581,6 +1607,8 @@ public final class Serialization
      *         data to load from (BOM must not be present)
      * @param type
      *         Class of the object to be created
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return parsed object
      */
@@ -1597,6 +1625,8 @@ public final class Serialization
      *         YAML data to load from (BOM must not be present)
      * @param type
      *         Class of the object to be created
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return parsed object
      */
@@ -1613,6 +1643,8 @@ public final class Serialization
      *         data to load from (BOM is respected and removed)
      * @param type
      *         Class of the object to be created
+     * @param <T>
+     *         type of deserialized object.
      *
      * @return parsed object
      */

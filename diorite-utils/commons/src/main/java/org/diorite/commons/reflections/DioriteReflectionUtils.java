@@ -971,6 +971,8 @@ public final class DioriteReflectionUtils
      *         lookup name of the class, see {@link #getCanonicalClass(String)}.
      * @param params
      *         the expected parameters.
+     * @param <T>
+     *         Type of constructed object by this constructor.
      *
      * @return An object that invokes this constructor.
      *
@@ -990,6 +992,8 @@ public final class DioriteReflectionUtils
      *         a class to start with.
      * @param params
      *         the expected parameters.
+     * @param <T>
+     *         Type of constructed object by this constructor.
      *
      * @return An object that invokes this constructor.
      *
@@ -1011,6 +1015,8 @@ public final class DioriteReflectionUtils
      *         if method should throw exception when there is no given method.
      * @param params
      *         the expected parameters.
+     * @param <T>
+     *         Type of constructed object by this constructor.
      *
      * @return An object that invokes this constructor.
      *
@@ -1032,6 +1038,8 @@ public final class DioriteReflectionUtils
      *         if method should throw exception when there is no given method.
      * @param params
      *         the expected parameters.
+     * @param <T>
+     *         Type of constructed object by this constructor.
      *
      * @return An object that invokes this constructor.
      *

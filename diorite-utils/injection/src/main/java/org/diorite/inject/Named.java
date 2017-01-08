@@ -45,8 +45,13 @@ import java.lang.annotation.Retention;
 @Qualifier
 @Documented
 @Retention(RUNTIME)
-public @interface Named {
+public @interface Named
+{
 
-    /** The name. */
+    /**
+     * The name.
+     *
+     * @return name.
+     */
     String value() default "";
 }

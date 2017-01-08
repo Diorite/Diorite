@@ -62,7 +62,7 @@ public interface ConfigPropertyTemplate<T>
     String getName();
 
     /**
-     * Generate and returns default value for this template. <br/>
+     * Generate and returns default value for this template. <br>
      * This value should never return null for primitive types!
      *
      * @param config
