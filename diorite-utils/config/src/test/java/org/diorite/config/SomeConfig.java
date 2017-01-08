@@ -93,4 +93,12 @@ public interface SomeConfig extends Config
     {
         return metaObject.getName();
     }
+
+    default TestEnum getEnumValue(){return TestEnum.A;}
+
+    void setEnumValue(TestEnum testEnum);
+
+    enum TestEnum{
+        A,B,C
+    }
 }

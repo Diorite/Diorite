@@ -35,6 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.diorite.commons.io.StringBuilderWriter;
+import org.diorite.config.SomeConfig.TestEnum;
 import org.diorite.config.serialization.MetaObject;
 import org.diorite.config.serialization.MetaValue;
 import org.diorite.config.serialization.SerializationTest;
@@ -60,6 +61,9 @@ public class ConfigTest
         SomeConfig someConfig = configTemplate.create();
         Assert.assertNotNull(someConfig);
 
+        Assert.assertNotNull(someConfig.getEnumValue());
+        someConfig.setEnumValue(TestEnum.C);
+        Assert.assertSame(TestEnum.C, someConfig.getEnumValue());
         this.testNicknames(someConfig);
         Assert.assertNotNull(someConfig.getSpecialData());
         someConfig.setStorage(SerializationTest.prepareObject());
