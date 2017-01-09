@@ -367,16 +367,16 @@ public final class ConfigInvocationHandler implements InvocationHandler
             }
             {
                 Method m = clazz.getMethod("values");
-                this.registerMethod(clazz, m, (args) -> this.valuesImpl());
+                this.registerMethod(clazz, m, (args) -> this.valuesImpl(false));
             }
             {
                 Method m = clazz.getMethod("entrySet");
-                this.registerMethod(clazz, m, (args) -> this.entrySetImpl());
+                this.registerMethod(clazz, m, (args) -> this.entrySetImpl(false));
             }
 
             {
                 Method m = Object.class.getMethod("toString");
-                this.registerMethod(m, (args) -> this.toStringImpl());
+                this.registerMethod(m, (args) -> this.toStringImpl(true));
             }
             {
                 Method m = Object.class.getMethod("hashCode");
@@ -815,12 +815,12 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return keys;
     }
 
-    private Collection<Object> valuesImpl()
+    private Collection<Object> valuesImpl(boolean raw)
     {
         Collection<Object> values = new ArrayList<>(20);
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            values.add(value.getPropertyValue());
+            values.add(raw ? value.getRawValue() : value.getPropertyValue());
         }
         for (Node node : this.simpleDynamicValues.values())
         {
@@ -830,13 +830,13 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return values;
     }
 
-    private Set<Entry<String, Object>> entrySetImpl()
+    private Set<Entry<String, Object>> entrySetImpl(boolean raw)
     {
         Set<Entry<String, Object>> result = new HashSet<>(20);
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getPropertyValue()));
+            result.add(new SimpleEntry<>(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue()));
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
@@ -850,13 +850,13 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return result;
     }
 
-    private Map<String, Object> toMap()
+    private Map<String, Object> toMap(boolean raw)
     {
         Map<String, Object> result = new LinkedHashMap<>(20);
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.put(entry.getKey(), entry.getValue().getPropertyValue());
+            result.put(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
@@ -864,20 +864,20 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
-            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toMap());
+            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toMap(raw));
         }
 
         return result;
     }
 
-    private String toStringImpl()
+    private String toStringImpl(boolean raw)
     {
         ToStringBuilder builder = new ToStringBuilder(this.config);
         builder.append(this.template.getConfigType().getName());
         builder.append(this.bindFile);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            builder.append(entry.getKey(), entry.getValue().getPropertyValue());
+            builder.append(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
@@ -892,7 +892,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private int hashCodeImpl()
     {
-        return this.entrySetImpl().hashCode();
+        return this.entrySetImpl(true).hashCode();
     }
 
     private boolean equalsImpl(Object object)
@@ -905,7 +905,16 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return false;
         }
-        return this.entrySetImpl().equals(((Config) object).entrySet());
+        Config config = (Config) object;
+        if (this.template.getConfigType().isInstance(config) && Proxy.isProxyClass(config.getClass()))
+        {
+            InvocationHandler invocationHandler = Proxy.getInvocationHandler(config);
+            if (invocationHandler instanceof ConfigInvocationHandler)
+            {
+                return this.entrySetImpl(true).equals(((ConfigInvocationHandler) invocationHandler).entrySetImpl(true));
+            }
+        }
+        return this.entrySetImpl(true).equals(config.entrySet());
     }
 
     @Nullable
