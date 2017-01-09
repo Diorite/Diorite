@@ -86,24 +86,24 @@ public final class DioriteMain
     public static void main(String[] args)
     {
         OptionParser parser = new OptionParser();
-        parser.acceptsAll(Collections.singletonList("?"), "Print help");
-        parser.acceptsAll(Arrays.asList("v", "version"), "Print version");
-        parser.acceptsAll(Collections.singletonList("debug"), "Enable debug mode");
-        parser.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level").withRequiredArg()
+        parser.acceptsAll(Collections.singletonList("?"), "Print help.");
+        parser.acceptsAll(Arrays.asList("v", "version"), "Print version.");
+        parser.acceptsAll(Collections.singletonList("debug"), "Enable debug mode.");
+        parser.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level.").withRequiredArg()
               .ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
-        parser.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on").withRequiredArg().ofType(Integer.class).describedAs("port")
+        parser.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on.").withRequiredArg().ofType(Integer.class).describedAs("port")
               .defaultsTo(Diorite.DEFAULT_PORT);
-        parser.acceptsAll(Arrays.asList("hostname", "h"), "hostname to listen on").withRequiredArg().ofType(String.class).describedAs("hostname")
+        parser.acceptsAll(Arrays.asList("hostname", "h"), "Hostname to listen on.").withRequiredArg().ofType(String.class).describedAs("hostname")
               .defaultsTo("localhost");
-        parser.acceptsAll(Arrays.asList("online-mode", "online", "o"), "online mode of server").withRequiredArg().ofType(OnlineMode.class)
+        parser.acceptsAll(Arrays.asList("online-mode", "online", "o"), "Online mode of server.").withRequiredArg().ofType(OnlineMode.class)
               .describedAs("online").defaultsTo(OnlineMode.TRUE);
         parser.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config")
               .defaultsTo(new File("diorite.yml"));
-        parser.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Each x seconds server will send keep alive packet to players")
+        parser.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Every x seconds server will send keep alive packet to players.")
               .withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
         parser.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class)
               .describedAs("netty").defaultsTo(4);
-        parser.acceptsAll(Collections.singletonList("noconsole"), "Disables the console");
+        parser.acceptsAll(Collections.singletonList("noconsole"), "Disables the console.");
         OptionSet options;
         try
         {
@@ -149,7 +149,7 @@ public final class DioriteMain
         dioriteConfig.bindFile(configFile);
         if (! configFile.exists())
         {
-            logger.info("Config file ('" + configFile.getAbsolutePath() + "') don't exist yet! Creating new one...");
+            logger.info("Config file ('" + configFile.getAbsolutePath() + "') Doesn't exist yet! Creating new one...");
             try
             {
                 configFile.createNewFile();
@@ -157,7 +157,7 @@ public final class DioriteMain
             }
             catch (IOException e)
             {
-                throw new RuntimeException("Can't crate config file: " + configFile.getAbsolutePath(), e);
+                throw new RuntimeException("Can't create config file: " + configFile.getAbsolutePath(), e);
             }
         }
         else
@@ -176,7 +176,7 @@ public final class DioriteMain
     {
         try (Formatter out = new Formatter(new LoggerOutputStream(logger, java.util.logging.Level.INFO)))
         {
-            out.format("%s%n", "Starting diorite server: '" + config.getServerName() + "'");
+            out.format("%s%n", "Starting Diorite server: '" + config.getServerName() + "'");
             out.format("%-30s %s%n", "  Enabled languages: ", Arrays.toString(config.getLanguages()));
             out.format("%-30s %s%n", "  Resource pack: ", config.getResourcePack());
             out.format("%-30s %s%n", "  Max players: ", config.getMaxPlayers());

@@ -45,11 +45,11 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
  * Configuration file of diorite, remember that config object will not reflect changes at runtime, like changing MOTD using diorite API, will not change MOTD
  * returned by instance of this class.
  */
-@Header({"Welcome in diorite configuration file!"})
+@Header({"Welcome to the diorite configuration file!"})
 @Footer("End of file ;)")
 public interface DioriteConfig extends Config
 {
-    @Comment("List of IPs to be bound.")
+    @Comment("List of IPs to be bound to.")
     @Unmodifiable
     @MapTypes(keyType = String.class, valueType = int.class)
     default Object2IntMap<String> getHosts()
@@ -65,10 +65,10 @@ public interface DioriteConfig extends Config
     @Comment("Default server motd, it can be changed at runtime.")
     default String getMotd() {return "  &fThis server is using &9diorite&f!\n    &7<&8==== &a#&9OnlyDiorite &8====&7>";}
 
-    @Nullable @Comment("Enables GameSpy4 protocol server listener. Used to get information about server by other services")
+    @Nullable @Comment("Enables GameSpy4 protocol server listener. Used to get information about server by other services.")
     Integer getQueryPort();
 
-    @Nullable @Comment("Port for rcon (remote access to the server console)")
+    @Nullable @Comment("Port for rcon (remote access to the server console).")
     Integer getRconPort();
 
     @Comment("Password to rcon.")
@@ -89,10 +89,10 @@ public interface DioriteConfig extends Config
     @Comment("Amount of netty event loop threads.")
     default int getNettyThreads() {return 4;}
 
-    @Comment("The maximum number of players on server,")
+    @Comment("The maximum number of players on server.")
     default int getMaxPlayers() {return 10;}
 
-    @Comment("Players are kicked if they are idle for too long. (in seconds)")
+    @Comment("Players are kicked if they are idle for too long. (In seconds)")
     default int getPlayerIdleTimeout() {return 600;}
 
     @Comment("Optional URI to a resource pack. Set to null to disable.")
@@ -120,10 +120,10 @@ public interface DioriteConfig extends Config
     @Comment("Path to file with UUID/nicknames of players added to whitelist.")
     default File getWhiteListFile() {return new File("whitelist.yml");}
 
-    @Comment("Languages to load, by enabling more languages you may allow players to select own one.")
+    @Comment("Languages to load, by enabling more languages you are allowing players to select one.")
     default Locale[] getLanguages() {return new Locale[]{Locale.forLanguageTag("en-US")};}
 
-    @Comment("Metrics UUID")
+    @Comment("Metrics UUID.")
     default UUID getMetricsUuid() {return UUID.randomUUID();}
 
     /**
