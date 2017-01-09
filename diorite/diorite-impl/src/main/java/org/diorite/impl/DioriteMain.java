@@ -48,7 +48,10 @@ import org.diorite.DioriteConfig.OnlineMode;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.config.ConfigManager;
 import org.diorite.config.ConfigTemplate;
+import org.diorite.inject.Controller;
 import org.diorite.inject.Injection;
+import org.diorite.inject.Named;
+import org.diorite.inject.Qualifiers;
 
 import io.netty.util.ResourceLeakDetector;
 import joptsimple.OptionParser;
@@ -164,16 +167,24 @@ public final class DioriteMain
         {
             dioriteConfig.load();
         }
-        printDioriteHello(dioriteConfig);
+        addBindings(dioriteConfig);
+
+        DioriteServer dioriteServer = new DioriteServer();
+        dioriteServer.start();
+        printDioriteHello(dioriteServer);
     }
 
-    private static void addLoggerBinder()
+    private static void addBindings(DioriteConfig config)
     {
-        Injection.getController().bindToClass(Logger.class).with().toInstance(logger);
+        Controller controller = Injection.getController();
+        controller.bindToClass(Logger.class).with(Qualifiers.of(Named.class, "diorite")).toInstance(logger);
+        controller.bindToClass(DioriteConfig.class).with().toInstance(config);
+        controller.rebind();
     }
 
-    private static void printDioriteHello(DioriteConfig config)
+    private static void printDioriteHello(DioriteServer diorite)
     {
+        DioriteConfig config = diorite.getConfig();
         try (Formatter out = new Formatter(new LoggerOutputStream(logger, java.util.logging.Level.INFO)))
         {
             out.format("%s%n", "Starting diorite server: '" + config.getServerName() + "'");

@@ -22,32 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite;
+package org.diorite.core;
 
-/**
- * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
- */
-public interface Diorite
+import org.diorite.Diorite;
+
+public interface DioriteCore extends Diorite
 {
-    /**
-     * Default server port.
-     */
-    int DEFAULT_PORT = 25565;
-
-    /**
-     * Returns diorite config instance.
-     *
-     * @return diorite config instance.
-     */
-    DioriteConfig getConfig();
-
-    /**
-     * Returns current minecraft version for main protocol implementation.
-     *
-     * @return current minecraft version for main protocol implementation.
-     */
-    static String getMinecraftVersion()
-    {
-        return "1.11.2";
-    }
 }

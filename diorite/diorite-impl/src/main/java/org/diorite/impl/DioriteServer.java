@@ -22,32 +22,45 @@
  * SOFTWARE.
  */
 
-package org.diorite;
+package org.diorite.impl;
 
-/**
- * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
- */
-public interface Diorite
+import javax.annotation.Nullable;
+
+import org.diorite.DioriteConfig;
+import org.diorite.core.DioriteCore;
+import org.diorite.inject.Inject;
+import org.diorite.inject.InjectableClass;
+import org.diorite.inject.Injection;
+
+@InjectableClass
+public class DioriteServer implements DioriteCore
 {
-    /**
-     * Default server port.
-     */
-    int DEFAULT_PORT = 25565;
+    @Inject private final DioriteConfig dioriteConfig = Injection.inject();
 
-    /**
-     * Returns diorite config instance.
-     *
-     * @return diorite config instance.
-     */
-    DioriteConfig getConfig();
-
-    /**
-     * Returns current minecraft version for main protocol implementation.
-     *
-     * @return current minecraft version for main protocol implementation.
-     */
-    static String getMinecraftVersion()
+    @Override
+    public DioriteConfig getConfig()
     {
-        return "1.11.2";
+        return this.dioriteConfig;
+    }
+
+    void start()
+    {
+
+    }
+
+    @Nullable private static DioriteServer instance;
+
+    {
+        System.out.println("ss");
+        if (instance != null)
+        {
+            throw new RuntimeException("Server already initialized!");
+        }
+        instance = this;
+    }
+
+    @Nullable public static DioriteServer getInstance()
+    {
+        return instance;
     }
 }
