@@ -22,29 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.connection;
+package org.diorite.core.protocol;
 
-public enum ProtocolDirection
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PacketClass
 {
-    SERVERBOUND("SERVERBOUND", 0),
-    CLIENTBOUND("CLIENTBOUND", 1);
+    Class<?> value();
 
-    private final String name;
-    private final int    value;
+    String name();
 
-    ProtocolDirection(String name, int value)
-    {
-        this.name = name;
-        this.value = value;
-    }
+    int id();
 
-    public String getName()
-    {
-        return this.name;
-    }
+    int minSize();
 
-    public int getValue()
-    {
-        return this.value;
-    }
+    int maxSize();
 }

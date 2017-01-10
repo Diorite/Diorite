@@ -22,42 +22,54 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl;
+package org.diorite.core.protocol;
 
-import javax.annotation.Nullable;
-
-import org.diorite.DioriteConfig;
-import org.diorite.core.DioriteCore;
-
-public class DioriteServer implements DioriteCore
+public class PacketType
 {
-    private final DioriteConfig dioriteConfig;
+    private final Class<?> type;
+    private final String name;
+    private final int id;
+    private final int minSize;
+    private final int maxSize;
 
-    public DioriteServer(DioriteConfig dioriteConfig) {this.dioriteConfig = dioriteConfig;}
-
-    @Override
-    public DioriteConfig getConfig()
-    {
-        return this.dioriteConfig;
+    public PacketType(Class<?> type, String name, int id, int minSize, int maxSize) {
+        this.type = type;
+        this.name = name;
+        this.id = id;
+        this.minSize = minSize;
+        this.maxSize = maxSize;
+    }
+    public PacketType(Class<?> type) {
+        this.type = type;
+        this.name = name;
+        this.id = id;
+        this.minSize = minSize;
+        this.maxSize = maxSize;
     }
 
-    void start()
-    {
 
+    public Class<?> getType()
+    {
+        return this.type;
     }
 
-    @Nullable private static DioriteServer instance;
-
+    public String getName()
     {
-        if (instance != null)
-        {
-            throw new RuntimeException("Server already initialized!");
-        }
-        instance = this;
+        return this.name;
     }
 
-    @Nullable public static DioriteServer getInstance()
+    public int getId()
     {
-        return instance;
+        return this.id;
+    }
+
+    public int getMinSize()
+    {
+        return this.minSize;
+    }
+
+    public int getMaxSize()
+    {
+        return this.maxSize;
     }
 }

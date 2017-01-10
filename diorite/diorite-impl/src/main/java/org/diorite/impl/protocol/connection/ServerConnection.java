@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.connection;
+package org.diorite.impl.protocol.connection;
 
 import org.slf4j.Logger;
 

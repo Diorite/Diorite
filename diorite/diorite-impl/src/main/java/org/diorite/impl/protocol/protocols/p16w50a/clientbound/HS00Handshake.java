@@ -22,42 +22,8 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl;
+package org.diorite.impl.protocol.protocols.p16w50a.clientbound;
 
-import javax.annotation.Nullable;
-
-import org.diorite.DioriteConfig;
-import org.diorite.core.DioriteCore;
-
-public class DioriteServer implements DioriteCore
+public class HS00Handshake
 {
-    private final DioriteConfig dioriteConfig;
-
-    public DioriteServer(DioriteConfig dioriteConfig) {this.dioriteConfig = dioriteConfig;}
-
-    @Override
-    public DioriteConfig getConfig()
-    {
-        return this.dioriteConfig;
-    }
-
-    void start()
-    {
-
-    }
-
-    @Nullable private static DioriteServer instance;
-
-    {
-        if (instance != null)
-        {
-            throw new RuntimeException("Server already initialized!");
-        }
-        instance = this;
-    }
-
-    @Nullable public static DioriteServer getInstance()
-    {
-        return instance;
-    }
 }

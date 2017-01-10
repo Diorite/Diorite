@@ -169,7 +169,7 @@ public final class DioriteMain
         }
         addBindings(dioriteConfig);
 
-        DioriteServer dioriteServer = new DioriteServer();
+        DioriteServer dioriteServer = new DioriteServer(dioriteConfig);
         dioriteServer.start();
         printDioriteHello(dioriteServer);
     }

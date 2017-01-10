@@ -22,42 +22,29 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl;
+package org.diorite.core.protocol.connection;
 
-import javax.annotation.Nullable;
-
-import org.diorite.DioriteConfig;
-import org.diorite.core.DioriteCore;
-
-public class DioriteServer implements DioriteCore
+public enum ProtocolDirection
 {
-    private final DioriteConfig dioriteConfig;
+    SERVERBOUND("SERVERBOUND", 0),
+    CLIENTBOUND("CLIENTBOUND", 1);
 
-    public DioriteServer(DioriteConfig dioriteConfig) {this.dioriteConfig = dioriteConfig;}
+    private final String name;
+    private final int    value;
 
-    @Override
-    public DioriteConfig getConfig()
+    ProtocolDirection(String name, int value)
     {
-        return this.dioriteConfig;
+        this.name = name;
+        this.value = value;
     }
 
-    void start()
+    public String getName()
     {
-
+        return this.name;
     }
 
-    @Nullable private static DioriteServer instance;
-
+    public int getValue()
     {
-        if (instance != null)
-        {
-            throw new RuntimeException("Server already initialized!");
-        }
-        instance = this;
-    }
-
-    @Nullable public static DioriteServer getInstance()
-    {
-        return instance;
+        return this.value;
     }
 }
