@@ -12,5 +12,23 @@
     <artifactId>gameprofile</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>Diorite Gameprofile</name>
-    
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.diorite.utils</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+    </dependencies>
 </project>

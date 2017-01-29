@@ -46,6 +46,7 @@
         <version.library.fastutil>7.0.13</version.library.fastutil>
         <version.library.guava>20.0</version.library.guava>
         <version.library.commons-lang3>3.5</version.library.commons-lang3>
+        <version.library.commons-io>2.5</version.library.commons-io>
         <version.library.snakeyaml>1.17</version.library.snakeyaml>
         <version.library.gson>2.8.0</version.library.gson>
 
@@ -177,6 +178,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${version.library.commons-lang3}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.library.commons-io}</version>
             </dependency>
             <dependency>
                 <groupId>org.yaml</groupId>
