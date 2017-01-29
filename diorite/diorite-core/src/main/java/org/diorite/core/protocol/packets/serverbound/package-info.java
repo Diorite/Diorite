@@ -22,55 +22,7 @@
  * SOFTWARE.
  */
 
+@NonnullByDefault
 package org.diorite.core.protocol.packets.serverbound;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.diorite.core.protocol.ProtocolVersion;
-import org.diorite.core.protocol.connection.ServerboundPacketHandler;
-
-public class RequestServerStatePacket implements ServerboundDioritePacket
-{
-    @Nullable private ProtocolVersion<?> protocolVersion;
-    @Nullable private String             serverAddress;
-    private           int                serverPort;
-
-    @Nullable
-    public ProtocolVersion<?> getProtocolVersion()
-    {
-        return this.protocolVersion;
-    }
-
-    public void setProtocolVersion(ProtocolVersion<?> protocolVersion)
-    {
-        this.protocolVersion = protocolVersion;
-    }
-
-    @Nullable
-    public String getServerAddress()
-    {
-        return this.serverAddress;
-    }
-
-    public void setServerAddress(String serverAddress)
-    {
-        this.serverAddress = serverAddress;
-    }
-
-    public int getServerPort()
-    {
-        return this.serverPort;
-    }
-
-    public void setServerPort(int serverPort)
-    {
-        this.serverPort = serverPort;
-    }
-
-    @Override
-    public void handle(@Nonnull ServerboundPacketHandler handler)
-    {
-        handler.handle(this);
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

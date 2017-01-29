@@ -25,17 +25,19 @@
 package org.diorite.core.protocol.packets.serverbound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 
 public class LoginStartPacket implements ServerboundDioritePacket
 {
-    private ProtocolVersion<?> protocolVersion;
-    private String             serverAddress;
-    private int                serverPort;
-    private String             username;
+    @Nullable private ProtocolVersion<?> protocolVersion;
+    @Nullable private String             serverAddress;
+    private           int                serverPort;
+    @Nullable private String             username;
 
+    @Nullable
     public ProtocolVersion<?> getProtocolVersion()
     {
         return this.protocolVersion;
@@ -46,6 +48,7 @@ public class LoginStartPacket implements ServerboundDioritePacket
         this.protocolVersion = protocolVersion;
     }
 
+    @Nullable
     public String getServerAddress()
     {
         return this.serverAddress;
@@ -66,6 +69,7 @@ public class LoginStartPacket implements ServerboundDioritePacket
         this.serverPort = serverPort;
     }
 
+    @Nullable
     public String getUsername()
     {
         return this.username;
