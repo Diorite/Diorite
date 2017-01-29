@@ -541,8 +541,7 @@ public final class YamlCollectionCreator
             if (constructor != null)
             {
                 constructor.ensureAccessible();
-                //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
-                IntFunction<T> creator = arguments -> constructor.invokeWith(arguments);
+                IntFunction<T> creator = constructor::invokeWith;
                 map.put(clazz, creator);
                 return creator.apply(size);
             }

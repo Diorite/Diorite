@@ -22,8 +22,18 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.protocol.protocols.p16w50a.clientbound;
+package org.diorite.chat;
 
-public class HS00Handshake
+class ChatEventOpenFileImpl extends ChatEventStringAbstract implements ChatEventOpenFile
 {
+    ChatEventOpenFileImpl(String value)
+    {
+        super(value);
+    }
+
+    @Override
+    public ChatMessageEvent duplicate()
+    {
+        return new ChatEventOpenFileImpl(this.value);
+    }
 }

@@ -39,7 +39,7 @@
         <maven.compiler.target>9</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <version.library.netty>4.1.6.Final</version.library.netty>
+        <version.library.netty>4.1.7.Final</version.library.netty>
         <version.library.jopt>6.0-alpha-1</version.library.jopt>
         <version.library.jline>2.14.3</version.library.jline>
         <version.library.vecmath>1.5.2</version.library.vecmath>

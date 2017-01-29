@@ -29,17 +29,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.diorite.core.protocol.connection.ProtocolDirection;
+import org.diorite.core.protocol.connection.internal.ProtocolState;
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PacketClass
 {
-    Class<?> value();
-
-    String name();
-
     int id();
+
+    ProtocolDirection direction();
+
+    ProtocolState state();
+
+    String name() default "";
 
     int minSize();
 
     int maxSize();
+
+    int preferredSize() default - 1;
 }

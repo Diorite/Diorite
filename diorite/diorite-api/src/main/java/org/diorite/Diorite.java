@@ -24,6 +24,8 @@
 
 package org.diorite;
 
+import org.diorite.commons.function.supplier.Supplier;
+
 /**
  * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
  */
@@ -42,6 +44,52 @@ public interface Diorite
     DioriteConfig getConfig();
 
     /**
+     * Returns true if server is running.
+     *
+     * @return true if server is running.
+     */
+    boolean isRunning();
+
+    /**
+     * Returns true if debug is enabled.
+     *
+     * @return true if debug is enabled.
+     */
+    boolean isEnabledDebug();
+
+    /**
+     * Prints throwable to logger but only if debug is enabled.
+     *
+     * @param throwable
+     *         throwable to print.
+     */
+    void debug(Throwable throwable);
+
+    /**
+     * Prints object to logger but only if debug is enabled.
+     *
+     * @param object
+     *         object to print.
+     */
+    void debug(Object object);
+
+    /**
+     * Runs runnable but only if debug is enabled.
+     *
+     * @param runnable
+     *         runnable to run.
+     */
+    void debugRun(Runnable runnable);
+
+    /**
+     * Runs supplier and print its result to logger but only if debug is enabled.
+     *
+     * @param supplier
+     *         supplier to run.
+     */
+    void debugRun(Supplier<?> supplier);
+
+    /**
      * Returns current minecraft version for main protocol implementation.
      *
      * @return current minecraft version for main protocol implementation.
@@ -49,5 +97,41 @@ public interface Diorite
     static String getMinecraftVersion()
     {
         return "1.11.2";
+    }
+
+    /**
+     * Returns version of diorite.
+     *
+     * @return version of diorite.
+     */
+    String getVersion();
+
+    /**
+     * Get diorite server instance from static content.
+     *
+     * @return diorite instance.
+     */
+    static Diorite getDiorite()
+    {
+        if (DioriteInstanceHolder.diorite == null)
+        {
+            throw new IllegalStateException("Instance not ready yet.");
+        }
+        return DioriteInstanceHolder.diorite;
+    }
+
+    /**
+     * Used by diorite to set static instance throws exception if used after init.
+     *
+     * @param dioriteInstance
+     *         instance to set.
+     */
+    static void setDioriteInstance(Diorite dioriteInstance)
+    {
+        if (DioriteInstanceHolder.diorite != null)
+        {
+            throw new IllegalStateException("Instance already set!");
+        }
+        DioriteInstanceHolder.diorite = dioriteInstance;
     }
 }

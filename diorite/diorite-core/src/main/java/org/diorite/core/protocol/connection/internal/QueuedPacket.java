@@ -22,11 +22,41 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.protocol;
+package org.diorite.core.protocol.connection.internal;
 
-public interface Packet
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+
+public class QueuedPacket
 {
-    int id();
+    private final           Packet<?>                                               packet;
+    @Nullable private final GenericFutureListener<? extends Future<? super Void>>[] listeners;
 
-    int minSize();
+    @SafeVarargs
+    public QueuedPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>>... listeners)
+    {
+        this.packet = packet;
+        this.listeners = listeners;
+    }
+
+    public Packet<?> getPacket()
+    {
+        return this.packet;
+    }
+
+    @Nullable
+    public GenericFutureListener<? extends Future<? super Void>>[] getListeners()
+    {
+        return this.listeners;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("packet", this.packet).append("listeners", this.listeners).toString();
+    }
 }

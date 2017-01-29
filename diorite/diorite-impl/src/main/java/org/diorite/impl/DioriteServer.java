@@ -26,14 +26,34 @@ package org.diorite.impl;
 
 import javax.annotation.Nullable;
 
+import java.util.concurrent.TimeUnit;
+
+import org.diorite.impl.protocol.PCProtocol;
+import org.diorite.impl.protocol.connection.ServerConnectionImpl;
+import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
+import org.diorite.commons.SpammyError;
+import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.core.DioriteCore;
+import org.diorite.core.protocol.Protocol;
+import org.diorite.core.protocol.connection.ServerConnection;
 
 public class DioriteServer implements DioriteCore
 {
-    private final DioriteConfig dioriteConfig;
+    private final           PCProtocol       pcProtocol;
+    private final           DioriteConfig    dioriteConfig;
+    private final           ServerConnection serverConnection;
+    @Nullable private final String           serverVersion;
 
-    public DioriteServer(DioriteConfig dioriteConfig) {this.dioriteConfig = dioriteConfig;}
+    private boolean isRunning;
+
+    public DioriteServer(DioriteConfig dioriteConfig)
+    {
+        this.dioriteConfig = dioriteConfig;
+        this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
+        this.pcProtocol = new PCProtocol(dioriteConfig);
+        this.serverConnection = new ServerConnectionImpl(this);
+    }
 
     @Override
     public DioriteConfig getConfig()
@@ -41,23 +61,79 @@ public class DioriteServer implements DioriteCore
         return this.dioriteConfig;
     }
 
+    @Override
+    public boolean isRunning()
+    {
+        return this.isRunning;
+    }
+
+    @Override
+    public boolean isEnabledDebug()
+    {
+        return DioriteMain.isEnabledDebug();
+    }
+
+    @Override
+    public String getVersion()
+    {
+        if (this.serverVersion == null)
+        {
+            SpammyError.err("Missing server version!", (int) TimeUnit.HOURS.toSeconds(1), "serverVersion");
+            return "Unknown" + " (MC: " + Diorite.getMinecraftVersion() + ")";
+        }
+        return this.serverVersion + " (MC: " + Diorite.getMinecraftVersion() + ")";
+    }
+
     void start()
     {
-
-    }
-
-    @Nullable private static DioriteServer instance;
-
-    {
-        if (instance != null)
+        this.serverConnection.init();
+        while (true)
         {
-            throw new RuntimeException("Server already initialized!");
         }
-        instance = this;
     }
 
-    @Nullable public static DioriteServer getInstance()
+    @Override
+    public Protocol<?> getProtocol()
     {
-        return instance;
+        return this.pcProtocol;
+    }
+
+    @Override
+    public ServerConnection getServerConnection()
+    {
+        return this.serverConnection;
+    }
+
+    {
+        Diorite.setDioriteInstance(this);
+    }
+
+    static DioriteCore getDiorite()
+    {
+        return (DioriteCore) Diorite.getDiorite();
+    }
+
+    @Override
+    public void debug(Throwable throwable)
+    {
+        DioriteMain.debug(throwable);
+    }
+
+    @Override
+    public void debug(Object obj)
+    {
+        DioriteMain.debug(obj);
+    }
+
+    @Override
+    public void debugRun(Runnable runnable)
+    {
+        DioriteMain.debugRun(runnable);
+    }
+
+    @Override
+    public void debugRun(Supplier<?> supplier)
+    {
+        DioriteMain.debugRun(supplier);
     }
 }

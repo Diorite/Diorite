@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.protocol;
+@NonnullByDefault
+package org.diorite.core.protocol.connection.internal;
 
-public abstract class AbstractPacket implements Packet
-{
-}
+import org.diorite.annotations.NonnullByDefault;

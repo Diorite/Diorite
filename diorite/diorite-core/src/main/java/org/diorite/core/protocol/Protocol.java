@@ -24,11 +24,92 @@
 
 package org.diorite.core.protocol;
 
-public class Protocol
+import javax.annotation.Nullable;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.diorite.core.protocol.connection.internal.Packet;
+import org.diorite.core.protocol.connection.internal.PacketType;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.ints.IntSets;
+
+public abstract class Protocol<T extends ProtocolVersion<?>>
 {
-//    protected final String name;
-//    protected final int version;
-//    protected final String versionName;
+    protected final String name;
+    protected final Int2ObjectMap<T> versions       = new Int2ObjectOpenHashMap<>(5);
+    protected final Map<String, T>   versionsByName = new HashMap<>(5);
 
+    public Protocol(String name)
+    {
+        this.name = name;
+    }
 
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public IntSet getAvailableVersions()
+    {
+        return IntSets.unmodifiable(this.versions.keySet());
+    }
+
+    public Set<String> getAvailableVersionNames()
+    {
+        return Collections.unmodifiableSet(this.versionsByName.keySet());
+    }
+
+    @Nullable
+    public T getVersion(int ver)
+    {
+        return this.versions.get(ver);
+    }
+
+    @Nullable
+    public T getVersion(String ver)
+    {
+        return this.versionsByName.get(ver);
+    }
+
+    public PacketType getPacketType(Class<? extends Packet<?>> packet)
+    {
+        for (T ver : this.versions.values())
+        {
+            if (ver.isPacket(packet))
+            {
+                return ver.getPackets().getType(packet);
+            }
+        }
+        throw new IllegalStateException("Unknown packet!");
+    }
+
+    public T getVersionByPacketClass(Class<? extends Packet<?>> packet)
+    {
+        for (T ver : this.versions.values())
+        {
+            if (ver.isPacket(packet))
+            {
+                return ver;
+            }
+        }
+        throw new IllegalStateException("Unknown packet!");
+    }
+
+    public void addVersion(T version)
+    {
+        this.versions.put(version.version, version);
+        this.versionsByName.put(version.versionName, version);
+        for (String ver : version.getAliases())
+        {
+            this.versionsByName.put(ver, version);
+        }
+    }
+
+    public abstract T getDefault();
 }

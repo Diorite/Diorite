@@ -22,54 +22,31 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.protocol;
+package org.diorite.chat;
 
-public class PacketType
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+class ChatEventShowTextImpl implements ChatEventShowText
 {
-    private final Class<?> type;
-    private final String name;
-    private final int id;
-    private final int minSize;
-    private final int maxSize;
+    protected final ChatMessage value;
 
-    public PacketType(Class<?> type, String name, int id, int minSize, int maxSize) {
-        this.type = type;
-        this.name = name;
-        this.id = id;
-        this.minSize = minSize;
-        this.maxSize = maxSize;
-    }
-    public PacketType(Class<?> type) {
-        this.type = type;
-        this.name = name;
-        this.id = id;
-        this.minSize = minSize;
-        this.maxSize = maxSize;
-    }
+    protected ChatEventShowTextImpl(ChatMessage value) {this.value = value;}
 
-
-    public Class<?> getType()
+    @Override
+    public ChatMessage getValue()
     {
-        return this.type;
+        return this.value;
     }
 
-    public String getName()
+    @Override
+    public ChatMessageEvent duplicate()
     {
-        return this.name;
+        return new ChatEventShowTextImpl(this.value);
     }
 
-    public int getId()
+    @Override
+    public String toString()
     {
-        return this.id;
-    }
-
-    public int getMinSize()
-    {
-        return this.minSize;
-    }
-
-    public int getMaxSize()
-    {
-        return this.maxSize;
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("value", this.value).toString();
     }
 }

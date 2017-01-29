@@ -36,6 +36,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,6 +82,8 @@ import org.diorite.config.annotations.SerializableAs;
 import org.diorite.config.annotations.StringSerializable;
 import org.diorite.config.serialization.comments.CommentsManager;
 import org.diorite.config.serialization.comments.DocumentComments;
+import org.diorite.config.serialization.serializers.InetAddressSerializer;
+import org.diorite.config.serialization.serializers.SocketAddressSerializer;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.Yaml;
@@ -248,7 +251,9 @@ public final class Serialization
         this.registerStringSerializer(StringSerializer.of(File.class, File::getPath, File::new));
         this.registerStringSerializer(StringSerializer.of(Locale.class, Locale::toLanguageTag, Locale::forLanguageTag));
         this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
-        this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
+        this.registerStringSerializer(StringSerializer.of(URI.class, ExceptionalFunction.of(URI::getPath), ExceptionalFunction.of(URI::new)));
+        this.registerStringSerializer(new InetAddressSerializer());
+        this.registerStringSerializer(new SocketAddressSerializer());
     }
 
     /**
@@ -361,7 +366,35 @@ public final class Serialization
      */
     public boolean isStringSerializable(Class<?> clazz)
     {
-        return this.stringSerializerMap.containsKey(clazz);
+        return this.stringSerializerMap.containsKey(clazz) || (this.getAsStringSerializable(clazz) != null);
+    }
+
+    @Nullable
+    private Class<?> getAsStringSerializable(Class<?> clazz)
+    {
+        boolean containsKey = this.stringSerializerMap.containsKey(clazz);
+        if (! containsKey)
+        {
+            Class<?> superclass = clazz.getSuperclass();
+            if ((superclass != null) && (superclass != Object.class))
+            {
+                Class<?> superSerializable = this.getAsStringSerializable(superclass);
+                if (superSerializable != null)
+                {
+                    return superSerializable;
+                }
+            }
+            for (Class<?> interfaceClass : clazz.getInterfaces())
+            {
+                Class<?> interfaceSerializable = this.getAsStringSerializable(interfaceClass);
+                if (interfaceSerializable != null)
+                {
+                    return interfaceSerializable;
+                }
+            }
+            return null;
+        }
+        return clazz;
     }
 
     /**
@@ -451,11 +484,12 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> T deserializeFromString(Class<T> type, String str)
     {
-        if (! this.isStringSerializable(type))
+        Class<?> stringSerializable = this.getAsStringSerializable(type);
+        if (stringSerializable == null)
         {
             throw new IllegalArgumentException("Given type isn't string serializable: (" + type.getName() + ") -> " + str);
         }
-        return ((StringSerializer<T>) this.stringSerializerMap.get(type)).deserialize(str);
+        return ((StringSerializer<T>) this.stringSerializerMap.get(stringSerializable)).deserialize(str);
     }
 
     /**
@@ -472,11 +506,12 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public String serializeToString(Object object)
     {
-        if (! this.isStringSerializable(object))
+        Class<?> stringSerializable = this.getAsStringSerializable(object.getClass());
+        if (stringSerializable == null)
         {
-            throw new IllegalArgumentException("Given object isn't string serializable: " + object);
+            throw new IllegalArgumentException("Given object isn't string serializable: (" + object.getClass() + ") " + object);
         }
-        return ((StringSerializer<Object>) this.stringSerializerMap.get(object.getClass())).serialize(object);
+        return ((StringSerializer<Object>) this.stringSerializerMap.get(stringSerializable)).serialize(object);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -491,7 +526,8 @@ public final class Serialization
     }
 
     @Nullable
-    @SuppressWarnings("unchecked") <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
+    @SuppressWarnings("unchecked")
+    <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
         {
@@ -579,8 +615,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(String.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
+                        deserialization = constructorInvoker::invokeWith;
                     }
                     else
                     {
@@ -748,8 +783,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(DeserializationData.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
+                        deserialization = constructorInvoker::invokeWith;
                     }
                     else
                     {

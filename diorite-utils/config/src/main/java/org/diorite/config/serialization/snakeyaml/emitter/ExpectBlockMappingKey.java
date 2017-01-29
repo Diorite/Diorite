@@ -54,7 +54,6 @@ class ExpectBlockMappingKey implements EmitterState
         {
             if (emitter.checkSimpleKey())
             {
-//                emitter.writeComment("This is test comment!"); TODO
                 emitter.writeIndent();
                 emitter.states.push(new ExpectBlockMappingSimpleValue());
                 emitter.expectNode(false, true, true, emitter.indent);

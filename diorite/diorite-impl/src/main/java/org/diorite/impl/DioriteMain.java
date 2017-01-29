@@ -26,12 +26,19 @@ package org.diorite.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.RuntimeMXBean;
+import java.net.InetSocketAddress;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -44,7 +51,10 @@ import org.slf4j.MarkerFactory;
 import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
+import org.diorite.DioriteConfig.HostConfiguration;
 import org.diorite.DioriteConfig.OnlineMode;
+import org.diorite.DioriteConfig.ProtocolSettings;
+import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.config.ConfigManager;
 import org.diorite.config.ConfigTemplate;
@@ -122,11 +132,15 @@ public final class DioriteMain
         switch (result)
         {
             case RUN:
-                logger.info("Diorite version: " + Diorite.class.getPackage().getImplementationVersion() + " (MC: " + Diorite.getMinecraftVersion() + ")");
-                startDiorite(options);
+                startDiorite(options, args);
                 return;
             case VERSION:
-                logger.info("Diorite version: " + Diorite.class.getPackage().getImplementationVersion() + " (MC: " + Diorite.getMinecraftVersion() + ")");
+                String implementationVersion = Diorite.class.getPackage().getImplementationVersion();
+                if (implementationVersion == null)
+                {
+                    implementationVersion = "Unknown";
+                }
+                logger.info("Diorite version: " + implementationVersion + " (MC: " + Diorite.getMinecraftVersion() + ")");
                 return;
             case HELP:
                 try
@@ -144,7 +158,7 @@ public final class DioriteMain
         throw new RuntimeException("Unexpected result.");
     }
 
-    public static void startDiorite(OptionSet options)
+    public static void startDiorite(OptionSet options, String[] args)
     {
         ConfigTemplate<DioriteConfig> configTemplate = ConfigManager.get().getConfigFile(DioriteConfig.class);
         File configFile = (File) options.valueOf("config");
@@ -170,8 +184,8 @@ public final class DioriteMain
         addBindings(dioriteConfig);
 
         DioriteServer dioriteServer = new DioriteServer(dioriteConfig);
+        printDioriteHello(dioriteServer, args);
         dioriteServer.start();
-        printDioriteHello(dioriteServer);
     }
 
     private static void addBindings(DioriteConfig config)
@@ -182,25 +196,73 @@ public final class DioriteMain
         controller.rebind();
     }
 
-    private static void printDioriteHello(DioriteServer diorite)
+    private static final DecimalFormat format = new DecimalFormat("#0.##");
+
+    @SuppressWarnings("MagicNumber")
+    private static String formatMemory(long memory)
+    {
+        double mem = memory / (1024.0);
+        if (mem < 1024)
+        {
+            return format.format(mem) + " kiB";
+        }
+        mem /= 1024.0;
+        if (mem < 1024)
+        {
+            return format.format(mem) + " MiB";
+        }
+        mem /= 1024.0;
+        return format.format(mem) + " GiB";
+    }
+
+    private static void printDioriteHello(DioriteServer diorite, String[] args)
     {
         DioriteConfig config = diorite.getConfig();
+        RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
+        OperatingSystemMXBean systemMXBean = ManagementFactory.getOperatingSystemMXBean();
+
         try (Formatter out = new Formatter(new LoggerOutputStream(logger, java.util.logging.Level.INFO)))
         {
-            out.format("%s%n", "Starting Diorite server: '" + config.getServerName() + "'");
+            out.format("%n%s%n", "Starting Diorite server: '" + config.getServerName() + "' version: " + diorite.getVersion());
+            out.format("%-30s %s%n", "  Arguments: ", StringUtils.join(args, ' '));
             out.format("%-30s %s%n", "  Enabled languages: ", Arrays.toString(config.getLanguages()));
             out.format("%-30s %s%n", "  Resource pack: ", config.getResourcePack());
-            out.format("%-30s %s%n", "  Max players: ", config.getMaxPlayers());
-            out.format("%-30s %s%n", "  Netty threads: ", config.getNettyThreads());
-            out.format("%-30s %s%n", "  Compression threshold: ", config.getNetworkCompressionThreshold());
-            out.format("%-30s %s%n", "  Online mode: ", config.getOnlineMode().toString().toLowerCase());
             out.format("%-30s %s%n", "  Native transport: ", config.getUseNativeTransport());
             out.format("%-30s %s%n", "  View distance: ", config.getViewDistance());
             out.format("%-30s %s%n", "  Whitelist: ", config.getWhiteListEnabled() + " (" + config.getWhiteListFile().getPath() + ")");
-            out.format("%-30s %s%n", "  Query port: ", config.getQueryPort());
-            out.format("%-30s %s%n", "  Rcon port: ", config.getRconPort());
-            out.format("%-30s %s%n", "  Hosts: ",
-                       config.getHosts().object2IntEntrySet().stream().map(e -> e.getKey() + ":" + e.getIntValue()).collect(Collectors.joining(", ")));
+            out.format("%s%n", "  Hosts: ");
+            for (InetSocketAddress inetSocketAddress : config.getHosts())
+            {
+                HostConfiguration hostCfg = config.getHostConfigurationOrDefault(inetSocketAddress);
+                out.format("%s%n", "    " + inetSocketAddress.toString());
+                out.format("  %-30s %s%n", "  Accepting Players: ", hostCfg.isAcceptingPlayers());
+                out.format("  %-30s %s%n", "  Max players: ", hostCfg.getMaxPlayers());
+                out.format("  %-30s %s%n", "  Netty threads: ", hostCfg.getNettyThreads());
+                out.format("  %-30s %s%n", "  Online mode: ", hostCfg.getOnlineMode().toString().toLowerCase());
+                out.format("  %-30s %s%n", "  Query port: ", hostCfg.getQueryPort());
+                out.format("  %-30s %s%n", "  Rcon port: ", hostCfg.getRconPort());
+            }
+            out.format("%s%n", "  Protocols: ");
+            for (String prot : config.getProtocols())
+            {
+                ProtocolSettings protocolSettings = config.getFromProtocolSettings(prot);
+                if (protocolSettings == null)
+                {
+                    out.format("%s%n", "    UNKNOWN PROTOCOL: " + prot);
+                    continue;
+                }
+                out.format("%s%n", "    " + prot);
+                out.format("  %-30s %s%n", "  Compression threshold: ", protocolSettings.getNetworkCompressionThreshold());
+            }
+            out.format("%s%n", "Runtime configuration: ");
+            out.format("%-30s %s%n", "  JVM: ", runtimeMxBean.getVmName());
+            out.format("%-30s %s%n", "  JVM version: ", runtimeMxBean.getVmVersion() + " [" + System.getProperty("java.class.version") + "]");
+            out.format("%-30s %s%n", "  Arguments: ", StringUtils.join(runtimeMxBean.getInputArguments(), ' '));
+            out.format("%-30s %s%n", "  OS: ", systemMXBean.getName() + " (" + systemMXBean.getArch() + ")" + " v" + systemMXBean.getVersion());
+            out.format("%-30s %s%n", "  Available Processors: ", systemMXBean.getAvailableProcessors());
+            out.format("%-30s %s%n", "  Available Memory for VM: ", formatMemory(heapMemoryUsage.getMax()));
             out.flush();
         }
     }
@@ -311,6 +373,28 @@ public final class DioriteMain
         if (enabledDebug)
         {
             runnable.run();
+        }
+    }
+
+    /**
+     * Runs given supplier if debug is enabled.
+     *
+     * @param supplier
+     *         action to run.
+     */
+    public static void debugRun(Supplier<?> supplier)
+    {
+        if (enabledDebug)
+        {
+            Object result = supplier.get();
+            if (result instanceof Throwable)
+            {
+                debug(result);
+            }
+            else
+            {
+                debug(result.toString());
+            }
         }
     }
 }

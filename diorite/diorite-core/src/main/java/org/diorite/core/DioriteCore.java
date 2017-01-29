@@ -25,7 +25,17 @@
 package org.diorite.core;
 
 import org.diorite.Diorite;
+import org.diorite.core.protocol.Protocol;
+import org.diorite.core.protocol.connection.ServerConnection;
 
 public interface DioriteCore extends Diorite
 {
+    Protocol<?> getProtocol();
+
+    ServerConnection getServerConnection();
+
+    static DioriteCore getDiorite()
+    {
+        return (DioriteCore) Diorite.getDiorite();
+    }
 }
