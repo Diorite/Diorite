@@ -22,38 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.protocol.p16w50a.serverbound;
+package org.diorite.serializers;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.UUID;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
-import org.diorite.core.protocol.InvalidPacketException;
-import org.diorite.core.protocol.PacketClass;
-import org.diorite.core.protocol.connection.ProtocolDirection;
-import org.diorite.core.protocol.connection.internal.ProtocolState;
+import org.diorite.config.serialization.Serialization;
+import org.diorite.gameprofile.GameProfile;
+import org.diorite.gameprofile.internal.GameProfileImpl;
+import org.diorite.gameprofile.internal.properties.PropertyImpl;
 
-@SuppressWarnings("MagicNumber")
-@PacketClass(id = 0x00, direction = ProtocolDirection.SERVERBOUND, state = ProtocolState.LOGIN, minSize = 4, maxSize = 17)
-public class L00LoginStart extends ServerboundPacket
+public final class SerializersInit
 {
-    public @Nullable String username; // 16 simple chars = bytes + length 1 byte, min size: 4
+    private SerializersInit() {}
 
-    @Override
-    protected void read(@Nonnull AbstractPacketDataSerializer serializer) throws InvalidPacketException
+    public static void init()
     {
-        this.username = serializer.readText(16, 20);
+        Serialization global = Serialization.getInstance();
+        global.registerSerializer(new PropertySerializer());
+        global.registerSerializer(new GameProfileSerializer());
     }
 
-    @Override
-    public void handle(ServerboundLoginPacketListener packetListener)
+    public static void main(String[] args)
     {
-        packetListener.handle(this);
+        GameProfileImpl test = new GameProfileImpl(UUID.randomUUID(), "test");
+        test.getProperties().put("test", new PropertyImpl("test", "nah"));
+        test.getProperties().put("test", new PropertyImpl("test", "nahhhh", "ugh"));
+        Serialization global = Serialization.getInstance();
+        System.out.println(global.toJson(test));
+        System.out.println(global.fromJson(global.toJson(test), GameProfile.class).equals(test));
     }
-
-//    @Override
-//    protected void write(@Nonnull AbstractPacketDataSerializer serializer) throws InvalidPacketException
-//    {
-//        serializer.writeText(this.username);
-//    }
 }

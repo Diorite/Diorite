@@ -39,6 +39,7 @@
         <maven.compiler.target>9</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <version.library.mbassador>1.3.0</version.library.mbassador>
         <version.library.netty>4.1.7.Final</version.library.netty>
         <version.library.jopt>6.0-alpha-1</version.library.jopt>
         <version.library.jline>2.14.3</version.library.jline>
@@ -154,6 +155,11 @@
                 <version>${version.library.jopt}</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.engio</groupId>
+                <artifactId>mbassador</artifactId>
+                <version>${version.library.mbassador}</version>
+            </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>

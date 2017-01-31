@@ -66,7 +66,7 @@ class SimpleSerializationData implements SerializationData
         this.serializationType = serializationType;
         this.serialization = serialization;
         this.type = type;
-        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        this.comments = Serialization.getInstance().getCommentsManager().getComments(type);
     }
 
     @Override
@@ -190,7 +190,7 @@ class SimpleSerializationData implements SerializationData
                 key[i] = CommentsNode.ANY;
             }
         }
-        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        DocumentComments comments = Serialization.getInstance().getCommentsManager().getComments(type);
         this.comments.join(key, comments);
         this.scannedCommentsClasses.put(type, comments);
         return comments;
@@ -219,7 +219,7 @@ class SimpleSerializationData implements SerializationData
         {
             return cached;
         }
-        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        DocumentComments comments = Serialization.getInstance().getCommentsManager().getComments(type);
         if (key.isEmpty())
         {
             this.comments.join(CommentsNode.ANY, comments);

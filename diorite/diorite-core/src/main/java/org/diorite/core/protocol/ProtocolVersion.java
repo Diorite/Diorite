@@ -30,9 +30,12 @@ import java.util.Set;
 
 import org.diorite.DioriteConfig.ProtocolSettings;
 import org.diorite.core.protocol.connection.ActiveConnection;
+import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.connection.internal.Packet;
 import org.diorite.core.protocol.connection.internal.Packets;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
+import org.diorite.core.protocol.packets.clientbound.ClientboundDioritePacket;
+import org.diorite.core.protocol.packets.serverbound.ServerboundDioritePacket;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -109,4 +112,10 @@ public abstract class ProtocolVersion<T extends Protocol<?>>
     public abstract void decode(ChannelHandlerContext context, ByteBuf byteBuf, List<Object> packets) throws Exception;
 
     public abstract void setListener(ActiveConnection activeConnection, ProtocolState state);
+
+    public abstract void handlePacket(ActiveConnection activeConnection, ServerboundDioritePacket packet);
+
+    public abstract void sendPacket(ActiveConnection activeConnection, ClientboundDioritePacket packet);
+
+    public abstract ServerboundPacketHandler createPacketHandler(ActiveConnection connection);
 }

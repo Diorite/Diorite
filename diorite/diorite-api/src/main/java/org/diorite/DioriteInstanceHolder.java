@@ -24,9 +24,11 @@
 
 package org.diorite;
 
+import javax.annotation.Nullable;
+
 final class DioriteInstanceHolder
 {
-    static Diorite diorite;
+    @Nullable static Diorite diorite;
 
     private DioriteInstanceHolder() {}
 }

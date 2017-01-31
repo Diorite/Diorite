@@ -96,7 +96,7 @@ public class PacketType
         this.state = annotation.state();
         if (annotation.name().isEmpty())
         {
-            this.name = type.getSimpleName().substring(3);
+            this.name = type.getSimpleName().substring(4);
         }
         else
         {

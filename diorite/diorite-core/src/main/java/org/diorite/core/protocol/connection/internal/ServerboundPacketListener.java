@@ -24,9 +24,11 @@
 
 package org.diorite.core.protocol.connection.internal;
 
+import javax.annotation.Nullable;
+
 import org.diorite.chat.ChatMessage;
 
-public interface ServerboundPacketListener
+public interface ServerboundPacketListener extends PacketListener
 {
-    void disconnect(ChatMessage disconnectMessage);
+    void disconnect(@Nullable ChatMessage disconnectMessage);
 }

@@ -24,18 +24,20 @@
 
 package org.diorite.impl.protocol.p16w50a.serverbound;
 
+import javax.annotation.Nullable;
+
 import org.diorite.chat.ChatMessage;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
 public class ServerboundLoginPacketListener implements ServerboundPacketListener
 {
     @Override
-    public void disconnect(ChatMessage disconnectMessage)
+    public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
         // TODO
     }
 
-    public void handle(L00LoginStart packet)
+    public void handle(SL00LoginStart packet)
     {
 
     }

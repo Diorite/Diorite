@@ -68,6 +68,8 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     protected volatile boolean closed    = false;
     protected volatile boolean preparing = true;
 
+    private final ServerboundPacketHandler packetHandler;
+
     public ActiveConnection(DioriteCore dioriteCore, InetSocketAddress serverAddress, ServerboundPacketListener packetListener,
                             ProtocolVersion<?> protocolVersion)
     {
@@ -77,6 +79,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         this.protocolVersion = protocolVersion;
 
         this.playerTimeout = dioriteCore.getConfig().getPlayerTimeout();
+        this.packetHandler = protocolVersion.createPacketHandler(this);
     }
 
     protected long lastKeepAlive = System.currentTimeMillis();
@@ -382,7 +385,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         }
     }
 
-    public void close(ChatMessage chatMessage, boolean wasSafe)
+    public void close(@Nullable ChatMessage chatMessage, boolean wasSafe)
     {
         if (this.closed)
         {
@@ -405,7 +408,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
 
     }
 
-    public void close(ChatMessage chatMessage)
+    public void close(@Nullable ChatMessage chatMessage)
     {
         this.close(chatMessage, false);
     }
@@ -415,6 +418,11 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     public void setPacketListener(ServerboundPacketListener packetListener)
     {
         this.packetListener = packetListener;
+    }
+
+    public ServerboundPacketListener getPacketListener()
+    {
+        return this.packetListener;
     }
 
     public InetSocketAddress getServerAddress()

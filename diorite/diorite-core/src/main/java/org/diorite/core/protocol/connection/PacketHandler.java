@@ -24,9 +24,6 @@
 
 package org.diorite.core.protocol.connection;
 
-import org.diorite.core.protocol.packets.DioritePacket;
-
 public interface PacketHandler
 {
-    void sendPacket(DioritePacket packet);
 }

@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.diorite.impl.protocol.any.serverbound.H00Handshake;
-import org.diorite.impl.protocol.p16w50a.serverbound.L00LoginStart;
 import org.diorite.DioriteConfig.ProtocolSettings;
 import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ServerConnection;
@@ -55,7 +54,6 @@ public abstract class PCProtocolVersion extends ProtocolVersion<PCProtocol>
         this.aliases.add(versionName);
         this.packets = new PacketsImpl(this);
         this.packets.addType(H00Handshake.class, H00Handshake::new);
-        this.packets.addType(L00LoginStart.class, L00LoginStart::new);
     }
 
     @Override

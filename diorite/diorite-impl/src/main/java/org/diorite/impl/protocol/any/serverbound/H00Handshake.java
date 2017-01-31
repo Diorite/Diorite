@@ -27,8 +27,6 @@ package org.diorite.impl.protocol.any.serverbound;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import org.diorite.impl.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.PCPacket;
 import org.diorite.core.protocol.InvalidPacketException;
@@ -42,10 +40,10 @@ import io.netty.buffer.ByteBuf;
 @PacketClass(id = 0x00, direction = ProtocolDirection.SERVERBOUND, state = ProtocolState.HANDSHAKE, minSize = 1 + 1 + 2 + 1, maxSize = 5 + 100 + 2 + 1)
 public class H00Handshake extends PCPacket<ServerboundHandshakeListener>
 {
-    public           int           protocolVersion; // varInt 1-5 bytes, currently: 2 bytes
-    public @Nullable String        address; // max length of 50 to prevent spamming with huge packets, max 100 bytes
-    public           int           port; // unsigned short
-    public @Nullable ProtocolState state; // varint, 1 byte
+    private           int           protocolVersion; // varInt 1-5 bytes, currently: 2 bytes
+    private @Nullable String        address; // max length of 50 to prevent spamming with huge packets, max 100 bytes
+    private           int           port; // unsigned short
+    private @Nullable ProtocolState state; // varint, 1 byte
 
     @Override
     protected AbstractPacketDataSerializer createSerializer(ByteBuf byteBuf)
@@ -62,25 +60,51 @@ public class H00Handshake extends PCPacket<ServerboundHandshakeListener>
         this.state = serializer.readEnum(ProtocolState.class);
     }
 
-//    @Override
-//    protected void write(@Nonnull AbstractPacketDataSerializer serializer) throws InvalidPacketException
-//    {
-//        serializer.writeVarInt(this.protocolVersion);
-//        serializer.writeText(this.address);
-//        serializer.writeShort(this.port);
-//        serializer.writeEnum(this.state);
-//    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("protocolVersion", this.protocolVersion).append("address", this.address)
-                                        .append("port", this.port).append("state", this.state).toString();
-    }
-
     @Override
     public void handle(@Nonnull ServerboundHandshakeListener packetListener)
     {
         packetListener.handle(this);
+    }
+
+    public int getProtocolVersion()
+    {
+        return this.protocolVersion;
+    }
+
+    public void setProtocolVersion(int protocolVersion)
+    {
+        this.protocolVersion = protocolVersion;
+    }
+
+    @Nullable
+    public String getAddress()
+    {
+        return this.address;
+    }
+
+    public void setAddress(@Nullable String address)
+    {
+        this.address = address;
+    }
+
+    public int getPort()
+    {
+        return this.port;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+
+    @Nullable
+    public ProtocolState getState()
+    {
+        return this.state;
+    }
+
+    public void setState(@Nullable ProtocolState state)
+    {
+        this.state = state;
     }
 }

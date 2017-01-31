@@ -416,7 +416,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -507,7 +507,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -550,7 +550,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -649,12 +649,12 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private void saveImpl(@WillNotClose Writer writer)
     {
-        Serialization.getGlobal().toYamlWithComments(this.config, writer, this.template.getComments());
+        Serialization.getInstance().toYamlWithComments(this.config, writer, this.template.getComments());
     }
 
     private void loadImpl(@WillNotClose Reader reader)
     {
-        Config fromYaml = Serialization.getGlobal().fromYaml(reader, this.template.getConfigType());
+        Config fromYaml = Serialization.getInstance().fromYaml(reader, this.template.getConfigType());
         if (fromYaml == null)
         {
             return;
@@ -714,7 +714,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -783,7 +783,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Node node : this.simpleDynamicValues.values())
         {
-            if (Objects.equals(toCheck, Serialization.getGlobal().fromYamlNode(node)))
+            if (Objects.equals(toCheck, Serialization.getInstance().fromYamlNode(node)))
             {
                 return true;
             }
@@ -824,7 +824,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Node node : this.simpleDynamicValues.values())
         {
-            values.add(Serialization.getGlobal().fromYamlNode(node));
+            values.add(Serialization.getInstance().fromYamlNode(node));
         }
         values.addAll(this.dynamicValues.values());
         return values;
@@ -840,7 +840,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            result.add(new SimpleEntry<>(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue())));
+            result.add(new SimpleEntry<>(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue())));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
@@ -860,7 +860,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            result.put(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue()));
+            result.put(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue()));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
@@ -881,7 +881,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            builder.append(entry.getKey(), (Object) Serialization.getGlobal().fromYamlNode(entry.getValue()));
+            builder.append(entry.getKey(), (Object) Serialization.getInstance().fromYamlNode(entry.getValue()));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {

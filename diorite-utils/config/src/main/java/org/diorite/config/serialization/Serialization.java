@@ -217,7 +217,7 @@ public final class Serialization
         return null;
     }
 
-    public static Serialization getGlobal()
+    public static Serialization getInstance()
     {
         return GLOBAL;
     }

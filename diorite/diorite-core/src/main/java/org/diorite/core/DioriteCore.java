@@ -25,6 +25,7 @@
 package org.diorite.core;
 
 import org.diorite.Diorite;
+import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
 
@@ -38,4 +39,7 @@ public interface DioriteCore extends Diorite
     {
         return (DioriteCore) Diorite.getDiorite();
     }
+
+    @Override
+    EventManagerImpl getEventManager();
 }

@@ -24,11 +24,9 @@
 
 package org.diorite.core.protocol.packets.serverbound;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.diorite.core.protocol.ProtocolVersion;
-import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 
 public class LoginStartPacket implements ServerboundDioritePacket
 {
@@ -78,11 +76,5 @@ public class LoginStartPacket implements ServerboundDioritePacket
     public void setUsername(String username)
     {
         this.username = username;
-    }
-
-    @Override
-    public void handle(@Nonnull ServerboundPacketHandler handler)
-    {
-        handler.handle(this);
     }
 }

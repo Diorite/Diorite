@@ -26,11 +26,12 @@ package org.diorite.core.protocol.connection.internal;
 
 import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.InvalidPacketException;
+import org.diorite.event.Event;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public interface Packet<T extends ServerboundPacketListener>
+public interface Packet<T extends PacketListener> extends Event
 {
     default int id()
     {

@@ -26,6 +26,9 @@ package org.diorite.chat;
 
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 class ChatMessageImpl extends BaseComponentElement<ChatMessageImpl, ChatMessageEvent, ChatEventAppendChat> implements ChatMessage
 {
     @Nullable Object cache; // for chat service implementation.
@@ -174,5 +177,13 @@ class ChatMessageImpl extends BaseComponentElement<ChatMessageImpl, ChatMessageE
     public String toJson()
     {
         return null;
+    }
+
+    @Override
+    public JsonElement toJsonElement()
+    {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("text", "NOT IMPLEMENTED YET, DIORITE CORPORAJT 2017");
+        return jsonObject;
     }
 }

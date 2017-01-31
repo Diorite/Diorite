@@ -26,7 +26,15 @@
             <groupId>org.diorite.utils</groupId>
             <artifactId>injection</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.diorite</groupId>
+            <artifactId>gameprofile</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>net.engio</groupId>
+            <artifactId>mbassador</artifactId>
+        </dependency>
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>

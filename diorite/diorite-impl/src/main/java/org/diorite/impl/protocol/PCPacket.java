@@ -25,17 +25,86 @@
 package org.diorite.impl.protocol;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.diorite.commons.lazy.IntLazyValue;
+import org.diorite.commons.objects.Dirtable;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.connection.internal.Packet;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
-public abstract class PCPacket<T extends ServerboundPacketListener> implements Packet<T>
+public abstract class PCPacket<T extends ServerboundPacketListener> implements Packet<T>, Dirtable
 {
+    public static final int INITIAL_CAPACITY = 256;
+    @Nullable protected volatile byte[]  data;
+    protected volatile           boolean dirty;
+
+    @Override
+    public boolean isDirty()
+    {
+        return this.dirty;
+    }
+
+    @Override
+    public boolean setDirty(boolean dirty)
+    {
+        boolean d = this.dirty;
+        this.dirty = dirty;
+        return d;
+    }
+
+    public synchronized byte[] preparePacket(boolean force) throws InvalidPacketException
+    {
+        byte[] data = this.data;
+        if (force || (data == null))
+        {
+            ByteBuf byteBuf = Unpooled.buffer(this.packetType().getPreferredSize());
+            this.write(byteBuf);
+            data = new byte[byteBuf.readableBytes()];
+            this.data = data;
+            System.arraycopy(byteBuf.array(), 0, data, 0, byteBuf.readableBytes());
+            return data;
+        }
+        else
+        {
+            data = this.data;
+            if (data == null)
+            {
+                throw new IllegalStateException("Cache cleaned too soon.");
+            }
+            return data;
+        }
+    }
+
+    public void writePacket(ByteBuf data) throws InvalidPacketException
+    {
+        byte[] tempData = this.data;
+        if ((tempData == null) || this.dirty)
+        {
+            synchronized (this)
+            {
+                tempData = this.preparePacket(this.dirty);
+                this.dirty = false;
+            }
+        }
+        data.writeBytes(tempData);
+    }
+
+    @Nullable
+    public byte[] getCachedData()
+    {
+        return this.data;
+    }
+
+    public void setCachedData(@Nullable byte[] data)
+    {
+        this.data = data;
+    }
+
     @Nonnull
     protected abstract AbstractPacketDataSerializer createSerializer(ByteBuf byteBuf);
 
@@ -50,7 +119,7 @@ public abstract class PCPacket<T extends ServerboundPacketListener> implements P
     @Override
     public void write(ByteBuf byteBuf) throws InvalidPacketException
     {
-        this.write(this.createSerializer(byteBuf));
+        this.writePacket(byteBuf);
     }
 
     @Override

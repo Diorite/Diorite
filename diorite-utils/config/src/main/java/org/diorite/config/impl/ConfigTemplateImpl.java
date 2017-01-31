@@ -88,7 +88,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     public ConfigTemplateImpl(Class<T> type, ConfigImplementationProvider provider)
     {
         this.type = type;
-        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        this.comments = Serialization.getInstance().getCommentsManager().getComments(type);
         this.implementationProvider = provider;
         this.name = type.getSimpleName();
         this.charsetEncoder = StandardCharsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);

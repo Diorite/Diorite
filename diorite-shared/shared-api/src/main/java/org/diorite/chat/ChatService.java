@@ -87,7 +87,7 @@ public interface ChatService
         }
         ChatServiceHandler.chatService = implementation;
 
-        Serialization.getGlobal().registerStringSerializer(StringSerializer.of(ChatMessage.class, ChatMessage::toJson, ChatMessage::fromJson));
+        Serialization.getInstance().registerStringSerializer(StringSerializer.of(ChatMessage.class, ChatMessage::toJson, ChatMessage::fromJson));
     }
 
 }

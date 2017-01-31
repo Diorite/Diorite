@@ -66,7 +66,11 @@ public interface DioriteConfig extends Config
     @Property(name = "hostConfiguration")
     private Map<InetSocketAddress, HostConfiguration> getHostConfiguration() {return Map.of();}
 
-    HostConfiguration getHostConfigurationBy(InetSocketAddress socketAddress);
+    @Nullable
+    default HostConfiguration getHostConfigurationBy(InetSocketAddress socketAddress)
+    {
+        return ConfigManager.createInstance(HostConfiguration.class);
+    }
 
     default HostConfiguration getHostConfigurationOrDefault(InetSocketAddress socketAddress)
     {
@@ -75,13 +79,7 @@ public interface DioriteConfig extends Config
         {
             return configuration;
         }
-        HostConfiguration def = this.getDefaultHostConfiguration();
-        if (def == null)
-        {
-            def = ConfigManager.get().getConfigFile(HostConfiguration.class).create();
-            this.set("defaultHostConfiguration", def);
-        }
-        return def;
+        return this.getDefaultHostConfiguration();
     }
 
     @Comment("List of enabled protocols.")
@@ -93,7 +91,10 @@ public interface DioriteConfig extends Config
     @Property(name = "protocolSettings")
     private Map<String, ProtocolSettings> getProtocolSettings() {return Map.of();}
 
-    ProtocolSettings getDefaultProtocolSettings();
+    default ProtocolSettings getDefaultProtocolSettings()
+    {
+        return ConfigManager.createInstance(ProtocolSettings.class);
+    }
 
     @Nullable
     ProtocolSettings getFromProtocolSettings(String name);
@@ -117,13 +118,7 @@ public interface DioriteConfig extends Config
         }
         if (any)
         {
-            ProtocolSettings protocolSettings = this.getDefaultProtocolSettings();
-            if (protocolSettings == null)
-            {
-                protocolSettings = ConfigManager.get().getConfigFile(ProtocolSettings.class).create();
-                this.set("defaultProtocolSettings", protocolSettings);
-            }
-            return protocolSettings;
+            return this.getDefaultProtocolSettings();
         }
         return null;
     }

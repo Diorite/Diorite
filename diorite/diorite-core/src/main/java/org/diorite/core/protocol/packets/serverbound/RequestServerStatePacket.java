@@ -24,11 +24,9 @@
 
 package org.diorite.core.protocol.packets.serverbound;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.diorite.core.protocol.ProtocolVersion;
-import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 
 public class RequestServerStatePacket implements ServerboundDioritePacket
 {
@@ -66,11 +64,5 @@ public class RequestServerStatePacket implements ServerboundDioritePacket
     public void setServerPort(int serverPort)
     {
         this.serverPort = serverPort;
-    }
-
-    @Override
-    public void handle(@Nonnull ServerboundPacketHandler handler)
-    {
-        handler.handle(this);
     }
 }

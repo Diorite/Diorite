@@ -47,7 +47,7 @@ public class SerializationTest
 
     public static Serialization prepareSerialization()
     {
-        Serialization global = Serialization.getGlobal();
+        Serialization global = Serialization.getInstance();
         global.registerSerializable(SomeProperties.class);
         global.registerSerializable(MetaObject.class);
         global.registerStringSerializable(MetaValue.class);

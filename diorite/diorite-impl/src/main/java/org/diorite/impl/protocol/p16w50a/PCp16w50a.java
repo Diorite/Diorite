@@ -30,10 +30,20 @@ import java.util.Set;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.PCProtocolVersion;
 import org.diorite.impl.protocol.any.serverbound.ServerboundHandshakeListener;
+import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
+import org.diorite.impl.protocol.p16w50a.clientbound.CS01Pong;
+import org.diorite.impl.protocol.p16w50a.serverbound.SL00LoginStart;
+import org.diorite.impl.protocol.p16w50a.serverbound.SS00Request;
+import org.diorite.impl.protocol.p16w50a.serverbound.SS01Ping;
 import org.diorite.impl.protocol.p16w50a.serverbound.ServerboundLoginPacketListener;
+import org.diorite.impl.protocol.p16w50a.serverbound.ServerboundStatusPacketListener;
 import org.diorite.DioriteConfig;
 import org.diorite.core.protocol.connection.ActiveConnection;
+import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
+import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
+import org.diorite.core.protocol.packets.clientbound.ClientboundDioritePacket;
+import org.diorite.core.protocol.packets.serverbound.ServerboundDioritePacket;
 
 public class PCp16w50a extends PCProtocolVersion
 {
@@ -44,6 +54,12 @@ public class PCp16w50a extends PCProtocolVersion
         super(protocol, VERSION, "p16w50a", true, Objects.requireNonNull(settings.findProtocol(Set.of("p16w50a", "1.11.1", "1.11.2"))));
         this.aliases.add("1.11.1");
         this.aliases.add("1.11.2");
+        this.packets.addType(CS00Response.class, CS00Response::new);
+        this.packets.addType(CS01Pong.class, CS01Pong::new);
+
+        this.packets.addType(SS00Request.class, SS00Request::new);
+        this.packets.addType(SS01Ping.class, SS01Ping::new);
+        this.packets.addType(SL00LoginStart.class, SL00LoginStart::new);
     }
 
     @Override
@@ -61,6 +77,16 @@ public class PCp16w50a extends PCProtocolVersion
                 activeConnection.setPacketListener(new ServerboundHandshakeListener(activeConnection));
                 break;
             case STATUS:
+                ServerboundPacketListener packetListener = activeConnection.getPacketListener();
+                if (packetListener instanceof ServerboundHandshakeListener)
+                {
+                    ServerboundHandshakeListener handshakeListener = (ServerboundHandshakeListener) packetListener;
+                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, handshakeListener.getPacket()));
+                }
+                else
+                {
+                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, null));
+                }
                 break;
             case LOGIN:
                 activeConnection.setPacketListener(new ServerboundLoginPacketListener());
@@ -70,5 +96,23 @@ public class PCp16w50a extends PCProtocolVersion
             default:
                 throw new IllegalStateException("Unknown state:" + state);
         }
+    }
+
+    @Override
+    public void handlePacket(ActiveConnection activeConnection, ServerboundDioritePacket packet)
+    {
+        activeConnection.handlePacket(packet);
+    }
+
+    @Override
+    public void sendPacket(ActiveConnection activeConnection, ClientboundDioritePacket packet)
+    {
+        activeConnection.sendPacket(packet);
+    }
+
+    @Override
+    public ServerboundPacketHandler createPacketHandler(ActiveConnection connection)
+    {
+        return new PCp16w50aServerboundPacketHandler(connection);
     }
 }

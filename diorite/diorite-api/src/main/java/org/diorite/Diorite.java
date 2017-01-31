@@ -25,6 +25,7 @@
 package org.diorite;
 
 import org.diorite.commons.function.supplier.Supplier;
+import org.diorite.event.EventManager;
 
 /**
  * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
@@ -42,6 +43,13 @@ public interface Diorite
      * @return diorite config instance.
      */
     DioriteConfig getConfig();
+
+    /**
+     * Returns event manager.
+     *
+     * @return event manager.
+     */
+    EventManager getEventManager();
 
     /**
      * Returns true if server is running.

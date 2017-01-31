@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import com.google.gson.JsonElement;
+
 /**
  * Represents chat message, chat messages can contain multiple formatting, including hover and click events.
  */
@@ -89,13 +91,17 @@ public interface ChatMessage extends Cloneable
     String toLegacyText();
     String toPlainText();
     String toJson();
+    JsonElement toJsonElement();
 //    String toMarkup();
 
     // + jakies statyczne metody jak join itd
     // do tego proste statyczne metody factory od parsowania
-    static ChatMessage fromLegacy(String s) {return null;}
+    static ChatMessage fromLegacy(String s)
+    {
+        return new ChatMessageImpl();
+    }
     static ChatMessage fromString(String s) {return null;}
-//    static ChatMessage fromMarkup(String s) {return null;}
+    //    static ChatMessage fromMarkup(String s) {return null;}
     static ChatMessage fromJson(String s) {return null;} // sam minecraft polega na jsonie, więc jako-tako musimy go wspierać, bo trzeba potem
     // zaimplementować komendy vanilli
 }

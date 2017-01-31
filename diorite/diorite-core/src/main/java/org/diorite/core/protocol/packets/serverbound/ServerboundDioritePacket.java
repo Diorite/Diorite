@@ -24,9 +24,8 @@
 
 package org.diorite.core.protocol.packets.serverbound;
 
-import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.packets.DioritePacket;
 
-public interface ServerboundDioritePacket extends DioritePacket<ServerboundPacketHandler>
+public interface ServerboundDioritePacket extends DioritePacket
 {
 }

@@ -76,7 +76,7 @@ public class CommentsManager
 
     public void addComments(Class<?> clazz, @WillNotClose Reader reader)
     {
-        DocumentComments comments = Serialization.getGlobal().fromYaml(reader, DocumentComments.class);
+        DocumentComments comments = Serialization.getInstance().fromYaml(reader, DocumentComments.class);
         this.addComments(clazz, (comments == null) ? DocumentComments.empty() : comments);
     }
 

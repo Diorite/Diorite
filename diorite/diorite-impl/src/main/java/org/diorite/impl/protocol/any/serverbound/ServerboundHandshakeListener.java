@@ -24,6 +24,8 @@
 
 package org.diorite.impl.protocol.any.serverbound;
 
+import javax.annotation.Nullable;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Map;
@@ -51,6 +53,14 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
     private final ActiveConnection  activeConnection;
     private final HostConfiguration hostConfiguration;
 
+    private @Nullable H00Handshake packet;
+
+    @Nullable
+    public H00Handshake getPacket()
+    {
+        return this.packet;
+    }
+
     public ServerboundHandshakeListener(ActiveConnection activeConnection)
     {
         this.core = activeConnection.getDioriteCore();
@@ -58,10 +68,19 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
         this.hostConfiguration = this.core.getConfig().getHostConfigurationOrDefault(activeConnection.getServerAddress());
     }
 
+    private volatile boolean handled = false;
+
     public void handle(H00Handshake packet)
     {
-        assert packet.state != null;
-        switch (packet.state)
+        if (this.handled)
+        {
+            this.disconnect(null);
+            return;
+        }
+        this.handled = true;
+        this.packet = packet;
+        assert packet.getState() != null;
+        switch (packet.getState())
         {
             case LOGIN:
             {
@@ -95,14 +114,14 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
                     LogManager.getLogger().debug("Failed to check connection throttle", t);
                 }
                 Protocol<?> protocol = this.core.getProtocol();
-                ProtocolVersion<?> protocolVersion = protocol.getVersion(packet.protocolVersion);
+                ProtocolVersion<?> protocolVersion = protocol.getVersion(packet.getProtocolVersion());
                 if (protocolVersion == null)
                 {
                     // We still need some protocol version to handle disconnect message
                     protocolVersion = protocol.getDefault();
                     this.activeConnection.setProtocolVersion(protocolVersion);
                     protocolVersion.setListener(this.activeConnection, ProtocolState.LOGIN);
-                    this.core.debug("Player failed to join, invalid protocol version (" + packet.protocolVersion + "). Supported versions: " +
+                    this.core.debug("Player failed to join, invalid protocol version (" + packet.getProtocolVersion() + "). Supported versions: " +
                                     protocol.getAvailableVersions() + ")");
                     this.disconnect(ChatMessage.fromLegacy("Outdated server or client, we are on " + protocol.getAvailableVersionNames()));
                     return;
@@ -113,8 +132,9 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
             }
             case STATUS:
             {
+                this.activeConnection.setProtocol(ProtocolState.STATUS);
                 Protocol<?> protocol = this.core.getProtocol();
-                ProtocolVersion<?> protocolVersion = protocol.getVersion(packet.protocolVersion);
+                ProtocolVersion<?> protocolVersion = protocol.getVersion(packet.getProtocolVersion());
                 if (protocolVersion == null)
                 {
                     protocolVersion = protocol.getDefault();
@@ -124,7 +144,7 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
                 break;
             }
             default:
-                throw new UnsupportedOperationException("Invalid intention " + packet.state);
+                throw new UnsupportedOperationException("Invalid intention " + packet.getState());
         }
     }
 
@@ -136,7 +156,7 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
     }
 
     @Override
-    public void disconnect(ChatMessage disconnectMessage)
+    public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
 //        this.activeConnection.sendPacket(new PacketLoginClientboundDisconnect(baseComponent));
         this.activeConnection.close(disconnectMessage, true);

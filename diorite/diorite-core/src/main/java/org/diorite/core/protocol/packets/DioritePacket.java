@@ -24,9 +24,8 @@
 
 package org.diorite.core.protocol.packets;
 
-import org.diorite.core.protocol.connection.PacketHandler;
+import org.diorite.event.Event;
 
-public interface DioritePacket<T extends PacketHandler>
+public interface DioritePacket extends Event
 {
-    void handle(T handler);
 }

@@ -35,15 +35,18 @@ import org.diorite.DioriteConfig;
 import org.diorite.commons.SpammyError;
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.core.DioriteCore;
+import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
 
 public class DioriteServer implements DioriteCore
 {
-    private final           PCProtocol       pcProtocol;
-    private final           DioriteConfig    dioriteConfig;
-    private final           ServerConnection serverConnection;
-    @Nullable private final String           serverVersion;
+    private final PCProtocol       pcProtocol;
+    private final DioriteConfig    dioriteConfig;
+    private final ServerConnection serverConnection;
+    private final EventManagerImpl eventManager = new EventManagerImpl();
+
+    @Nullable private final String serverVersion;
 
     private boolean isRunning;
 
@@ -111,6 +114,12 @@ public class DioriteServer implements DioriteCore
     static DioriteCore getDiorite()
     {
         return (DioriteCore) Diorite.getDiorite();
+    }
+
+    @Override
+    public EventManagerImpl getEventManager()
+    {
+        return this.eventManager;
     }
 
     @Override
