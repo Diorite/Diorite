@@ -61,6 +61,9 @@ public class ConfigTest
         SomeConfig someConfig = configTemplate.create();
         Assert.assertNotNull(someConfig);
 
+        Assert.assertEquals("1", someConfig.getSomething());
+        Assert.assertNull(someConfig.get("something"));
+
         Assert.assertNotNull(someConfig.getEnumValue());
         someConfig.setEnumValue(TestEnum.C);
         Assert.assertSame(TestEnum.C, someConfig.getEnumValue());

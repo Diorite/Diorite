@@ -60,6 +60,7 @@ import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
 import org.diorite.config.Property;
+import org.diorite.config.annotations.HelperMethod;
 import org.diorite.config.annotations.ToKeyMapperFunction;
 import org.diorite.config.annotations.ToStringMapperFunction;
 import org.diorite.config.impl.actions.ActionsRegistry;
@@ -213,6 +214,11 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             }
             else
             {
+                if (methodInvoker.isDefault() && methodInvoker.isAnnotationPresent(HelperMethod.class))
+                {
+                    iterator.remove();
+                    continue;
+                }
                 Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method, knownProperties::contains);
                 if (resultPair == null)
                 {

@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 
 import org.diorite.config.annotations.AsList;
 import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.HelperMethod;
 import org.diorite.config.annotations.Mapped;
 import org.diorite.config.annotations.ToStringMapperFunction;
 import org.diorite.config.annotations.Unmodifiable;
@@ -51,6 +52,13 @@ public interface SomeConfig extends Config
 
     int nicknamesSize();
     int sizeOfNicknames();
+
+    @HelperMethod
+    default String getSomething()
+    {
+        System.out.println("just helper");
+        return "1";
+    }
 
     String getFromNicknames(int index);
     String getNicknamesBy(int index);
@@ -94,11 +102,14 @@ public interface SomeConfig extends Config
         return metaObject.getName();
     }
 
-    default TestEnum getEnumValue(){return TestEnum.A;}
+    default TestEnum getEnumValue() {return TestEnum.A;}
 
     void setEnumValue(TestEnum testEnum);
 
-    enum TestEnum{
-        A,B,C
+    enum TestEnum
+    {
+        A,
+        B,
+        C
     }
 }
