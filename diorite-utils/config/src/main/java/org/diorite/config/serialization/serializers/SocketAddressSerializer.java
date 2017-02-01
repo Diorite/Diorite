@@ -37,7 +37,7 @@ public class SocketAddressSerializer implements StringSerializer<InetSocketAddre
     @Override
     public Class<? super InetSocketAddress> getType()
     {
-        return SocketAddress.class;
+        return InetSocketAddress.class;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SocketAddressSerializer implements StringSerializer<InetSocketAddre
         int portSeparator = data.lastIndexOf(':');
         String port = data.substring(portSeparator + 1);
         String host = data.substring(0, portSeparator);
-        return InetSocketAddress.createUnresolved(host, Integer.parseInt(port));
+        return new InetSocketAddress(host, Integer.parseInt(port));
     }
 
     @Override
