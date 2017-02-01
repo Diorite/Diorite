@@ -162,36 +162,34 @@ public final class DioriteMain
     {
         ConfigTemplate<DioriteConfig> configTemplate = ConfigManager.get().getConfigFile(DioriteConfig.class);
         File configFile = (File) options.valueOf("config");
+        boolean exists = configFile.exists();
         DioriteConfig dioriteConfig = configTemplate.create();
         dioriteConfig.bindFile(configFile);
-        if (! configFile.exists() || (dioriteConfig.getConfigVersion() != DioriteConfig.CURRENT_VERSION))
+        if (exists)
         {
-            if (! configFile.exists())
-            {
-                logger.info("Config file ('" + configFile.getAbsolutePath() + "') Doesn't exist yet! Creating new one...");
-            }
-            else
+            dioriteConfig.load();
+            if (dioriteConfig.getConfigVersion() != DioriteConfig.CURRENT_VERSION)
             {
                 logger.info(
                         "Invalid version of config file ('" + configFile.getAbsolutePath() + "') found: " + dioriteConfig.getConfigVersion() + ", expected: " +
-                        DioriteConfig.CURRENT_VERSION + ")! Updating it...");
+                        DioriteConfig.CURRENT_VERSION + "! Updating it...");
+                dioriteConfig.set("configVersion", DioriteConfig.CURRENT_VERSION);
             }
+            dioriteConfig.save(configFile);
+        }
+        else
+        {
+            logger.info("Config file ('" + configFile.getAbsolutePath() + "') Doesn't exist yet! Creating new one...");
             try
             {
-                if (! configFile.exists())
-                {
-                    configFile.createNewFile();
-                }
+                configFile.createNewFile();
+                dioriteConfig.set("configVersion", DioriteConfig.CURRENT_VERSION);
                 dioriteConfig.save(configFile);
             }
             catch (IOException e)
             {
                 throw new RuntimeException("Can't create config file: " + configFile.getAbsolutePath(), e);
             }
-        }
-        else
-        {
-            dioriteConfig.load();
         }
         addBindings(dioriteConfig);
 
