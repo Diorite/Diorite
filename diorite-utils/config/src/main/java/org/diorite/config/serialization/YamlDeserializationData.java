@@ -183,6 +183,10 @@ public class YamlDeserializationData extends AbstractDeserializationData
     @SuppressWarnings({"unchecked", "rawtypes"})
     private <T> T deserializeSpecial(Class<T> type, Node node, @Nullable T def)
     {
+        if (node.getTag().equals(Tag.NULL))
+        {
+            return null;
+        }
         if (DioriteReflectionUtils.getWrapperClass(type).equals(Boolean.class))
         {
             node.setTag(Tag.STR);
@@ -233,15 +237,23 @@ public class YamlDeserializationData extends AbstractDeserializationData
                 return (T) (Double) Double.parseDouble(deserialize);
             }
         }
-        if (type != Object.class)
-        {
-            node.setTag(new Tag(type));
-        }
         if ((node instanceof SequenceNode) && type.isArray())
         {
             node.setType(type);
-            ((SequenceNode) node).setListType(type.getComponentType());
+            Class<?> componentType = type.getComponentType();
+            Tag componentTag = new Tag(componentType);
+            node.setUseClassConstructor(false);
+            for (Node subNode : ((SequenceNode) node).getValue())
+            {
+                subNode.setType(componentType);
+                subNode.setTag(componentTag);
+                subNode.setUseClassConstructor(false);
+            }
             return (T) this.constructor.constructArray((SequenceNode) node);
+        }
+        if (type != Object.class)
+        {
+            node.setTag(new Tag(type));
         }
         return (T) this.constructor.constructObject(node);
     }
