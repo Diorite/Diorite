@@ -26,6 +26,9 @@ package org.diorite.event;
 
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.Feature.AsynchronousHandlerInvocation;
@@ -35,6 +38,8 @@ import net.engio.mbassy.bus.config.IBusConfiguration;
 
 public final class DioriteEventBus extends MBassador<Event>
 {
+    private static final Logger logger = LoggerFactory.getLogger("[event-bus]");
+
     private final EventSubscriptionManager subscriptionManager;
 
     private DioriteEventBus(IBusConfiguration configuration)
@@ -61,7 +66,10 @@ public final class DioriteEventBus extends MBassador<Event>
                                               .setMetadataReader(new EventHandlerMetadataReader())
                                               .setSubscriptionManagerProvider(SubscriptionManagerProvider.singleton()))
                         .addFeature(AsynchronousMessageDispatch.Default())
-                        .addFeature(AsynchronousHandlerInvocation.Default());
+                        .addFeature(AsynchronousHandlerInvocation.Default())
+                        .addPublicationErrorHandler(error -> logger.error(
+                                "Error publishing event: " + error.getPublishedMessage() + " to: " + error.getHandler() + " from listener: " +
+                                error.getListener() + ", error: " + error.getMessage(), error.getCause()));
         return new DioriteEventBus(configuration);
     }
 }
