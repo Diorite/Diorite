@@ -95,6 +95,14 @@ public interface Config extends Map<String, Object>
     boolean containsKey(String... key);
 
     /**
+     * Returns metadata map. <br>
+     * This map isn't saved, can be used by config implementations to store temporary data.
+     *
+     * @return metadata map.
+     */
+    Map<String, Object> metadata();
+
+    /**
      * Get selected value from config.
      *
      * @param key

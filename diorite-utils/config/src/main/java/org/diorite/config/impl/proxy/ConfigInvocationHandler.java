@@ -42,6 +42,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -244,6 +245,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
             {
                 Method m = clazz.getMethod("fillWithDefaults");
                 this.registerVoidMethod(clazz, m, (args) -> this.fillWithDefaultsImpl());
+            }
+            {
+                Method m = clazz.getMethod("metadata");
+                this.registerMethod(clazz, m, (args) -> this.metadataImpl());
             }
             {
                 Method m = clazz.getMethod("get", String.class);
@@ -625,6 +630,13 @@ public final class ConfigInvocationHandler implements InvocationHandler
     private void bindFileImpl(@Nullable File file)
     {
         this.bindFile = file;
+    }
+
+    private final Map<String, Object> metadata = Collections.synchronizedMap(new HashMap<>(3));
+
+    private Map<String, Object> metadataImpl()
+    {
+        return this.metadata;
     }
 
     private void saveImpl()

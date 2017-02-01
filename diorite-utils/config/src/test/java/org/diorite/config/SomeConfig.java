@@ -56,7 +56,7 @@ public interface SomeConfig extends Config
     @HelperMethod
     default String getSomething()
     {
-        System.out.println("just helper");
+        this.metadata().putIfAbsent("meta", "meta value");
         return "1";
     }
 
