@@ -25,17 +25,6 @@
 package org.diorite.ping;
 
 import javax.annotation.Nullable;
-import javax.imageio.ImageIO;
-
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -47,13 +36,10 @@ import org.diorite.chat.ChatMessage;
  */
 public class ServerPing
 {
-    public static final int MAX_FAVICON_HEIGHT = 64;
-    public static final int MAX_FAVICON_WIDTH  = 64;
-
     private           ChatMessage            motd;
     private           ServerPingPlayerSample playerData;
     private           ServerPingServerData   serverData;
-    private @Nullable String                 encodedFavicon;
+    private @Nullable Favicon                favicon;
 
     /**
      * Create new ping instance.
@@ -61,17 +47,16 @@ public class ServerPing
      * @param motd
      *         message of the day to show.
      * @param favicon
-     *         encoded favicon (as string starting with `data:image/png;base64` containing encoded image data in utf8 base64) to display, favicon should be
-     *         cached.
+     *         favicon object.
      * @param serverData
      *         version server data.
      * @param playerData
      *         player sample data.
      */
-    public ServerPing(ChatMessage motd, @Nullable String favicon, ServerPingServerData serverData, ServerPingPlayerSample playerData)
+    public ServerPing(ChatMessage motd, @Nullable Favicon favicon, ServerPingServerData serverData, ServerPingPlayerSample playerData)
     {
         this.motd = motd;
-        this.encodedFavicon = favicon;
+        this.favicon = favicon;
         this.serverData = serverData;
         this.playerData = playerData;
     }
@@ -98,68 +83,25 @@ public class ServerPing
     }
 
     /**
-     * Returns encoded favicon, as string starting with `data:image/png;base64` containing encoded image data in utf8 base64
+     * Returns favicon object.
      *
-     * @return encoded favicon.
+     * @return favicon object.
      */
     @Nullable
-    public String getEncodedFavicon()
+    public Favicon getFavicon()
     {
-        return this.encodedFavicon;
+        return this.favicon;
     }
 
     /**
-     * Change encoded favicon as string starting with `data:image/png;base64` containing encoded image data in utf8 base64.
+     * Sets new favicon.
      *
      * @param favicon
-     *         new favicon data.
+     *         new favicon.
      */
-    public void setEncodedFavicon(@Nullable String favicon)
+    public void setFavicon(@Nullable Favicon favicon)
     {
-        this.encodedFavicon = favicon;
-    }
-
-    /**
-     * Helper method to encode buffered image, result should be cached and reused.
-     *
-     * @param faviconImage
-     *         image to encode.
-     *
-     * @return encoded image in valid favicon format.
-     */
-    public static String encodeFavicon(BufferedImage faviconImage)
-    {
-        if ((faviconImage.getWidth() != MAX_FAVICON_WIDTH) && (faviconImage.getHeight() != MAX_FAVICON_HEIGHT))
-        {
-            int type = (faviconImage.getType() == 0) ? BufferedImage.TYPE_INT_ARGB : faviconImage.getType();
-            faviconImage = resizeImageWithHint(faviconImage, type);
-        }
-        try
-        {
-            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream(MAX_FAVICON_WIDTH * MAX_FAVICON_HEIGHT * 4);
-            OutputStream outputStream = Base64.getEncoder().wrap(arrayOutputStream);
-            ImageIO.write(faviconImage, "PNG", outputStream);
-            return "data:image/png;base64," + arrayOutputStream.toString(StandardCharsets.UTF_8.name());
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Can't scale image.", e);
-        }
-    }
-
-    private static BufferedImage resizeImageWithHint(BufferedImage originalImage, int type)
-    {
-        BufferedImage resizedImage = new BufferedImage(MAX_FAVICON_WIDTH, MAX_FAVICON_HEIGHT, type);
-        Graphics2D g = resizedImage.createGraphics();
-
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g.drawImage(originalImage, 0, 0, MAX_FAVICON_WIDTH, MAX_FAVICON_HEIGHT, null);
-        g.dispose();
-        g.setComposite(AlphaComposite.Src);
-        return resizedImage;
+        this.favicon = favicon;
     }
 
     /**
@@ -209,6 +151,6 @@ public class ServerPing
     {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("motd", this.motd)
                                                                           .append("playerData", this.playerData).append("serverData", this.serverData)
-                                                                          .append("favicon", this.encodedFavicon != null).toString();
+                                                                          .append("favicon", this.favicon != null).toString();
     }
 }
