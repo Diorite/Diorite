@@ -24,6 +24,7 @@
 
 package org.diorite.impl.protocol.connection;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Collections;
 import java.util.Iterator;
@@ -57,7 +58,7 @@ public class ServerConnectionImpl extends Thread implements ServerConnection
     private final       Logger logger = LoggerFactory.getLogger("[Netty]");
     public static final int    MILLIS = 500;
 
-    final         Set<DioriteActiveConnection<?>> connections = ObjectSets.synchronize(new ObjectOpenHashSet<>(200));
+    final Set<DioriteActiveConnection<?>> connections = ObjectSets.synchronize(new ObjectOpenHashSet<>(200));
     private final DioriteCore core;
     private final Map<InetSocketAddress, ChannelFuture> channels = new ConcurrentHashMap<>(1);
 
@@ -83,6 +84,14 @@ public class ServerConnectionImpl extends Thread implements ServerConnection
         for (InetSocketAddress address : config.getHosts())
         {
             HostConfiguration hostConfiguration = config.getHostConfigurationOrDefault(address);
+            try
+            {
+                hostConfiguration.prepareFavicon();
+            }
+            catch (IOException e)
+            {
+                LoggerFactory.getLogger(address.toString()).error("Can't prepare favicon.", e);
+            }
             if (hostConfiguration.isAcceptingPlayers())
             {
                 this.bind(epoll, address);

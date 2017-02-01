@@ -38,6 +38,7 @@ import org.diorite.core.DioriteCore;
 import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
+import org.diorite.ping.Favicon;
 import org.diorite.serializers.SerializersInit;
 
 public class DioriteServer implements DioriteCore
@@ -46,6 +47,7 @@ public class DioriteServer implements DioriteCore
     private final DioriteConfig    dioriteConfig;
     private final ServerConnection serverConnection;
     private final EventManagerImpl eventManager = new EventManagerImpl();
+    private @Nullable Favicon favicon;
 
     @Nullable private final String serverVersion;
 

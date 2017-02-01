@@ -27,6 +27,7 @@ package org.diorite;
 import javax.annotation.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Collection;
@@ -41,7 +42,9 @@ import org.diorite.config.Property;
 import org.diorite.config.annotations.Comment;
 import org.diorite.config.annotations.Footer;
 import org.diorite.config.annotations.Header;
+import org.diorite.config.annotations.HelperMethod;
 import org.diorite.config.annotations.Unmodifiable;
+import org.diorite.ping.Favicon;
 
 /**
  * Configuration file of diorite, remember that config object will not reflect changes at runtime, like changing MOTD using diorite API, will not change MOTD
@@ -201,6 +204,43 @@ public interface DioriteConfig extends Config
 
         @Comment("Path of favicon.")
         default File getFavicon() {return new File("server-icon.png");}
+
+        /**
+         * Returns prepared favicon.
+         *
+         * @return prepared favicon.
+         */
+        @HelperMethod
+        @Nullable
+        default Favicon getPreparedFavicon()
+        {
+            return (Favicon) this.metadata().get("favicon-prepared");
+        }
+
+        /**
+         * Change prepared favicon.
+         *
+         * @param favicon
+         *         new favicon instance.
+         */
+        @HelperMethod
+        default void setPreparedFavicon(@Nullable Favicon favicon)
+        {
+            this.metadata().put("favicon-prepared", favicon);
+        }
+
+        @HelperMethod
+        @Nullable
+        default Favicon prepareFavicon() throws IOException
+        {
+            if (! this.getFavicon().exists())
+            {
+                return null;
+            }
+            Favicon from = Favicon.from(this.getFavicon());
+            this.metadata().put("favicon-prepared", from);
+            return from;
+        }
 
         @Comment("Default server motd, it can be changed at runtime.")
         default String getMotd() {return "  &fThis server is using &9diorite&f!\n    &7<&8==== &a#&9OnlyDiorite &8====&7>";}
