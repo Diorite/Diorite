@@ -164,12 +164,24 @@ public final class DioriteMain
         File configFile = (File) options.valueOf("config");
         DioriteConfig dioriteConfig = configTemplate.create();
         dioriteConfig.bindFile(configFile);
-        if (! configFile.exists())
+        if (! configFile.exists() || (dioriteConfig.getConfigVersion() != DioriteConfig.CURRENT_VERSION))
         {
-            logger.info("Config file ('" + configFile.getAbsolutePath() + "') Doesn't exist yet! Creating new one...");
+            if (! configFile.exists())
+            {
+                logger.info("Config file ('" + configFile.getAbsolutePath() + "') Doesn't exist yet! Creating new one...");
+            }
+            else
+            {
+                logger.info(
+                        "Invalid version of config file ('" + configFile.getAbsolutePath() + "') found: " + dioriteConfig.getConfigVersion() + ", expected: " +
+                        DioriteConfig.CURRENT_VERSION + ")! Updating it...");
+            }
             try
             {
-                configFile.createNewFile();
+                if (! configFile.exists())
+                {
+                    configFile.createNewFile();
+                }
                 dioriteConfig.save(configFile);
             }
             catch (IOException e)

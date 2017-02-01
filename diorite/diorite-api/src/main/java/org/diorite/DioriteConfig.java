@@ -57,6 +57,11 @@ import org.diorite.ping.Favicon;
 @SuppressWarnings("MagicNumber")
 public interface DioriteConfig extends Config
 {
+    int CURRENT_VERSION = 0;
+
+    @Comment("Current version of diorite config.")
+    default int getConfigVersion() {return - 1;}
+
     @Comment("List of IPs to be bound to.")
     @Unmodifiable
     default Set<InetSocketAddress> getHosts()
