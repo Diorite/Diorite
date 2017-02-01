@@ -34,6 +34,7 @@ import org.diorite.chat.ChatMessage;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
+import org.diorite.core.protocol.packets.ReceiveDioritePacketEvent;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
 
 import net.engio.mbassy.listener.Handler;
@@ -84,7 +85,12 @@ public class ServerboundStatusPacketListener implements ServerboundPacketListene
             requestServerStatePacket.setServerAddress(handshakeAddress);
             requestServerStatePacket.setServerPort(this.handshakePacket.getPort());
         }
-        this.activeConnection.callEvent(requestServerStatePacket);
+        ReceiveDioritePacketEvent receiveDioritePacketEvent = new ReceiveDioritePacketEvent(this.activeConnection, requestServerStatePacket);
+        this.dioriteCore.getEventManager().callEvent(receiveDioritePacketEvent);
+        if (! receiveDioritePacketEvent.isCancelled())
+        {
+            this.activeConnection.callEvent(requestServerStatePacket);
+        }
     }
 
     @Handler

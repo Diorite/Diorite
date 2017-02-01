@@ -44,7 +44,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 
 public class ServerConnectionChannel extends ChannelInitializer<Channel>
 {
-    private static final Logger logger = LoggerFactory.getLogger("Netty");
+    private static final Logger logger = LoggerFactory.getLogger("[Netty]");
 
     public static final int IP_TOS          = 24;
     public static final int TIMEOUT_SECONDS = 30;
