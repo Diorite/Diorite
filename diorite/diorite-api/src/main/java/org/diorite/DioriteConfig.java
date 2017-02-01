@@ -29,7 +29,9 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -129,6 +131,9 @@ public interface DioriteConfig extends Config
     @Comment("Server name, may be used by other plugins.")
     default String getServerName() {return "diorite";}
 
+    @Comment("The maximum number of players on server.")
+    default int getMaxPlayers() {return 10;}
+
     @Comment("Players are kicked if they are idle for too long. (In seconds)")
     default int getPlayerTimeout() {return 600;}
 
@@ -199,11 +204,18 @@ public interface DioriteConfig extends Config
                 "without it. (You should use online mode true, or at least find some authorization plugin for players.)")
         default OnlineMode getOnlineMode() {return OnlineMode.TRUE;}
 
-        @Comment("The maximum number of players on server.")
-        default int getMaxPlayers() {return 10;}
-
-        @Comment("Path of favicon.")
-        default File getFavicon() {return new File("server-icon.png");}
+        @Comment("Path of favicon, when using file favicon will automatically update to new file contents.")
+        default URL getFavicon()
+        {
+            try
+            {
+                return new File("server-icon.png").toURI().toURL();
+            }
+            catch (MalformedURLException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
 
         /**
          * Returns prepared favicon.
@@ -233,14 +245,17 @@ public interface DioriteConfig extends Config
         @Nullable
         default Favicon prepareFavicon() throws IOException
         {
-            if (! this.getFavicon().exists())
-            {
-                return null;
-            }
             Favicon from = Favicon.from(this.getFavicon());
             this.metadata().put("favicon-prepared", from);
             return from;
         }
+
+        /**
+         * Returns size of players sample in server ping.
+         *
+         * @return size of players sample in server ping.
+         */
+        default int getSampleSize() {return 10;}
 
         @Comment("Default server motd, it can be changed at runtime.")
         default String getMotd() {return "  &fThis server is using &9diorite&f!\n    &7<&8==== &a#&9OnlyDiorite &8====&7>";}

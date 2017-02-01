@@ -29,6 +29,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 
 /**
  * Represent diorite favicon.
@@ -63,6 +66,45 @@ public interface Favicon
      * Creates favicon from file.
      *
      * @return favicon instance.
+     *
+     * @throws IOException
+     *         if read operation fails. {@link ImageIO#read(URL)}
+     */
+    static Favicon from(URL url) throws IOException
+    {
+        if (isLocalFile(url))
+        {
+            try
+            {
+                return DynamicFaviconInstance.from(Paths.get(url.toURI()).toFile());
+            }
+            catch (URISyntaxException e)
+            {
+                throw new IOException(e);
+            }
+        }
+        return from(ImageIO.read(url));
+    }
+
+    private static boolean isLocalFile(java.net.URL url)
+    {
+        String scheme = url.getProtocol();
+        return "file".equalsIgnoreCase(scheme) && ! hasHost(url);
+    }
+
+    private static boolean hasHost(java.net.URL url)
+    {
+        String host = url.getHost();
+        return (host != null) && ! host.isEmpty();
+    }
+
+    /**
+     * Creates favicon from file.
+     *
+     * @return favicon instance.
+     *
+     * @throws IOException
+     *         if read operation fails. {@link ImageIO#read(File)}
      */
     static Favicon from(File file) throws IOException
     {
