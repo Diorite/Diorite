@@ -459,11 +459,12 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> String serializeToString(Class<T> type, T object)
     {
-        if (! this.isStringSerializable(type))
+        Class<?> asStringSerializable = this.getAsStringSerializable(type);
+        if (asStringSerializable == null)
         {
             throw new IllegalArgumentException("Given object isn't string serializable: (" + type.getName() + ") -> " + object);
         }
-        return ((StringSerializer<T>) this.stringSerializerMap.get(type)).serialize(object);
+        return ((StringSerializer<T>) this.stringSerializerMap.get(asStringSerializable)).serialize(object);
     }
 
     /**

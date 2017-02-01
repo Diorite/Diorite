@@ -106,6 +106,10 @@ class SimpleSerializationData implements SerializationData
         {
             type = (Class<T>) object.getClass();
         }
+        if (this.serialization.isStringSerializable(type))
+        {
+            return this.serialization.serializeToString(type, object);
+        }
         return this.serialization.serialize(type, object, this.serializationType, comments);
     }
 
