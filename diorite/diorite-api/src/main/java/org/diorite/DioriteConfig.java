@@ -199,6 +199,9 @@ public interface DioriteConfig extends Config
         @Comment("The maximum number of players on server.")
         default int getMaxPlayers() {return 10;}
 
+        @Comment("Path of favicon.")
+        default File getFavicon() {return new File("server-icon.png");}
+
         @Comment("Default server motd, it can be changed at runtime.")
         default String getMotd() {return "  &fThis server is using &9diorite&f!\n    &7<&8==== &a#&9OnlyDiorite &8====&7>";}
 
