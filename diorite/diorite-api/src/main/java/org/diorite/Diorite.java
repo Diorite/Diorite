@@ -121,11 +121,12 @@ public interface Diorite
      */
     static Diorite getDiorite()
     {
-        if (DioriteInstanceHolder.diorite == null)
+        Diorite diorite = DioriteInstanceHolder.diorite;
+        if (diorite == null)
         {
             throw new IllegalStateException("Instance not ready yet.");
         }
-        return DioriteInstanceHolder.diorite;
+        return diorite;
     }
 
     /**
