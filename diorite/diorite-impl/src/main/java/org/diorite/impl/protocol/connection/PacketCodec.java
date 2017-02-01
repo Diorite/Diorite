@@ -48,7 +48,7 @@ public class PacketCodec extends PacketByteToMessageCodec
     }
 
     @Override
-    protected void encode(ChannelHandlerContext context, Packet<?> packet, ByteBuf byteBuf) throws Exception
+    protected void encode(ChannelHandlerContext context, Packet packet, ByteBuf byteBuf) throws Exception
     {
         packet.encode(context, byteBuf);
     }

@@ -27,7 +27,6 @@ package org.diorite.impl.protocol.p16w50a.clientbound;
 import org.diorite.impl.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.p16w50a.PCp16w50aPacket;
 import org.diorite.core.protocol.InvalidPacketException;
-import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
 @SuppressWarnings("rawtypes")
 public abstract class ClientboundPacket extends PCp16w50aPacket
@@ -35,9 +34,9 @@ public abstract class ClientboundPacket extends PCp16w50aPacket
     @Override
     protected abstract void write(AbstractPacketDataSerializer serializer) throws InvalidPacketException;
 
-    @Override
-    public final void handle(ServerboundPacketListener packetListener)
-    {
-        throw new IllegalStateException("unexpected packet handle.");
-    }
+//    @Override
+//    public void handle(PacketListener packetListener)
+//    {
+//        throw new IllegalStateException("unexpected packet handle.");
+//    }
 }

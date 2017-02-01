@@ -77,7 +77,7 @@ public abstract class Protocol<T extends ProtocolVersion<?>>
         return this.versionsByName.get(ver);
     }
 
-    public PacketType getPacketType(Class<? extends Packet<?>> packet)
+    public PacketType getPacketType(Class<? extends Packet> packet)
     {
         for (T ver : this.versions.values())
         {
@@ -89,7 +89,7 @@ public abstract class Protocol<T extends ProtocolVersion<?>>
         throw new IllegalStateException("Unknown packet!");
     }
 
-    public T getVersionByPacketClass(Class<? extends Packet<?>> packet)
+    public T getVersionByPacketClass(Class<? extends Packet> packet)
     {
         for (T ver : this.versions.values())
         {

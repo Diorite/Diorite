@@ -24,6 +24,7 @@
 
 package org.diorite.core.protocol.connection.internal;
 
+import org.diorite.commons.objects.Cancellable;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.event.Event;
@@ -31,7 +32,7 @@ import org.diorite.event.Event;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public interface Packet<T extends PacketListener> extends Event
+public interface Packet extends Event, Cancellable
 {
     default int id()
     {
@@ -54,9 +55,8 @@ public interface Packet<T extends PacketListener> extends Event
     @SuppressWarnings("unchecked")
     default PacketType packetType()
     {
-        Class<? extends Packet<?>> aClass = (Class<? extends Packet<?>>) this.getClass();
-        return DioriteCore.getDiorite().getProtocol().getPacketType(aClass);
+        return DioriteCore.getDiorite().getProtocol().getPacketType(this.getClass());
     }
 
-    void handle(T packetListener);
+//    void handle(T packetListener);
 }

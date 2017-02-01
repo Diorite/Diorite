@@ -28,22 +28,22 @@ import org.diorite.commons.function.supplier.Supplier;
 
 public interface Packets
 {
-    boolean isRegistered(Class<? extends Packet<?>> clazz);
+    boolean isRegistered(Class<? extends Packet> clazz);
 
-    PacketType getType(Class<? extends Packet<?>> clazz);
+    PacketType getType(Class<? extends Packet> clazz);
 
     PacketType getServerboundType(ProtocolState protocolState, int id);
 
     PacketType getClientboundType(ProtocolState protocolState, int id);
 
-    void addType(Class<? extends Packet<?>> clazz, PacketType type);
+    void addType(Class<? extends Packet> clazz, PacketType type);
 
-    default void addType(Class<? extends Packet<?>> clazz)
+    default void addType(Class<? extends Packet> clazz)
     {
         this.addType(clazz, new PacketType(clazz));
     }
 
-    default <T extends Packet<?>> void addType(Class<T> clazz, Supplier<? extends T> constructor)
+    default <T extends Packet> void addType(Class<T> clazz, Supplier<? extends T> constructor)
     {
         this.addType(clazz, new PacketType(clazz, constructor));
     }

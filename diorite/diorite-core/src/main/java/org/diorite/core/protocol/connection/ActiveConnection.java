@@ -34,6 +34,8 @@ import java.util.Queue;
 import com.google.common.collect.Queues;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.chat.ChatMessage;
 import org.diorite.core.DioriteCore;
@@ -41,7 +43,10 @@ import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.internal.Packet;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
 import org.diorite.core.protocol.connection.internal.QueuedPacket;
+import org.diorite.core.protocol.connection.internal.ReceivePacketEvent;
+import org.diorite.core.protocol.connection.internal.SendPacketEvent;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
+import org.diorite.event.Event;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -50,14 +55,21 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.config.BusConfiguration;
+import net.engio.mbassy.bus.config.Feature;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import net.engio.mbassy.bus.error.PublicationError;
 
-public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packet<? super ServerboundPacketListener>>
+public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packet>
 {
+    protected       Logger              logger      = LoggerFactory.getLogger("[Con][Unknown~" + Integer.toHexString(System.identityHashCode(this)) + "]");
     protected final Queue<QueuedPacket> packetQueue = Queues.newConcurrentLinkedQueue();
 
     protected final DioriteCore       dioriteCore;
     protected final InetSocketAddress serverAddress;
     protected final int               playerTimeout;
+    protected final MBassador<Event>  eventBus;
 
     @Nullable protected Channel                   channel;
     @Nullable protected SocketAddress             address;
@@ -80,6 +92,13 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
 
         this.playerTimeout = dioriteCore.getConfig().getPlayerTimeout();
         this.packetHandler = protocolVersion.createPacketHandler(this);
+
+        this.eventBus = new MBassador<>(new BusConfiguration()
+                                                .addFeature(Feature.SyncPubSub.Default())
+                                                .addFeature(Feature.AsynchronousHandlerInvocation.Default())
+                                                .addFeature(Feature.AsynchronousMessageDispatch.Default())
+                                                .addPublicationErrorHandler(new PublicationErrorHandler()));
+        this.eventBus.subscribe(this.packetHandler);
     }
 
     protected long lastKeepAlive = System.currentTimeMillis();
@@ -124,7 +143,12 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         this.channel.flush();
     }
 
-    public void sendPackets(Packet<?>[] packets)
+    public void callEvent(Event event)
+    {
+        this.eventBus.publish(event);
+    }
+
+    public void sendPackets(Packet[] packets)
     {
         if (this.closed)
         {
@@ -134,21 +158,21 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         if (this.isChannelOpen())
         {
             this.nextPacket();
-            for (Packet<?> packet : packets)
+            for (Packet packet : packets)
             {
                 this.sendPacket(packet, null);
             }
         }
         else
         {
-            for (Packet<?> packet : packets)
+            for (Packet packet : packets)
             {
                 this.packetQueue.add(new QueuedPacket(packet, null));
             }
         }
     }
 
-    public void sendPacket(Packet<?> packet)
+    public void sendPacket(Packet packet)
     {
         if (this.closed)
         {
@@ -167,7 +191,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     }
 
     @SafeVarargs
-    public final void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener,
+    public final void sendPacket(Packet packet, GenericFutureListener<? extends Future<? super Void>> listener,
                                  GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
         if (this.closed)
@@ -186,7 +210,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         }
     }
 
-    private void sendPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>>[] listeners)
+    private void sendPacket(Packet packet, @Nullable GenericFutureListener<? extends Future<? super Void>>[] listeners)
     {
         if (this.closed)
         {
@@ -211,7 +235,11 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
             {
                 this.setProtocol(ep1);
             }
-            ChannelFuture channelfuture = this.channel.writeAndFlush(packet);
+            ChannelFuture channelfuture = this.flushPacket(packet);
+            if (channelfuture == null)
+            {
+                return;
+            }
             if (listeners != null)
             {
                 channelfuture.addListeners(listeners);
@@ -226,7 +254,11 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
                                                  {
                                                      this.setProtocol(ep1);
                                                  }
-                                                 ChannelFuture channelFuture = this.channel.writeAndFlush(packet);
+                                                 ChannelFuture channelFuture = this.flushPacket(packet);
+                                                 if (channelFuture == null)
+                                                 {
+                                                     return;
+                                                 }
                                                  if (listeners != null)
                                                  {
                                                      channelFuture.addListeners(listeners);
@@ -234,6 +266,19 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
                                                  channelFuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
                                              });
         }
+    }
+
+    @Nullable
+    private ChannelFuture flushPacket(Packet packet)
+    {
+        SendPacketEvent sendPacketEvent = new SendPacketEvent(this, packet);
+        this.dioriteCore.getEventManager().callEvent(sendPacketEvent);
+        if (sendPacketEvent.isCancelled() || packet.isCancelled())
+        {
+            return null;
+        }
+        assert this.channel != null;
+        return this.channel.writeAndFlush(packet);
     }
 
     private void nextPacket()
@@ -256,7 +301,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     public abstract void enableEncryption(SecretKey secretkey);
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet<? super ServerboundPacketListener> msg) throws Exception
+    protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception
     {
         if (this.closed)
         {
@@ -266,7 +311,12 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         assert this.channel != null;
         if (this.channel.isOpen())
         {
-            msg.handle(this.packetListener);
+            ReceivePacketEvent receivePacketEvent = new ReceivePacketEvent(this, msg);
+            this.dioriteCore.getEventManager().callEvent(receivePacketEvent);
+            if (! receivePacketEvent.isCancelled() && ! msg.isCancelled())
+            {
+                this.eventBus.publish(msg);
+            }
         }
     }
 
@@ -306,7 +356,8 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         super.channelActive(channelHandlerContext);
         this.channel = channelHandlerContext.channel();
         this.address = this.channel.remoteAddress();
-
+        this.logger = LoggerFactory.getLogger("[Con][" + this.address.toString() + "]");
+        this.dioriteCore.debugRun(() -> this.logger.debug("Received new connection on: " + this.serverAddress));
         this.preparing = false;
         try
         {
@@ -314,7 +365,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         }
         catch (Throwable throwable)
         {
-            throwable.printStackTrace();
+            this.logger.error(throwable.getMessage(), throwable);
         }
     }
 
@@ -405,7 +456,6 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
             this.disconnectMessage = chatMessage;
         }
         this.handleClosed();
-
     }
 
     public void close(@Nullable ChatMessage chatMessage)
@@ -415,9 +465,14 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
 
     public abstract void setCompression(int i);
 
-    public void setPacketListener(ServerboundPacketListener packetListener)
+    public void setPacketListener(ServerboundPacketListener packetListener, boolean subscribe)
     {
+        this.eventBus.unsubscribe(this.packetListener);
         this.packetListener = packetListener;
+        if (subscribe)
+        {
+            this.eventBus.subscribe(packetListener);
+        }
     }
 
     public ServerboundPacketListener getPacketListener()
@@ -443,5 +498,16 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     public void handleClosed()
     {
         this.dioriteCore.getServerConnection().remove(this);
+    }
+
+    class PublicationErrorHandler implements IPublicationErrorHandler
+    {
+        @Override
+        public void handleError(PublicationError error)
+        {
+            ActiveConnection.this.logger
+                    .error("Error publishing event: " + error.getPublishedMessage() + " to: " + error.getHandler() + " from listener: " + error.getListener() +
+                           ", error: " + error.getMessage(), error.getCause());
+        }
     }
 }

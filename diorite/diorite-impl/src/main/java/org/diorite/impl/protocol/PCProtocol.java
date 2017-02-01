@@ -27,17 +27,17 @@ package org.diorite.impl.protocol;
 import javax.annotation.Nullable;
 
 import org.diorite.impl.protocol.p16w50a.PCp16w50a;
-import org.diorite.DioriteConfig;
+import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.Protocol;
 
 public class PCProtocol extends Protocol<PCProtocolVersion>
 {
     @Nullable private PCProtocolVersion newest;
 
-    public PCProtocol(DioriteConfig config)
+    public PCProtocol(DioriteCore core)
     {
         super("pc");
-        this.addVersion(new PCp16w50a(this, config));
+        this.addVersion(new PCp16w50a(this, core));
     }
 
     @Override

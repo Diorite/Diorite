@@ -27,16 +27,30 @@ package org.diorite.impl.protocol.p16w50a.serverbound;
 import javax.annotation.Nullable;
 
 import org.diorite.chat.ChatMessage;
+import org.diorite.core.DioriteCore;
+import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
+
+import net.engio.mbassy.listener.Handler;
 
 public class ServerboundLoginPacketListener implements ServerboundPacketListener
 {
+    private final DioriteCore      dioriteCore;
+    private final ActiveConnection activeConnection;
+
+    public ServerboundLoginPacketListener(ActiveConnection activeConnection)
+    {
+        this.dioriteCore = activeConnection.getDioriteCore();
+        this.activeConnection = activeConnection;
+    }
+
     @Override
     public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
         // TODO
     }
 
+    @Handler
     public void handle(SL00LoginStart packet)
     {
 

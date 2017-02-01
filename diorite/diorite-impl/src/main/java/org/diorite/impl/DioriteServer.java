@@ -38,6 +38,7 @@ import org.diorite.core.DioriteCore;
 import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
+import org.diorite.serializers.SerializersInit;
 
 public class DioriteServer implements DioriteCore
 {
@@ -52,9 +53,11 @@ public class DioriteServer implements DioriteCore
 
     public DioriteServer(DioriteConfig dioriteConfig)
     {
+        SerializersInit.init();
+
         this.dioriteConfig = dioriteConfig;
         this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
-        this.pcProtocol = new PCProtocol(dioriteConfig);
+        this.pcProtocol = new PCProtocol(this);
         this.serverConnection = new ServerConnectionImpl(this);
     }
 

@@ -27,6 +27,8 @@ package org.diorite.impl.protocol;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.diorite.commons.lazy.IntLazyValue;
 import org.diorite.commons.objects.Dirtable;
 import org.diorite.core.protocol.InvalidPacketException;
@@ -37,24 +39,35 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
-public abstract class PCPacket<T extends ServerboundPacketListener> implements Packet<T>, Dirtable
+public abstract class PCPacket<T extends ServerboundPacketListener> implements Packet, Dirtable
 {
     public static final int INITIAL_CAPACITY = 256;
-    @Nullable protected volatile byte[]  data;
-    protected volatile           boolean dirty;
+    @Nullable protected volatile byte[] data;
+    protected final AtomicBoolean dirty     = new AtomicBoolean(false);
+    protected final AtomicBoolean cancelled = new AtomicBoolean(false);
+
+    @Override
+    public boolean isCancelled()
+    {
+        return this.cancelled.get();
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled.set(cancelled);
+    }
 
     @Override
     public boolean isDirty()
     {
-        return this.dirty;
+        return this.dirty.get();
     }
 
     @Override
     public boolean setDirty(boolean dirty)
     {
-        boolean d = this.dirty;
-        this.dirty = dirty;
-        return d;
+        return this.dirty.getAndSet(dirty);
     }
 
     public synchronized byte[] preparePacket(boolean force) throws InvalidPacketException
@@ -83,12 +96,11 @@ public abstract class PCPacket<T extends ServerboundPacketListener> implements P
     public void writePacket(ByteBuf data) throws InvalidPacketException
     {
         byte[] tempData = this.data;
-        if ((tempData == null) || this.dirty)
+        if ((tempData == null) || this.dirty.get())
         {
             synchronized (this)
             {
-                tempData = this.preparePacket(this.dirty);
-                this.dirty = false;
+                tempData = this.preparePacket(this.dirty.getAndSet(false));
             }
         }
         data.writeBytes(tempData);

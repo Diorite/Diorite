@@ -32,9 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.protocol.any.PlaceholderPacketListener;
-import org.diorite.impl.protocol.any.serverbound.ServerboundHandshakeListener;
 import org.diorite.DioriteConfig.HostConfiguration;
 import org.diorite.core.DioriteCore;
+import org.diorite.core.protocol.connection.internal.ProtocolState;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -62,7 +62,6 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel>
     @Override
     protected void initChannel(Channel channel) throws Exception
     {
-        System.out.println(channel.remoteAddress());
         try
         {
             channel.config().setOption(ChannelOption.IP_TOS, IP_TOS);
@@ -87,7 +86,7 @@ public class ServerConnectionChannel extends ChannelInitializer<Channel>
                .addLast("sizer", new PacketSizeCodec(this.serverConnection, activeConnection))
                .addLast("codec", new PacketCodec(this.serverConnection, activeConnection));
         // TODO: legacy ping?
-        activeConnection.setPacketListener(new ServerboundHandshakeListener(activeConnection));
+        activeConnection.getProtocolVersion().setListener(activeConnection, ProtocolState.HANDSHAKE);
         this.serverConnection.connections.add(activeConnection);
         channel.pipeline().addLast("packet_handler", activeConnection);
 //        activeConnection.setPacketListener(new HandshakeListener(this.serverConnection.getCore(), activeConnection));

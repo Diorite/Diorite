@@ -38,10 +38,4 @@ public class SS00Request extends ServerboundStatusPacket
     {
         // nothing to read
     }
-
-    @Override
-    public void handle(ServerboundStatusPacketListener packetListener)
-    {
-        packetListener.handle(this);
-    }
 }

@@ -29,6 +29,8 @@ import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.packets.serverbound.LoginStartPacket;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
 
+import net.engio.mbassy.listener.Handler;
+
 public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandler
 {
     private final ActiveConnection activeConnection;
@@ -38,15 +40,17 @@ public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandl
         this.activeConnection = activeConnection;
     }
 
+    @Handler
     @Override
     public void handle(LoginStartPacket packet)
     {
         // TODO
     }
 
+    @Handler
     @Override
     public void handle(RequestServerStatePacket packet)
     {
-
+        System.out.println(packet);
     }
 }

@@ -24,12 +24,7 @@
 
 package org.diorite.serializers;
 
-import java.util.UUID;
-
 import org.diorite.config.serialization.Serialization;
-import org.diorite.gameprofile.GameProfile;
-import org.diorite.gameprofile.internal.GameProfileImpl;
-import org.diorite.gameprofile.internal.properties.PropertyImpl;
 
 public final class SerializersInit
 {
@@ -40,15 +35,5 @@ public final class SerializersInit
         Serialization global = Serialization.getInstance();
         global.registerSerializer(new PropertySerializer());
         global.registerSerializer(new GameProfileSerializer());
-    }
-
-    public static void main(String[] args)
-    {
-        GameProfileImpl test = new GameProfileImpl(UUID.randomUUID(), "test");
-        test.getProperties().put("test", new PropertyImpl("test", "nah"));
-        test.getProperties().put("test", new PropertyImpl("test", "nahhhh", "ugh"));
-        Serialization global = Serialization.getInstance();
-        System.out.println(global.toJson(test));
-        System.out.println(global.fromJson(global.toJson(test), GameProfile.class).equals(test));
     }
 }

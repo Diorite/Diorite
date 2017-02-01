@@ -27,6 +27,7 @@ package org.diorite.impl.protocol.p16w50a.clientbound;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 import com.google.gson.JsonArray;
@@ -94,7 +95,6 @@ public class CS00Response extends ClientboundPacket
         {
             response.addProperty("favicon", this.encodedFavicon);
         }
-        System.out.println(response);
         serializer.writeText(response.toString());
     }
 
@@ -107,6 +107,7 @@ public class CS00Response extends ClientboundPacket
     public void setVersionString(@Nullable String versionString)
     {
         this.versionString = versionString;
+        this.setDirty();
     }
 
     public int getVersionNumber()
@@ -117,6 +118,7 @@ public class CS00Response extends ClientboundPacket
     public void setVersionNumber(int versionNumber)
     {
         this.versionNumber = versionNumber;
+        this.setDirty();
     }
 
     public int getMaxPlayers()
@@ -127,6 +129,7 @@ public class CS00Response extends ClientboundPacket
     public void setMaxPlayers(int maxPlayers)
     {
         this.maxPlayers = maxPlayers;
+        this.setDirty();
     }
 
     public int getOnlinePlayers()
@@ -137,17 +140,19 @@ public class CS00Response extends ClientboundPacket
     public void setOnlinePlayers(int onlinePlayers)
     {
         this.onlinePlayers = onlinePlayers;
+        this.setDirty();
     }
 
     @Nullable
     public Collection<GameProfile> getSample()
     {
-        return this.sample;
+        return (this.sample == null) ? null : Collections.unmodifiableCollection(this.sample);
     }
 
     public void setSample(@Nullable Collection<GameProfile> sample)
     {
         this.sample = sample;
+        this.setDirty();
     }
 
     @Nullable
@@ -159,6 +164,7 @@ public class CS00Response extends ClientboundPacket
     public void setDescription(@Nullable ChatMessage description)
     {
         this.description = description;
+        this.setDirty();
     }
 
     @Nullable
@@ -170,5 +176,6 @@ public class CS00Response extends ClientboundPacket
     public void setEncodedFavicon(@Nullable String encodedFavicon)
     {
         this.encodedFavicon = encodedFavicon;
+        this.setDirty();
     }
 }

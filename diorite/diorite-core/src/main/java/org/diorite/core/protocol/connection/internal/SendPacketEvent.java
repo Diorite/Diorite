@@ -22,47 +22,57 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.protocol.packets.serverbound;
+package org.diorite.core.protocol.connection.internal;
 
-import javax.annotation.Nullable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.diorite.core.protocol.ProtocolVersion;
+import org.diorite.commons.objects.Cancellable;
+import org.diorite.core.protocol.connection.ActiveConnection;
+import org.diorite.event.Event;
 
-public class RequestServerStatePacket implements ServerboundDioritePacket // TODO: make it cancellable?
+public class SendPacketEvent implements Event, Cancellable
 {
-    @Nullable private ProtocolVersion<?> protocolVersion;
-    @Nullable private String             serverAddress;
-    private           int                serverPort;
+    private final ActiveConnection activeConnection;
+    private       Packet           packet;
+    private       boolean          cancelled;
 
-    @Nullable
-    public ProtocolVersion<?> getProtocolVersion()
+    public SendPacketEvent(ActiveConnection connection, Packet packets)
     {
-        return this.protocolVersion;
+        this.activeConnection = connection;
+        this.packet = packets;
     }
 
-    public void setProtocolVersion(ProtocolVersion<?> protocolVersion)
+    public ActiveConnection getActiveConnection()
     {
-        this.protocolVersion = protocolVersion;
+        return this.activeConnection;
     }
 
-    @Nullable
-    public String getServerAddress()
+    public Packet getPacket()
     {
-        return this.serverAddress;
+        return this.packet;
     }
 
-    public void setServerAddress(String serverAddress)
+    public void setPacket(Packet packet)
     {
-        this.serverAddress = serverAddress;
+        this.packet = packet;
     }
 
-    public int getServerPort()
+    @Override
+    public String toString()
     {
-        return this.serverPort;
+        return new ToStringBuilder(this).appendSuper(super.toString()).append("activeConnection", this.activeConnection).append("packet", this.packet)
+                                        .toString();
     }
 
-    public void setServerPort(int serverPort)
+    @Override
+    public boolean isCancelled()
     {
-        this.serverPort = serverPort;
+        return this.cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled)
+    {
+        this.cancelled = cancelled;
     }
 }

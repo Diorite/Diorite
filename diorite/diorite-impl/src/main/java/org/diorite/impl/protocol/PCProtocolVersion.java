@@ -69,7 +69,7 @@ public abstract class PCProtocolVersion extends ProtocolVersion<PCProtocol>
     }
 
     @Override
-    public boolean isPacket(Class<? extends Packet<?>> packet)
+    public boolean isPacket(Class<? extends Packet> packet)
     {
         return this.packets.isRegistered(packet);
     }
@@ -95,7 +95,7 @@ public abstract class PCProtocolVersion extends ProtocolVersion<PCProtocol>
         }
         int id = AbstractPacketDataSerializer.readVarInt(byteBuf);
         PacketType packetType = this.packets.getServerboundType(context.channel().attr(ServerConnection.protocolKey).get(), id);
-        Packet<?> packet = packetType.createPacket();
+        Packet packet = packetType.createPacket();
         packet.decode(context, byteBuf);
         if (byteBuf.readableBytes() > 0)
         {

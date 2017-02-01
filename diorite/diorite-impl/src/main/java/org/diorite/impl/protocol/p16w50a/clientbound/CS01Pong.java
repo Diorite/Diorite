@@ -49,5 +49,6 @@ public class CS01Pong extends ClientboundPacket
     public void setTime(long time)
     {
         this.time = time;
+        this.setDirty();
     }
 }

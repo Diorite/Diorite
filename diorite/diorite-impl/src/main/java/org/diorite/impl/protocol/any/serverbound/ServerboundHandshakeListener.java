@@ -44,6 +44,8 @@ import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
+import net.engio.mbassy.listener.Handler;
+
 public class ServerboundHandshakeListener implements ServerboundPacketListener
 {
     public static final  int                    CLEANUP_THROTTLE = 200;
@@ -70,6 +72,7 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
 
     private volatile boolean handled = false;
 
+    @Handler
     public void handle(H00Handshake packet)
     {
         if (this.handled)

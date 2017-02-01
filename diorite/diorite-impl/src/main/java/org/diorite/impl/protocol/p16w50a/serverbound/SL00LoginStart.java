@@ -45,12 +45,6 @@ public class SL00LoginStart extends ServerboundLoginPacket
         this.username = serializer.readText(16, 20);
     }
 
-    @Override
-    public void handle(ServerboundLoginPacketListener packetListener)
-    {
-        packetListener.handle(this);
-    }
-
     @Nullable
     public String getUsername()
     {
@@ -60,5 +54,6 @@ public class SL00LoginStart extends ServerboundLoginPacket
     public void setUsername(@Nullable String username)
     {
         this.username = username;
+        this.setDirty();
     }
 }

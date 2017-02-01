@@ -41,12 +41,6 @@ public class SS01Ping extends ServerboundStatusPacket
         this.time = serializer.readLong();
     }
 
-    @Override
-    public void handle(ServerboundStatusPacketListener packetListener)
-    {
-        packetListener.handle(this);
-    }
-
     public long getTime()
     {
         return this.time;
@@ -55,5 +49,6 @@ public class SS01Ping extends ServerboundStatusPacket
     public void setTime(long time)
     {
         this.time = time;
+        this.setDirty();
     }
 }

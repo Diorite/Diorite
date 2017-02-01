@@ -315,7 +315,7 @@ public final class DioriteMain
             {
                 e.printStackTrace();
             }
-            System.out.println("Starting server, please wait...");
+            logger.info("Starting server, please wait...");
 
             // TODO: register basic nbt stuff, packets, etc.
         }

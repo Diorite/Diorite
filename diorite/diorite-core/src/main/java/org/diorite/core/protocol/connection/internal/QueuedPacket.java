@@ -33,17 +33,17 @@ import io.netty.util.concurrent.GenericFutureListener;
 
 public class QueuedPacket
 {
-    private final           Packet<?>                                               packet;
+    private final           Packet                                                  packet;
     @Nullable private final GenericFutureListener<? extends Future<? super Void>>[] listeners;
 
     @SafeVarargs
-    public QueuedPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>>... listeners)
+    public QueuedPacket(Packet packet, @Nullable GenericFutureListener<? extends Future<? super Void>>... listeners)
     {
         this.packet = packet;
         this.listeners = listeners;
     }
 
-    public Packet<?> getPacket()
+    public Packet getPacket()
     {
         return this.packet;
     }

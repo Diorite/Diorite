@@ -36,7 +36,7 @@ import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.Packet;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
-public class DioriteActiveConnection<T extends Packet<? super ServerboundPacketListener>> extends ActiveConnection
+public class DioriteActiveConnection<T extends Packet> extends ActiveConnection
 {
     public DioriteActiveConnection(DioriteCore dioriteCore, InetSocketAddress serverAddress, ServerboundPacketListener packetListener,
                                    ProtocolVersion<?> protocolVersion)

@@ -64,13 +64,13 @@ public class PacketsImpl implements Packets
     }
 
     @Override
-    public boolean isRegistered(Class<? extends Packet<?>> clazz)
+    public boolean isRegistered(Class<? extends Packet> clazz)
     {
         return this.packets.containsKey(clazz);
     }
 
     @Override
-    public PacketType getType(Class<? extends Packet<?>> clazz)
+    public PacketType getType(Class<? extends Packet> clazz)
     {
         PacketType packetType = this.packets.get(clazz);
         if (packetType == null)
@@ -107,7 +107,7 @@ public class PacketsImpl implements Packets
     }
 
     @Override
-    public void addType(Class<? extends Packet<?>> clazz, PacketType type)
+    public void addType(Class<? extends Packet> clazz, PacketType type)
     {
         if (type.getType() != clazz)
         {

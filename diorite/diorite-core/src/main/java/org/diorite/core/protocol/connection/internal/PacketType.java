@@ -41,10 +41,10 @@ public class PacketType
     private final int               maxSize;
     private       int               preferredSize;
 
-    private final Supplier<? extends Packet<?>> constructor;
+    private final Supplier<? extends Packet> constructor;
 
-    public <T extends Packet<?>> PacketType(Class<T> type, int id, ProtocolDirection direction, ProtocolState state, String name, int minSize, int maxSize,
-                                            int preferredSize, Supplier<? extends Packet<?>> constructor)
+    public <T extends Packet> PacketType(Class<T> type, int id, ProtocolDirection direction, ProtocolState state, String name, int minSize, int maxSize,
+                                         int preferredSize, Supplier<? extends Packet> constructor)
     {
         this.type = type;
         this.id = id;
@@ -57,7 +57,7 @@ public class PacketType
         this.constructor = constructor;
     }
 
-    public <T extends Packet<?>> PacketType(Class<T> type)
+    public <T extends Packet> PacketType(Class<T> type)
     {
         this.type = type;
         try
@@ -86,7 +86,7 @@ public class PacketType
         this.preferredSize = - 1;
     }
 
-    public <T extends Packet<?>> PacketType(Class<T> type, Supplier<? extends T> constructor)
+    public <T extends Packet> PacketType(Class<T> type, Supplier<? extends T> constructor)
     {
         this.type = type;
         this.constructor = constructor;
@@ -108,7 +108,7 @@ public class PacketType
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Packet<?>> T createPacket()
+    public <T extends Packet> T createPacket()
     {
         try
         {

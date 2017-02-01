@@ -60,17 +60,17 @@ public interface DioriteConfig extends Config
     }
 
     @Comment("Default configuration of each host.")
-    HostConfiguration getDefaultHostConfiguration();
+    default HostConfiguration getDefaultHostConfiguration()
+    {
+        return ConfigManager.createInstance(HostConfiguration.class);
+    }
 
     @Comment("You can use separate configuration for each host.")
     @Property(name = "hostConfiguration")
     private Map<InetSocketAddress, HostConfiguration> getHostConfiguration() {return Map.of();}
 
     @Nullable
-    default HostConfiguration getHostConfigurationBy(InetSocketAddress socketAddress)
-    {
-        return ConfigManager.createInstance(HostConfiguration.class);
-    }
+    HostConfiguration getHostConfigurationBy(InetSocketAddress socketAddress);
 
     default HostConfiguration getHostConfigurationOrDefault(InetSocketAddress socketAddress)
     {

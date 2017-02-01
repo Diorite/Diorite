@@ -31,17 +31,23 @@ import java.net.InetSocketAddress;
 import org.diorite.impl.protocol.any.serverbound.H00Handshake;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS01Pong;
 import org.diorite.chat.ChatMessage;
+import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
 
+import net.engio.mbassy.listener.Handler;
+
 public class ServerboundStatusPacketListener implements ServerboundPacketListener
 {
+    private final DioriteCore dioriteCore;
+
     private final           ActiveConnection activeConnection;
     @Nullable private final H00Handshake     handshakePacket;
 
     public ServerboundStatusPacketListener(ActiveConnection activeConnection, @Nullable H00Handshake handshakePacket)
     {
+        this.dioriteCore = activeConnection.getDioriteCore();
         this.activeConnection = activeConnection;
         this.handshakePacket = handshakePacket;
     }
@@ -54,6 +60,7 @@ public class ServerboundStatusPacketListener implements ServerboundPacketListene
 
     private volatile boolean handled = false;
 
+    @Handler
     public void handle(SS00Request packet)
     {
         if (this.handled)
@@ -77,9 +84,10 @@ public class ServerboundStatusPacketListener implements ServerboundPacketListene
             requestServerStatePacket.setServerAddress(handshakeAddress);
             requestServerStatePacket.setServerPort(this.handshakePacket.getPort());
         }
-        this.activeConnection.getProtocolVersion().handlePacket(requestServerStatePacket);
+        this.activeConnection.callEvent(requestServerStatePacket);
     }
 
+    @Handler
     public void handle(SS01Ping packet)
     {
         CS01Pong cs01Pong = new CS01Pong();

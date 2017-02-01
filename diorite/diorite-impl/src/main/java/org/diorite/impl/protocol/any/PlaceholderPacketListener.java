@@ -24,13 +24,15 @@
 
 package org.diorite.impl.protocol.any;
 
+import javax.annotation.Nullable;
+
 import org.diorite.chat.ChatMessage;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 
 public class PlaceholderPacketListener implements ServerboundPacketListener
 {
     @Override
-    public void disconnect(ChatMessage disconnectMessage)
+    public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
         throw new IllegalStateException("Listener not ready yet.");
     }

@@ -71,10 +71,10 @@ public abstract class ByteToMessageCodec<I> extends ChannelDuplexHandler
         }
     };
 
-    public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet<?>>
+    public abstract static class PacketByteToMessageCodec extends ByteToMessageCodec<Packet>
     {
         @Override
-        protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, Packet<?> msg, boolean preferDirect) throws Exception
+        protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, Packet msg, boolean preferDirect) throws Exception
         {
             PacketType pc = msg.packetType();
             int size = DioriteMathUtils.varintSize(pc.getId()) + pc.getPreferredSize();

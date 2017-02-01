@@ -37,23 +37,26 @@ import org.diorite.impl.protocol.p16w50a.serverbound.SS00Request;
 import org.diorite.impl.protocol.p16w50a.serverbound.SS01Ping;
 import org.diorite.impl.protocol.p16w50a.serverbound.ServerboundLoginPacketListener;
 import org.diorite.impl.protocol.p16w50a.serverbound.ServerboundStatusPacketListener;
-import org.diorite.DioriteConfig;
+import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
-import org.diorite.core.protocol.packets.clientbound.ClientboundDioritePacket;
-import org.diorite.core.protocol.packets.serverbound.ServerboundDioritePacket;
+import org.diorite.event.Listener;
 
-public class PCp16w50a extends PCProtocolVersion
+public class PCp16w50a extends PCProtocolVersion implements Listener
 {
     public static final int VERSION = 316;
+    private final DioriteCore dioriteCore;
 
-    public PCp16w50a(PCProtocol protocol, DioriteConfig settings)
+    public PCp16w50a(PCProtocol protocol, DioriteCore dioriteCore)
     {
-        super(protocol, VERSION, "p16w50a", true, Objects.requireNonNull(settings.findProtocol(Set.of("p16w50a", "1.11.1", "1.11.2"))));
+        super(protocol, VERSION, "p16w50a", true, Objects.requireNonNull(dioriteCore.getConfig().findProtocol(Set.of("p16w50a", "1.11.1", "1.11.2"))));
         this.aliases.add("1.11.1");
         this.aliases.add("1.11.2");
+
+        this.dioriteCore = dioriteCore;
+
         this.packets.addType(CS00Response.class, CS00Response::new);
         this.packets.addType(CS01Pong.class, CS01Pong::new);
 
@@ -74,40 +77,28 @@ public class PCp16w50a extends PCProtocolVersion
         switch (state)
         {
             case HANDSHAKE:
-                activeConnection.setPacketListener(new ServerboundHandshakeListener(activeConnection));
+                activeConnection.setPacketListener(new ServerboundHandshakeListener(activeConnection), true);
                 break;
             case STATUS:
                 ServerboundPacketListener packetListener = activeConnection.getPacketListener();
                 if (packetListener instanceof ServerboundHandshakeListener)
                 {
                     ServerboundHandshakeListener handshakeListener = (ServerboundHandshakeListener) packetListener;
-                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, handshakeListener.getPacket()));
+                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, handshakeListener.getPacket()), true);
                 }
                 else
                 {
-                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, null));
+                    activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, null), true);
                 }
                 break;
             case LOGIN:
-                activeConnection.setPacketListener(new ServerboundLoginPacketListener());
+                activeConnection.setPacketListener(new ServerboundLoginPacketListener(activeConnection), true);
                 break;
             case PLAY:
                 break;
             default:
                 throw new IllegalStateException("Unknown state:" + state);
         }
-    }
-
-    @Override
-    public void handlePacket(ActiveConnection activeConnection, ServerboundDioritePacket packet)
-    {
-        activeConnection.handlePacket(packet);
-    }
-
-    @Override
-    public void sendPacket(ActiveConnection activeConnection, ClientboundDioritePacket packet)
-    {
-        activeConnection.sendPacket(packet);
     }
 
     @Override

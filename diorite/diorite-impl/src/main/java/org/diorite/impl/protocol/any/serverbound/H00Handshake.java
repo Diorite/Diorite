@@ -60,12 +60,6 @@ public class H00Handshake extends PCPacket<ServerboundHandshakeListener>
         this.state = serializer.readEnum(ProtocolState.class);
     }
 
-    @Override
-    public void handle(@Nonnull ServerboundHandshakeListener packetListener)
-    {
-        packetListener.handle(this);
-    }
-
     public int getProtocolVersion()
     {
         return this.protocolVersion;
