@@ -68,7 +68,7 @@ public class JsonDeserializationData extends AbstractDeserializationData
     {
         if (this.element.isJsonObject())
         {
-            Set<Entry<String, JsonElement>> entries = element.getAsJsonObject().entrySet();
+            Set<Entry<String, JsonElement>> entries = this.element.getAsJsonObject().entrySet();
             Set<String> result = new LinkedHashSet<>(entries.size());
             for (Entry<String, JsonElement> entry : entries)
             {

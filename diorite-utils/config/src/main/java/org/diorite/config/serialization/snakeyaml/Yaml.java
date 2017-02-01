@@ -577,7 +577,8 @@ public class Yaml
      *
      * @return parsed object
      */
-    @SuppressWarnings("unchecked") @Nullable
+    @SuppressWarnings("unchecked")
+    @Nullable
     public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
     {
         Composer composer = new Composer(new ParserImpl(new StreamReader(io)), new ConfigTemplateResolver(template));
@@ -598,7 +599,8 @@ public class Yaml
      *
      * @return parsed object
      */
-    @SuppressWarnings("unchecked") @Nullable
+    @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(Reader io, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(io), type);
@@ -617,7 +619,8 @@ public class Yaml
      *
      * @return parsed object
      */
-    @SuppressWarnings("unchecked") @Nullable
+    @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(String yaml, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(yaml), type);
@@ -636,7 +639,8 @@ public class Yaml
      *
      * @return parsed object
      */
-    @SuppressWarnings("unchecked") @Nullable
+    @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(new UnicodeReader(input)), type);
@@ -671,7 +675,8 @@ public class Yaml
      *
      * @return loaded object.
      */
-    @SuppressWarnings("unchecked") @Nullable
+    @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYamlNode(Node node, Class<T> type)
     {
         node.setTag(new Tag(type));

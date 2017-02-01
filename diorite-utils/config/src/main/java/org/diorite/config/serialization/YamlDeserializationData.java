@@ -237,6 +237,12 @@ public class YamlDeserializationData extends AbstractDeserializationData
         {
             node.setTag(new Tag(type));
         }
+        if ((node instanceof SequenceNode) && type.isArray())
+        {
+            node.setType(type);
+            ((SequenceNode) node).setListType(type.getComponentType());
+            return (T) this.constructor.constructArray((SequenceNode) node);
+        }
         return (T) this.constructor.constructObject(node);
     }
 

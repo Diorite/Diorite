@@ -858,47 +858,29 @@ public final class Serialization
 
     static boolean isSimpleType(Class<?> type)
     {
-        if (type.isPrimitive())
+        while (true)
         {
-            return true;
+            if (DioriteReflectionUtils.getPrimitive(type).isPrimitive())
+            {
+                return true;
+            }
+            if (type.isEnum())
+            {
+                return true;
+            }
+            if (type.equals(String.class))
+            {
+                return true;
+            }
+            if (type.isArray())
+            {
+                type = type.getComponentType();
+            }
+            else
+            {
+                return false;
+            }
         }
-        if (type.isEnum())
-        {
-            return true;
-        }
-        if (type.equals(String.class))
-        {
-            return true;
-        }
-        if (type.equals(Boolean.class))
-        {
-            return true;
-        }
-        if (type.equals(Byte.class))
-        {
-            return true;
-        }
-        if (type.equals(Character.class))
-        {
-            return true;
-        }
-        if (type.equals(Short.class))
-        {
-            return true;
-        }
-        if (type.equals(Integer.class))
-        {
-            return true;
-        }
-        if (type.equals(Long.class))
-        {
-            return true;
-        }
-        if (type.equals(Float.class))
-        {
-            return true;
-        }
-        return type.equals(Double.class);
     }
 
     static boolean isSimple(@Nullable Object object)
@@ -907,43 +889,7 @@ public final class Serialization
         {
             return true;
         }
-        if (object instanceof Enum)
-        {
-            return true;
-        }
-        if (object instanceof String)
-        {
-            return true;
-        }
-        if (object instanceof Boolean)
-        {
-            return true;
-        }
-        if (object instanceof Byte)
-        {
-            return true;
-        }
-        if (object instanceof Character)
-        {
-            return true;
-        }
-        if (object instanceof Short)
-        {
-            return true;
-        }
-        if (object instanceof Integer)
-        {
-            return true;
-        }
-        if (object instanceof Long)
-        {
-            return true;
-        }
-        if (object instanceof Float)
-        {
-            return true;
-        }
-        return object instanceof Double;
+        return isSimpleType(object.getClass());
     }
 
     // json delegates.

@@ -47,14 +47,15 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yaml.snakeyaml.nodes.Node;
 
@@ -779,23 +780,27 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private boolean containsValueImpl(Object toCheck)
     {
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            if (Objects.equals(toCheck, value.getPropertyValue()))
+            equalsBuilder.append(toCheck, value.getPropertyValue());
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
         }
         for (SimpleConfig configNode : this.dynamicValues.values())
         {
-            if (Objects.equals(toCheck, configNode))
+            equalsBuilder.append(toCheck, configNode);
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
         }
         for (Node node : this.simpleDynamicValues.values())
         {
-            if (Objects.equals(toCheck, Serialization.getInstance().fromYamlNode(node)))
+            equalsBuilder.append(toCheck, Serialization.getInstance().fromYamlNode(node));
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
@@ -862,6 +867,26 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return result;
     }
 
+    private Map<String, Object> toTreeMap(boolean raw)
+    {
+        Map<String, Object> result = new TreeMap<>();
+
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
+        {
+            result.put(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
+        }
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue()));
+        }
+        for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toTreeMap(raw));
+        }
+
+        return result;
+    }
+
     private Map<String, Object> toMap(boolean raw)
     {
         Map<String, Object> result = new LinkedHashMap<>(20);
@@ -918,15 +943,35 @@ public final class ConfigInvocationHandler implements InvocationHandler
             return false;
         }
         Config config = (Config) object;
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        Map<String, Object> entries = this.toTreeMap(true);
+        Map<String, Object> otherEntries;
         if (this.template.getConfigType().isInstance(config) && Proxy.isProxyClass(config.getClass()))
         {
             InvocationHandler invocationHandler = Proxy.getInvocationHandler(config);
             if (invocationHandler instanceof ConfigInvocationHandler)
             {
-                return this.entrySetImpl(true).equals(((ConfigInvocationHandler) invocationHandler).entrySetImpl(true));
+                otherEntries = ((ConfigInvocationHandler) invocationHandler).toTreeMap(true);
+            }
+            else
+            {
+                otherEntries = new TreeMap<>(config);
             }
         }
-        return this.entrySetImpl(true).equals(config.entrySet());
+        else
+        {
+            otherEntries = new TreeMap<>(config);
+        }
+        if (entries.size() != otherEntries.size())
+        {
+            return false;
+        }
+        equalsBuilder.append(entries.keySet(), otherEntries.keySet());
+        if (! equalsBuilder.isEquals())
+        {
+            return false;
+        }
+        return equalsBuilder.append(entries.values().toArray(), otherEntries.values().toArray()).isEquals();
     }
 
     @Nullable

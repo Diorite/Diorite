@@ -45,6 +45,38 @@ public class ConfigTest
     private final ConfigManager configManager = ConfigManager.get();
 
     @Test
+    public void testTypes() throws Exception
+    {
+        SerializationTest.prepareSerialization();
+        ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
+
+        ConfigTemplate<TypeTestConfig> configTemplate = this.configManager.getConfigFile(TypeTestConfig.class);
+        Assert.assertNotNull(configTemplate);
+        Assert.assertEquals(TypeTestConfig.class.getSimpleName(), configTemplate.getName());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultDecoder().charset());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultEncoder().charset());
+
+        System.out.println("[ConfigTypeTest] creating config instance.");
+        TypeTestConfig cfg = configTemplate.create();
+        Assert.assertNotNull(cfg);
+
+        Assert.assertSame(1, cfg.getCopyTest()[0]);
+        cfg.getCopyTest()[0] = 2;
+        Assert.assertSame(1, cfg.getCopyTest()[0]);
+
+        Assert.assertSame(1, cfg.getNonCopyTest()[0]);
+        cfg.getNonCopyTest()[0] = 2;
+        Assert.assertSame(2, cfg.getNonCopyTest()[0]);
+
+        cfg.save(System.out);
+        // check if all data is still valid after reload of config.
+        StringBuilderWriter writer = new StringBuilderWriter(500);
+        cfg.save(writer);
+        Assert.assertEquals(cfg, configTemplate.load(new StringReader(writer.toString())));
+    }
+
+    @Test
     public void test() throws Exception
     {
         SerializationTest.prepareSerialization();

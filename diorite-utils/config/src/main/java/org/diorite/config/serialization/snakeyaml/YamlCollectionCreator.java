@@ -26,6 +26,7 @@ package org.diorite.config.serialization.snakeyaml;
 
 import javax.annotation.Nullable;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,6 +64,7 @@ import java.util.function.IntFunction;
 
 import org.yaml.snakeyaml.error.YAMLException;
 
+import org.diorite.commons.arrays.DioriteArrayUtils;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
@@ -558,10 +560,21 @@ public final class YamlCollectionCreator
         throw new YAMLException("Can't create collection: " + clazz);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes", "SuspiciousSystemArraycopy"})
     @Nullable
     public static <T> T makeUnmodifiable(Object collection)
     {
+        if (collection.getClass().isArray())
+        {
+            int length = Array.getLength(collection);
+            if (length == 0)
+            {
+                return (T) DioriteArrayUtils.getEmptyObjectArray(collection.getClass().getComponentType());
+            }
+            Object copy = DioriteArrayUtils.newArray(collection.getClass().getComponentType(), length);
+            System.arraycopy(collection, 0, copy, 0, length);
+            return (T) copy;
+        }
         Function function = unmodifiableWrappers.get(collection.getClass());
         if (function == null)
         {

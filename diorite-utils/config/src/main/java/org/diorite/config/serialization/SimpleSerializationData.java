@@ -27,6 +27,7 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -269,6 +270,7 @@ class SimpleSerializationData implements SerializationData
         this.joinComments(key, comments);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public <T> void add(String key, @Nullable T value, Class<T> type)
     {
@@ -280,10 +282,22 @@ class SimpleSerializationData implements SerializationData
         }
         if (Serialization.isSimple(value))
         {
-            this.dataMap.put(key, this.toString(value, type));
+            if (value.getClass().isArray())
+            {
+                this.dataMap.put(key, value);
+            }
+            else
+            {
+                this.dataMap.put(key, this.toString(value, type));
+            }
             return;
         }
-
+        if (value.getClass().isArray())
+        {
+            List<Object> objects = Arrays.asList((Object[]) value);
+            this.addCollection(key, objects, (Class) value.getClass().getComponentType());
+            return;
+        }
         DocumentComments comments = this.addComments(value.getClass(), key);
 
         if (! this.serialization.isSerializable(type))

@@ -153,7 +153,8 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
             }
             else
             {
-                throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
+                throw new IllegalArgumentException("Invalid object type: " + (value == null ? "" : ("(" + value.getClass() + ") ")) + value +
+                                                   " in template property: " + this.template.getName() + " (" +
                                                    this.template.getGenericType() + ")");
             }
         }
