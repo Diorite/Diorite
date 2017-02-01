@@ -29,9 +29,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -209,18 +207,16 @@ public interface DioriteConfig extends Config
                 "without it. (You should use online mode true, or at least find some authorization plugin for players.)")
         default OnlineMode getOnlineMode() {return OnlineMode.TRUE;}
 
-        @Comment("Path of favicon, when using file favicon will automatically update to new file contents.")
-        default URL getFavicon()
+        @Comment("Path of favicon, favicon will automatically update to new file contents.")
+        @Nullable
+        default File getFavicon()
         {
-            try
-            {
-                return new File("server-icon.png").toURI().toURL();
-            }
-            catch (MalformedURLException e)
-            {
-                throw new RuntimeException(e);
-            }
+            return new File("server-icon.png");
         }
+
+        @Comment("URL of favicon.")
+        @Nullable
+        File getFaviconURL();
 
         /**
          * Returns prepared favicon.
@@ -250,7 +246,24 @@ public interface DioriteConfig extends Config
         @Nullable
         default Favicon prepareFavicon() throws IOException
         {
-            Favicon from = Favicon.from(this.getFavicon());
+            Favicon from;
+            File favicon = this.getFavicon();
+            if (favicon != null)
+            {
+                from = Favicon.from(favicon);
+            }
+            else
+            {
+                File faviconURL = this.getFaviconURL();
+                if (faviconURL != null)
+                {
+                    from = Favicon.from(faviconURL);
+                }
+                else
+                {
+                    from = null;
+                }
+            }
             this.metadata().put("favicon-prepared", from);
             return from;
         }
