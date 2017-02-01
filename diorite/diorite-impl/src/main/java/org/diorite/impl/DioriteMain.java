@@ -238,7 +238,6 @@ public final class DioriteMain
                 HostConfiguration hostCfg = config.getHostConfigurationOrDefault(inetSocketAddress);
                 out.format("%s%n", "    " + inetSocketAddress.toString());
                 out.format("  %-30s %s%n", "  Accepting Players: ", hostCfg.isAcceptingPlayers());
-                out.format("  %-30s %s%n", "  Max players: ", hostCfg.getMaxPlayers());
                 out.format("  %-30s %s%n", "  Netty threads: ", hostCfg.getNettyThreads());
                 out.format("  %-30s %s%n", "  Online mode: ", hostCfg.getOnlineMode().toString().toLowerCase());
                 out.format("  %-30s %s%n", "  Query port: ", hostCfg.getQueryPort());

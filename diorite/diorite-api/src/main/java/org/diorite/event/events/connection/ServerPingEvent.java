@@ -22,32 +22,46 @@
  * SOFTWARE.
  */
 
-package org.diorite.core.protocol.packets.clientbound;
+package org.diorite.event.events.connection;
 
-import javax.annotation.Nullable;
-
+import org.diorite.event.Event;
 import org.diorite.ping.ServerPing;
 
-public class ServerStateResponsePacket implements ClientboundDioritePacket
+/**
+ * Called when player refresh server list.
+ */
+public class ServerPingEvent implements Event
 {
-    private @Nullable ServerPing serverPing;
+    private ServerPing serverPing;
 
-    public ServerStateResponsePacket()
-    {
-    }
-
-    public ServerStateResponsePacket(@Nullable ServerPing serverPing)
+    /**
+     * Construct new instance of ping event.
+     *
+     * @param serverPing
+     *         ping data.
+     */
+    public ServerPingEvent(ServerPing serverPing)
     {
         this.serverPing = serverPing;
     }
 
-    @Nullable
+    /**
+     * Returns server ping data.
+     *
+     * @return server ping data.
+     */
     public ServerPing getServerPing()
     {
         return this.serverPing;
     }
 
-    public void setServerPing(@Nullable ServerPing serverPing)
+    /**
+     * Sets new ping result.
+     *
+     * @param serverPing
+     *         new result.
+     */
+    public void setServerPing(ServerPing serverPing)
     {
         this.serverPing = serverPing;
     }

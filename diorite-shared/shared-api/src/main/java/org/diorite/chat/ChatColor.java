@@ -125,15 +125,15 @@ public enum ChatColor
         return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
     }
 
-//    public static BaseComponent translateAlternateColorCodes(final char altColorChar, final String textToTranslate)
-//    {
-//        return TextComponent.fromLegacyText(translateAlternateColorCodesInString(altColorChar, textToTranslate));
-//    }
-//
-//    public static BaseComponent translateAlternateColorCodes(final String textToTranslate)
-//    {
-//        return TextComponent.fromLegacyText(translateAlternateColorCodesInString(DEFAULT_ALTERNATE_COLOR_CHAR, textToTranslate));
-//    }
+    public static ChatMessage translateAlternateColorCodes(char altColorChar, String textToTranslate)
+    {
+        return ChatMessage.fromLegacy(translateAlternateColorCodesInString(altColorChar, textToTranslate));
+    }
+
+    public static ChatMessage translateAlternateColorCodes(String textToTranslate)
+    {
+        return ChatMessage.fromLegacy(translateAlternateColorCodesInString(DEFAULT_ALTERNATE_COLOR_CHAR, textToTranslate));
+    }
 
     public static String translateAlternateColorCodesInString(char altColorChar, String textToTranslate)
     {

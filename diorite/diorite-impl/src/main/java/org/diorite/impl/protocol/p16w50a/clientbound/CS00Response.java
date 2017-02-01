@@ -44,13 +44,13 @@ import org.diorite.gameprofile.GameProfile;
 @PacketClass(id = 0x00, direction = ProtocolDirection.CLIENTBOUND, state = ProtocolState.STATUS, minSize = 0, maxSize = 0, preferredSize = 0)
 public class CS00Response extends ClientboundPacket
 {
-    private @Nullable String                  versionString;
-    private           int                     versionNumber;
-    private           int                     maxPlayers;
-    private           int                     onlinePlayers;
-    private @Nullable Collection<GameProfile> sample;
-    private @Nullable ChatMessage             description;
-    private @Nullable String                  encodedFavicon;
+    private @Nullable String                            versionString;
+    private           int                               versionNumber;
+    private           int                               maxPlayers;
+    private           int                               onlinePlayers;
+    private @Nullable Collection<? extends GameProfile> sample;
+    private @Nullable ChatMessage                       description;
+    private @Nullable String                            encodedFavicon;
 
     @Override
     protected void write(AbstractPacketDataSerializer serializer) throws InvalidPacketException
@@ -149,7 +149,7 @@ public class CS00Response extends ClientboundPacket
         return (this.sample == null) ? null : Collections.unmodifiableCollection(this.sample);
     }
 
-    public void setSample(@Nullable Collection<GameProfile> sample)
+    public void setSample(@Nullable Collection<? extends GameProfile> sample)
     {
         this.sample = sample;
         this.setDirty();

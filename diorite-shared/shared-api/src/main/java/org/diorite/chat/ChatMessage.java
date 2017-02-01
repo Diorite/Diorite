@@ -72,20 +72,13 @@ public interface ChatMessage extends Cloneable
 //    ChatMessage removeFirst(String text);
 //    ChatMessage removeLast(String text);
 //
-//    // pewnie nie dodam:
-//    ChatMessage replaceEach(String[] text, ChatMessage[] replacement);
-//    ChatMessage replaceEachRepeatedly(String[] text, ChatMessage[] replacement);
-//    ChatMessage replaceRegEx(String text, ChatMessage replacement);
-//
 //    boolean contains(String text);
-//    boolean contains(ChatMessage chatMessage);
 //    boolean containsIgnoreCase(String text);
-//    boolean containsIgnoreCase(ChatMessage chatMessage);
 //
 //    ChatMessage toLowerCase();
 //    ChatMessage toUpperCase();
 //
-//    ChatMessage[] split(String token); // chyba nie ma sensu splitować po ChatMessage?
+//    ChatMessage[] split(String token);
 //    ChatMessage[] split(String token, int max);
 
     String toLegacyText();
@@ -94,14 +87,11 @@ public interface ChatMessage extends Cloneable
     JsonElement toJsonElement();
 //    String toMarkup();
 
-    // + jakies statyczne metody jak join itd
-    // do tego proste statyczne metody factory od parsowania
     static ChatMessage fromLegacy(String s)
     {
         return new ChatMessageImpl();
     }
     static ChatMessage fromString(String s) {return null;}
     //    static ChatMessage fromMarkup(String s) {return null;}
-    static ChatMessage fromJson(String s) {return null;} // sam minecraft polega na jsonie, więc jako-tako musimy go wspierać, bo trzeba potem
-    // zaimplementować komendy vanilli
+    static ChatMessage fromJson(String s) {return null;}
 }

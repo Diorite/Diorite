@@ -46,6 +46,8 @@ import org.diorite.core.protocol.connection.internal.QueuedPacket;
 import org.diorite.core.protocol.connection.internal.ReceivePacketEvent;
 import org.diorite.core.protocol.connection.internal.SendPacketEvent;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
+import org.diorite.core.protocol.packets.DioritePacket;
+import org.diorite.core.protocol.packets.SendDioritePacketEvent;
 import org.diorite.event.Event;
 
 import io.netty.channel.Channel;
@@ -141,6 +143,16 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         assert this.channel != null;
         this.nextPacket();
         this.channel.flush();
+    }
+
+    public void sendDioritePacket(DioritePacket packet)
+    {
+        SendDioritePacketEvent packetEvent = new SendDioritePacketEvent(this, packet);
+        this.dioriteCore.getEventManager().callEvent(packetEvent);
+        if (! packetEvent.isCancelled())
+        {
+            this.eventBus.publish(packet);
+        }
     }
 
     public void callEvent(Event event)

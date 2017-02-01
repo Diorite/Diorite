@@ -24,10 +24,27 @@
 
 package org.diorite.impl.protocol.p16w50a;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
+import org.diorite.DioriteConfig;
+import org.diorite.DioriteConfig.HostConfiguration;
+import org.diorite.chat.ChatColor;
+import org.diorite.chat.ChatMessage;
+import org.diorite.core.DioriteCore;
+import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.ServerboundPacketHandler;
+import org.diorite.core.protocol.packets.clientbound.ServerStateResponsePacket;
 import org.diorite.core.protocol.packets.serverbound.LoginStartPacket;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
+import org.diorite.event.events.connection.ServerPingEvent;
+import org.diorite.gameprofile.GameProfile;
+import org.diorite.ping.Favicon;
+import org.diorite.ping.ServerPing;
+import org.diorite.ping.ServerPingPlayerSample;
+import org.diorite.ping.ServerPingServerData;
 
 import net.engio.mbassy.listener.Handler;
 
@@ -51,6 +68,52 @@ public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandl
     @Override
     public void handle(RequestServerStatePacket packet)
     {
-        System.out.println(packet);
+        DioriteCore dioriteCore = this.activeConnection.getDioriteCore();
+        DioriteConfig dioriteConfig = dioriteCore.getConfig();
+        HostConfiguration hostCfg = dioriteConfig.getHostConfigurationOrDefault(this.activeConnection.getServerAddress());
+        ProtocolVersion<?> protocolVersion = this.activeConnection.getProtocolVersion();
+
+        ServerPingServerData pingServerData = new ServerPingServerData(protocolVersion.getVersionName(), protocolVersion.getVersion());
+
+        int sampleSize = hostCfg.getSampleSize();
+        Collection<GameProfile> sample = new ArrayList<>(sampleSize);
+        // TODO: players
+        ServerPingPlayerSample sampleData = new ServerPingPlayerSample(dioriteConfig.getMaxPlayers(), 0, sample);
+
+        Favicon preparedFavicon = hostCfg.getPreparedFavicon();
+
+        ChatMessage motd = ChatColor.translateAlternateColorCodes(hostCfg.getMotd());
+        ServerPing serverPing = new ServerPing(motd, preparedFavicon, pingServerData, sampleData);
+
+        ServerPingEvent serverPingEvent = new ServerPingEvent(serverPing);
+        dioriteCore.getEventManager().callEvent(serverPingEvent);
+        serverPing = serverPingEvent.getServerPing();
+
+        ServerStateResponsePacket responsePacket = new ServerStateResponsePacket(serverPing);
+        this.activeConnection.callEvent(responsePacket);
+    }
+
+    @Handler
+    @Override
+    public void handle(ServerStateResponsePacket packet)
+    {
+        ServerPing ping = packet.getServerPing();
+        assert ping != null;
+        ServerPingPlayerSample playerData = ping.getPlayerData();
+        ServerPingServerData serverData = ping.getServerData();
+
+        CS00Response cs00Response = new CS00Response();
+        cs00Response.setDescription(ping.getMotd());
+        if (ping.getFavicon() != null)
+        {
+            cs00Response.setEncodedFavicon(ping.getFavicon().getEncoded());
+        }
+        cs00Response.setMaxPlayers(playerData.getMaxPlayers());
+        cs00Response.setOnlinePlayers(playerData.getOnlinePlayers());
+        cs00Response.setSample(playerData.getProfiles());
+        cs00Response.setVersionNumber(serverData.getProtocol());
+        cs00Response.setVersionString(serverData.getName());
+
+        this.activeConnection.sendPacket(cs00Response);
     }
 }
