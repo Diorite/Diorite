@@ -27,32 +27,65 @@ package org.diorite.ping;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * Represent ping server data.
+ */
 public class ServerPingServerData
 {
     private String name;
     private int    protocol;
 
-    public ServerPingServerData(String paramString, int paramInt)
+    /**
+     * Construct new ping server data.
+     *
+     * @param protocolName
+     *         name of protocol version.
+     * @param protocolVersion
+     *         numeric version of protocol.
+     */
+    public ServerPingServerData(String protocolName, int protocolVersion)
     {
-        this.name = paramString;
-        this.protocol = paramInt;
+        this.name = protocolName;
+        this.protocol = protocolVersion;
     }
 
+    /**
+     * Returns name of protocol version.
+     *
+     * @return name of protocol version.
+     */
     public String getName()
     {
         return this.name;
     }
 
+    /**
+     * Sets new name of protocol version.
+     *
+     * @param name
+     *         new name of protocol version.
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Returns numeric protocol version.
+     *
+     * @return numeric protocol version.
+     */
     public int getProtocol()
     {
         return this.protocol;
     }
 
+    /**
+     * Sets new numeric protocol version.
+     *
+     * @param protocol
+     *         new numeric protocol version.
+     */
     public void setProtocol(int protocol)
     {
         this.protocol = protocol;

@@ -34,12 +34,25 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import org.diorite.gameprofile.GameProfile;
 
+/**
+ * Represent ping player sample.
+ */
 public class ServerPingPlayerSample
 {
     private int               maxPlayers;
     private int               onlinePlayers;
     private List<GameProfile> profiles;
 
+    /**
+     * Construct new sample.
+     *
+     * @param maxPlayers
+     *         max players on server.
+     * @param onlinePlayers
+     *         online players.
+     * @param profiles
+     *         collection of players, it will be copied to this object.
+     */
     public ServerPingPlayerSample(int maxPlayers, int onlinePlayers, Collection<GameProfile> profiles)
     {
         this.maxPlayers = maxPlayers;
@@ -47,38 +60,64 @@ public class ServerPingPlayerSample
         this.profiles = new ArrayList<>(profiles);
     }
 
-    public ServerPingPlayerSample(int maxPlayers, int onlinePlayers)
-    {
-        this.maxPlayers = maxPlayers;
-        this.onlinePlayers = onlinePlayers;
-        this.profiles = Collections.emptyList();
-    }
-
+    /**
+     * Returns max amount of players.
+     *
+     * @return max amount of players.
+     */
     public int getMaxPlayers()
     {
         return this.maxPlayers;
     }
 
+    /**
+     * Sets new max players amount.
+     *
+     * @param maxPlayers
+     *         new max amount of players.
+     */
     public void setMaxPlayers(int maxPlayers)
     {
         this.maxPlayers = maxPlayers;
     }
 
+    /**
+     * Returns count of online players.
+     *
+     * @return count of online players.
+     */
     public int getOnlinePlayers()
     {
         return this.onlinePlayers;
     }
 
+    /**
+     * Set count of online players.
+     *
+     * @param onlinePlayers
+     *         new count of online players.
+     */
     public void setOnlinePlayers(int onlinePlayers)
     {
         this.onlinePlayers = onlinePlayers;
     }
 
+    /**
+     * Returns unmodifiable collection of sample profiles.
+     *
+     * @return unmodifiable collection of sample profiles.
+     */
     public List<? extends GameProfile> getProfiles()
     {
         return Collections.unmodifiableList(this.profiles);
     }
 
+    /**
+     * Set new profile sample, note that collection will be copied to new one.
+     *
+     * @param profiles
+     *         new profiles to use.
+     */
     public void setProfiles(Collection<GameProfile> profiles)
     {
         this.profiles = new ArrayList<>(profiles);
