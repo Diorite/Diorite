@@ -26,19 +26,31 @@ package org.diorite.event;
 
 import javax.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.engio.mbassy.bus.BusRuntime;
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.MessagePublication;
 import net.engio.mbassy.bus.config.BusConfiguration;
 import net.engio.mbassy.bus.config.Feature.AsynchronousHandlerInvocation;
 import net.engio.mbassy.bus.config.Feature.AsynchronousMessageDispatch;
 import net.engio.mbassy.bus.config.Feature.SyncPubSub;
 import net.engio.mbassy.bus.config.IBusConfiguration;
+import net.engio.mbassy.bus.error.PublicationError;
+import net.engio.mbassy.subscription.Subscription;
 
 public final class DioriteEventBus extends MBassador<Event>
 {
     private static final Logger logger = LoggerFactory.getLogger("[event-bus]");
+
+    // diorite cache unused events, cleared on every listener register, improves total performance.
+    private static final Set<Class<?>> unusedEvents = new HashSet<>(500);
 
     private final EventSubscriptionManager subscriptionManager;
 
@@ -46,6 +58,34 @@ public final class DioriteEventBus extends MBassador<Event>
     {
         super(configuration);
         this.subscriptionManager = this.getRuntime().get(SubscriptionManagerProvider.KEY);
+    }
+
+    public void clearCache()
+    {
+        unusedEvents.clear();
+    }
+
+    public boolean isDeadType(Class<?> type)
+    {
+        return unusedEvents.contains(type);
+    }
+
+    // skip dead messages
+    @Override
+    protected MessagePublication createMessagePublication(Event message)
+    {
+        Class<? extends Event> messageClass = message.getClass();
+        Collection<Subscription> subscriptions = this.getSubscriptionsByMessageType(messageClass);
+        if ((subscriptions == null) || subscriptions.isEmpty())
+        {
+            // unused event
+            unusedEvents.add(messageClass);
+            return new DummyMessage(this.getRuntime(), Collections.emptyList(), message);
+        }
+        else
+        {
+            return this.getPublicationFactory().createPublication(this.getRuntime(), subscriptions, message);
+        }
     }
 
     public void reRegisterTypeListener(@Nullable Object listener, Class<?> messageType)
@@ -71,5 +111,50 @@ public final class DioriteEventBus extends MBassador<Event>
                                 "Error publishing event: " + error.getPublishedMessage() + " to: " + error.getHandler() + " from listener: " +
                                 error.getListener() + ", error: " + error.getMessage(), error.getCause()));
         return new DioriteEventBus(configuration);
+    }
+
+    private static class DummyMessage extends MessagePublication
+    {
+        protected DummyMessage(BusRuntime runtime, Collection<Subscription> subscriptions, Object message)
+        {
+            super(runtime, subscriptions, message, null);
+        }
+
+        @Override
+        public boolean add(Subscription subscription) {return true;}
+
+        @Override
+        public void execute() {}
+
+        @Override
+        public boolean isFinished() {return true;}
+
+        @Override
+        public boolean isRunning() {return false;}
+
+        @Override
+        public boolean isScheduled() {return false;}
+
+        @Override
+        public boolean hasError() {return false;}
+
+        @Override
+        @Nullable
+        public PublicationError getError() {return null;}
+
+        @Override
+        public void markDispatched() {}
+
+        @Override
+        public void markError(PublicationError error) {}
+
+        @Override
+        public MessagePublication markScheduled() {return this;}
+
+        @Override
+        public boolean isDeadMessage() {return true;}
+
+        @Override
+        public boolean isFilteredMessage() {return false;}
     }
 }
