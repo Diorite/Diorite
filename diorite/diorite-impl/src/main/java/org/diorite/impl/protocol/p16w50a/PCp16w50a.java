@@ -31,6 +31,7 @@ import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.PCProtocolVersion;
 import org.diorite.impl.protocol.any.serverbound.ServerboundHandshakeListener;
 import org.diorite.impl.protocol.p16w50a.clientbound.CL01EncryptionRequest;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL02SetCompression;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS01Pong;
 import org.diorite.impl.protocol.p16w50a.serverbound.SL00LoginStart;
@@ -53,15 +54,16 @@ public class PCp16w50a extends PCProtocolVersion implements Listener
 
     public PCp16w50a(PCProtocol protocol, DioriteCore dioriteCore)
     {
-        super(protocol, VERSION, "p16w50a", true, Objects.requireNonNull(dioriteCore.getConfig().findProtocol(Set.of("p16w50a", "1.11.1", "1.11.2"))));
+        super(protocol, VERSION, "1.11.2", true, Objects.requireNonNull(dioriteCore.getConfig().findProtocol(Set.of("p16w50a", "1.11.1", "1.11.2"))));
         this.aliases.add("1.11.1");
-        this.aliases.add("1.11.2");
+        this.aliases.add("p16w50a");
 
         this.dioriteCore = dioriteCore;
 
         this.packets.addType(CS00Response.class, CS00Response::new);
         this.packets.addType(CS01Pong.class, CS01Pong::new);
         this.packets.addType(CL01EncryptionRequest.class, CL01EncryptionRequest::new);
+        this.packets.addType(CL02SetCompression.class, CL02SetCompression::new);
 
         this.packets.addType(SS00Request.class, SS00Request::new);
         this.packets.addType(SS01Ping.class, SS01Ping::new);

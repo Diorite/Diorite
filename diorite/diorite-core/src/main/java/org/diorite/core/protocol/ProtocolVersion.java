@@ -81,6 +81,11 @@ public abstract class ProtocolVersion<T extends Protocol<?>>
         return maxServerboundCompressedPacketSize;
     }
 
+    public ProtocolSettings getSettings()
+    {
+        return this.settings;
+    }
+
     public T getProtocol()
     {
         return this.protocol;

@@ -45,8 +45,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.diorite.impl.protocol.MinecraftEncryption;
 import org.diorite.impl.protocol.any.serverbound.H00Handshake;
 import org.diorite.impl.protocol.p16w50a.clientbound.CL01EncryptionRequest;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL02SetCompression;
 import org.diorite.chat.ChatMessage;
 import org.diorite.core.DioriteCore;
+import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ActiveConnection;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
@@ -152,8 +154,15 @@ public class ServerboundLoginPacketListener implements ServerboundPacketListener
 
     private void switchToPlay()
     {
+        ProtocolVersion<?> protocolVersion = this.activeConnection.getProtocolVersion();
+        int compressionThreshold = protocolVersion.getSettings().getNetworkCompressionThreshold();
+        this.activeConnection.sendPacket(new CL02SetCompression(compressionThreshold));
+        this.activeConnection.setCompression(compressionThreshold);
         this.activeConnection.setProtocol(ProtocolState.PLAY);
-        System.out.println("play state: " + this.gameProfile); // TODO
+        assert this.gameProfile != null;
+        this.dioriteCore.getLogger().info("Player (uuid: " + this.gameProfile.getId() + ", name: " + this.gameProfile.getName() + ", ip: " +
+                                          this.activeConnection.getSocketAddress().getAddress() + ") connected to server using `" +
+                                          protocolVersion.getVersionName() + "` protocol, logging in...");
     }
 
     static class AuthTask implements Runnable
