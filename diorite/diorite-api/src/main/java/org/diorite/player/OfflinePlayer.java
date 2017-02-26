@@ -24,9 +24,11 @@
 
 package org.diorite.player;
 
+import org.diorite.commons.objects.Nameable;
+
 /**
  * Represent player that might be offline.
  */
-public interface OfflinePlayer
+public interface OfflinePlayer extends Nameable
 {
 }

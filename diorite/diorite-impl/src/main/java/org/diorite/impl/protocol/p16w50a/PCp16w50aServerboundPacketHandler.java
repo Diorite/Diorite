@@ -26,12 +26,19 @@ package org.diorite.impl.protocol.p16w50a;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
 import org.diorite.DioriteConfig;
 import org.diorite.DioriteConfig.HostConfiguration;
+import org.diorite.DioriteConfig.OnlineMode;
 import org.diorite.chat.ChatColor;
 import org.diorite.chat.ChatMessage;
+import org.diorite.commons.SpammyLoggerError;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ActiveConnection;
@@ -39,17 +46,22 @@ import org.diorite.core.protocol.connection.ServerboundPacketHandler;
 import org.diorite.core.protocol.packets.clientbound.ServerStateResponsePacket;
 import org.diorite.core.protocol.packets.serverbound.LoginStartPacket;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
+import org.diorite.event.events.connection.PlayerConnectedEvent;
 import org.diorite.event.events.connection.ServerPingEvent;
 import org.diorite.gameprofile.GameProfile;
 import org.diorite.ping.Favicon;
 import org.diorite.ping.ServerPing;
 import org.diorite.ping.ServerPingPlayerSample;
 import org.diorite.ping.ServerPingServerData;
+import org.diorite.services.AutoAuthMode;
 
 import net.engio.mbassy.listener.Handler;
 
 public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandler
 {
+    private static final Logger            logger          = LoggerFactory.getLogger("[Packets]");
+    private static final Predicate<String> nicknamePattern = Pattern.compile("[0-9A-Za-z_]{3,16}").asPredicate();
+
     private final ActiveConnection activeConnection;
 
     public PCp16w50aServerboundPacketHandler(ActiveConnection activeConnection)
@@ -61,8 +73,49 @@ public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandl
     @Override
     public void handle(LoginStartPacket packet)
     {
-        System.out.println("join");
-        // TODO
+        DioriteCore dioriteCore = this.activeConnection.getDioriteCore();
+
+        String username = packet.getUsername();
+        assert username != null;
+        AutoAuthMode autoAuthMode = dioriteCore.getServiceManager().get(AutoAuthMode.class);
+        HostConfiguration cfg = dioriteCore.getConfig().getHostConfigurationOrDefault(this.activeConnection.getServerAddress());
+        OnlineMode auth = cfg.getOnlineMode();
+
+        PlayerConnectedEvent connectedEvent = new PlayerConnectedEvent(username, this.activeConnection.getSocketAddress(), auth, nicknamePattern.test(username));
+        dioriteCore.getEventManager().callEvent(connectedEvent);
+        if (connectedEvent.isCancelled())
+        {
+            this.activeConnection.disconnect(connectedEvent.getKickMessage());
+            return;
+        }
+        if (! connectedEvent.isValidNickname())
+        {
+            // TODO: fetch message from config.
+            this.activeConnection.disconnect(ChatMessage.fromLegacy("TODO"));
+            return;
+        }
+
+        auth = connectedEvent.getOnlineMode();
+        switch (auth)
+        {
+            case TRUE:
+                this.activeConnection.setAuthWithMojang(true);
+                break;
+            case FALSE:
+                this.activeConnection.setAuthWithMojang(false);
+                break;
+            case AUTO:
+                if (autoAuthMode != null)
+                {
+                    this.activeConnection.setAuthWithMojang(autoAuthMode.authWithMojang(username, this.activeConnection.getSocketAddress().getAddress()));
+                }
+                else
+                {
+                    this.activeConnection.setAuthWithMojang(true);
+                    SpammyLoggerError.err(logger, "AutoAuthMode is unavailable!", 10, this.activeConnection.hashCode());
+                }
+                break;
+        }
     }
 
     @Handler

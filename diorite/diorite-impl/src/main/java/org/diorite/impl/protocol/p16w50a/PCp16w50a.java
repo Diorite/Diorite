@@ -30,9 +30,11 @@ import java.util.Set;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.PCProtocolVersion;
 import org.diorite.impl.protocol.any.serverbound.ServerboundHandshakeListener;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL01EncryptionRequest;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS01Pong;
 import org.diorite.impl.protocol.p16w50a.serverbound.SL00LoginStart;
+import org.diorite.impl.protocol.p16w50a.serverbound.SL01EncryptionResponse;
 import org.diorite.impl.protocol.p16w50a.serverbound.SS00Request;
 import org.diorite.impl.protocol.p16w50a.serverbound.SS01Ping;
 import org.diorite.impl.protocol.p16w50a.serverbound.ServerboundLoginPacketListener;
@@ -59,10 +61,12 @@ public class PCp16w50a extends PCProtocolVersion implements Listener
 
         this.packets.addType(CS00Response.class, CS00Response::new);
         this.packets.addType(CS01Pong.class, CS01Pong::new);
+        this.packets.addType(CL01EncryptionRequest.class, CL01EncryptionRequest::new);
 
         this.packets.addType(SS00Request.class, SS00Request::new);
         this.packets.addType(SS01Ping.class, SS01Ping::new);
         this.packets.addType(SL00LoginStart.class, SL00LoginStart::new);
+        this.packets.addType(SL01EncryptionResponse.class, SL01EncryptionResponse::new);
     }
 
     @Override
@@ -80,6 +84,7 @@ public class PCp16w50a extends PCProtocolVersion implements Listener
                 activeConnection.setPacketListener(new ServerboundHandshakeListener(activeConnection), true);
                 break;
             case STATUS:
+            {
                 ServerboundPacketListener packetListener = activeConnection.getPacketListener();
                 if (packetListener instanceof ServerboundHandshakeListener)
                 {
@@ -91,9 +96,21 @@ public class PCp16w50a extends PCProtocolVersion implements Listener
                     activeConnection.setPacketListener(new ServerboundStatusPacketListener(activeConnection, null), true);
                 }
                 break;
+            }
             case LOGIN:
-                activeConnection.setPacketListener(new ServerboundLoginPacketListener(activeConnection), true);
+            {
+                ServerboundPacketListener packetListener = activeConnection.getPacketListener();
+                if (packetListener instanceof ServerboundHandshakeListener)
+                {
+                    ServerboundHandshakeListener handshakeListener = (ServerboundHandshakeListener) packetListener;
+                    activeConnection.setPacketListener(new ServerboundLoginPacketListener(activeConnection, handshakeListener.getPacket()), true);
+                }
+                else
+                {
+                    activeConnection.setPacketListener(new ServerboundLoginPacketListener(activeConnection, null), true);
+                }
                 break;
+            }
             case PLAY:
                 break;
             default:

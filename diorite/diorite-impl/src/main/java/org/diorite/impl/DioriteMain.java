@@ -104,18 +104,10 @@ public final class DioriteMain
         parser.acceptsAll(Collections.singletonList("debug"), "Enable debug mode.");
         parser.acceptsAll(Arrays.asList("resourceleakdetector", "rld"), "ResourceLeakDetector level.").withRequiredArg()
               .ofType(String.class).describedAs("rld").defaultsTo(ResourceLeakDetector.Level.DISABLED.name());
-        parser.acceptsAll(Arrays.asList("p", "port", "server-port"), "Port to listen on.").withRequiredArg().ofType(Integer.class).describedAs("port")
-              .defaultsTo(Diorite.DEFAULT_PORT);
-        parser.acceptsAll(Arrays.asList("hostname", "h"), "Hostname to listen on.").withRequiredArg().ofType(String.class).describedAs("hostname")
-              .defaultsTo("localhost");
-        parser.acceptsAll(Arrays.asList("online-mode", "online", "o"), "Online mode of server.").withRequiredArg().ofType(OnlineMode.class)
-              .describedAs("online").defaultsTo(OnlineMode.TRUE);
         parser.acceptsAll(Collections.singletonList("config"), "Configuration file to use.").withRequiredArg().ofType(File.class).describedAs("config")
               .defaultsTo(new File("diorite.yml"));
         parser.acceptsAll(Arrays.asList("keepalivetimer", "keep-alive-timer", "kat"), "Every x seconds server will send keep alive packet to players.")
               .withRequiredArg().ofType(Integer.class).describedAs("keepalivetimer").defaultsTo(10);
-        parser.acceptsAll(Arrays.asList("netty", "netty-threads"), "Amount of netty event loop threads.").withRequiredArg().ofType(Integer.class)
-              .describedAs("netty").defaultsTo(4);
         parser.acceptsAll(Collections.singletonList("noconsole"), "Disables the console.");
         OptionSet options;
         try

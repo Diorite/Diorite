@@ -58,14 +58,6 @@ public class AbstractPacketDataSerializer extends ByteBuf
         this.writeBytes(abyte);
     }
 
-    public byte[] readByteWord()
-    {
-        byte[] abyte = new byte[this.readVarInt()];
-
-        this.readBytes(abyte);
-        return abyte;
-    }
-
     private static final ConcurrentHashMap<Class<?>, Object[]> enumValues = new ConcurrentHashMap<>(20);
 
     @SuppressWarnings("unchecked")

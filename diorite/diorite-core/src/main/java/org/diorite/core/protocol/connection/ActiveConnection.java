@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.Queue;
 
 import com.google.common.collect.Queues;
@@ -74,13 +73,14 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
     protected final MBassador<Event>  eventBus;
 
     @Nullable protected Channel                   channel;
-    @Nullable protected SocketAddress             address;
+    @Nullable protected InetSocketAddress         address;
     protected           ServerboundPacketListener packetListener;
     @Nullable protected ChatMessage               disconnectMessage;
     protected           ProtocolVersion<?>        protocolVersion;
 
-    protected volatile boolean closed    = false;
-    protected volatile boolean preparing = true;
+    protected volatile boolean authWithMojang = true;
+    protected volatile boolean closed         = false;
+    protected volatile boolean preparing      = true;
 
     private final ServerboundPacketHandler packetHandler;
 
@@ -112,9 +112,22 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         return this.dioriteCore;
     }
 
-    @Nullable
-    public SocketAddress getSocketAddress()
+    public boolean isAuthWithMojang()
     {
+        return this.authWithMojang;
+    }
+
+    public void setAuthWithMojang(boolean authWithMojang)
+    {
+        this.authWithMojang = authWithMojang;
+    }
+
+    public InetSocketAddress getSocketAddress()
+    {
+        if (this.address == null)
+        {
+            throw new IllegalStateException("Connection not active yet!");
+        }
         return this.address;
     }
 
@@ -344,7 +357,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         assert this.channel != null;
         if (this.channel.isOpen())
         {
-            this.close(ChatMessage.fromLegacy("Internal Exception: " + throwable)); // TODO change message
+            this.disconnect(ChatMessage.fromLegacy("Internal Exception: " + throwable)); // TODO change message
             this.channel.close();
             this.handleClosed();
         }
@@ -367,7 +380,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         }
         super.channelActive(channelHandlerContext);
         this.channel = channelHandlerContext.channel();
-        this.address = this.channel.remoteAddress();
+        this.address = (InetSocketAddress) this.channel.remoteAddress();
         this.logger = LoggerFactory.getLogger("[Con][" + this.address.toString() + "]");
         this.dioriteCore.debugRun(() -> this.logger.debug("Received new connection on: " + this.serverAddress));
         this.preparing = false;
@@ -389,7 +402,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
             this.handleClosed();
             return;
         }
-        this.close(ChatMessage.fromLegacy("disconnect.endOfStream")); // TODO change message
+        this.disconnect(ChatMessage.fromLegacy("disconnect.endOfStream")); // TODO change message
         this.handleClosed();
     }
 
@@ -448,7 +461,7 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         }
     }
 
-    public void close(@Nullable ChatMessage chatMessage, boolean wasSafe)
+    public void disconnect(@Nullable ChatMessage chatMessage, boolean wasSafe)
     {
         if (this.closed)
         {
@@ -470,9 +483,9 @@ public abstract class ActiveConnection extends SimpleChannelInboundHandler<Packe
         this.handleClosed();
     }
 
-    public void close(@Nullable ChatMessage chatMessage)
+    public void disconnect(@Nullable ChatMessage chatMessage)
     {
-        this.close(chatMessage, false);
+        this.disconnect(chatMessage, false);
     }
 
     public abstract void setCompression(int i);

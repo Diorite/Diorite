@@ -22,31 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
+package org.diorite.services;
 
-import java.security.KeyPair;
+import java.net.InetAddress;
 
-import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
-
-public interface DioriteCore extends Diorite
+/**
+ * Service used by auto auth mode to determine if player should be auth with mojang.
+ */
+public interface AutoAuthMode
 {
-    SessionService getSessionService();
-
-    KeyPair getKeyPair();
-
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    static DioriteCore getDiorite()
-    {
-        return (DioriteCore) Diorite.getDiorite();
-    }
-
-    @Override
-    EventManagerImpl getEventManager();
+    /**
+     * Returns true if given player should be authorized with mojang.
+     *
+     * @param nickname
+     *         nickname to check.
+     * @param address
+     *         address of player, might be used for some caching or ignored.
+     *
+     * @return true if player should be authorized with mojang.
+     */
+    boolean authWithMojang(String nickname, InetAddress address);
 }

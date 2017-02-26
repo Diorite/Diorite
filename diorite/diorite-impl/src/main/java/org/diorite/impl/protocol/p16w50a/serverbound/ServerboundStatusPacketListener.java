@@ -56,7 +56,7 @@ public class ServerboundStatusPacketListener implements ServerboundPacketListene
     @Override
     public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
-        this.activeConnection.close(disconnectMessage, true);
+        this.activeConnection.disconnect(disconnectMessage, true);
     }
 
     private volatile boolean handled = false;

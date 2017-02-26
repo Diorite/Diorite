@@ -26,6 +26,8 @@ package org.diorite;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.event.EventManager;
 import org.diorite.player.Player;
@@ -39,6 +41,13 @@ public interface Diorite extends SharedAPI
      * Default server port.
      */
     int DEFAULT_PORT = 25565;
+
+    /**
+     * Returns server logger.
+     *
+     * @return server logger.
+     */
+    Logger getLogger();
 
     /**
      * Returns diorite config instance.

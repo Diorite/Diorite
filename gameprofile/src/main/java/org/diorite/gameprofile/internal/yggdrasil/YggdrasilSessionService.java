@@ -132,6 +132,12 @@ public class YggdrasilSessionService implements SessionService
     }
 
     @Override
+    public GameProfiles getCache()
+    {
+        return this.gameProfiles;
+    }
+
+    @Override
     public Map<String, GameProfile> getUUIDsFromUsernames(String... names) throws AuthenticationException
     {
         ProfileSearchResultsResponse response = this.makeRequest(NAMES_TO_UUIDS, new ProfileSearchRequest(names), ProfileSearchResultsResponse.class);

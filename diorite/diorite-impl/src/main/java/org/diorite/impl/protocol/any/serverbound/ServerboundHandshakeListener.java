@@ -27,7 +27,6 @@ package org.diorite.impl.protocol.any.serverbound;
 import javax.annotation.Nullable;
 
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -93,9 +92,7 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
                     long currentTime = System.currentTimeMillis();
 
                     long connectionThrottle = this.hostConfiguration.getConnectionThrottle();
-                    InetSocketAddress socketAddress = (InetSocketAddress) this.activeConnection.getSocketAddress();
-                    assert socketAddress != null;
-                    InetAddress address = socketAddress.getAddress();
+                    InetAddress address = this.activeConnection.getSocketAddress().getAddress();
 
                     if ((throttleTracker.containsKey(address)) && (! "127.0.0.1".equals(address.getHostAddress())) &&
                         ((currentTime - throttleTracker.get(address)) < connectionThrottle))
@@ -162,6 +159,6 @@ public class ServerboundHandshakeListener implements ServerboundPacketListener
     public void disconnect(@Nullable ChatMessage disconnectMessage)
     {
 //        this.activeConnection.sendPacket(new PacketLoginClientboundDisconnect(baseComponent));
-        this.activeConnection.close(disconnectMessage, true);
+        this.activeConnection.disconnect(disconnectMessage, true);
     }
 }

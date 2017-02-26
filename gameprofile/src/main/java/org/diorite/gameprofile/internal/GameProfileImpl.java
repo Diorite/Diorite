@@ -160,4 +160,10 @@ public class GameProfileImpl implements GameProfile
             return result;
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return "GameProfile{" + "id=" + this.id + ", name='" + this.name + '\'' + '}';
+    }
 }

@@ -26,12 +26,19 @@ package org.diorite.impl;
 
 import javax.annotation.Nullable;
 
+import java.net.Proxy;
+import java.security.KeyPair;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.diorite.impl.permissions.DioritePermissionsManager;
 import org.diorite.impl.plugin.DioriteServerPlugin;
+import org.diorite.impl.protocol.MinecraftEncryption;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.connection.ServerConnectionImpl;
 import org.diorite.impl.service.ServiceManagerImpl;
@@ -44,21 +51,27 @@ import org.diorite.core.DioriteCore;
 import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
+import org.diorite.gameprofile.SessionService;
+import org.diorite.gameprofile.internal.yggdrasil.YggdrasilSessionService;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.ping.Favicon;
 import org.diorite.player.Player;
 import org.diorite.plugin.PluginManager;
 import org.diorite.serializers.SerializersInit;
 import org.diorite.service.ServiceManager;
+import org.diorite.services.AutoAuthMode;
 
 public class DioriteServer implements DioriteCore
 {
+    private final Logger logger = LoggerFactory.getLogger("");
+
     private final PCProtocol       pcProtocol;
     private final DioriteConfig    dioriteConfig;
     private final ServerConnection serverConnection;
     private final EventManagerImpl    eventManager   = new EventManagerImpl();
     private final ServiceManager      serviceManager = new ServiceManagerImpl();
     private final DioriteServerPlugin plugin         = new DioriteServerPlugin();
+    private final KeyPair             keyPair        = MinecraftEncryption.generateKeyPair();
     private @Nullable Favicon favicon;
 
     @Nullable private final String serverVersion;
@@ -81,8 +94,29 @@ public class DioriteServer implements DioriteCore
     {
         this.serviceManager.registerServiceType(this.plugin, PluginManager.class);
         this.serviceManager.registerServiceType(this.plugin, PermissionsManager.class);
+        this.serviceManager.registerServiceType(this.plugin, AutoAuthMode.class);
+        this.serviceManager.registerServiceType(this.plugin, SessionService.class);
 
         this.serviceManager.provideService(this.plugin, PermissionsManager.class, new DioritePermissionsManager(this.plugin), false);
+        this.serviceManager.provideService(this.plugin, SessionService.class, new YggdrasilSessionService(Proxy.NO_PROXY, UUID.randomUUID().toString()), false);
+    }
+
+    @Override
+    public SessionService getSessionService()
+    {
+        return Objects.requireNonNull(this.serviceManager.get(SessionService.class));
+    }
+
+    @Override
+    public KeyPair getKeyPair()
+    {
+        return this.keyPair;
+    }
+
+    @Override
+    public Logger getLogger()
+    {
+        return this.logger;
     }
 
     @Override

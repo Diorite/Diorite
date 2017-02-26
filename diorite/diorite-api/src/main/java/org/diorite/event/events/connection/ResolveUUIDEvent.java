@@ -27,33 +27,30 @@ package org.diorite.event.events.connection;
 import javax.annotation.Nullable;
 
 import java.net.InetSocketAddress;
+import java.util.UUID;
 
-import org.diorite.DioriteConfig.OnlineMode;
 import org.diorite.chat.ChatMessage;
 import org.diorite.commons.objects.Cancellable;
 import org.diorite.event.Event;
 
 /**
- * Called when player is trying to join the server, before any authorization. <br>
- * It's called right after first login packet. <br>
- * It is also called for invalid nicknames, use {@link #isValidNickname()} to check it. <br>
- * You can cancel event with custom kick message.
+ * Called after fetching uuid of player, if player is cracked and allowed to connect uuid will be generated from name.
  */
-public class PlayerConnectedEvent implements Event, Cancellable
+public class ResolveUUIDEvent implements Event, Cancellable
 {
     private final     String            name;
     private final     InetSocketAddress socketAddress;
-    private           OnlineMode        onlineMode;
-    private           boolean           validNickname;
+    private final     boolean           isUUIDFromMojang;
+    private           UUID              resolvedUUID;
     private           boolean           cancelled;
     private @Nullable ChatMessage       kickMessage;
 
-    public PlayerConnectedEvent(String name, InetSocketAddress socketAddress, OnlineMode onlineMode, boolean validNickname)
+    public ResolveUUIDEvent(String name, InetSocketAddress socketAddress, boolean isUUIDFromMojang, UUID resolvedUUID)
     {
         this.name = name;
         this.socketAddress = socketAddress;
-        this.onlineMode = onlineMode;
-        this.validNickname = validNickname;
+        this.isUUIDFromMojang = isUUIDFromMojang;
+        this.resolvedUUID = resolvedUUID;
     }
 
     public String getName()
@@ -66,24 +63,19 @@ public class PlayerConnectedEvent implements Event, Cancellable
         return this.socketAddress;
     }
 
-    public OnlineMode getOnlineMode()
+    public boolean isUUIDFromMojang()
     {
-        return this.onlineMode;
+        return this.isUUIDFromMojang;
     }
 
-    public void setOnlineMode(OnlineMode onlineMode)
+    public UUID getResolvedUUID()
     {
-        this.onlineMode = onlineMode;
+        return this.resolvedUUID;
     }
 
-    public boolean isValidNickname()
+    public void setResolvedUUID(UUID resolvedUUID)
     {
-        return this.validNickname;
-    }
-
-    public void setValidNickname(boolean validNickname)
-    {
-        this.validNickname = validNickname;
+        this.resolvedUUID = resolvedUUID;
     }
 
     @Nullable

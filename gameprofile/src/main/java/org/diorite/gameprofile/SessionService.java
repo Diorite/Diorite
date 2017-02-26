@@ -32,8 +32,18 @@ import java.util.UUID;
 import org.diorite.gameprofile.internal.exceptions.AuthenticationException;
 import org.diorite.gameprofile.internal.exceptions.AuthenticationUnavailableException;
 
+/**
+ * Represents session service.
+ */
 public interface SessionService
 {
+    /**
+     * Returns cache of game profiles.
+     *
+     * @return cache of game profiles.
+     */
+    GameProfiles getCache();
+
     Map<String, GameProfile> getUUIDsFromUsernames(String... names) throws AuthenticationException;
 
     @Nullable
