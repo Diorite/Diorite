@@ -27,8 +27,6 @@ package org.diorite.commons.lazy;
 import java.util.Collection;
 import java.util.function.IntSupplier;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Class to represent lazy init int values that use {@link IntSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link IntLazyValueAbstract}
@@ -51,7 +49,6 @@ public class IntLazyValue extends IntLazyValueAbstract
      */
     public IntLazyValue(IntSupplier supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

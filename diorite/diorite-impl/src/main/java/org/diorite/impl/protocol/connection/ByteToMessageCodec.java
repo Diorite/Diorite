@@ -51,7 +51,6 @@ import io.netty.util.internal.TypeParameterMatcher;
  * Be aware that sub-classes of {@link ByteToMessageCodec} <strong>MUST NOT</strong>
  * annotated with {@link io.netty.channel.ChannelHandler.Sharable}.
  */
-@SuppressWarnings("ThrowFromFinallyBlock")
 public abstract class ByteToMessageCodec<I> extends ChannelDuplexHandler
 {
     private final TypeParameterMatcher    outboundMsgMatcher;

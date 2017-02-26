@@ -63,7 +63,7 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
 
     protected abstract boolean matchesAction0(MethodInvoker method, Class<?>[] parameters);
 
-    private static ActionMatcherResult FAIL = new ActionMatcherResult(false, null);
+    private static final ActionMatcherResult FAIL = new ActionMatcherResult(false, null);
 
     @Override
     public ActionMatcherResult matchesAction(Method method)

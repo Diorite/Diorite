@@ -29,24 +29,10 @@ package org.diorite.commons.objects;
  */
 public interface Cancellable
 {
-    /**
-     * Returns true if thi is cancelled.
-     *
-     * @return true if thi is cancelled.
-     */
     boolean isCancelled();
 
-    /**
-     * Set cancelled status.
-     *
-     * @param cancelled
-     *         if this should be cancelled.
-     */
     void setCancelled(boolean cancelled);
 
-    /**
-     * Change cancelled status to true.
-     */
     default void cancel()
     {
         this.setCancelled(true);

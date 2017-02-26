@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.events.MappingEndEvent;
 
 class ExpectBlockMappingKey implements EmitterState
 {
-    private boolean first;
+    private final boolean first;
 
     ExpectBlockMappingKey(boolean first)
     {

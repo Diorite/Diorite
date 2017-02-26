@@ -62,7 +62,6 @@ public class ServerConnectionImpl extends Thread implements ServerConnection
     private final DioriteCore core;
     private final Map<InetSocketAddress, ChannelFuture> channels = new ConcurrentHashMap<>(1);
 
-    @SuppressWarnings("resource")
     public ServerConnectionImpl(DioriteCore core)
     {
         this.core = core;

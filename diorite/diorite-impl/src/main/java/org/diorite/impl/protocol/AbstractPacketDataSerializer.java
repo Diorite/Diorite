@@ -66,7 +66,7 @@ public class AbstractPacketDataSerializer extends ByteBuf
         return abyte;
     }
 
-    private static ConcurrentHashMap<Class<?>, Object[]> enumValues = new ConcurrentHashMap<>(20);
+    private static final ConcurrentHashMap<Class<?>, Object[]> enumValues = new ConcurrentHashMap<>(20);
 
     @SuppressWarnings("unchecked")
     public <T extends Enum<T>> T readEnum(Class<T> c)

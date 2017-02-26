@@ -104,11 +104,11 @@ public final class Serialization
     private       ThreadLocal<Gson> cachedGson  = ThreadLocal.withInitial(this.gsonBuilder::create);
 
     // yaml section
-    private Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
-    private Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
-    private Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
-    private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
-    private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
+    private final Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
+    private final Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
+    private final Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
+    private       ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
+    private final ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
 
     private final CommentsManager commentsManager = new CommentsManager();
 
@@ -287,7 +287,6 @@ public final class Serialization
      * @param <T>
      *         serializer value type.
      */
-    @SuppressWarnings("unchecked")
     public <T> void registerStringSerializer(StringSerializer<T> stringSerializer)
     {
         this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new JsonStringSerializerImpl<>(stringSerializer));

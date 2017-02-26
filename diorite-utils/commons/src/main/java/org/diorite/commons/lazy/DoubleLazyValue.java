@@ -27,8 +27,6 @@ package org.diorite.commons.lazy;
 import java.util.Collection;
 import java.util.function.DoubleSupplier;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Class to represent lazy init double values that use {@link DoubleSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link DoubleLazyValueAbstract}
@@ -51,7 +49,6 @@ public class DoubleLazyValue extends DoubleLazyValueAbstract
      */
     public DoubleLazyValue(DoubleSupplier supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

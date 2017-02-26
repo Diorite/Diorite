@@ -52,7 +52,6 @@ public interface Packet extends Event, Cancellable
 
     void decode(ChannelHandlerContext context, ByteBuf byteBuf) throws InvalidPacketException;
 
-    @SuppressWarnings("unchecked")
     default PacketType packetType()
     {
         return DioriteCore.getDiorite().getProtocol().getPacketType(this.getClass());

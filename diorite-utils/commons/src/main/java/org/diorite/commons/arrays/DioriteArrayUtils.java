@@ -190,7 +190,6 @@ public final class DioriteArrayUtils
      *
      * @return empty array of given type.
      */
-    @SuppressWarnings("unchecked")
     public static Object getEmptyArray(Class<?> clazz)
     {
         Object o = arrayMaps.get(clazz);
@@ -275,7 +274,6 @@ public final class DioriteArrayUtils
      *
      * @return array of given type and size.
      */
-    @SuppressWarnings("unchecked")
     public static Object newArray(Class<?> clazz, int size)
     {
         if (size == 0)
@@ -2638,7 +2636,6 @@ public final class DioriteArrayUtils
         byte[] result = new byte[array.length];
         for (int i = 0; i < array.length; i++)
         {
-            //noinspection UnnecessaryUnboxing
             result[i] = ((byte) array[i].charValue());
         }
         return result;
@@ -2801,7 +2798,6 @@ public final class DioriteArrayUtils
         short[] result = new short[array.length];
         for (int i = 0; i < array.length; i++)
         {
-            //noinspection UnnecessaryUnboxing
             result[i] = ((short) array[i].charValue());
         }
         return result;

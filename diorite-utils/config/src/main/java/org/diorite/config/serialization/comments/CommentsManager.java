@@ -38,7 +38,7 @@ import org.diorite.config.serialization.Serialization;
 
 public class CommentsManager
 {
-    private Map<Class<?>, DocumentComments> commentsMap = new ConcurrentHashMap<>(10);
+    private final Map<Class<?>, DocumentComments> commentsMap = new ConcurrentHashMap<>(10);
 
     public DocumentComments getComments(Class<?> clazz)
     {

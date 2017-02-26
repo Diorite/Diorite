@@ -307,7 +307,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     private synchronized void setupActions()
     {
         LinkedList<MethodInvoker> methods = new LinkedList<>();

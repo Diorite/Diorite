@@ -187,7 +187,7 @@ import org.yaml.snakeyaml.nodes.Node;
 
 class YamlNodeIterable implements Iterable<Node>
 {
-    private Iterator<Node> iterator;
+    private final Iterator<Node> iterator;
 
     YamlNodeIterable(Iterator<Node> iterator)
     {

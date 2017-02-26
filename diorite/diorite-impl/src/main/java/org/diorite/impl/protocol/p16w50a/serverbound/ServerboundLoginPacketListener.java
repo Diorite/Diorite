@@ -53,6 +53,6 @@ public class ServerboundLoginPacketListener implements ServerboundPacketListener
     @Handler
     public void handle(SL00LoginStart packet)
     {
-
+        String username = packet.getUsername();
     }
 }

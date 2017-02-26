@@ -28,13 +28,11 @@ import org.diorite.core.protocol.packets.clientbound.ServerStateResponsePacket;
 import org.diorite.core.protocol.packets.serverbound.LoginStartPacket;
 import org.diorite.core.protocol.packets.serverbound.RequestServerStatePacket;
 
-import net.engio.mbassy.listener.Handler;
-
 public interface ServerboundPacketHandler extends PacketHandler
 {
     void handle(LoginStartPacket packet);
 
     void handle(RequestServerStatePacket packet);
-    @Handler
+
     void handle(ServerStateResponsePacket packet);
 }

@@ -49,7 +49,7 @@ import org.diorite.config.exceptions.ConfigSaveException;
 /**
  * Config interface with basic operations, all config file instances must implementing this.
  */
-@SuppressWarnings({"resource", "IOResourceOpenedButNotSafelyClosed"})
+@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
 public interface Config extends Map<String, Object>
 {
     /**

@@ -225,9 +225,9 @@ public class Yaml
     protected final Serialization   serialization;
     protected final Resolver        resolver;
     private         String          name;
-    protected       YamlConstructor constructor;
-    protected       Representer     representer;
-    protected       DumperOptions   dumperOptions;
+    protected final YamlConstructor constructor;
+    protected final Representer     representer;
+    protected final DumperOptions   dumperOptions;
 
     /**
      * Create Yaml instance. It is safe to create a few instances and use them

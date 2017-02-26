@@ -24,13 +24,16 @@
 
 package org.diorite;
 
+import java.util.Collection;
+
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.event.EventManager;
+import org.diorite.player.Player;
 
 /**
  * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
  */
-public interface Diorite
+public interface Diorite extends SharedAPI
 {
     /**
      * Default server port.
@@ -50,6 +53,9 @@ public interface Diorite
      * @return event manager.
      */
     EventManager getEventManager();
+
+    @Override
+    Collection<? extends Player> getOnlinePlayers();
 
     /**
      * Returns true if server is running.
@@ -121,26 +127,6 @@ public interface Diorite
      */
     static Diorite getDiorite()
     {
-        Diorite diorite = DioriteInstanceHolder.diorite;
-        if (diorite == null)
-        {
-            throw new IllegalStateException("Instance not ready yet.");
-        }
-        return diorite;
-    }
-
-    /**
-     * Used by diorite to set static instance throws exception if used after init.
-     *
-     * @param dioriteInstance
-     *         instance to set.
-     */
-    static void setDioriteInstance(Diorite dioriteInstance)
-    {
-        if (DioriteInstanceHolder.diorite != null)
-        {
-            throw new IllegalStateException("Instance already set!");
-        }
-        DioriteInstanceHolder.diorite = dioriteInstance;
+        return (Diorite) SharedAPI.getSharedAPI();
     }
 }

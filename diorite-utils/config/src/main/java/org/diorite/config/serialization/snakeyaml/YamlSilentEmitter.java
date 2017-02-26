@@ -190,7 +190,7 @@ import org.yaml.snakeyaml.events.Event;
 
 class YamlSilentEmitter implements Emitable
 {
-    private List<Event> events = new ArrayList<>(100);
+    private final List<Event> events = new ArrayList<>(100);
 
     public List<Event> getEvents()
     {

@@ -27,8 +27,6 @@ package org.diorite.commons.lazy;
 import java.util.Collection;
 import java.util.function.BooleanSupplier;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Class to represent lazy init boolean values that use {@link BooleanSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link BooleanLazyValueAbstract}
@@ -51,7 +49,6 @@ public class BooleanLazyValue extends BooleanLazyValueAbstract
      */
     public BooleanLazyValue(BooleanSupplier supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

@@ -114,7 +114,6 @@ public enum ChatColor
     @Nullable
     public static ChatColor getByChar(String code)
     {
-        Validate.notNull(code, "Code cannot be null");
         Validate.isTrue(! code.isEmpty(), "Code must have at least one char");
 
         return BY_CHAR.get(code.charAt(0));
@@ -170,7 +169,7 @@ public enum ChatColor
 
     public static String getLastColors(CharSequence input)
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int length = input.length();
         for (int index = length - 1; index > - 1; index--)
         {
@@ -181,7 +180,7 @@ public enum ChatColor
                 ChatColor color = getByChar(c);
                 if (color != null)
                 {
-                    result = color.toString() + result;
+                    result.insert(0, color.toString());
                     if ((color.isColor()) || (color == RESET))
                     {
                         break;
@@ -189,7 +188,7 @@ public enum ChatColor
                 }
             }
         }
-        return result;
+        return result.toString();
     }
 
     static

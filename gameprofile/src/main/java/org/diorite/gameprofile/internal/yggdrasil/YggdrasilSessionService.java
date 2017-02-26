@@ -71,7 +71,6 @@ import org.diorite.gameprofile.internal.yggdrasil.response.ProfileResponse;
 import org.diorite.gameprofile.internal.yggdrasil.response.ProfileSearchResultsResponse;
 import org.diorite.gameprofile.internal.yggdrasil.response.Response;
 
-@SuppressWarnings("HardcodedFileSeparator")
 public class YggdrasilSessionService implements SessionService
 {
     public static final int CONNECT_TIMEOUT = 15000;

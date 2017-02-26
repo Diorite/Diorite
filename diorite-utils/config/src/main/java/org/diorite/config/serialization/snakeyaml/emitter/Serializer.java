@@ -67,21 +67,21 @@ import org.diorite.config.serialization.comments.DocumentComments;
 
 public final class Serializer
 {
-    private final     Serialization       serialization;
-    private final     EmitableWrapper     emitter;
-    private final     Resolver            resolver;
-    private           boolean             explicitStart;
-    private           boolean             explicitEnd;
-    @Nullable private Version             useVersion;
-    private           Map<String, String> useTags;
-    private           Set<Node>           serializedNodes;
-    private           Map<Node, String>   anchors;
-    private           AnchorGenerator     anchorGenerator;
-    @Nullable private Boolean             closed;
-    @Nullable private Tag                 explicitRoot;
+    private final           Serialization       serialization;
+    private final           EmitableWrapper     emitter;
+    private final           Resolver            resolver;
+    private final           boolean             explicitStart;
+    private final           boolean             explicitEnd;
+    @Nullable private       Version             useVersion;
+    private final           Map<String, String> useTags;
+    private final           Set<Node>           serializedNodes;
+    private final           Map<Node, String>   anchors;
+    private final           AnchorGenerator     anchorGenerator;
+    @Nullable private       Boolean             closed;
+    @Nullable private final Tag                 explicitRoot;
 
-    private DocumentComments        comments    = DocumentComments.empty();
-    private Set<Collection<String>> commentsSet = new HashSet<>(20);
+    private       DocumentComments        comments    = DocumentComments.empty();
+    private final Set<Collection<String>> commentsSet = new HashSet<>(20);
 
     boolean checkCommentsSet(String[] path)
     {

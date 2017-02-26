@@ -29,8 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Class to represent lazy init object values that use {@link Supplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link LazyValueAbstract}
@@ -56,7 +54,6 @@ public class LazyValue<T> extends LazyValueAbstract<T>
      */
     public LazyValue(Supplier<T> supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

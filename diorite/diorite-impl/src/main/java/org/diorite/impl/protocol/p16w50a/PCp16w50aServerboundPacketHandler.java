@@ -61,6 +61,7 @@ public class PCp16w50aServerboundPacketHandler implements ServerboundPacketHandl
     @Override
     public void handle(LoginStartPacket packet)
     {
+        System.out.println("join");
         // TODO
     }
 

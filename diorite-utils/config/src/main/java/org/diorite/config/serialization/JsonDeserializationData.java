@@ -173,7 +173,6 @@ public class JsonDeserializationData extends AbstractDeserializationData
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T get(String key, Class<T> type, @Nullable T def)

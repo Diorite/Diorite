@@ -258,7 +258,6 @@ public class YamlDeserializationData extends AbstractDeserializationData
         return (T) this.constructor.constructObject(node);
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T deserializeSpecialOrThrow(Class<T> type, Node node)
     {
         try
@@ -280,7 +279,6 @@ public class YamlDeserializationData extends AbstractDeserializationData
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T get(String key, Class<T> type, @Nullable T def)

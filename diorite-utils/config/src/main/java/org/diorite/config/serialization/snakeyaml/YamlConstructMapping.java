@@ -55,7 +55,7 @@ import org.diorite.config.serialization.snakeyaml.YamlConstructor.ConstructorExc
  */
 class YamlConstructMapping implements Construct
 {
-    private YamlConstructor yamlConstructor;
+    private final YamlConstructor yamlConstructor;
 
     YamlConstructMapping(YamlConstructor yamlConstructor)
     {
@@ -71,7 +71,7 @@ class YamlConstructMapping implements Construct
      *
      * @return constructed JavaBean
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     @Nullable
     @Override
     public Object construct(Node node)

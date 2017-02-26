@@ -22,13 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite;
+package org.diorite.entity;
 
-import javax.annotation.Nullable;
-
-final class DioriteInstanceHolder
+/**
+ * Represent basic entity.
+ */
+public interface Entity extends NameableEntity
 {
-    @Nullable static Diorite diorite;
-
-    private DioriteInstanceHolder() {}
 }

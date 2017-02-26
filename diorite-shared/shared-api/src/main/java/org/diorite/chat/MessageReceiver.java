@@ -30,6 +30,19 @@ package org.diorite.chat;
 public interface MessageReceiver
 {
     /**
+     * Method for checking if this object is instance of another class. As replacement for instanceof.
+     *
+     * @param type
+     *         type to check
+     *
+     * @return true if this is instance of given class.
+     */
+    default boolean is(Class<? extends MessageReceiver> type)
+    {
+        return type.isInstance(this);
+    }
+
+    /**
      * Send message to this receiver.
      *
      * @param chatMessage
@@ -39,6 +52,7 @@ public interface MessageReceiver
     {
         chatMessage.sendTo(this);
     }
+
     /**
      * Send message to this receiver.
      *
@@ -51,4 +65,19 @@ public interface MessageReceiver
     {
         chatMessage.sendTo(messageType, this);
     }
+
+    /**
+     * Returns output object for this receiver, used to add filters etc.
+     *
+     * @return output object for this receiver.
+     */
+    MessageOutput getOutput();
+
+    /**
+     * Set new output object for this receiver.
+     *
+     * @param output
+     *         new output object.
+     */
+    void setOutput(MessageOutput output);
 }

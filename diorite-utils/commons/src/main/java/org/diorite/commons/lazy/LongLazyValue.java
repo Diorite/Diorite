@@ -27,8 +27,6 @@ package org.diorite.commons.lazy;
 import java.util.Collection;
 import java.util.function.LongSupplier;
 
-import org.apache.commons.lang3.Validate;
-
 /**
  * Class to represent lazy init long values that use {@link LongSupplier} passed in constructor to initialize value in {@link #init()} method. <br>
  * Class is extending {@link LongLazyValueAbstract}
@@ -51,7 +49,6 @@ public class LongLazyValue extends LongLazyValueAbstract
      */
     public LongLazyValue(LongSupplier supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

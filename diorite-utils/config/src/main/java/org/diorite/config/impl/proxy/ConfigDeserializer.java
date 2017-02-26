@@ -59,7 +59,6 @@ public class ConfigDeserializer<T extends Config> implements Serializer<T>
         return this.clazz;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void serialize(T object, SerializationData abstractData)
     {

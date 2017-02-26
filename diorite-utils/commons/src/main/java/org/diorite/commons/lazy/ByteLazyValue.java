@@ -26,8 +26,6 @@ package org.diorite.commons.lazy;
 
 import java.util.Collection;
 
-import org.apache.commons.lang3.Validate;
-
 import org.diorite.commons.function.supplier.ByteSupplier;
 
 /**
@@ -52,7 +50,6 @@ public class ByteLazyValue extends ByteLazyValueAbstract
      */
     public ByteLazyValue(ByteSupplier supplier)
     {
-        Validate.notNull(supplier, "supplier can't be null!");
         this.supplier = supplier;
     }
 

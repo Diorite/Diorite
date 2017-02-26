@@ -26,27 +26,39 @@ package org.diorite.impl;
 
 import javax.annotation.Nullable;
 
+import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.diorite.impl.permissions.DioritePermissionsManager;
+import org.diorite.impl.plugin.DioriteServerPlugin;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.connection.ServerConnectionImpl;
+import org.diorite.impl.service.ServiceManagerImpl;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
+import org.diorite.SharedAPI;
 import org.diorite.commons.SpammyError;
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.event.EventManagerImpl;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
+import org.diorite.permissions.PermissionsManager;
 import org.diorite.ping.Favicon;
+import org.diorite.player.Player;
+import org.diorite.plugin.PluginManager;
 import org.diorite.serializers.SerializersInit;
+import org.diorite.service.ServiceManager;
 
 public class DioriteServer implements DioriteCore
 {
     private final PCProtocol       pcProtocol;
     private final DioriteConfig    dioriteConfig;
     private final ServerConnection serverConnection;
-    private final EventManagerImpl eventManager = new EventManagerImpl();
+    private final EventManagerImpl    eventManager   = new EventManagerImpl();
+    private final ServiceManager      serviceManager = new ServiceManagerImpl();
+    private final DioriteServerPlugin plugin         = new DioriteServerPlugin();
     private @Nullable Favicon favicon;
 
     @Nullable private final String serverVersion;
@@ -61,6 +73,16 @@ public class DioriteServer implements DioriteCore
         this.serverVersion = DioriteCore.class.getPackage().getImplementationVersion();
         this.pcProtocol = new PCProtocol(this);
         this.serverConnection = new ServerConnectionImpl(this);
+
+        this.initServices();
+    }
+
+    private void initServices()
+    {
+        this.serviceManager.registerServiceType(this.plugin, PluginManager.class);
+        this.serviceManager.registerServiceType(this.plugin, PermissionsManager.class);
+
+        this.serviceManager.provideService(this.plugin, PermissionsManager.class, new DioritePermissionsManager(this.plugin), false);
     }
 
     @Override
@@ -112,8 +134,26 @@ public class DioriteServer implements DioriteCore
         return this.serverConnection;
     }
 
+    @Override
+    public PluginManager getPluginManager()
     {
-        Diorite.setDioriteInstance(this);
+        return Objects.requireNonNull(this.serviceManager.get(PluginManager.class));
+    }
+
+    @Override
+    public PermissionsManager getPermissionsManager()
+    {
+        return Objects.requireNonNull(this.serviceManager.get(PermissionsManager.class));
+    }
+
+    @Override
+    public ServiceManager getServiceManager()
+    {
+        return this.serviceManager;
+    }
+
+    {
+        SharedAPI.setDioriteInstance(this);
     }
 
     static DioriteCore getDiorite()
@@ -125,6 +165,12 @@ public class DioriteServer implements DioriteCore
     public EventManagerImpl getEventManager()
     {
         return this.eventManager;
+    }
+
+    @Override
+    public Collection<? extends Player> getOnlinePlayers()
+    {
+        return null;
     }
 
     @Override
