@@ -45,7 +45,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.diorite.impl.protocol.MinecraftEncryption;
 import org.diorite.impl.protocol.any.serverbound.H00Handshake;
 import org.diorite.impl.protocol.p16w50a.clientbound.CL01EncryptionRequest;
-import org.diorite.impl.protocol.p16w50a.clientbound.CL02SetCompression;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL02LoginSuccess;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL03SetCompression;
 import org.diorite.chat.ChatMessage;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.protocol.ProtocolVersion;
@@ -156,13 +157,15 @@ public class ServerboundLoginPacketListener implements ServerboundPacketListener
     {
         ProtocolVersion<?> protocolVersion = this.activeConnection.getProtocolVersion();
         int compressionThreshold = protocolVersion.getSettings().getNetworkCompressionThreshold();
-        this.activeConnection.sendPacket(new CL02SetCompression(compressionThreshold));
+        this.activeConnection.sendPacket(new CL03SetCompression(compressionThreshold));
         this.activeConnection.setCompression(compressionThreshold);
         this.activeConnection.setProtocol(ProtocolState.PLAY);
         assert this.gameProfile != null;
         this.dioriteCore.getLogger().info("Player (uuid: " + this.gameProfile.getId() + ", name: " + this.gameProfile.getName() + ", ip: " +
                                           this.activeConnection.getSocketAddress().getAddress() + ") connected to server using `" +
                                           protocolVersion.getVersionName() + "` protocol, logging in...");
+
+        this.activeConnection.sendPacket(new CL02LoginSuccess(this.gameProfile));
     }
 
     static class AuthTask implements Runnable

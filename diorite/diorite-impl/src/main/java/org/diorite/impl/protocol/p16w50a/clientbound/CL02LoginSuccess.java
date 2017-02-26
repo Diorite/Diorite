@@ -24,40 +24,35 @@
 
 package org.diorite.impl.protocol.p16w50a.clientbound;
 
+import javax.annotation.Nullable;
+
 import org.diorite.impl.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.PacketClass;
 import org.diorite.core.protocol.connection.ProtocolDirection;
 import org.diorite.core.protocol.connection.internal.ProtocolState;
+import org.diorite.gameprofile.GameProfile;
 
-@SuppressWarnings("MagicNumber")
-@PacketClass(id = 0x03, direction = ProtocolDirection.CLIENTBOUND, state = ProtocolState.LOGIN, minSize = 1, maxSize = 5, preferredSize = 5)
-public class CL02SetCompression extends ClientboundPacket
+@PacketClass(id = 0x02, direction = ProtocolDirection.CLIENTBOUND, state = ProtocolState.STATUS, minSize = 54, maxSize = 54, preferredSize = 54)
+public class CL02LoginSuccess extends ClientboundPacket
 {
-    private int threshold;
-
-    public CL02SetCompression()
+    private @Nullable GameProfile gameProfile; // 54 bytes, 1 + 36 + 1 + 16
+    public CL02LoginSuccess()
     {
     }
 
-    public CL02SetCompression(int threshold)
+    public CL02LoginSuccess(GameProfile gameProfile)
     {
-        this.threshold = threshold;
+        this.gameProfile = gameProfile;
     }
 
-    public int getThreshold()
-    {
-        return this.threshold;
-    }
-
-    public void setThreshold(int threshold)
-    {
-        this.threshold = threshold;
-    }
-
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void write(AbstractPacketDataSerializer serializer) throws InvalidPacketException
     {
-        serializer.writeVarInt(this.threshold);
+        assert this.gameProfile != null;
+        assert this.gameProfile.isComplete();
+        serializer.writeText(this.gameProfile.getId().toString());
+        serializer.writeText(this.gameProfile.getName());
     }
 }

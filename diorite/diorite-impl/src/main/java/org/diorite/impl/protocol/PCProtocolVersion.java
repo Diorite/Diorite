@@ -95,6 +95,20 @@ public abstract class PCProtocolVersion extends ProtocolVersion<PCProtocol>
         }
         int id = AbstractPacketDataSerializer.readVarInt(byteBuf);
         PacketType packetType = this.packets.getServerboundType(context.channel().attr(ServerConnection.protocolKey).get(), id);
+        if (byteBuf.readableBytes() < packetType.getMinSize())
+        {
+            context.close();
+            byteBuf.clear();
+            throw new IOException("Packet is smaller than expected, found " + byteBuf.readableBytes() + " but expected min of: " + packetType.getMinSize() +
+                                  " in packet type: " + packetType);
+        }
+        if (byteBuf.readableBytes() > packetType.getMaxSize())
+        {
+            context.close();
+            byteBuf.clear();
+            throw new IOException("Packet is larger than expected, found " + byteBuf.readableBytes() + " but expected max of: " + packetType.getMaxSize() +
+                                  " in packet type: " + packetType);
+        }
         Packet packet = packetType.createPacket();
         packet.decode(context, byteBuf);
         if (byteBuf.readableBytes() > 0)

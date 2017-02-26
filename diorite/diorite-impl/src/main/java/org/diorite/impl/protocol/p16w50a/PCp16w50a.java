@@ -31,7 +31,8 @@ import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.PCProtocolVersion;
 import org.diorite.impl.protocol.any.serverbound.ServerboundHandshakeListener;
 import org.diorite.impl.protocol.p16w50a.clientbound.CL01EncryptionRequest;
-import org.diorite.impl.protocol.p16w50a.clientbound.CL02SetCompression;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL02LoginSuccess;
+import org.diorite.impl.protocol.p16w50a.clientbound.CL03SetCompression;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS00Response;
 import org.diorite.impl.protocol.p16w50a.clientbound.CS01Pong;
 import org.diorite.impl.protocol.p16w50a.serverbound.SL00LoginStart;
@@ -63,7 +64,8 @@ public class PCp16w50a extends PCProtocolVersion implements Listener
         this.packets.addType(CS00Response.class, CS00Response::new);
         this.packets.addType(CS01Pong.class, CS01Pong::new);
         this.packets.addType(CL01EncryptionRequest.class, CL01EncryptionRequest::new);
-        this.packets.addType(CL02SetCompression.class, CL02SetCompression::new);
+        this.packets.addType(CL02LoginSuccess.class, CL02LoginSuccess::new);
+        this.packets.addType(CL03SetCompression.class, CL03SetCompression::new);
 
         this.packets.addType(SS00Request.class, SS00Request::new);
         this.packets.addType(SS01Ping.class, SS01Ping::new);
