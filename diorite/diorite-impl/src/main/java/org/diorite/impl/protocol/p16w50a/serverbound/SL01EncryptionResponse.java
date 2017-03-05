@@ -25,7 +25,6 @@
 package org.diorite.impl.protocol.p16w50a.serverbound;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.diorite.impl.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.InvalidPacketException;
@@ -38,7 +37,7 @@ import org.diorite.core.protocol.connection.internal.ProtocolState;
 public class SL01EncryptionResponse extends ServerboundLoginPacket
 {
     private final byte[] sharedSecret = new byte[128]; // 128 bytes + 2 bytes size
-    private final byte[] verifyToken = new byte[128]; // 128 bytes + 2 bytes size
+    private final byte[] verifyToken  = new byte[128]; // 128 bytes + 2 bytes size
 
     public byte[] getSharedSecret()
     {
@@ -59,7 +58,7 @@ public class SL01EncryptionResponse extends ServerboundLoginPacket
             throw new IllegalStateException("Expected secret to be 128 bytes long, but got: " + bytes + " instead!");
         }
         serializer.readBytes(this.sharedSecret);
-         bytes = serializer.readVarInt();
+        bytes = serializer.readVarInt();
         if (bytes != 128)
         {
             throw new IllegalStateException("Expected verifyToken to be 128 bytes long, but got: " + bytes + " instead!");

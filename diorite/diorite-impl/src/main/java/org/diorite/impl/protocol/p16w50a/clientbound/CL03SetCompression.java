@@ -53,6 +53,7 @@ public class CL03SetCompression extends ClientboundPacket
     public void setThreshold(int threshold)
     {
         this.threshold = threshold;
+        this.setDirty();
     }
 
     @Override

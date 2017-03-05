@@ -24,7 +24,7 @@
 
 package org.diorite.impl.protocol.p16w50a.clientbound;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 import org.diorite.impl.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.InvalidPacketException;
@@ -36,22 +36,26 @@ import org.diorite.gameprofile.GameProfile;
 @PacketClass(id = 0x02, direction = ProtocolDirection.CLIENTBOUND, state = ProtocolState.STATUS, minSize = 54, maxSize = 54, preferredSize = 54)
 public class CL02LoginSuccess extends ClientboundPacket
 {
-    private @Nullable GameProfile gameProfile; // 54 bytes, 1 + 36 + 1 + 16
+    private GameProfile gameProfile; // 54 bytes, 1 + 36 + 1 + 16
+
     public CL02LoginSuccess()
     {
     }
 
-    public CL02LoginSuccess(GameProfile gameProfile)
+    public CL02LoginSuccess(@Nonnull GameProfile gameProfile)
     {
+        if (! gameProfile.isComplete())
+        {
+            throw new IllegalStateException("gameprofile not complete: " + gameProfile);
+        }
         this.gameProfile = gameProfile;
+        this.setDirty();
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void write(AbstractPacketDataSerializer serializer) throws InvalidPacketException
     {
-        assert this.gameProfile != null;
-        assert this.gameProfile.isComplete();
         serializer.writeText(this.gameProfile.getId().toString());
         serializer.writeText(this.gameProfile.getName());
     }

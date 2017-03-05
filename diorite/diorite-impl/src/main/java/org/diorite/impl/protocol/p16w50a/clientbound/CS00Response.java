@@ -24,6 +24,7 @@
 
 package org.diorite.impl.protocol.p16w50a.clientbound;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
@@ -44,13 +45,13 @@ import org.diorite.gameprofile.GameProfile;
 @PacketClass(id = 0x00, direction = ProtocolDirection.CLIENTBOUND, state = ProtocolState.STATUS, minSize = 0, maxSize = 0, preferredSize = 0)
 public class CS00Response extends ClientboundPacket
 {
-    private @Nullable String                            versionString;
-    private           int                               versionNumber;
-    private           int                               maxPlayers;
-    private           int                               onlinePlayers;
-    private @Nullable Collection<? extends GameProfile> sample;
-    private @Nullable ChatMessage                       description;
-    private @Nullable String                            encodedFavicon;
+    private String                            versionString;
+    private int                               versionNumber;
+    private int                               maxPlayers;
+    private int                               onlinePlayers;
+    private Collection<? extends GameProfile> sample;
+    private ChatMessage                       description;
+    private String                            encodedFavicon;
 
     @Override
     protected void write(AbstractPacketDataSerializer serializer) throws InvalidPacketException
@@ -104,7 +105,7 @@ public class CS00Response extends ClientboundPacket
         return this.versionString;
     }
 
-    public void setVersionString(@Nullable String versionString)
+    public void setVersionString(@Nonnull String versionString)
     {
         this.versionString = versionString;
         this.setDirty();
