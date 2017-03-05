@@ -57,8 +57,8 @@ public class DynamicEnumTest
 
     static class EnumExample extends DynamicEnum<EnumExample>
     {
-        public static final EnumExample A = new EnumExample();
-        public static final EnumExample B = new EnumExample();
+        public static final EnumExample A = $();
+        public static final EnumExample B = $();
         public static final EnumExample C = new EnumExample()
         {
             public int doSomething() {return 7;}

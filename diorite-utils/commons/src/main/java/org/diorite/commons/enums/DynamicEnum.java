@@ -25,9 +25,15 @@
 package org.diorite.commons.enums;
 
 import java.lang.StackWalker.Option;
+import java.lang.StackWalker.StackFrame;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 
 /**
  * Base class for creating dynamic enums, new elements can be added to dynamic enums, but not removed/changed.
@@ -38,7 +44,8 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparable<T>
 {
-    private static final StackWalker walker = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE);
+    private static final StackWalker walker =
+            StackWalker.getInstance(Set.of(Option.RETAIN_CLASS_REFERENCE, Option.SHOW_HIDDEN_FRAMES, Option.SHOW_REFLECT_FRAMES));
 
     int    ordinal = - 1;
     String name    = "\0";
@@ -56,7 +63,36 @@ public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparabl
     {
         Class<T> enumType = this.getDeclaringClass0();
         DynamicEnumType<T> dynamicEnumType = DynamicEnumType.getDynamicEnumType(enumType);
-        switch (ValueType.findType(walker.walk(s -> s.skip(2).limit(2).collect(Collectors.toList())), enumType, this.getClass()))
+        List<StackFrame> stackFrames = walker.walk(s -> s.skip(2).collect(Collectors.toList()));
+        List<StackFrame> validStack = new ArrayList<>(2);
+        boolean foundSpecial = false;
+        for (StackFrame stackFrame : stackFrames)
+        {
+            if (foundSpecial)
+            {
+                validStack.add(stackFrame);
+                if (validStack.size() == 2)
+                {
+                    break;
+                }
+            }
+            if (stackFrame.getDeclaringClass().equals(DynamicEnum.class) && stackFrame.getMethodName().equals("$"))
+            {
+                foundSpecial = true;
+            }
+        }
+        if (! foundSpecial)
+        {
+            for (StackFrame stackFrame : stackFrames)
+            {
+                validStack.add(stackFrame);
+                if (validStack.size() == 2)
+                {
+                    break;
+                }
+            }
+        }
+        switch (ValueType.findType(validStack, enumType, this.getClass()))
         {
             case DYNAMIC:
             case DYNAMIC_EXTENDED:
@@ -80,6 +116,31 @@ public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparabl
                 }
                 throw new IllegalStateException("Can't find enum value declaration");
             }
+        }
+    }
+
+    protected static <T extends DynamicEnum<T>> T $(Object... arguments)
+    {
+        StackFrame stackOne = walker.walk(s -> s.skip(1).limit(1).findFirst()).orElseThrow(InternalError::new);
+        if (! DynamicEnum.class.isAssignableFrom(stackOne.getDeclaringClass()))
+        {
+            throw new InternalError("This method should be used only to create new instances of enum values!");
+        }
+        try
+        {
+            return DioriteReflectionUtils.findMatchingConstructor((Class<T>) stackOne.getDeclaringClass(), arguments).invokeWith(arguments);
+        }
+        catch (RuntimeException e)
+        {
+            if (e.getCause() instanceof InstantiationException)
+            {
+                throw new InternalError("Can't create enum instance, there was error in constructor!", e.getCause());
+            }
+            throw new InternalError("Exception when invoking constructor!", e);
+        }
+        catch (Exception e)
+        {
+            throw new InternalError("Can't create enum instance using default constructor, $() method works only for simple constructor usages", e);
         }
     }
 
@@ -282,4 +343,32 @@ public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparabl
         throw new IllegalArgumentException("No enum constant " + enumType.getCanonicalName() + "." + name);
     }
 
+    /**
+     * Returns the enum constant of the specified enum type with the specified ordinal.
+     *
+     * @param <T>
+     *         The enum type whose constant is to be returned
+     * @param enumType
+     *         the {@code Class} object of the enum type from which to return a constant
+     * @param ordinal
+     *         the name of the constant to return
+     *
+     * @return the enum constant of the specified enum type with the specified ordinal
+     *
+     * @throws IllegalArgumentException
+     *         if the specified enum type has no constant with the specified ordinal, or the specified class object does not represent an enum type
+     */
+    public static <T extends DynamicEnum<T>> T valueOf(Class<T> enumType, int ordinal)
+    {
+        T[] values = DynamicEnumType.getDynamicEnumType(enumType).values;
+        if ((ordinal >= 0) && (ordinal < values.length))
+        {
+            T result = values[ordinal];
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant " + enumType.getCanonicalName() + "#" + ordinal);
+    }
 }
