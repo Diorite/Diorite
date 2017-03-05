@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ package org.diorite.commons.math;
 
 import javax.annotation.Nullable;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -52,80 +54,247 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 public final class DioriteRandomUtils
 {
-    private static final ThreadLocal<DioriteRandom> random = ThreadLocal.withInitial(DioriteRandom::new);
+    private static final ThreadLocal<DioriteRandom>       random       = ThreadLocal.withInitial(DioriteRandomImpl::new);
+    private static final ThreadLocal<DioriteSecureRandom> secureRandom = ThreadLocal.withInitial(DioriteSecureRandomImpl::new);
 
     private DioriteRandomUtils()
     {
     }
 
-    public static DioriteRandom getRandom()
+    // non-public to prevent performance loss
+
+    @SuppressWarnings("unchecked")
+    static <T extends Random & DioriteRandom> T getRandom()
     {
-        return random.get();
+        return (T) random.get();
     }
 
+    @SuppressWarnings("unchecked")
+    static <T extends SecureRandom & DioriteSecureRandom> T getSecureRandom()
+    {
+        return (T) secureRandom.get();
+    }
+
+    /**
+     * Returns random element from given array.
+     *
+     * @param array
+     *         array of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given array.
+     */
     @Nullable
     public static <T> T getRandom(T[] array)
     {
         return getRandom(getRandom(), array);
     }
 
+    /**
+     * Returns random element from given list.
+     *
+     * @param list
+     *         list of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given list.
+     */
     @Nullable
     public static <T> T getRandom(List<T> coll)
     {
         return getRandom(getRandom(), coll);
     }
 
+    /**
+     * Pick some amount of random non-repeating elements from given collection, and adds it to another given collection. <br>
+     * Same as {@link #getRandom(Collection, Collection, int, boolean)} with noRepeat = true.
+     *
+     * @param coll
+     *         source collection with elements.
+     * @param target
+     *         target collection where random elements will be added.
+     * @param amount
+     *         amount of element to randomly pick from collection.
+     * @param <T>
+     *         type of collection elements.
+     * @param <E>
+     *         type of target collection.
+     *
+     * @return this same target collection as given.
+     */
     public static <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount)
     {
         return getRandom(getRandom(), coll, target, amount, true);
     }
 
+    /**
+     * Pick some amount of random elements from given collection, and adds it to another given collection.
+     *
+     * @param coll
+     *         source collection with elements.
+     * @param target
+     *         target collection where random elements will be added.
+     * @param amount
+     *         amount of element to randomly pick from collection.
+     * @param noRepeat
+     *         if false no duplicates will be selected.
+     * @param <T>
+     *         type of collection elements.
+     * @param <E>
+     *         type of target collection.
+     *
+     * @return this same target collection as given.
+     */
     public static <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount, boolean noRepeat)
     {
         return getRandom(getRandom(), coll, target, amount, noRepeat);
     }
 
+    /**
+     * Returns random element from given collection.
+     *
+     * @param coll
+     *         collection of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given collection.
+     */
     @Nullable
     public static <T> T getRandom(Collection<T> coll)
     {
         return getRandom(getRandom(), coll);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static long getRandomLongSafe(long a, long b)
     {
         return getRandomLongSafe(getRandom(), a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static int getRandomIntSafe(int a, int b)
     {
         return getRandomIntSafe(getRandom(), a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static double getRandomDoubleSafe(double a, double b)
     {
         return getRandomDoubleSafe(getRandom(), a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static float getRandomFloatSafe(float a, float b)
     {
         return getRandomFloatSafe(getRandom(), a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static long getRandomLong(long min, long max) throws IllegalArgumentException
     {
         return getRandomLong(getRandom(), min, max);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static int getRandomInt(int min, int max) throws IllegalArgumentException
     {
         return getRandomInt(getRandom(), min, max);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static double getRandomDouble(double min, double max) throws IllegalArgumentException
     {
         return getRandomDouble(getRandom(), min, max);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static float getRandomFloat(float min, float max) throws IllegalArgumentException
     {
         return getRandomFloat(getRandom(), min, max);
@@ -144,7 +313,198 @@ public final class DioriteRandomUtils
         return getChance(getRandom(), chance);
     }
 
-    // custom random
+    /**
+     * Returns random elements from iterable of choices based on weight of each random element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(Iterable<? extends T> choices)
+    {
+        return getWeightedRandom(getRandom(), choices, sumWeight(choices));
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Map<? extends Number, ? extends T> choices)
+    {
+        return getWeightedRandomReversed(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversedDouble(Map<Double, T> choices)
+    {
+        return getWeightedRandomReversed(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Double2ObjectMap<T> choices)
+    {
+        return getWeightedRandomReversed(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversedInt(Map<Integer, T> choices)
+    {
+        return getWeightedRandomReversed(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Int2ObjectMap<T> choices)
+    {
+        return getWeightedRandomReversed(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Map<? extends T, ? extends Number> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomDouble(Map<T, Double> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Object2DoubleMap<T> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomInt(Map<T, Integer> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Object2IntMap<T> choices)
+    {
+        return getWeightedRandom(getRandom(), choices);
+    }
+
+    /*
+     * with custom random
+     */
+
+    /**
+     * Returns random element from given array.
+     *
+     * @param random
+     *         random instance to use.
+     * @param array
+     *         array of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given array.
+     */
     @Nullable
     public static <T> T getRandom(Random random, T[] array)
     {
@@ -155,21 +515,72 @@ public final class DioriteRandomUtils
         return array[random.nextInt(array.length)];
     }
 
+    /**
+     * Returns random element from given list.
+     *
+     * @param random
+     *         random instance to use.
+     * @param list
+     *         list of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given list.
+     */
     @Nullable
-    public static <T> T getRandom(Random random, List<T> coll)
+    public static <T> T getRandom(Random random, List<T> list)
     {
-        if (coll.isEmpty())
+        if (list.isEmpty())
         {
             return null;
         }
-        return coll.get(random.nextInt(coll.size()));
+        return list.get(random.nextInt(list.size()));
     }
 
+    /**
+     * Pick some amount of random non-repeating elements from given collection, and adds it to another given collection. <br>
+     * Same as {@link #getRandom(Collection, Collection, int, boolean)} with noRepeat = true.
+     *
+     * @param random
+     *         random instance to use.
+     * @param coll
+     *         source collection with elements.
+     * @param target
+     *         target collection where random elements will be added.
+     * @param amount
+     *         amount of element to randomly pick from collection.
+     * @param <T>
+     *         type of collection elements.
+     * @param <E>
+     *         type of target collection.
+     *
+     * @return this same target collection as given.
+     */
     public static <T, E extends Collection<T>> E getRandom(Random random, Collection<T> coll, E target, int amount)
     {
         return getRandom(random, coll, target, amount, true);
     }
 
+    /**
+     * Pick some amount of random elements from given collection, and adds it to another given collection.
+     *
+     * @param random
+     *         random instance to use.
+     * @param coll
+     *         source collection with elements.
+     * @param target
+     *         target collection where random elements will be added.
+     * @param amount
+     *         amount of element to randomly pick from collection.
+     * @param noRepeat
+     *         if false no duplicates will be selected.
+     * @param <T>
+     *         type of collection elements.
+     * @param <E>
+     *         type of target collection.
+     *
+     * @return this same target collection as given.
+     */
     public static <T, E extends Collection<T>> E getRandom(Random random, Collection<T> coll, E target, int amount, boolean noRepeat)
     {
         if (coll.isEmpty())
@@ -194,6 +605,18 @@ public final class DioriteRandomUtils
         return target;
     }
 
+    /**
+     * Returns random element from given collection.
+     *
+     * @param random
+     *         random instance to use.
+     * @param coll
+     *         collection of elements.
+     * @param <T>
+     *         type of array.
+     *
+     * @return random element from given collection.
+     */
     @Nullable
     public static <T> T getRandom(Random random, Collection<T> coll)
     {
@@ -218,6 +641,18 @@ public final class DioriteRandomUtils
         }
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param random
+     *         random instance to use.
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static long getRandomLongSafe(Random random, long a, long b)
     {
         if (a > b)
@@ -227,11 +662,35 @@ public final class DioriteRandomUtils
         return getRandomLong(random, a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param random
+     *         random instance to use.
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static int getRandomIntSafe(Random random, int a, int b)
     {
         return (int) getRandomLongSafe(random, a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param random
+     *         random instance to use.
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static double getRandomDoubleSafe(Random random, double a, double b)
     {
         if (a > b)
@@ -241,6 +700,18 @@ public final class DioriteRandomUtils
         return getRandomDouble(random, a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
+     *
+     * @param random
+     *         random instance to use.
+     * @param a
+     *         range number.
+     * @param b
+     *         range number.
+     *
+     * @return random numeric value from inclusive range from a to b.
+     */
     public static float getRandomFloatSafe(Random random, float a, float b)
     {
         if (a > b)
@@ -250,6 +721,21 @@ public final class DioriteRandomUtils
         return getRandomFloat(random, a, b);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param random
+     *         random instance to use.
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static long getRandomLong(Random random, long min, long max) throws IllegalArgumentException
     {
         if (min == max)
@@ -260,6 +746,21 @@ public final class DioriteRandomUtils
         return (Math.abs(random.nextLong()) % ((max - min) + 1)) + min;
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param random
+     *         random instance to use.
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static int getRandomInt(Random random, int min, int max) throws IllegalArgumentException
     {
         if (min == max)
@@ -270,6 +771,21 @@ public final class DioriteRandomUtils
         return (int) getRandomLong(random, min, max);
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param random
+     *         random instance to use.
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static double getRandomDouble(Random random, double min, double max) throws IllegalArgumentException
     {
         if (Double.compare(min, max) == 0)
@@ -280,6 +796,21 @@ public final class DioriteRandomUtils
         return (random.nextDouble() * (max - min)) + min;
     }
 
+    /**
+     * Returns random numeric value from inclusive range from min to max.
+     *
+     * @param random
+     *         random instance to use.
+     * @param min
+     *         minimal number to pick.
+     * @param max
+     *         maximal number to pick.
+     *
+     * @return random numeric value from inclusive range from min to max.
+     *
+     * @throws IllegalArgumentException
+     *         if min > max
+     */
     public static float getRandomFloat(Random random, float min, float max) throws IllegalArgumentException
     {
         if (Float.compare(min, max) == 0)
@@ -295,6 +826,8 @@ public final class DioriteRandomUtils
      *
      * @param random
      *         random instance to use.
+     * @param random
+     *         random instance to use.
      * @param chance
      *         chance in %.
      *
@@ -305,6 +838,411 @@ public final class DioriteRandomUtils
         return (chance > 0) && ((chance >= 100) || (chance >= getRandomDouble(random, 0, 100)));
     }
 
+    /**
+     * Returns random elements from iterable of choices based on weight of each random element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T extends IWeightedRandomChoice> T getWeightedRandom(Random random, Iterable<? extends T> choices)
+    {
+        return getWeightedRandom(random, choices, sumWeight(choices));
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Random random, Map<? extends Number, ? extends T> choices)
+    {
+        double i = 0;
+        for (Number choice : choices.keySet())
+        {
+            i += choice.doubleValue();
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Entry<? extends Number, ? extends T> entry : choices.entrySet())
+        {
+            i -= entry.getKey().doubleValue();
+            if (i < 0)
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversedDouble(Random random, Map<Double, T> choices)
+    {
+        if (choices instanceof Double2ObjectMap)
+        {
+            return getWeightedRandomReversed(random, (Double2ObjectMap<T>) choices);
+        }
+        double i = 0;
+        Set<Double> doubles = choices.keySet();
+        for (Double x : doubles)
+        {
+            i += x;
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Entry<Double, T> entry : choices.entrySet())
+        {
+            i -= entry.getKey();
+            if (i < 0)
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Random random, Double2ObjectMap<T> choices)
+    {
+        double i = 0;
+        DoubleSet doubles = choices.keySet();
+        for (DoubleIterator iterator = doubles.iterator(); iterator.hasNext(); )
+        {
+            double x = iterator.nextDouble();
+            i += x;
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Double2ObjectMap.Entry<T> entry : choices.double2ObjectEntrySet())
+        {
+            i -= entry.getDoubleKey();
+            if (i < 0)
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversedInt(Random random, Map<Integer, T> choices)
+    {
+        if (choices instanceof Int2ObjectMap)
+        {
+            return getWeightedRandomReversed(random, (Int2ObjectMap<T>) choices);
+        }
+        long i = 0;
+        Set<Integer> ints = choices.keySet();
+        for (Integer x : ints)
+        {
+            i += x;
+        }
+        i = getRandomLong(random, 0, i);
+        for (Entry<Integer, T> entry : choices.entrySet())
+        {
+            i -= entry.getKey();
+            if (i < 0)
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomReversed(Random random, Int2ObjectMap<T> choices)
+    {
+        long i = 0;
+        IntSet ints = choices.keySet();
+        for (IntIterator iterator = ints.iterator(); iterator.hasNext(); )
+        {
+            int x = iterator.nextInt();
+            i += x;
+        }
+        i = getRandomLong(random, 0, i);
+        for (Int2ObjectMap.Entry<T> entry : choices.int2ObjectEntrySet())
+        {
+            i -= entry.getIntKey();
+            if (i < 0)
+            {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Random random, Map<? extends T, ? extends Number> choices)
+    {
+        double i = 0;
+        for (Number choice : choices.values())
+        {
+            i += choice.doubleValue();
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Entry<? extends T, ? extends Number> entry : choices.entrySet())
+        {
+            i -= entry.getValue().doubleValue();
+            if (i < 0)
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomDouble(Random random, Map<T, Double> choices)
+    {
+        if (choices instanceof Object2DoubleMap)
+        {
+            return getWeightedRandom(random, (Object2DoubleMap<T>) choices);
+        }
+        double i = 0;
+        Collection<Double> doubles = choices.values();
+        for (Double x : doubles)
+        {
+            i += x;
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Entry<T, Double> entry : choices.entrySet())
+        {
+            i -= entry.getValue();
+            if (i < 0)
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Random random, Object2DoubleMap<T> choices)
+    {
+        double i = 0;
+        DoubleCollection doubles = choices.values();
+        for (DoubleIterator iterator = doubles.iterator(); iterator.hasNext(); )
+        {
+            double x = iterator.nextDouble();
+            i += x;
+        }
+        i = getRandomDouble(random, 0, i);
+        for (Object2DoubleMap.Entry<T> entry : choices.object2DoubleEntrySet())
+        {
+            i -= entry.getDoubleValue();
+            if (i < 0)
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandomInt(Random random, Map<T, Integer> choices)
+    {
+        if (choices instanceof Object2IntMap)
+        {
+            return getWeightedRandom(random, (Object2IntMap<T>) choices);
+        }
+        long i = 0;
+        Collection<Integer> ints = choices.values();
+        for (Integer x : ints)
+        {
+            i += x;
+        }
+        i = getRandomLong(random, 0, i);
+        for (Entry<T, Integer> entry : choices.entrySet())
+        {
+            i -= entry.getValue();
+            if (i < 0)
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
+     *
+     * @param random
+     *         random instance to use.
+     * @param choices
+     *         random choices.
+     * @param <T>
+     *         type of elements.
+     *
+     * @return one of elements.
+     */
+    @Nullable
+    public static <T> T getWeightedRandom(Random random, Object2IntMap<T> choices)
+    {
+        long i = 0;
+        IntCollection ints = choices.values();
+        for (IntIterator iterator = ints.iterator(); iterator.hasNext(); )
+        {
+            int x = iterator.nextInt();
+            i += x;
+        }
+        i = getRandomLong(random, 0, i);
+        for (Object2IntMap.Entry<T> entry : choices.object2IntEntrySet())
+        {
+            i -= entry.getIntValue();
+            if (i < 0)
+            {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    private static double sumWeight(Iterable<? extends IWeightedRandomChoice> choices)
+    {
+        double i = 0;
+        for (IWeightedRandomChoice choice : choices)
+        {
+            i += choice.getWeight();
+        }
+        return i;
+    }
+
+    @Nullable
+    private static <T extends IWeightedRandomChoice> T getWeightedRandom(Random random, Iterable<? extends T> choices, double weightSum)
+    {
+        if (weightSum <= 0)
+        {
+            throw new IllegalArgumentException("Weight must be greater than 0.");
+        }
+        return getWeightedRandomElement(choices, getRandomDouble(random, 0, weightSum));
+    }
+
+    @Nullable
+    private static <T extends IWeightedRandomChoice> T getWeightedRandom(Iterable<? extends T> choices, double weightSum)
+    {
+        return getWeightedRandom(getRandom(), choices, weightSum);
+    }
+
+    @Nullable
+    private static <T extends IWeightedRandomChoice> T getWeightedRandomElement(Iterable<? extends T> choices, double randomWeight)
+    {
+        for (T choice : choices)
+        {
+            randomWeight -= choice.getWeight();
+            if (randomWeight < 0)
+            {
+                return choice;
+            }
+        }
+        return null;
+    }
     /*
      * Delegated {@link Random} methods.
      */
@@ -882,241 +1820,53 @@ public final class DioriteRandomUtils
     }
 
     /**
-     * Construct new diorite random instance.
+     * Construct new random instance.
      *
      * @return created random instance.
      */
-    public static DioriteRandom newRandom()
+    @SuppressWarnings("unchecked")
+    public static <T extends Random & DioriteRandom> T newRandom()
     {
-        return new DioriteRandom();
+        return (T) new DioriteRandomImpl();
     }
 
     /**
-     * Construct new diorite random instance with given seed.
+     * Construct new random instance with given seed.
      *
      * @param seed
      *         seed of random instance.
      *
      * @return created random instance.
      */
-    public static DioriteRandom newRandom(long seed)
+    @SuppressWarnings("unchecked")
+    public static <T extends Random & DioriteRandom> T newRandom(long seed)
     {
-        return new DioriteRandom(seed);
+        return (T) new DioriteRandomImpl(seed);
     }
 
-    private static double sumWeight(Iterable<? extends IWeightedRandomChoice> choices)
+    /**
+     * Construct new random instance.
+     *
+     * @return created random instance.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends SecureRandom & DioriteSecureRandom> T newSecureRandom()
     {
-        double i = 0;
-        for (IWeightedRandomChoice choice : choices)
-        {
-            i += choice.getWeight();
-        }
-        return i;
+        return (T) new DioriteSecureRandomImpl();
     }
 
-    @Nullable
-    private static <T extends IWeightedRandomChoice> T getWeightedRandom(Random random, Iterable<? extends T> choices, double weightSum)
+    /**
+     * Construct new random instance with given seed.
+     *
+     * @param seed
+     *         seed of random instance.
+     *
+     * @return created random instance.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends SecureRandom & DioriteSecureRandom> T newSecureRandom(byte[] seed)
     {
-        if (weightSum <= 0)
-        {
-            throw new IllegalArgumentException("Weight must be greater than 0.");
-        }
-        return getWeightedRandomElement(choices, getRandomDouble(random, 0, weightSum));
+        return (T) new DioriteSecureRandomImpl(seed);
     }
 
-    @Nullable
-    private static <T extends IWeightedRandomChoice> T getWeightedRandom(Iterable<? extends T> choices, double weightSum)
-    {
-        return getWeightedRandom(getRandom(), choices, weightSum);
-    }
-
-    @Nullable
-    private static <T extends IWeightedRandomChoice> T getWeightedRandomElement(Iterable<? extends T> choices, double randomWeight)
-    {
-        for (T choice : choices)
-        {
-            randomWeight -= choice.getWeight();
-            if (randomWeight < 0)
-            {
-                return choice;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Map<? extends Number, ? extends T> choices)
-    {
-        return getWeightedRandomReversed(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Random random, Map<? extends Number, ? extends T> choices)
-    {
-        double i = 0;
-        for (Number choice : choices.keySet())
-        {
-            i += choice.doubleValue();
-        }
-        i = getRandomDouble(random, 0, i);
-        for (Entry<? extends Number, ? extends T> entry : choices.entrySet())
-        {
-            i -= entry.getKey().doubleValue();
-            if (i < 0)
-            {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Double2ObjectMap<T> choices)
-    {
-        return getWeightedRandomReversed(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Random random, Double2ObjectMap<T> choices)
-    {
-        double i = 0;
-        DoubleSet doubles = choices.keySet();
-        for (DoubleIterator iterator = doubles.iterator(); iterator.hasNext(); )
-        {
-            double x = iterator.nextDouble();
-            i += x;
-        }
-        i = getRandomDouble(random, 0, i);
-        for (Double2ObjectMap.Entry<T> entry : choices.double2ObjectEntrySet())
-        {
-            i -= entry.getDoubleKey();
-            if (i < 0)
-            {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Int2ObjectMap<T> choices)
-    {
-        return getWeightedRandomReversed(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandomReversed(Random random, Int2ObjectMap<T> choices)
-    {
-        long i = 0;
-        IntSet ints = choices.keySet();
-        for (IntIterator iterator = ints.iterator(); iterator.hasNext(); )
-        {
-            int x = iterator.nextInt();
-            i += x;
-        }
-        i = getRandomLong(random, 0, i);
-        for (Int2ObjectMap.Entry<T> entry : choices.int2ObjectEntrySet())
-        {
-            i -= entry.getIntKey();
-            if (i < 0)
-            {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Map<? extends T, ? extends Number> choices)
-    {
-        return getWeightedRandom(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Random random, Map<? extends T, ? extends Number> choices)
-    {
-        double i = 0;
-        for (Number choice : choices.values())
-        {
-            i += choice.doubleValue();
-        }
-        i = getRandomDouble(random, 0, i);
-        for (Entry<? extends T, ? extends Number> entry : choices.entrySet())
-        {
-            i -= entry.getValue().doubleValue();
-            if (i < 0)
-            {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Object2DoubleMap<T> choices)
-    {
-        return getWeightedRandom(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Random random, Object2DoubleMap<T> choices)
-    {
-        double i = 0;
-        DoubleCollection doubles = choices.values();
-        for (DoubleIterator iterator = doubles.iterator(); iterator.hasNext(); )
-        {
-            double x = iterator.nextDouble();
-            i += x;
-        }
-        i = getRandomDouble(random, 0, i);
-        for (Object2DoubleMap.Entry<T> entry : choices.object2DoubleEntrySet())
-        {
-            i -= entry.getDoubleValue();
-            if (i < 0)
-            {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Object2IntMap<T> choices)
-    {
-        return getWeightedRandom(getRandom(), choices);
-    }
-
-    @Nullable
-    public static <T> T getWeightedRandom(Random random, Object2IntMap<T> choices)
-    {
-        long i = 0;
-        IntCollection ints = choices.values();
-        for (IntIterator iterator = ints.iterator(); iterator.hasNext(); )
-        {
-            int x = iterator.nextInt();
-            i += x;
-        }
-        i = getRandomLong(random, 0, i);
-        for (Object2IntMap.Entry<T> entry : choices.object2IntEntrySet())
-        {
-            i -= entry.getIntValue();
-            if (i < 0)
-            {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T extends IWeightedRandomChoice> T getWeightedRandom(Random random, Iterable<? extends T> choices)
-    {
-        return getWeightedRandom(random, choices, sumWeight(choices));
-    }
-
-    @Nullable
-    public static <T extends IWeightedRandomChoice> T getWeightedRandom(Iterable<? extends T> choices)
-    {
-        return getWeightedRandom(getRandom(), choices, sumWeight(choices));
-    }
 }
