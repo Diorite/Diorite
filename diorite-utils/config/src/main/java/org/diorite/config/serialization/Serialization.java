@@ -69,6 +69,7 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.function.function.ExceptionalFunction;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
@@ -861,6 +862,10 @@ public final class Serialization
         while (true)
         {
             if (DioriteReflectionUtils.getPrimitive(type).isPrimitive())
+            {
+                return true;
+            }
+            if (DynamicEnum.class.isAssignableFrom(type))
             {
                 return true;
             }

@@ -54,8 +54,10 @@ public abstract class AbstractEntityData implements EntityData
                                      "test test"})
     String namee; // test for custom name
     int age;
+    @Comment("special enum!")
+    DynamicEnumType specialEnum;
     @Comment("is it special?")
-    boolean special;
+    boolean         special;
     @Comment("meta objects!")
     Collection<MetaObject>     metaObjects          = new ArrayList<>();
     @Comment("second list example")
@@ -72,6 +74,7 @@ public abstract class AbstractEntityData implements EntityData
         this.age = age;
         this.special = special;
         this.displayName = displayName;
+        this.specialEnum = DynamicEnumType.SOME_ENUM_CONSTANT;
     }
 
     protected AbstractEntityData(DeserializationData data)
@@ -81,6 +84,7 @@ public abstract class AbstractEntityData implements EntityData
         this.age = data.getAsInt("age");
         this.special = data.getOrThrow("special", Boolean.class);
         this.displayName = data.get("displayName", String.class);
+        this.specialEnum = data.getOrThrow("specialEnum", DynamicEnumType.class);
 
         data.getAsCollection("metaObjects", MetaObject.class, this.metaObjects);
         data.getAsMapWithKeys("uuidMetaObjectMap", UUID.class, MetaObject.class, "uuid", this.uuidMetaObjectMap);
@@ -110,6 +114,7 @@ public abstract class AbstractEntityData implements EntityData
         data.addNumber("age", this.age, 3);
         data.add("special", this.special);
         data.add("displayName", this.displayName);
+        data.add("specialEnum", this.specialEnum);
         data.addMappedList("metaObjects", MetaObject.class, this.metaObjects, o -> o.name);
         data.addMapAsListWithKeys("uuidMetaObjectMap", this.uuidMetaObjectMap, MetaObject.class, "uuid");
         data.addCollection("propertiesCollection", this.propertiesCollection, SomeProperties.class);

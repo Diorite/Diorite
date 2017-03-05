@@ -44,6 +44,7 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.snakeyaml.Representer;
@@ -206,6 +207,19 @@ public class YamlDeserializationData extends AbstractDeserializationData
                 return def;
             }
             return (T) valueSafe;
+        }
+        if (DynamicEnum.class.isAssignableFrom(type))
+        {
+            String name = this.constructor.constructObject(node).toString();
+            DynamicEnum[] values = DynamicEnum.values((Class<DynamicEnum>) type);
+            for (DynamicEnum value : values)
+            {
+                if (value.prettyName().equalsIgnoreCase(name) || value.name().equalsIgnoreCase(name) || String.valueOf(value.ordinal()).equalsIgnoreCase(name))
+                {
+                    return (T) value;
+                }
+            }
+            return def;
         }
         if (Number.class.isAssignableFrom(DioriteReflectionUtils.getWrapperClass(type)))
         {

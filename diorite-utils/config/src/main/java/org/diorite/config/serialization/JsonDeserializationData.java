@@ -42,6 +42,7 @@ import com.google.gson.JsonPrimitive;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
@@ -143,6 +144,19 @@ public class JsonDeserializationData extends AbstractDeserializationData
                 return def;
             }
             return (T) valueSafe;
+        }
+        if (DynamicEnum.class.isAssignableFrom(type))
+        {
+            String name = this.context.deserialize(element, String.class);
+            DynamicEnum[] values = DynamicEnum.values((Class<DynamicEnum>) type);
+            for (DynamicEnum value : values)
+            {
+                if (value.prettyName().equalsIgnoreCase(name) || value.name().equalsIgnoreCase(name) || String.valueOf(value.ordinal()).equalsIgnoreCase(name))
+                {
+                    return (T) value;
+                }
+            }
+            return def;
         }
         return this.context.deserialize(element, type);
     }

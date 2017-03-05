@@ -30,9 +30,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.diorite.commons.lazy.LazyValue;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
 /**
@@ -49,6 +51,7 @@ public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparabl
 
     int    ordinal = - 1;
     String name    = "\0";
+    private final transient LazyValue<String> prettyName = new LazyValue<>(this::createPrettyName);
 
     @SuppressWarnings("StringEquality")
     final void validate()
@@ -164,6 +167,38 @@ public abstract class DynamicEnum<T extends DynamicEnum<T>> implements Comparabl
     {
         this.validate();
         return this.name;
+    }
+
+    /**
+     * Returns name of this enum element in PascalCase and removed underscores.
+     *
+     * @return pretty name of this enum element.
+     */
+    public final String prettyName()
+    {
+        return Objects.requireNonNull(this.prettyName.get());
+    }
+
+    private String createPrettyName()
+    {
+        String toLowerCase = this.name.toLowerCase();
+        char[] charArray = toLowerCase.toCharArray();
+        StringBuilder sb = new StringBuilder(toLowerCase.length()).append(Character.toUpperCase(charArray[0]));
+        char last = '\0';
+        for (int i = 1; i < charArray.length; i++)
+        {
+            char c = charArray[i];
+            if (last == '_')
+            {
+                sb.append(Character.toUpperCase(c));
+            }
+            else if (c != '_')
+            {
+                sb.append(c);
+            }
+            last = c;
+        }
+        return sb.toString();
     }
 
     /**

@@ -17,6 +17,9 @@ entities:
   # age of entity
   age: write anything here, or just nothing.
 
+  # special enum!
+  specialEnum:
+
   # is it special?
   special:
   displayName: # no comments here (this is also ignored)

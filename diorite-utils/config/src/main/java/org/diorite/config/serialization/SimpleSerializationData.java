@@ -38,8 +38,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.comments.CommentsNode;
 import org.diorite.config.serialization.comments.DocumentComments;
@@ -159,6 +161,10 @@ class SimpleSerializationData implements SerializationData
             {
                 return this.falseValue;
             }
+        }
+        if (object instanceof DynamicEnum)
+        {
+            return ((DynamicEnum<?>) object).prettyName();
         }
         return object.toString();
     }
