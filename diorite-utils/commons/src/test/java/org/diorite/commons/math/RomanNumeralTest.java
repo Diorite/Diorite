@@ -41,8 +41,8 @@ public class RomanNumeralTest
         Assert.assertEquals("IX", RomanNumeral.toString(9));
         Assert.assertEquals("X", RomanNumeral.toString(10));
         Assert.assertEquals("XL", RomanNumeral.toString(40));
-        Assert.assertEquals("VL", RomanNumeral.toString(45));
-        Assert.assertEquals("IL", RomanNumeral.toString(49));
+        Assert.assertEquals("XLV", RomanNumeral.toString(45));
+        Assert.assertEquals("XLIX", RomanNumeral.toString(49));
         Assert.assertEquals("L", RomanNumeral.toString(50));
         Assert.assertEquals("MCMXCIX", RomanNumeral.toString(1999));
     }
