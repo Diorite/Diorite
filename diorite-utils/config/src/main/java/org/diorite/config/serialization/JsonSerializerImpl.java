@@ -50,7 +50,14 @@ class JsonSerializerImpl<T> implements JsonSerializer<T>, JsonDeserializer<T>
         DeserializationData data = new JsonDeserializationData(this.serialization, jsonData, jsonDeserializationContext, this.serializer.getType());
         try
         {
-            return this.serializer.deserialize(data);
+            if (type instanceof Class)
+            {
+                return this.serializer.deserialize(data, (Class<?>) type);
+            }
+            else
+            {
+                return this.serializer.deserialize(data);
+            }
         }
         catch (DeserializationException e)
         {

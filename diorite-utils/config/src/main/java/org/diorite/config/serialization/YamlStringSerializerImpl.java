@@ -25,10 +25,12 @@
 package org.diorite.config.serialization;
 
 import org.yaml.snakeyaml.constructor.Construct;
+import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.AnchorNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.snakeyaml.AbstractRepresent;
 import org.diorite.config.serialization.snakeyaml.Representer;
 
@@ -63,7 +65,23 @@ class YamlStringSerializerImpl<T> extends AbstractRepresent implements Construct
         }
         if (node instanceof ScalarNode)
         {
-            return this.stringSerializer.deserialize(((ScalarNode) node).getValue());
+            Class<?> type;
+            if ((node.getType() == null) || Object.class.equals(node.getType()))
+            {
+                try
+                {
+                    type = DioriteReflectionUtils.tryGetCanonicalClass(node.getTag().getClassName());
+                }
+                catch (YAMLException e)
+                {
+                    type = null;
+                }
+            }
+            else
+            {
+                type = node.getType();
+            }
+            return this.stringSerializer.deserialize(((ScalarNode) node).getValue(), type);
         }
         throw new RuntimeException("Can't deserialize simple string from yaml node: " + node);
     }

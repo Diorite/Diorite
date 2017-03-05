@@ -60,6 +60,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -108,8 +109,10 @@ public final class Serialization
     private final Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
     private final Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
     private final Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
-    private       ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
-    private final ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
+    private       ThreadLocal<Yaml>                                                                 cachedYaml         =
+            ThreadLocal.withInitial(this::createYaml);
+    private final ThreadLocal<AtomicInteger>                                                        localCounter       =
+            ThreadLocal.withInitial(AtomicInteger::new);
 
     private final CommentsManager commentsManager = new CommentsManager();
 
@@ -246,6 +249,7 @@ public final class Serialization
         this.cachedYaml.remove();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Serialization(@Nullable Void v)
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
@@ -268,7 +272,6 @@ public final class Serialization
      *
      * @return old serializer if exists.
      */
-    @Nullable
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> StringSerializer<T> registerStringSerializable(Class<T> clazz)
     {
@@ -290,7 +293,7 @@ public final class Serialization
      */
     public <T> void registerStringSerializer(StringSerializer<T> stringSerializer)
     {
-        this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new JsonStringSerializerImpl<>(stringSerializer));
+        this.gsonBuilder.registerTypeAdapterFactory(new StringSerializableTypeAdapterFactory(stringSerializer));
         this.stringRepresenters.add((c, r) -> new YamlStringSerializerImpl<>(r, stringSerializer));
         this.refreshCache();
         this.stringSerializerMap.put(stringSerializer.getType(), stringSerializer);
@@ -319,7 +322,7 @@ public final class Serialization
         }
         if (clazz != target)
         {
-            this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+            this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         }
     }
 
@@ -490,7 +493,7 @@ public final class Serialization
         {
             throw new IllegalArgumentException("Given type isn't string serializable: (" + type.getName() + ") -> " + str);
         }
-        return ((StringSerializer<T>) this.stringSerializerMap.get(stringSerializable)).deserialize(str);
+        return ((StringSerializer<T>) this.stringSerializerMap.get(stringSerializable)).deserialize(str, type);
     }
 
     /**
@@ -562,7 +565,6 @@ public final class Serialization
 
     // private
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T> StringSerializer<T> registerStringSerializableByAnnotations(Class<T> clazz)
     {
@@ -634,7 +636,6 @@ public final class Serialization
         return stringSerializer;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T extends org.diorite.config.serialization.StringSerializable> StringSerializer<T> registerStringSerializableByType(Class<T> clazz)
     {
@@ -713,7 +714,7 @@ public final class Serialization
                 throw new DeserializationException(clazz, data, throwable);
             }
         });
-        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         this.registerSerializer(serializer);
         return serializer;
     }
@@ -798,7 +799,7 @@ public final class Serialization
             }
         }
         Serializer<T> serializer = Serializer.of(getRedirectionClass(clazz), serialization, deserialization);
-        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         this.registerSerializer(serializer);
         return serializer;
     }
@@ -1696,5 +1697,24 @@ public final class Serialization
     public Iterable<Object> fromAllYaml(InputStream yaml)
     {
         return this.yaml().fromAllYaml(yaml);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static class StringSerializableTypeAdapterFactory implements TypeAdapterFactory
+    {
+        private final StringSerializer<?> stringSerializer;
+
+        StringSerializableTypeAdapterFactory(StringSerializer<?> stringSerializer) {this.stringSerializer = stringSerializer;}
+
+        @Override
+        @Nullable
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type)
+        {
+            if (! this.stringSerializer.getType().isAssignableFrom(type.getRawType()))
+            {
+                return null;
+            }
+            return new JsonStringSerializerImpl(this.stringSerializer, type.getRawType());
+        }
     }
 }

@@ -24,6 +24,9 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
+
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -42,11 +45,11 @@ public interface StringSerializer<T>
     Class<? super T> getType();
 
     /**
-     * Returns {@link #deserialize(String)} as {@link Function}.
+     * Returns {@link #deserialize(String, Class)} as {@link Function}.
      *
-     * @return {@link #deserialize(String)} as {@link Function}.
+     * @return {@link #deserialize(String, Class)} as {@link Function}.
      */
-    default Function<String, T> deserializerFunction()
+    default BiFunction<String, Class<?>, T> deserializerFunction()
     {
         return this::deserialize;
     }
@@ -59,6 +62,21 @@ public interface StringSerializer<T>
     default Function<T, String> serializerFunction()
     {
         return this::serialize;
+    }
+
+    /**
+     * Deserialize given string to valid object.
+     *
+     * @param data
+     *         string data to deserialize.
+     * @param type
+     *         expected type, might be null or object, some deserializer might then need to throw error.
+     *
+     * @return deserialized object.
+     */
+    default T deserialize(String data, @Nullable Class<?> type)
+    {
+        return this.deserialize(data);
     }
 
     /**
@@ -96,6 +114,25 @@ public interface StringSerializer<T>
      * @return string serializer instance.
      */
     static <T> StringSerializer<T> of(Class<? super T> type, Function<T, String> serializer, Function<String, T> deserializer)
+    {
+        return new SimpleStringSerializer<>(type, (str, x) -> deserializer.apply(str), serializer);
+    }
+
+    /**
+     * Create instance of string serializer from type and serialize/deserializer functions.
+     *
+     * @param type
+     *         type of implemented value type.
+     * @param serializer
+     *         function that change object into simple string.
+     * @param deserializer
+     *         function that change simple string into object.
+     * @param <T>
+     *         type of implemented value type.
+     *
+     * @return string serializer instance.
+     */
+    static <T> StringSerializer<T> ofDynamic(Class<? super T> type, Function<T, String> serializer, BiFunction<String, Class<?>, T> deserializer)
     {
         return new SimpleStringSerializer<>(type, deserializer, serializer);
     }
