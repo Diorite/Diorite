@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
+/**
+ * Geometry objects, vectors, boxes, etc.
+ */
 @NonnullByDefault
-package org.diorite.impl.protocol.p16w50a.clientbound;
+package org.diorite.commons.math.geometry;
 
 import org.diorite.annotations.NonnullByDefault;
