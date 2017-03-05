@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
+/**
+ * Noise generators used by map generator.
+ */
 @NonnullByDefault
-package org.diorite.impl.protocol.p16w50a.serverbound;
+package org.diorite.commons.math.noise;
 
 import org.diorite.annotations.NonnullByDefault;
