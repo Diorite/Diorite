@@ -124,7 +124,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount)
+    public static <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount)
     {
         return getRandom(getRandom(), coll, target, amount, true);
     }
@@ -147,7 +147,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount, boolean noRepeat)
+    public static <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         return getRandom(getRandom(), coll, target, amount, noRepeat);
     }
@@ -556,7 +556,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<T> coll, E target, int amount)
+    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount)
     {
         return getRandom(random, coll, target, amount, true);
     }
@@ -581,7 +581,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<T> coll, E target, int amount, boolean noRepeat)
+    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         if (coll.isEmpty())
         {
@@ -617,8 +617,9 @@ public final class DioriteRandomUtils
      *
      * @return random element from given collection.
      */
+    @SuppressWarnings("unchecked")
     @Nullable
-    public static <T> T getRandom(Random random, Collection<T> coll)
+    public static <T> T getRandom(Random random, Collection<? extends T> coll)
     {
         if (coll.isEmpty())
         {

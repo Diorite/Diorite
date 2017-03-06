@@ -679,7 +679,7 @@ public interface DioriteRandom
      *
      * @return this same target collection as given.
      */
-    <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount);
+    <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount);
 
     /**
      * Pick some amount of random elements from given collection, and adds it to another given collection.
@@ -699,7 +699,7 @@ public interface DioriteRandom
      *
      * @return this same target collection as given.
      */
-    <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount, boolean noRepeat);
+    <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat);
 
     /**
      * Returns random element from given collection.

@@ -64,13 +64,13 @@ class DioriteRandomImpl extends Random implements DioriteRandom
     }
 
     @Override
-    public <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount)
+    public <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount)
     {
         return DioriteRandomUtils.getRandom(this, coll, target, amount);
     }
 
     @Override
-    public <T, E extends Collection<T>> E getRandom(Collection<T> coll, E target, int amount, boolean noRepeat)
+    public <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         return DioriteRandomUtils.getRandom(this, coll, target, amount, noRepeat);
     }
