@@ -24,8 +24,6 @@
 
 package org.diorite;
 
-import java.util.Collection;
-
 import org.slf4j.Logger;
 
 import org.diorite.commons.function.supplier.Supplier;
@@ -64,7 +62,7 @@ public interface Diorite extends SharedAPI
     EventManager getEventManager();
 
     @Override
-    Collection<? extends Player> getOnlinePlayers();
+    PlayersManager<? extends Player> getOnlinePlayers();
 
     /**
      * Returns true if server is running.

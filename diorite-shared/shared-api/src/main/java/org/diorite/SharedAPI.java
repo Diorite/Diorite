@@ -24,8 +24,6 @@
 
 package org.diorite;
 
-import java.util.Collection;
-
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.plugin.PluginManager;
 import org.diorite.sender.PlayerCommandSender;
@@ -58,13 +56,12 @@ public interface SharedAPI
     ServiceManager getServiceManager();
 
     /**
-     * Returns immutable collection of online players. <br>
-     * This isn't copy, online player changes will be visible in returned collection. <br>
-     * Returned collection is thread safe.
+     * Returns manager of online players. <br>
+     * Online player changes will be visible in returned object.
      *
-     * @return immutable collection of online players.
+     * @return manager of online players.
      */
-    Collection<? extends PlayerCommandSender> getOnlinePlayers();
+    PlayersManager<? extends PlayerCommandSender> getOnlinePlayers();
 
     /**
      * Get diorite server instance from static content.
