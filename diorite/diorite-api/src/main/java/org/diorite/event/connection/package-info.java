@@ -23,9 +23,9 @@
  */
 
 /**
- * Root package for all diorite event classes.
+ * Events related to connections.
  */
 @NonnullByDefault
-package org.diorite.event.events;
+package org.diorite.event.connection;
 
 import org.diorite.annotations.NonnullByDefault;

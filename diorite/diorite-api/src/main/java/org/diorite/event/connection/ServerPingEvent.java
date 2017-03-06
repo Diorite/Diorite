@@ -22,10 +22,47 @@
  * SOFTWARE.
  */
 
-/**
- * Events related to connections.
- */
-@NonnullByDefault
-package org.diorite.event.events.connection;
+package org.diorite.event.connection;
 
-import org.diorite.annotations.NonnullByDefault;
+import org.diorite.event.Event;
+import org.diorite.ping.ServerPing;
+
+/**
+ * Called when player refresh server list.
+ */
+public class ServerPingEvent implements Event
+{
+    private ServerPing serverPing;
+
+    /**
+     * Construct new instance of ping event.
+     *
+     * @param serverPing
+     *         ping data.
+     */
+    public ServerPingEvent(ServerPing serverPing)
+    {
+        this.serverPing = serverPing;
+    }
+
+    /**
+     * Returns server ping data.
+     *
+     * @return server ping data.
+     */
+    public ServerPing getServerPing()
+    {
+        return this.serverPing;
+    }
+
+    /**
+     * Sets new ping result.
+     *
+     * @param serverPing
+     *         new result.
+     */
+    public void setServerPing(ServerPing serverPing)
+    {
+        this.serverPing = serverPing;
+    }
+}
