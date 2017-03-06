@@ -61,7 +61,7 @@ public interface SharedAPI
      *
      * @return manager of online players.
      */
-    PlayersManager<? extends PlayerCommandSender> getOnlinePlayers();
+    PlayersManager<? extends PlayerCommandSender> getPlayers();
 
     /**
      * Get diorite server instance from static content.

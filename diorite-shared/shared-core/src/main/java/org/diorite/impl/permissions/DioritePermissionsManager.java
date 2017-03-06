@@ -264,7 +264,7 @@ public class DioritePermissionsManager implements PermissionsManager
             this.groups.put(group.getName(), group);
             return;
         }
-        SharedAPI.getSharedAPI().getOnlinePlayers().stream().map(PlayerCommandSender::getPermissionsContainer)
+        SharedAPI.getSharedAPI().getPlayers().stream().map(PlayerCommandSender::getPermissionsContainer)
                  .forEach(p ->
                           {
                               GroupEntry entry =
@@ -302,7 +302,7 @@ public class DioritePermissionsManager implements PermissionsManager
         PermissionsGroup group = this.groups.remove(name);
         if (group != null)
         {
-            SharedAPI.getSharedAPI().getOnlinePlayers().forEach(p -> p.getPermissionsContainer().removeGroup(group));
+            SharedAPI.getSharedAPI().getPlayers().forEach(p -> p.getPermissionsContainer().removeGroup(group));
         }
         return group;
     }

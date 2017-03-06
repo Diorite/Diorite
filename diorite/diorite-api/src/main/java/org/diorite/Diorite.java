@@ -62,7 +62,7 @@ public interface Diorite extends SharedAPI
     EventManager getEventManager();
 
     @Override
-    PlayersManager<? extends Player> getOnlinePlayers();
+    PlayersManager<? extends Player> getPlayers();
 
     /**
      * Returns true if server is running.

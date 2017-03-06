@@ -202,7 +202,7 @@ public class DioriteServer implements DioriteCore
     }
 
     @Override
-    public Collection<? extends Player> getOnlinePlayers()
+    public Collection<? extends Player> getPlayers()
     {
         return null;
     }
