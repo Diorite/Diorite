@@ -660,7 +660,7 @@ public interface DioriteRandom
      * @return random element from given list.
      */
     @Nullable
-    <T> T getRandom(List<T> list);
+    <T> T getRandom(List<? extends T> list);
 
     /**
      * Pick some amount of random non-repeating elements from given collection, and adds it to another given collection. <br>
@@ -679,7 +679,7 @@ public interface DioriteRandom
      *
      * @return this same target collection as given.
      */
-    <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount);
+    <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount);
 
     /**
      * Pick some amount of random elements from given collection, and adds it to another given collection.
@@ -699,7 +699,7 @@ public interface DioriteRandom
      *
      * @return this same target collection as given.
      */
-    <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat);
+    <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat);
 
     /**
      * Returns random element from given collection.
@@ -712,7 +712,7 @@ public interface DioriteRandom
      * @return random element from given collection.
      */
     @Nullable
-    <T> T getRandom(Collection<T> coll);
+    <T> T getRandom(Collection<? extends T> coll);
 
     /**
      * Returns random numeric value from inclusive range from a to b, method will still return valid random number if a > b.
@@ -869,7 +869,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomReversedDouble(Map<Double, T> choices);
+    <T> T getWeightedRandomReversedDouble(Map<Double, ? extends T> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
@@ -882,7 +882,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomReversed(Double2ObjectMap<T> choices);
+    <T> T getWeightedRandomReversed(Double2ObjectMap<? extends T> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
@@ -895,7 +895,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomReversedInt(Map<Integer, T> choices);
+    <T> T getWeightedRandomReversedInt(Map<Integer, ? extends T> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where key is weight of element.
@@ -908,7 +908,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomReversed(Int2ObjectMap<T> choices);
+    <T> T getWeightedRandomReversed(Int2ObjectMap<? extends T> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
@@ -934,7 +934,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomDouble(Map<T, Double> choices);
+    <T> T getWeightedRandomDouble(Map<? extends T, Double> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
@@ -947,7 +947,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandom(Object2DoubleMap<T> choices);
+    <T> T getWeightedRandom(Object2DoubleMap<? extends T> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
@@ -960,7 +960,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandomInt(Map<T, Integer> choices);
+    <T> T getWeightedRandomInt(Map<? extends T, Integer> choices);
 
     /**
      * Returns random elements from map of choices based on weight of each random element, where value is weight of element.
@@ -973,7 +973,7 @@ public interface DioriteRandom
      * @return one of elements.
      */
     @Nullable
-    <T> T getWeightedRandom(Object2IntMap<T> choices);
+    <T> T getWeightedRandom(Object2IntMap<? extends T> choices);
 
     /**
      * Returns random instance with this same properties as this random.

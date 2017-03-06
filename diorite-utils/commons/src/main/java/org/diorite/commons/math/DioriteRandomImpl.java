@@ -58,26 +58,26 @@ class DioriteRandomImpl extends Random implements DioriteRandom
 
     @Override
     @Nullable
-    public <T> T getRandom(List<T> coll)
+    public <T> T getRandom(List<? extends T> coll)
     {
         return DioriteRandomUtils.getRandom(this, coll);
     }
 
     @Override
-    public <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount)
+    public <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount)
     {
         return DioriteRandomUtils.getRandom(this, coll, target, amount);
     }
 
     @Override
-    public <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
+    public <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         return DioriteRandomUtils.getRandom(this, coll, target, amount, noRepeat);
     }
 
     @Override
     @Nullable
-    public <T> T getRandom(Collection<T> coll)
+    public <T> T getRandom(Collection<? extends T> coll)
     {
         return DioriteRandomUtils.getRandom(this, coll);
     }
@@ -152,28 +152,28 @@ class DioriteRandomImpl extends Random implements DioriteRandom
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomReversedDouble(Map<Double, T> choices)
+    public <T> T getWeightedRandomReversedDouble(Map<Double, ? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandomReversedDouble(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomReversedInt(Map<Integer, T> choices)
+    public <T> T getWeightedRandomReversedInt(Map<Integer, ? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandomReversedInt(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomReversed(Double2ObjectMap<T> choices)
+    public <T> T getWeightedRandomReversed(Double2ObjectMap<? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandomReversed(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomReversed(Int2ObjectMap<T> choices)
+    public <T> T getWeightedRandomReversed(Int2ObjectMap<? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandomReversed(this, choices);
     }
@@ -187,28 +187,28 @@ class DioriteRandomImpl extends Random implements DioriteRandom
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomDouble(Map<T, Double> choices)
+    public <T> T getWeightedRandomDouble(Map<? extends T, Double> choices)
     {
         return DioriteRandomUtils.getWeightedRandomDouble(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandomInt(Map<T, Integer> choices)
+    public <T> T getWeightedRandomInt(Map<? extends T, Integer> choices)
     {
         return DioriteRandomUtils.getWeightedRandomInt(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandom(Object2DoubleMap<T> choices)
+    public <T> T getWeightedRandom(Object2DoubleMap<? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandom(this, choices);
     }
 
     @Override
     @Nullable
-    public <T> T getWeightedRandom(Object2IntMap<T> choices)
+    public <T> T getWeightedRandom(Object2IntMap<? extends T> choices)
     {
         return DioriteRandomUtils.getWeightedRandom(this, choices);
     }

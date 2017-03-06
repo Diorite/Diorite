@@ -102,9 +102,9 @@ public final class DioriteRandomUtils
      * @return random element from given list.
      */
     @Nullable
-    public static <T> T getRandom(List<T> coll)
+    public static <T> T getRandom(List<T> list)
     {
-        return getRandom(getRandom(), coll);
+        return getRandom(getRandom(), list);
     }
 
     /**
@@ -124,7 +124,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount)
+    public static <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount)
     {
         return getRandom(getRandom(), coll, target, amount, true);
     }
@@ -147,7 +147,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
+    public static <T, E extends Collection<? super T>> E getRandom(Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         return getRandom(getRandom(), coll, target, amount, noRepeat);
     }
@@ -163,7 +163,7 @@ public final class DioriteRandomUtils
      * @return random element from given collection.
      */
     @Nullable
-    public static <T> T getRandom(Collection<T> coll)
+    public static <T> T getRandom(Collection<? extends T> coll)
     {
         return getRandom(getRandom(), coll);
     }
@@ -556,7 +556,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount)
+    public static <T, E extends Collection<? super T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount)
     {
         return getRandom(random, coll, target, amount, true);
     }
@@ -581,7 +581,7 @@ public final class DioriteRandomUtils
      *
      * @return this same target collection as given.
      */
-    public static <T, E extends Collection<T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount, boolean noRepeat)
+    public static <T, E extends Collection<? super T>> E getRandom(Random random, Collection<? extends T> coll, E target, int amount, boolean noRepeat)
     {
         if (coll.isEmpty())
         {
