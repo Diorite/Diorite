@@ -25,7 +25,6 @@
 package org.diorite;
 
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 import javax.vecmath.Vector3d;
 
 import org.diorite.commons.math.DioriteMathUtils;

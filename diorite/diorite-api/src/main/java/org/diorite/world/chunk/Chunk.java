@@ -24,6 +24,10 @@
 
 package org.diorite.world.chunk;
 
+import java.util.Collection;
+
+import org.diorite.BlockLocation;
+import org.diorite.event.chunk.ChunkAnchorRemovedEvent;
 import org.diorite.world.World;
 
 /**
@@ -40,12 +44,98 @@ public interface Chunk
     World getWorld();
 
     /**
+     * Returns position of this chunk.
+     *
+     * @return position of this chunk.
+     */
+    ChunkPosition getPosition();
+
+    /**
      * Returns true if this is valid chunk instance. <br>
-     * This may return false if chunk is unloaded and not tracked by server anymore, so after loading chunk again this instance will be still empty.
+     * This may return false if chunk is unloaded and not tracked by server anymore, so after loading chunk again this instance will be still empty. <br>
      *
      * @return true if this is valid chunk instance.
      */
     boolean isValid();
+
+    /**
+     * Returns true if this chunk is loaded.
+     *
+     * @return true if this chunk is loaded.
+     */
+    boolean isLoaded();
+
+    /**
+     * Returns true if this chunk can be unloaded.
+     *
+     * @return true if this chunk can be unloaded.
+     */
+    boolean canBeUnloaded();
+
+    /**
+     * Save and unload this chunk if possible. (chunk anchors and events can be used to disable chunk unloading)
+     *
+     * @return if chunk was unloaded.
+     */
+    default boolean unload()
+    {
+        return this.unload(true);
+    }
+
+    /**
+     * Unloads this chunk if possible. (chunk anchors and events can be used to disable chunk unloading)
+     *
+     * @param save
+     *         if chunk should be saved.
+     *
+     * @return if chunk was unloaded.
+     */
+    boolean unload(boolean save);
+
+    /**
+     * Loads this chunk, if chunk is already loaded nothing will happen. <br>
+     * If chunk isn't generated yet it will be generated.
+     */
+    default void load()
+    {
+        this.load(true);
+    }
+
+    /**
+     * Loads this chunk, if chunk is already loaded nothing will happen. <br>
+     *
+     * @param generate
+     *         if chunk should be loaded.
+     */
+    void load(boolean generate);
+
+    /**
+     * Adds anchor to this chunk to prevent unloading.
+     *
+     * @param anchor
+     *         anchor to add.
+     *
+     * @return true if anchor was added, false if anchor was already added or can't be added to this chunk.
+     */
+    boolean addAnchor(ChunkAnchor anchor);
+
+    /**
+     * Removes anchor from this chunk, anchors are used to prevent chunk unloading. <br>
+     * Removing anchor will call {@link ChunkAnchorRemovedEvent} that can be cancelled.
+     *
+     * @param anchor
+     *         anchor to remove.
+     *
+     * @return if anchor was successful removed.
+     */
+    boolean removeAnchor(ChunkAnchor anchor);
+
+    /**
+     * Returns collection of all anchors added to this chunk.
+     *
+     * @return collection of all anchors added to this chunk.
+     */
+    Collection<? extends ChunkAnchor> getAnchors();
 
     /**
      * Returns true if this chunk is empty, and there is nothing in it.
@@ -68,4 +158,17 @@ public interface Chunk
      */
     int getSizeZ();
 
+    /**
+     * Returns block location of minimal point on chunk, so location win minimal x/y/z coordinates on this chunk.
+     *
+     * @return block location of minimal point on chunk.
+     */
+    BlockLocation getMinimalPoint();
+
+    /**
+     * Returns block location of maximal point on chunk, so location win maximal x/y/z coordinates on this chunk.
+     *
+     * @return block location of maximal point on chunk.
+     */
+    BlockLocation getMaximalPoint();
 }
