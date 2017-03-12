@@ -44,6 +44,7 @@ import org.diorite.impl.protocol.connection.ServerConnectionImpl;
 import org.diorite.impl.service.ServiceManagerImpl;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
+import org.diorite.PlayersManager;
 import org.diorite.SharedAPI;
 import org.diorite.commons.SpammyError;
 import org.diorite.commons.function.supplier.Supplier;
@@ -202,7 +203,7 @@ public class DioriteServer implements DioriteCore
     }
 
     @Override
-    public Collection<? extends Player> getPlayers()
+    public PlayersManager<? extends Player> getPlayers()
     {
         return null;
     }
