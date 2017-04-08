@@ -17,7 +17,7 @@
         <module>shared-core</module>
     </modules>
     <packaging>pom</packaging>
-    <name>Diorite Shaded</name>
+    <name>Diorite Shared</name>
 
     <dependencies>
         <dependency>
