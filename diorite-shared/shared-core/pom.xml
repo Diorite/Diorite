@@ -11,7 +11,7 @@
 
     <artifactId>shared-core</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>Diorite Shaded Core</name>
+    <name>Diorite Shared Core</name>
 
     <dependencies>
         <dependency>
