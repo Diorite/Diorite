@@ -11,7 +11,7 @@
 
     <artifactId>shared-api</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>Diorite Shaded API</name>
+    <name>Diorite Shared API</name>
 
     <dependencies>
         <dependency>
