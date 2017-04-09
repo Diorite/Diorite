@@ -29,7 +29,7 @@ import java.util.Objects;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class EqualsPropertyAction extends AbstractPropertyAction
 {
     protected EqualsPropertyAction()

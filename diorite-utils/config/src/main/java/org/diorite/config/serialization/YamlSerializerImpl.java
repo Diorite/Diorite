@@ -30,8 +30,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.yaml.snakeyaml.constructor.Construct;
+import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.Node;
 
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.snakeyaml.AbstractRepresent;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor;
@@ -61,7 +63,23 @@ class YamlSerializerImpl<T> extends AbstractRepresent implements Construct
         DeserializationData data = new YamlDeserializationData(this.serialization, node, this.representer, this.constructor, this.serializer.getType());
         try
         {
-            return this.serializer.deserialize(data);
+            Class<?> type;
+            if ((node.getType() == null) || Object.class.equals(node.getType()))
+            {
+                try
+                {
+                    type = DioriteReflectionUtils.tryGetCanonicalClass(node.getTag().getClassName());
+                }
+                catch (YAMLException e)
+                {
+                    type = null;
+                }
+            }
+            else
+            {
+                type = node.getType();
+            }
+            return this.serializer.deserialize(data, type);
         }
         catch (DeserializationException e)
         {

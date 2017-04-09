@@ -42,14 +42,9 @@ class CommentsFileParser
         this.comments = new DocumentCommentsImpl();
     }
 
-    public static void main(String[] args)
-    {
-
-    }
-
     @Nullable private StringBuilder currentComment;
 
-    private LinkedList<String> currentNodes = new LinkedList<>();
+    private final LinkedList<String> currentNodes = new LinkedList<>();
     @Nullable private String lastNode;
     private int indentLevel = 0;
 

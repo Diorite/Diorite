@@ -49,13 +49,13 @@ final class TypeExtractor
 
     private final DocumentComments comments;
 
-    @SuppressWarnings("Java8MapApi") // might cause IllegalStateException: Recursive update
+    // might cause IllegalStateException: Recursive update
     static DocumentComments getAnnotationData(@Nullable Class<?> clazz)
     {
         if ((clazz == null) || clazz.isPrimitive() || (clazz == Object.class) || (clazz.getClassLoader() == null) || (clazz.getPackageName() == null) ||
             clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("jdk."))
         {
-            return DocumentComments.getEmpty();
+            return DocumentComments.empty();
         }
         DocumentComments documentComments = cache.get(clazz);
         if (documentComments == null)
@@ -67,13 +67,13 @@ final class TypeExtractor
         return documentComments;
     }
 
-    private Set<Class<?>> scanned = new HashSet<>(20);
+    private final Set<Class<?>> scanned = new HashSet<>(20);
 
     private DocumentComments getAnnotationDataSafe(@Nullable Class<?> type)
     {
         if ((type == null) || this.scanned.contains(type))
         {
-            return DocumentComments.getEmpty();
+            return DocumentComments.empty();
         }
         return getAnnotationData(type);
     }

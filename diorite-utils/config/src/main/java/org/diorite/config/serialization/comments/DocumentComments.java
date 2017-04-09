@@ -187,7 +187,7 @@ public interface DocumentComments extends CommentsNode
      *
      * @return always empty instance of Document Comments
      */
-    static DocumentComments getEmpty()
+    static DocumentComments empty()
     {
         return EmptyDocumentComments.getEmpty();
     }

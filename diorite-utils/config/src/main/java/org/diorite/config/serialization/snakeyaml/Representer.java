@@ -219,7 +219,7 @@ public class Representer extends BaseRepresenter
 {
     private static final int MAX_WIDTH = 100;
 
-    protected Map<Class<?>, Tag> classTags;
+    protected final Map<Class<?>, Tag> classTags;
     @Nullable protected TimeZone timeZone = null;
 
     public Representer()
@@ -298,7 +298,7 @@ public class Representer extends BaseRepresenter
         return this.classTags.put(clazz, tag);
     }
 
-    public static Pattern MULTILINE_PATTERN = Pattern.compile("\n|\u0085|\u2028|\u2029");
+    public static final Pattern MULTILINE_PATTERN = Pattern.compile("[\n\u0085\u2028\u2029]");
 
     @Override
     public Node representScalar(Tag tag, String value, @Nullable Character style)
@@ -660,7 +660,7 @@ public class Representer extends BaseRepresenter
 
     public abstract static class AbstractRepresent implements Represent
     {
-        protected Representer representer;
+        protected final Representer representer;
 
         public AbstractRepresent(Representer representer)
         {

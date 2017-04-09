@@ -30,10 +30,13 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import sun.misc.Unsafe;
 
@@ -1086,6 +1089,251 @@ public final class DioriteReflectionUtils
             return null;
         }
         throw new IllegalStateException(String.format("Unable to find constructor for %s (%s).", clazz, Arrays.asList(params)));
+    }
+
+    /**
+     * Try to find matching constructor for given arguments, arguments may contain null values.
+     *
+     * @param type
+     *         class with constructors.
+     * @param values
+     *         arguments that will be used in constructor.
+     * @param <T>
+     *         type of object.
+     *
+     * @return constructor invoker instance.
+     *
+     * @throws NoSuchMethodException
+     *         if constructor can't be found.
+     * @throws IllegalStateException
+     *         if constructors are ambiguous.
+     */
+    public static <T> ConstructorInvoker<T> findMatchingConstructor(Class<T> type, Object... values) throws NoSuchMethodException, IllegalStateException
+    {
+        return findMatchingExecutable(type.getDeclaredConstructors(), values);
+    }
+
+    /**
+     * Try to find matching method for given arguments with given method name, arguments may contain null values.
+     *
+     * @param type
+     *         class with methods.
+     * @param methodName
+     *         name of method.
+     * @param values
+     *         arguments that will be used in method call.
+     *
+     * @return method invoker instance.
+     *
+     * @throws NoSuchMethodException
+     *         if constructor can't be found.
+     * @throws IllegalStateException
+     *         if constructors are ambiguous.
+     */
+    public static MethodInvoker findMatchingMethod(Class<?> type, String methodName, Object... values) throws NoSuchMethodException, IllegalStateException
+    {
+        List<Method> methodList = new ArrayList<>(20);
+        Class<?> currentType = type;
+        while ((currentType != null) && ! currentType.equals(Object.class))
+        {
+            for (Method method : currentType.getDeclaredMethods())
+            {
+                if (method.getName().equals(methodName) && (method.getParameterCount() == values.length))
+                {
+                    methodList.add(method);
+                }
+            }
+            currentType = currentType.getSuperclass();
+        }
+        return findMatchingExecutable(methodList.toArray(new Method[methodList.size()]), values);
+    }
+
+    /**
+     * Try to find matching executable for given arguments, arguments may contain null values.
+     *
+     * @param executables
+     *         array of executables.
+     * @param values
+     *         arguments that will be used in executable.
+     *
+     * @return method invoker instance.
+     *
+     * @throws NoSuchMethodException
+     *         if constructor can't be found.
+     * @throws IllegalStateException
+     *         if constructors are ambiguous.
+     */
+    public static <T extends ReflectMethod> T findMatchingExecutable(Executable[] executables,
+                                                                     Object... values) throws NoSuchMethodException, IllegalStateException
+    {
+        if (values.length == 0)
+        {
+            for (Executable executable : executables)
+            {
+                if (executable.getParameterCount() == 0)
+                {
+                    return wrap(executable, true);
+                }
+            }
+            throw new NoSuchMethodException("Can't find no-args constructor.");
+        }
+        Class<?>[] paramTypes = new Class<?>[values.length];
+        for (int i = 0; i < values.length; i++)
+        {
+            Object value = values[i];
+            paramTypes[i] = (value == null) ? null : value.getClass();
+        }
+        // try to find exact matching constructor, and add any just compatible to collection.
+        int exactMatches = 0;
+        Executable exact = null;
+        Executable bestMatch = null;
+        for (Executable executable : executables)
+        {
+            if (executable.getParameterCount() != values.length)
+            {
+                continue;
+            }
+            CompatibleExecutableResults compatibleConstructor = isCompatibleExecutable(executable, paramTypes);
+            if (compatibleConstructor == CompatibleExecutableResults.EXACT)
+            {
+                if (exactMatches >= 1)
+                {
+                    throw new IllegalStateException("Ambiguous constructors found " + Arrays.toString(paramTypes));
+                }
+                exact = executable;
+                exactMatches += 1;
+            }
+            if (compatibleConstructor != CompatibleExecutableResults.INVALID)
+            {
+                bestMatch = getMoreSpecialized(bestMatch, executable);
+            }
+        }
+        if (bestMatch == null)
+        {
+            throw new NoSuchMethodException("Can't find matching constructor for: " + Arrays.toString(paramTypes));
+        }
+        if (exact != null)
+        {
+            if (! bestMatch.equals(exact))
+            {
+                throw new IllegalStateException("Ambiguous constructors found " + Arrays.toString(paramTypes));
+            }
+            return wrap(exact, true);
+        }
+        return wrap(bestMatch, true);
+    }
+
+    private static <T extends ReflectMethod> T wrap(Executable executable, boolean setAccessible)
+    {
+        T result;
+        if (executable instanceof Constructor)
+        {
+            result = (T) new ConstructorInvoker<>((Constructor<?>) executable);
+        }
+        else if (executable instanceof Method)
+        {
+            result = (T) new MethodInvoker((Method) executable);
+        }
+        else
+        {
+            throw new IllegalStateException("Can't wrap this executable.");
+        }
+        if (setAccessible)
+        {
+            result.ensureAccessible();
+        }
+        return result;
+    }
+
+    @Nullable
+    private static <T> Executable getMoreSpecialized(@Nullable Executable a, @Nullable Executable b)
+    {
+        if (a == null)
+        {
+            return b;
+        }
+        if (b == null)
+        {
+            return a;
+        }
+        Class<?>[] aTypes = a.getParameterTypes();
+        Class<?>[] bTypes = b.getParameterTypes();
+        int result = 0;
+        for (int i = 0; i < aTypes.length; i++)
+        {
+            Class<?> aType = aTypes[i];
+            Class<?> bType = bTypes[i];
+            if (aType.equals(bType))
+            {
+                continue;
+            }
+            // if aType is less specialized than bType
+            if ((aType.isPrimitive() && ! bType.isPrimitive()) ||
+                DioriteReflectionUtils.getWrapperClass(aType).isAssignableFrom(DioriteReflectionUtils.getWrapperClass(bType)))
+            {
+                // one of prev types was less specialized, javac fails to find such constructor, we should too
+                if (result < 0)
+                {
+                    throw new IllegalStateException("Ambiguous constructors found for: " + Arrays.toString(aTypes) + " and " + Arrays.toString(bTypes));
+                }
+                result += 1;
+            }
+            else
+            {
+                if (result > 0)
+                {
+                    throw new IllegalStateException("Ambiguous constructors found for: " + Arrays.toString(aTypes) + " and " + Arrays.toString(bTypes));
+                }
+                result -= 1;
+            }
+        }
+        if (result == 0)
+        {
+            throw new IllegalStateException("Ambiguous constructors found for: " + Arrays.toString(aTypes) + " and " + Arrays.toString(bTypes));
+        }
+        if (result < 0)
+        {
+            return a;
+        }
+        return b;
+    }
+
+    private static CompatibleExecutableResults isCompatibleExecutable(Executable constructor, Class<?>[] providedTypes)
+    {
+        Class<?>[] constructorParameterTypes = constructor.getParameterTypes();
+        boolean compatible = true;
+        CompatibleExecutableResults current = CompatibleExecutableResults.EXACT;
+        for (int i = 0; i < constructorParameterTypes.length; i++)
+        {
+            Class<?> providedType = providedTypes[i];
+            Class<?> parameterType = constructorParameterTypes[i];
+
+            // null can't be used as primitive
+            if ((providedType == null) && parameterType.isPrimitive())
+            {
+                return CompatibleExecutableResults.INVALID;
+            }
+
+            // handle primitives correctly by using wrapped type as boolean.class.isAssignableFrom(Boolean.class) => false
+            if ((providedType != null) && ! DioriteReflectionUtils.getWrapperClass(parameterType).isAssignableFrom(providedType))
+            {
+                return CompatibleExecutableResults.INVALID;
+            }
+
+            if ((providedType == null) || parameterType.equals(providedType))
+            {
+                continue; // sill exact match
+            }
+            current = CompatibleExecutableResults.COMPATIBLE;
+        }
+        return current;
+    }
+
+    enum CompatibleExecutableResults
+    {
+        EXACT,
+        COMPATIBLE,
+        INVALID
     }
 
     /**

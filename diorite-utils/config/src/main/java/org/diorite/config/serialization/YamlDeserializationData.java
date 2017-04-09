@@ -44,6 +44,7 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.snakeyaml.Representer;
@@ -183,6 +184,10 @@ public class YamlDeserializationData extends AbstractDeserializationData
     @SuppressWarnings({"unchecked", "rawtypes"})
     private <T> T deserializeSpecial(Class<T> type, Node node, @Nullable T def)
     {
+        if (node.getTag().equals(Tag.NULL))
+        {
+            return null;
+        }
         if (DioriteReflectionUtils.getWrapperClass(type).equals(Boolean.class))
         {
             node.setTag(Tag.STR);
@@ -202,6 +207,19 @@ public class YamlDeserializationData extends AbstractDeserializationData
                 return def;
             }
             return (T) valueSafe;
+        }
+        if (DynamicEnum.class.isAssignableFrom(type))
+        {
+            String name = this.constructor.constructObject(node).toString();
+            DynamicEnum[] values = DynamicEnum.values((Class<DynamicEnum>) type);
+            for (DynamicEnum value : values)
+            {
+                if (value.prettyName().equalsIgnoreCase(name) || value.name().equalsIgnoreCase(name) || String.valueOf(value.ordinal()).equalsIgnoreCase(name))
+                {
+                    return (T) value;
+                }
+            }
+            return def;
         }
         if (Number.class.isAssignableFrom(DioriteReflectionUtils.getWrapperClass(type)))
         {
@@ -233,6 +251,20 @@ public class YamlDeserializationData extends AbstractDeserializationData
                 return (T) (Double) Double.parseDouble(deserialize);
             }
         }
+        if ((node instanceof SequenceNode) && type.isArray())
+        {
+            node.setType(type);
+            Class<?> componentType = type.getComponentType();
+            Tag componentTag = new Tag(componentType);
+            node.setUseClassConstructor(false);
+            for (Node subNode : ((SequenceNode) node).getValue())
+            {
+                subNode.setType(componentType);
+                subNode.setTag(componentTag);
+                subNode.setUseClassConstructor(false);
+            }
+            return (T) this.constructor.constructArray((SequenceNode) node);
+        }
         if (type != Object.class)
         {
             node.setTag(new Tag(type));
@@ -240,7 +272,6 @@ public class YamlDeserializationData extends AbstractDeserializationData
         return (T) this.constructor.constructObject(node);
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T deserializeSpecialOrThrow(Class<T> type, Node node)
     {
         try
@@ -262,7 +293,6 @@ public class YamlDeserializationData extends AbstractDeserializationData
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T get(String key, Class<T> type, @Nullable T def)

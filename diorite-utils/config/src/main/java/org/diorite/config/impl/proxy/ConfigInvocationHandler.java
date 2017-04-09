@@ -42,18 +42,20 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yaml.snakeyaml.nodes.Node;
 
@@ -246,6 +248,10 @@ public final class ConfigInvocationHandler implements InvocationHandler
                 this.registerVoidMethod(clazz, m, (args) -> this.fillWithDefaultsImpl());
             }
             {
+                Method m = clazz.getMethod("metadata");
+                this.registerMethod(clazz, m, (args) -> this.metadataImpl());
+            }
+            {
                 Method m = clazz.getMethod("get", String.class);
                 this.registerMethod(clazz, m, (args) -> this.getImpl((String) args[0]));
             }
@@ -367,16 +373,16 @@ public final class ConfigInvocationHandler implements InvocationHandler
             }
             {
                 Method m = clazz.getMethod("values");
-                this.registerMethod(clazz, m, (args) -> this.valuesImpl());
+                this.registerMethod(clazz, m, (args) -> this.valuesImpl(false));
             }
             {
                 Method m = clazz.getMethod("entrySet");
-                this.registerMethod(clazz, m, (args) -> this.entrySetImpl());
+                this.registerMethod(clazz, m, (args) -> this.entrySetImpl(false));
             }
 
             {
                 Method m = Object.class.getMethod("toString");
-                this.registerMethod(m, (args) -> this.toStringImpl());
+                this.registerMethod(m, (args) -> this.toStringImpl(true));
             }
             {
                 Method m = Object.class.getMethod("hashCode");
@@ -416,7 +422,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -507,7 +513,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -550,7 +556,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -627,6 +633,13 @@ public final class ConfigInvocationHandler implements InvocationHandler
         this.bindFile = file;
     }
 
+    private final Map<String, Object> metadata = Collections.synchronizedMap(new HashMap<>(3));
+
+    private Map<String, Object> metadataImpl()
+    {
+        return this.metadata;
+    }
+
     private void saveImpl()
     {
         File bindFile = this.bindFile;
@@ -649,12 +662,16 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private void saveImpl(@WillNotClose Writer writer)
     {
-        Serialization.getGlobal().toYamlWithComments(this.config, writer, this.template.getComments());
+        Serialization.getInstance().toYamlWithComments(this.config, writer, this.template.getComments());
     }
 
     private void loadImpl(@WillNotClose Reader reader)
     {
-        Config fromYaml = Serialization.getGlobal().fromYaml(reader, this.template.getConfigType());
+        Config fromYaml = Serialization.getInstance().fromYaml(reader, this.template.getConfigType());
+        if (fromYaml == null)
+        {
+            return;
+        }
         ConfigInvocationHandler invocationHandler = (ConfigInvocationHandler) Proxy.getInvocationHandler(fromYaml);
 
         this.predefinedValues.putAll(invocationHandler.predefinedValues);
@@ -710,7 +727,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             throw new IllegalStateException("Empty key given");
         }
-        Serialization serialization = Serialization.getGlobal();
+        Serialization serialization = Serialization.getInstance();
 
         String key = keys[0];
         if (keys.length == 1)
@@ -763,23 +780,27 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private boolean containsValueImpl(Object toCheck)
     {
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            if (Objects.equals(toCheck, value.getPropertyValue()))
+            equalsBuilder.append(toCheck, value.getPropertyValue());
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
         }
         for (SimpleConfig configNode : this.dynamicValues.values())
         {
-            if (Objects.equals(toCheck, configNode))
+            equalsBuilder.append(toCheck, configNode);
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
         }
         for (Node node : this.simpleDynamicValues.values())
         {
-            if (Objects.equals(toCheck, Serialization.getGlobal().fromYamlNode(node)))
+            equalsBuilder.append(toCheck, Serialization.getInstance().fromYamlNode(node));
+            if (equalsBuilder.isEquals())
             {
                 return true;
             }
@@ -811,32 +832,32 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return keys;
     }
 
-    private Collection<Object> valuesImpl()
+    private Collection<Object> valuesImpl(boolean raw)
     {
         Collection<Object> values = new ArrayList<>(20);
         for (ConfigPropertyValueImpl<Object> value : this.predefinedValues.values())
         {
-            values.add(value.getPropertyValue());
+            values.add(raw ? value.getRawValue() : value.getPropertyValue());
         }
         for (Node node : this.simpleDynamicValues.values())
         {
-            values.add(Serialization.getGlobal().fromYamlNode(node));
+            values.add(Serialization.getInstance().fromYamlNode(node));
         }
         values.addAll(this.dynamicValues.values());
         return values;
     }
 
-    private Set<Entry<String, Object>> entrySetImpl()
+    private Set<Entry<String, Object>> entrySetImpl(boolean raw)
     {
         Set<Entry<String, Object>> result = new HashSet<>(20);
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.add(new SimpleEntry<>(entry.getKey(), entry.getValue().getPropertyValue()));
+            result.add(new SimpleEntry<>(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue()));
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            result.add(new SimpleEntry<>(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue())));
+            result.add(new SimpleEntry<>(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue())));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
@@ -846,38 +867,58 @@ public final class ConfigInvocationHandler implements InvocationHandler
         return result;
     }
 
-    private Map<String, Object> toMap()
+    private Map<String, Object> toTreeMap(boolean raw)
     {
-        Map<String, Object> result = new LinkedHashMap<>(20);
+        Map<String, Object> result = new TreeMap<>();
 
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            result.put(entry.getKey(), entry.getValue().getPropertyValue());
+            result.put(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            result.put(entry.getKey(), Serialization.getGlobal().fromYamlNode(entry.getValue()));
+            result.put(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue()));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
-            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toMap());
+            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toTreeMap(raw));
         }
 
         return result;
     }
 
-    private String toStringImpl()
+    private Map<String, Object> toMap(boolean raw)
+    {
+        Map<String, Object> result = new LinkedHashMap<>(20);
+
+        for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
+        {
+            result.put(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
+        }
+        for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), Serialization.getInstance().fromYamlNode(entry.getValue()));
+        }
+        for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
+        {
+            result.put(entry.getKey(), ((ConfigInvocationHandler) Proxy.getInvocationHandler(entry.getValue())).toMap(raw));
+        }
+
+        return result;
+    }
+
+    private String toStringImpl(boolean raw)
     {
         ToStringBuilder builder = new ToStringBuilder(this.config);
         builder.append(this.template.getConfigType().getName());
         builder.append(this.bindFile);
         for (Entry<String, ConfigPropertyValueImpl<Object>> entry : this.predefinedValues.entrySet())
         {
-            builder.append(entry.getKey(), entry.getValue().getPropertyValue());
+            builder.append(entry.getKey(), raw ? entry.getValue().getRawValue() : entry.getValue().getPropertyValue());
         }
         for (Entry<String, Node> entry : this.simpleDynamicValues.entrySet())
         {
-            builder.append(entry.getKey(), (Object) Serialization.getGlobal().fromYamlNode(entry.getValue()));
+            builder.append(entry.getKey(), (Object) Serialization.getInstance().fromYamlNode(entry.getValue()));
         }
         for (Entry<String, SimpleConfig> entry : this.dynamicValues.entrySet())
         {
@@ -888,7 +929,7 @@ public final class ConfigInvocationHandler implements InvocationHandler
 
     private int hashCodeImpl()
     {
-        return this.entrySetImpl().hashCode();
+        return this.entrySetImpl(true).hashCode();
     }
 
     private boolean equalsImpl(Object object)
@@ -901,7 +942,36 @@ public final class ConfigInvocationHandler implements InvocationHandler
         {
             return false;
         }
-        return this.entrySetImpl().equals(((Config) object).entrySet());
+        Config config = (Config) object;
+        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        Map<String, Object> entries = this.toTreeMap(true);
+        Map<String, Object> otherEntries;
+        if (this.template.getConfigType().isInstance(config) && Proxy.isProxyClass(config.getClass()))
+        {
+            InvocationHandler invocationHandler = Proxy.getInvocationHandler(config);
+            if (invocationHandler instanceof ConfigInvocationHandler)
+            {
+                otherEntries = ((ConfigInvocationHandler) invocationHandler).toTreeMap(true);
+            }
+            else
+            {
+                otherEntries = new TreeMap<>(config);
+            }
+        }
+        else
+        {
+            otherEntries = new TreeMap<>(config);
+        }
+        if (entries.size() != otherEntries.size())
+        {
+            return false;
+        }
+        equalsBuilder.append(entries.keySet(), otherEntries.keySet());
+        if (! equalsBuilder.isEquals())
+        {
+            return false;
+        }
+        return equalsBuilder.append(entries.values().toArray(), otherEntries.values().toArray()).isEquals();
     }
 
     @Nullable

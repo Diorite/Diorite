@@ -27,14 +27,17 @@ package org.diorite.config.serialization.snakeyaml;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.constructor.Construct;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.Mark;
+import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeId;
@@ -43,6 +46,7 @@ import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import org.diorite.commons.arrays.DioriteArrayUtils;
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 
 public class YamlConstructor extends Constructor
 {
@@ -155,7 +159,98 @@ public class YamlConstructor extends Constructor
     @Override
     public Construct getConstructor(Node node)
     {
-        return super.getConstructor(node);
+        if (node.useClassConstructor())
+        {
+            return this.yamlClassConstructors.get(node.getNodeId());
+        }
+        else
+        {
+            Construct constructor = this.yamlConstructors.get(node.getTag());
+            if (constructor == null)
+            {
+                Class<?> nodeType;
+                if ((node.getType() == null) || Object.class.equals(node.getType()))
+                {
+                    try
+                    {
+                        nodeType = DioriteReflectionUtils.tryGetCanonicalClass(node.getTag().getClassName());
+                    }
+                    catch (YAMLException e)
+                    {
+                        nodeType = null;
+                    }
+                }
+                else
+                {
+                    nodeType = node.getType();
+                }
+                for (Entry<String, Construct> stringConstructEntry : this.yamlMultiConstructors.entrySet())
+                {
+                    if (node.getTag().startsWith(stringConstructEntry.getKey()))
+                    {
+                        return this.yamlMultiConstructors.get(stringConstructEntry.getKey());
+                    }
+                }
+                if (nodeType != null)
+                {
+                    Construct bestMatching = null;
+                    int score = - 1;
+                    for (Entry<Tag, Construct> entry : this.yamlConstructors.entrySet())
+                    {
+                        try
+                        {
+                            Tag key = entry.getKey();
+                            Construct value = entry.getValue();
+                            if ((key == null) || (value == null))
+                            {
+                                continue;
+                            }
+                            Class<?> type = Class.forName(key.getClassName());
+                            if (type.isAssignableFrom(nodeType))
+                            {
+                                int classScore = this.getClassScore(type, new HashSet<>(5));
+                                if (classScore > score)
+                                {
+                                    score = classScore;
+                                    bestMatching = value;
+                                }
+                            }
+                        }
+                        catch (ClassNotFoundException | YAMLException e)
+                        {
+                            // skip
+                        }
+                    }
+                    if (bestMatching != null)
+                    {
+                        this.yamlConstructors.putIfAbsent(new Tag(nodeType), bestMatching);
+                        return bestMatching;
+                    }
+                }
+                return this.yamlConstructors.get(null);
+            }
+            return constructor;
+        }
+    }
+
+    private int getClassScore(Class<?> type, Set<Class<?>> dup)
+    {
+        int result = 0;
+        Class<?> current = type;
+        while ((current != null) && ! current.equals(Object.class))
+        {
+            result += 1;
+            for (Class<?> aClass : current.getInterfaces())
+            {
+                if (! dup.add(aClass))
+                {
+                    continue;
+                }
+                result += this.getClassScore(aClass, dup);
+            }
+            current = current.getSuperclass();
+        }
+        return result;
     }
 
     @Override

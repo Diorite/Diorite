@@ -24,6 +24,8 @@
 
 package org.diorite.config.serialization.snakeyaml;
 
+import javax.annotation.Nullable;
+
 import java.beans.IntrospectionException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -45,8 +47,6 @@ import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import org.diorite.config.Config;
-import org.diorite.config.ConfigManager;
-import org.diorite.config.ConfigTemplate;
 import org.diorite.config.serialization.snakeyaml.YamlConstructor.ConstructorException;
 
 /**
@@ -55,7 +55,7 @@ import org.diorite.config.serialization.snakeyaml.YamlConstructor.ConstructorExc
  */
 class YamlConstructMapping implements Construct
 {
-    private YamlConstructor yamlConstructor;
+    private final YamlConstructor yamlConstructor;
 
     YamlConstructMapping(YamlConstructor yamlConstructor)
     {
@@ -71,7 +71,8 @@ class YamlConstructMapping implements Construct
      *
      * @return constructed JavaBean
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
+    @Nullable
     @Override
     public Object construct(Node node)
     {
@@ -81,11 +82,15 @@ class YamlConstructMapping implements Construct
         {
             if (Config.class.isAssignableFrom(nodeType))
             {
-                ConfigManager configManager = ConfigManager.get();
-                ConfigTemplate configTemplate = configManager.getConfigFile((Class) nodeType);
-                Config config = configTemplate.create();
-                this.yamlConstructor.constructMapping2ndStep(mnode, (Map) config);
-                return config;
+                node.setUseClassConstructor(false);
+                node.setTag(new Tag(nodeType));
+                Construct constructor = this.yamlConstructor.getConstructor(node);
+                Object construct = constructor.construct(node);
+                if (node.isTwoStepsConstruction())
+                {
+                    constructor.construct2ndStep(node, construct);
+                }
+                return construct;
             }
             Object created = YamlCollectionCreator.createCollection(nodeType, mnode.getValue().size());
             if (Properties.class.isAssignableFrom(nodeType))

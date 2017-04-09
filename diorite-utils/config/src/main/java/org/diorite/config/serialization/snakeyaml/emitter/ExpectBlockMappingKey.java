@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.events.MappingEndEvent;
 
 class ExpectBlockMappingKey implements EmitterState
 {
-    private boolean first;
+    private final boolean first;
 
     ExpectBlockMappingKey(boolean first)
     {
@@ -54,7 +54,6 @@ class ExpectBlockMappingKey implements EmitterState
         {
             if (emitter.checkSimpleKey())
             {
-//                emitter.writeComment("This is test comment!"); TODO
                 emitter.writeIndent();
                 emitter.states.push(new ExpectBlockMappingSimpleValue());
                 emitter.expectNode(false, true, true, emitter.indent);

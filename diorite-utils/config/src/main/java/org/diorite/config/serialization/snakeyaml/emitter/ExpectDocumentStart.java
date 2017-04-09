@@ -35,7 +35,7 @@ import org.yaml.snakeyaml.events.StreamEndEvent;
 
 class ExpectDocumentStart implements EmitterState
 {
-    private boolean first;
+    private final boolean first;
 
     ExpectDocumentStart(boolean first)
     {

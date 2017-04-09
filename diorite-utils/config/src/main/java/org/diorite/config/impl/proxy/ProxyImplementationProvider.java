@@ -49,9 +49,9 @@ public class ProxyImplementationProvider implements ConfigImplementationProvider
             throw new IllegalArgumentException("Class must be a interface!");
         }
 
-        if (! Serialization.getGlobal().isSerializable(clazz))
+        if (! Serialization.getInstance().isSerializable(clazz))
         {
-            Serialization.getGlobal().registerSerializer(new ConfigDeserializer<>(clazz));
+            Serialization.getInstance().registerSerializer(new ConfigDeserializer<>(clazz));
         }
 
         Class<?>[] interfaces = clazz.getInterfaces();

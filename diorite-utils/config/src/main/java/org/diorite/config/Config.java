@@ -49,7 +49,7 @@ import org.diorite.config.exceptions.ConfigSaveException;
 /**
  * Config interface with basic operations, all config file instances must implementing this.
  */
-@SuppressWarnings({"resource", "IOResourceOpenedButNotSafelyClosed"})
+@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
 public interface Config extends Map<String, Object>
 {
     /**
@@ -93,6 +93,14 @@ public interface Config extends Map<String, Object>
      * @return true if config contains given key.
      */
     boolean containsKey(String... key);
+
+    /**
+     * Returns metadata map. <br>
+     * This map isn't saved, can be used by config implementations to store temporary data.
+     *
+     * @return metadata map.
+     */
+    Map<String, Object> metadata();
 
     /**
      * Get selected value from config.

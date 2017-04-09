@@ -187,7 +187,7 @@ import org.yaml.snakeyaml.events.Event;
 
 class YamlEventIterable implements Iterable<Event>
 {
-    private Iterator<Event> iterator;
+    private final Iterator<Event> iterator;
 
     YamlEventIterable(Iterator<Event> iterator)
     {

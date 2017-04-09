@@ -27,6 +27,7 @@ package org.diorite.config.serialization;
 import javax.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,8 +38,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.serialization.comments.CommentsNode;
 import org.diorite.config.serialization.comments.DocumentComments;
@@ -66,7 +69,7 @@ class SimpleSerializationData implements SerializationData
         this.serializationType = serializationType;
         this.serialization = serialization;
         this.type = type;
-        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        this.comments = Serialization.getInstance().getCommentsManager().getComments(type);
     }
 
     @Override
@@ -87,6 +90,7 @@ class SimpleSerializationData implements SerializationData
         this.comments = comments;
     }
 
+    @Nullable
     protected <T> Object serialize(T object, @Nullable DocumentComments comments)
     {
         return this.serialization.serialize(object, this.serializationType, comments);
@@ -103,6 +107,10 @@ class SimpleSerializationData implements SerializationData
         if (type == Object.class)
         {
             type = (Class<T>) object.getClass();
+        }
+        if (this.serialization.isStringSerializable(type))
+        {
+            return this.serialization.serializeToString(type, object);
         }
         return this.serialization.serialize(type, object, this.serializationType, comments);
     }
@@ -154,6 +162,10 @@ class SimpleSerializationData implements SerializationData
                 return this.falseValue;
             }
         }
+        if (object instanceof DynamicEnum)
+        {
+            return ((DynamicEnum<?>) object).prettyName();
+        }
         return object.toString();
     }
 
@@ -189,7 +201,7 @@ class SimpleSerializationData implements SerializationData
                 key[i] = CommentsNode.ANY;
             }
         }
-        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        DocumentComments comments = Serialization.getInstance().getCommentsManager().getComments(type);
         this.comments.join(key, comments);
         this.scannedCommentsClasses.put(type, comments);
         return comments;
@@ -218,7 +230,7 @@ class SimpleSerializationData implements SerializationData
         {
             return cached;
         }
-        DocumentComments comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        DocumentComments comments = Serialization.getInstance().getCommentsManager().getComments(type);
         if (key.isEmpty())
         {
             this.comments.join(CommentsNode.ANY, comments);
@@ -268,6 +280,7 @@ class SimpleSerializationData implements SerializationData
         this.joinComments(key, comments);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public <T> void add(String key, @Nullable T value, Class<T> type)
     {
@@ -279,10 +292,22 @@ class SimpleSerializationData implements SerializationData
         }
         if (Serialization.isSimple(value))
         {
-            this.dataMap.put(key, this.toString(value, type));
+            if (value.getClass().isArray())
+            {
+                this.dataMap.put(key, value);
+            }
+            else
+            {
+                this.dataMap.put(key, this.toString(value, type));
+            }
             return;
         }
-
+        if (value.getClass().isArray())
+        {
+            List<Object> objects = Arrays.asList((Object[]) value);
+            this.addCollection(key, objects, (Class) value.getClass().getComponentType());
+            return;
+        }
         DocumentComments comments = this.addComments(value.getClass(), key);
 
         if (! this.serialization.isSerializable(type))

@@ -248,23 +248,28 @@ public class RomanNumeral
             num *= - 1;
             negative = true;
         }
-        String roman = baseValues.get(num);
-        if (roman == null)
+        String romanStr = baseValues.get(num);
+        StringBuilder roman;
+        if (romanStr == null)
         {
-            roman = negative ? "-" : "";
+            roman = new StringBuilder(negative ? "-" : "");
         }
         else
         {
-            return roman;
+            if (negative)
+            {
+                return "-" + romanStr;
+            }
+            return romanStr;
         }
         while (num >= 1000)
         {
-            roman += "M";
+            roman.append("M");
             num -= 1000;
         }
         if (num == 0)
         {
-            return roman;
+            return roman.toString();
         }
         String str = Integer.toString(num);
         char[] charArray = str.toCharArray();
@@ -307,6 +312,6 @@ public class RomanNumeral
             }
             k++;
         }
-        return roman + StringUtils.join(romanParts);
+        return roman.append(StringUtils.join(romanParts)).toString();
     }
 }

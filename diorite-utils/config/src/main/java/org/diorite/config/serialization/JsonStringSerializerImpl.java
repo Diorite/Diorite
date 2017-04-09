@@ -33,10 +33,12 @@ import com.google.gson.stream.JsonWriter;
 class JsonStringSerializerImpl<T> extends TypeAdapter<T>
 {
     private final StringSerializer<T> stringSerializer;
+    private final Class<T>            type;
 
-    JsonStringSerializerImpl(StringSerializer<T> stringSerializer)
+    JsonStringSerializerImpl(StringSerializer<T> stringSerializer, Class<T> type)
     {
         this.stringSerializer = stringSerializer;
+        this.type = type;
     }
 
     @SuppressWarnings("resource")
@@ -49,6 +51,6 @@ class JsonStringSerializerImpl<T> extends TypeAdapter<T>
     @Override
     public T read(JsonReader jsonReader) throws IOException
     {
-        return this.stringSerializer.deserialize(jsonReader.nextString());
+        return this.stringSerializer.deserialize(jsonReader.nextString(), this.type);
     }
 }

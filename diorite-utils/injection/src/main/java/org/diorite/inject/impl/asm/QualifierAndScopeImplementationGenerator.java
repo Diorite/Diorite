@@ -129,7 +129,7 @@ public class QualifierAndScopeImplementationGenerator implements ClassFileTransf
         }
         catch (Throwable e)
         {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Exception when processing: " + clazz, e);
         }
     }
 

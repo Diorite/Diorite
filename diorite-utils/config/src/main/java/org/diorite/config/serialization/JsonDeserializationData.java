@@ -42,6 +42,7 @@ import com.google.gson.JsonPrimitive;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import org.diorite.commons.enums.DynamicEnum;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 
@@ -68,7 +69,7 @@ public class JsonDeserializationData extends AbstractDeserializationData
     {
         if (this.element.isJsonObject())
         {
-            Set<Entry<String, JsonElement>> entries = element.getAsJsonObject().entrySet();
+            Set<Entry<String, JsonElement>> entries = this.element.getAsJsonObject().entrySet();
             Set<String> result = new LinkedHashSet<>(entries.size());
             for (Entry<String, JsonElement> entry : entries)
             {
@@ -144,6 +145,19 @@ public class JsonDeserializationData extends AbstractDeserializationData
             }
             return (T) valueSafe;
         }
+        if (DynamicEnum.class.isAssignableFrom(type))
+        {
+            String name = this.context.deserialize(element, String.class);
+            DynamicEnum[] values = DynamicEnum.values((Class<DynamicEnum>) type);
+            for (DynamicEnum value : values)
+            {
+                if (value.prettyName().equalsIgnoreCase(name) || value.name().equalsIgnoreCase(name) || String.valueOf(value.ordinal()).equalsIgnoreCase(name))
+                {
+                    return (T) value;
+                }
+            }
+            return def;
+        }
         return this.context.deserialize(element, type);
     }
 
@@ -173,7 +187,6 @@ public class JsonDeserializationData extends AbstractDeserializationData
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T get(String key, Class<T> type, @Nullable T def)

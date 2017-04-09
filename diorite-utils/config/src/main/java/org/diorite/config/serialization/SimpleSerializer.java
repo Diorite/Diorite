@@ -24,16 +24,18 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
+
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 class SimpleSerializer<T> implements Serializer<T>
 {
-    private final Class<? super T>                 type;
-    private final Function<DeserializationData, T> deserializer;
-    private final BiConsumer<T, SerializationData> serializer;
+    private final Class<? super T>                             type;
+    private final BiFunction<DeserializationData, Class<?>, T> deserializer;
+    private final BiConsumer<T, SerializationData>             serializer;
 
-    SimpleSerializer(Class<? super T> type, Function<DeserializationData, T> deserializer, BiConsumer<T, SerializationData> serializer)
+    SimpleSerializer(Class<? super T> type, BiFunction<DeserializationData, Class<?>, T> deserializer, BiConsumer<T, SerializationData> serializer)
     {
         this.type = type;
         this.deserializer = deserializer;
@@ -47,7 +49,7 @@ class SimpleSerializer<T> implements Serializer<T>
     }
 
     @Override
-    public Function<DeserializationData, T> getDeserializerFunction()
+    public BiFunction<DeserializationData, Class<?>, T> getDeserializerFunction()
     {
         return this.deserializer;
     }
@@ -61,12 +63,39 @@ class SimpleSerializer<T> implements Serializer<T>
     @Override
     public void serialize(T object, SerializationData data)
     {
-        this.serializer.accept(object, data);
+        try
+        {
+            this.serializer.accept(object, data);
+        }
+        catch (Throwable e)
+        {
+            throw new SerializationException(this.type, "toSerialize: " + object, e);
+        }
     }
 
     @Override
     public T deserialize(DeserializationData data)
     {
-        return this.deserializer.apply(data);
+        try
+        {
+            return this.deserializer.apply(data, null);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, data, e);
+        }
+    }
+
+    @Override
+    public T deserialize(DeserializationData data, @Nullable Class<?> type)
+    {
+        try
+        {
+            return this.deserializer.apply(data, type);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, data, e);
+        }
     }
 }

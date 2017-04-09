@@ -214,6 +214,21 @@ public interface ConfigTemplate<T extends Config>
         return this.load(new InputStreamReader(inputStream, this.getDefaultDecoder()));
     }
 
+//    /**
+//     * Load config from yaml node.
+//     *
+//     * @param node
+//     *         node to load.
+//     *
+//     * @return loaded config file.
+//     */
+//    default T load(Node node)
+//    {
+//        T implementation = this.create();
+//        implementation.load(node);
+//        return implementation;
+//    }
+
     /**
      * Load config from reader.
      * Reader isn't automatically closed here!

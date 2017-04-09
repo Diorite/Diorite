@@ -43,7 +43,7 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
  */
 class YamlConstructSequence implements Construct
 {
-    private YamlConstructor yamlConstructor;
+    private final YamlConstructor yamlConstructor;
 
     YamlConstructSequence(YamlConstructor yamlConstructor)
     {

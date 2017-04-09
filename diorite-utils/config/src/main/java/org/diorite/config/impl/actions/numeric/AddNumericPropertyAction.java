@@ -27,7 +27,7 @@ package org.diorite.config.impl.actions.numeric;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class AddNumericPropertyAction extends NumericPropertyAction
 {
     public AddNumericPropertyAction()

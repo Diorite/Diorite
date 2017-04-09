@@ -60,7 +60,7 @@ public class CommentsConfigTest
     @Test
     public void simpleObjectTest() throws IOException
     {
-        Serialization global = Serialization.getGlobal();
+        Serialization global = Serialization.getInstance();
         DocumentComments comments = DocumentComments.create();
         comments.setComment("test", "dsdsa");
         comments.getNode("testNode").setComment("test", "nah\nlonger nah");

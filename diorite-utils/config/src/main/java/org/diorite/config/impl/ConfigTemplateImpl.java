@@ -60,6 +60,7 @@ import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
 import org.diorite.config.Property;
+import org.diorite.config.annotations.HelperMethod;
 import org.diorite.config.annotations.ToKeyMapperFunction;
 import org.diorite.config.annotations.ToStringMapperFunction;
 import org.diorite.config.impl.actions.ActionsRegistry;
@@ -88,7 +89,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     public ConfigTemplateImpl(Class<T> type, ConfigImplementationProvider provider)
     {
         this.type = type;
-        this.comments = Serialization.getGlobal().getCommentsManager().getComments(type);
+        this.comments = Serialization.getInstance().getCommentsManager().getComments(type);
         this.implementationProvider = provider;
         this.name = type.getSimpleName();
         this.charsetEncoder = StandardCharsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT);
@@ -213,6 +214,11 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             }
             else
             {
+                if (methodInvoker.isDefault() && methodInvoker.isAnnotationPresent(HelperMethod.class))
+                {
+                    iterator.remove();
+                    continue;
+                }
                 Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method, knownProperties::contains);
                 if (resultPair == null)
                 {
@@ -301,7 +307,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     private synchronized void setupActions()
     {
         LinkedList<MethodInvoker> methods = new LinkedList<>();

@@ -185,7 +185,7 @@ import java.util.Iterator;
 
 class YamlIterable implements Iterable<Object>
 {
-    private Iterator<Object> iterator;
+    private final Iterator<Object> iterator;
 
     YamlIterable(Iterator<Object> iterator)
     {

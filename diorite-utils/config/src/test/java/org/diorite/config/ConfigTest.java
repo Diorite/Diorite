@@ -35,6 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.diorite.commons.io.StringBuilderWriter;
+import org.diorite.config.SomeConfig.TestEnum;
 import org.diorite.config.serialization.MetaObject;
 import org.diorite.config.serialization.MetaValue;
 import org.diorite.config.serialization.SerializationTest;
@@ -42,6 +43,38 @@ import org.diorite.config.serialization.SerializationTest;
 public class ConfigTest
 {
     private final ConfigManager configManager = ConfigManager.get();
+
+    @Test
+    public void testTypes() throws Exception
+    {
+        SerializationTest.prepareSerialization();
+        ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
+
+        ConfigTemplate<TypeTestConfig> configTemplate = this.configManager.getConfigFile(TypeTestConfig.class);
+        Assert.assertNotNull(configTemplate);
+        Assert.assertEquals(TypeTestConfig.class.getSimpleName(), configTemplate.getName());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultDecoder().charset());
+        Assert.assertEquals(StandardCharsets.UTF_8, configTemplate.getDefaultEncoder().charset());
+
+        System.out.println("[ConfigTypeTest] creating config instance.");
+        TypeTestConfig cfg = configTemplate.create();
+        Assert.assertNotNull(cfg);
+
+        Assert.assertSame(1, cfg.getCopyTest()[0]);
+        cfg.getCopyTest()[0] = 2;
+        Assert.assertSame(1, cfg.getCopyTest()[0]);
+
+        Assert.assertSame(1, cfg.getNonCopyTest()[0]);
+        cfg.getNonCopyTest()[0] = 2;
+        Assert.assertSame(2, cfg.getNonCopyTest()[0]);
+
+        cfg.save(System.out);
+        // check if all data is still valid after reload of config.
+        StringBuilderWriter writer = new StringBuilderWriter(500);
+        cfg.save(writer);
+        Assert.assertEquals(cfg, configTemplate.load(new StringReader(writer.toString())));
+    }
 
     @Test
     public void test() throws Exception
@@ -60,6 +93,14 @@ public class ConfigTest
         SomeConfig someConfig = configTemplate.create();
         Assert.assertNotNull(someConfig);
 
+        Assert.assertNull(someConfig.metadata().get("meta"));
+        Assert.assertEquals("1", someConfig.getSomething());
+        Assert.assertNull(someConfig.get("something"));
+        Assert.assertEquals("meta value", someConfig.metadata().get("meta"));
+
+        Assert.assertNotNull(someConfig.getEnumValue());
+        someConfig.setEnumValue(TestEnum.C);
+        Assert.assertSame(TestEnum.C, someConfig.getEnumValue());
         this.testNicknames(someConfig);
         Assert.assertNotNull(someConfig.getSpecialData());
         someConfig.setStorage(SerializationTest.prepareObject());

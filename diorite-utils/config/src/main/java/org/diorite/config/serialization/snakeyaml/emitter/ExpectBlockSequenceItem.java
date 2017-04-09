@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.events.SequenceEndEvent;
 
 class ExpectBlockSequenceItem implements EmitterState
 {
-    private boolean first;
+    private final boolean first;
 
     ExpectBlockSequenceItem(boolean first)
     {

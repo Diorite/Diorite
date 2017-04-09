@@ -225,9 +225,9 @@ public class Yaml
     protected final Serialization   serialization;
     protected final Resolver        resolver;
     private         String          name;
-    protected       YamlConstructor constructor;
-    protected       Representer     representer;
-    protected       DumperOptions   dumperOptions;
+    protected final YamlConstructor constructor;
+    protected final Representer     representer;
+    protected final DumperOptions   dumperOptions;
 
     /**
      * Create Yaml instance. It is safe to create a few instances and use them
@@ -529,6 +529,7 @@ public class Yaml
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(String yaml)
     {
         return this.loadFromReader(new StreamReader(yaml), Object.class);
@@ -543,6 +544,7 @@ public class Yaml
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(InputStream io)
     {
         return this.loadFromReader(new StreamReader(new UnicodeReader(io)), Object.class);
@@ -557,6 +559,7 @@ public class Yaml
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(Reader io)
     {
         return this.loadFromReader(new StreamReader(io), Object.class);
@@ -575,6 +578,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
     {
         Composer composer = new Composer(new ParserImpl(new StreamReader(io)), new ConfigTemplateResolver(template));
@@ -596,6 +600,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(Reader io, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(io), type);
@@ -615,6 +620,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(String yaml, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(yaml), type);
@@ -634,6 +640,7 @@ public class Yaml
      * @return parsed object
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return (T) this.loadFromReader(new StreamReader(new UnicodeReader(input)), type);
@@ -669,6 +676,7 @@ public class Yaml
      * @return loaded object.
      */
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T fromYamlNode(Node node, Class<T> type)
     {
         node.setTag(new Tag(type));
@@ -676,6 +684,7 @@ public class Yaml
         return (T) this.constructor.constructFromNode(node);
     }
 
+    @Nullable
     private Object loadFromReader(StreamReader sreader, Class<?> type)
     {
         Composer composer = new Composer(new ParserImpl(sreader), this.resolver);

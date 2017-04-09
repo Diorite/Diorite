@@ -38,9 +38,11 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.ReflectedProperty;
 import org.diorite.config.Config;
 
-public class NestedNodesHelper
+public final class NestedNodesHelper
 {
     private static final Map<CacheKey, ReflectedProperty<?>> propertyCache = new ConcurrentHashMap<>(200);
+
+    private NestedNodesHelper() {}
 
     @SuppressWarnings("unchecked")
     @Nullable
@@ -89,7 +91,6 @@ public class NestedNodesHelper
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     public static Object get(Object object, String[] path)
     {

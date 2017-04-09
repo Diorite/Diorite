@@ -31,7 +31,7 @@ import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
 import org.diorite.config.impl.actions.AbstractPropertyAction;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 public class SizeOfCollectionPropertyAction extends AbstractPropertyAction
 {
     public SizeOfCollectionPropertyAction()

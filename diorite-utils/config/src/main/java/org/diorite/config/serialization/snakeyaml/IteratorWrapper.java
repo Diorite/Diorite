@@ -28,7 +28,7 @@ import java.util.Iterator;
 
 final class IteratorWrapper implements Iterable<Object>
 {
-    private Iterator<Object> iterator;
+    private final Iterator<Object> iterator;
 
     @SuppressWarnings("unchecked")
     IteratorWrapper(Iterator<?> iterator)

@@ -79,7 +79,7 @@ public class FieldAccessor<T> implements ReflectGetter<T>, ReflectSetter<T>
     @SuppressWarnings("unchecked")
     public Class<T> getType()
     {
-        return (Class<T>) field.getType();
+        return (Class<T>) this.field.getType();
     }
 
     @Override

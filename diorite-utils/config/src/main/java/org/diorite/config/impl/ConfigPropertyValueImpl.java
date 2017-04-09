@@ -109,40 +109,54 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
                 }
             }
         }
-        else if (value instanceof Number)
+        else if (! rawType.isPrimitive() && (value == null))
         {
-            Number num = (Number) value;
-            if (primitiveRawType == byte.class)
-            {
-                num = num.byteValue();
-            }
-            if (primitiveRawType == short.class)
-            {
-                num = num.shortValue();
-            }
-            if (primitiveRawType == int.class)
-            {
-                num = num.intValue();
-            }
-            if (primitiveRawType == long.class)
-            {
-                num = num.longValue();
-            }
-            if (primitiveRawType == float.class)
-            {
-                num = num.floatValue();
-            }
-            if (primitiveRawType == double.class)
-            {
-                num = num.doubleValue();
-            }
-            this.rawValue = (T) num;
+            this.rawValue = null;
             return;
         }
         else
         {
-            throw new IllegalArgumentException("Invalid object type: " + value + " in template property: " + this.template.getName() + " (" +
-                                               this.template.getGenericType() + ")");
+            if (value instanceof Number)
+            {
+                Number num = (Number) value;
+                if (primitiveRawType == byte.class)
+                {
+                    num = num.byteValue();
+                }
+                if (primitiveRawType == short.class)
+                {
+                    num = num.shortValue();
+                }
+                if (primitiveRawType == int.class)
+                {
+                    num = num.intValue();
+                }
+                if (primitiveRawType == long.class)
+                {
+                    num = num.longValue();
+                }
+                if (primitiveRawType == float.class)
+                {
+                    num = num.floatValue();
+                }
+                if (primitiveRawType == double.class)
+                {
+                    num = num.doubleValue();
+                }
+                this.rawValue = (T) num;
+                return;
+            }
+            else if ((value instanceof Boolean) || (value instanceof Character))
+            {
+                this.rawValue = value;
+                return;
+            }
+            else
+            {
+                throw new IllegalArgumentException("Invalid object type: " + (value == null ? "" : ("(" + value.getClass() + ") ")) + value +
+                                                   " in template property: " + this.template.getName() + " (" +
+                                                   this.template.getGenericType() + ")");
+            }
         }
         this.rawValue = value;
     }

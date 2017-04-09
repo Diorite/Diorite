@@ -26,6 +26,7 @@ package org.diorite.config.serialization;
 
 import javax.annotation.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -35,10 +36,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -56,6 +60,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -65,6 +70,8 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.resolver.Resolver;
 
+import org.diorite.commons.enums.DynamicEnum;
+import org.diorite.commons.function.function.ExceptionalFunction;
 import org.diorite.commons.reflections.ConstructorInvoker;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
@@ -77,6 +84,8 @@ import org.diorite.config.annotations.SerializableAs;
 import org.diorite.config.annotations.StringSerializable;
 import org.diorite.config.serialization.comments.CommentsManager;
 import org.diorite.config.serialization.comments.DocumentComments;
+import org.diorite.config.serialization.serializers.InetAddressSerializer;
+import org.diorite.config.serialization.serializers.SocketAddressSerializer;
 import org.diorite.config.serialization.snakeyaml.DumperOptions;
 import org.diorite.config.serialization.snakeyaml.Representer;
 import org.diorite.config.serialization.snakeyaml.Yaml;
@@ -97,11 +106,13 @@ public final class Serialization
     private       ThreadLocal<Gson> cachedGson  = ThreadLocal.withInitial(this.gsonBuilder::create);
 
     // yaml section
-    private Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
-    private Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
-    private Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
-    private ThreadLocal<Yaml>                                                                 cachedYaml         = ThreadLocal.withInitial(this::createYaml);
-    private ThreadLocal<AtomicInteger>                                                        localCounter       = ThreadLocal.withInitial(AtomicInteger::new);
+    private final Collection<Class<?>>                                                              yamlIgnoredClasses = new ConcurrentLinkedQueue<>();
+    private final Collection<BiFunction<YamlConstructor, Representer, YamlStringSerializerImpl<?>>> stringRepresenters = new ConcurrentLinkedQueue<>();
+    private final Collection<BiFunction<YamlConstructor, Representer, YamlSerializerImpl<?>>>       objectRepresenters = new ConcurrentLinkedQueue<>();
+    private       ThreadLocal<Yaml>                                                                 cachedYaml         =
+            ThreadLocal.withInitial(this::createYaml);
+    private final ThreadLocal<AtomicInteger>                                                        localCounter       =
+            ThreadLocal.withInitial(AtomicInteger::new);
 
     private final CommentsManager commentsManager = new CommentsManager();
 
@@ -210,7 +221,7 @@ public final class Serialization
         return null;
     }
 
-    public static Serialization getGlobal()
+    public static Serialization getInstance()
     {
         return GLOBAL;
     }
@@ -238,9 +249,16 @@ public final class Serialization
         this.cachedYaml.remove();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Serialization(@Nullable Void v)
     {
         this.registerStringSerializer(StringSerializer.of(UUID.class, UUID::toString, UUID::fromString));
+        this.registerStringSerializer(StringSerializer.of(File.class, File::getPath, File::new));
+        this.registerStringSerializer(StringSerializer.of(Locale.class, Locale::toLanguageTag, Locale::forLanguageTag));
+        this.registerStringSerializer(StringSerializer.of(URL.class, ExceptionalFunction.of(URL::getPath), ExceptionalFunction.of(URL::new)));
+        this.registerStringSerializer(StringSerializer.of(URI.class, ExceptionalFunction.of(URI::getPath), ExceptionalFunction.of(URI::new)));
+        this.registerStringSerializer(new InetAddressSerializer());
+        this.registerStringSerializer(new SocketAddressSerializer());
     }
 
     /**
@@ -254,7 +272,6 @@ public final class Serialization
      *
      * @return old serializer if exists.
      */
-    @Nullable
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <T> StringSerializer<T> registerStringSerializable(Class<T> clazz)
     {
@@ -274,10 +291,9 @@ public final class Serialization
      * @param <T>
      *         serializer value type.
      */
-    @SuppressWarnings("unchecked")
     public <T> void registerStringSerializer(StringSerializer<T> stringSerializer)
     {
-        this.gsonBuilder.registerTypeAdapter(stringSerializer.getType(), new JsonStringSerializerImpl<>(stringSerializer));
+        this.gsonBuilder.registerTypeAdapterFactory(new StringSerializableTypeAdapterFactory(stringSerializer));
         this.stringRepresenters.add((c, r) -> new YamlStringSerializerImpl<>(r, stringSerializer));
         this.refreshCache();
         this.stringSerializerMap.put(stringSerializer.getType(), stringSerializer);
@@ -306,7 +322,7 @@ public final class Serialization
         }
         if (clazz != target)
         {
-            this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+            this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         }
     }
 
@@ -353,7 +369,35 @@ public final class Serialization
      */
     public boolean isStringSerializable(Class<?> clazz)
     {
-        return this.stringSerializerMap.containsKey(clazz);
+        return this.stringSerializerMap.containsKey(clazz) || (this.getAsStringSerializable(clazz) != null);
+    }
+
+    @Nullable
+    private Class<?> getAsStringSerializable(Class<?> clazz)
+    {
+        boolean containsKey = this.stringSerializerMap.containsKey(clazz);
+        if (! containsKey)
+        {
+            Class<?> superclass = clazz.getSuperclass();
+            if ((superclass != null) && (superclass != Object.class))
+            {
+                Class<?> superSerializable = this.getAsStringSerializable(superclass);
+                if (superSerializable != null)
+                {
+                    return superSerializable;
+                }
+            }
+            for (Class<?> interfaceClass : clazz.getInterfaces())
+            {
+                Class<?> interfaceSerializable = this.getAsStringSerializable(interfaceClass);
+                if (interfaceSerializable != null)
+                {
+                    return interfaceSerializable;
+                }
+            }
+            return null;
+        }
+        return clazz;
     }
 
     /**
@@ -418,11 +462,12 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> String serializeToString(Class<T> type, T object)
     {
-        if (! this.isStringSerializable(type))
+        Class<?> asStringSerializable = this.getAsStringSerializable(type);
+        if (asStringSerializable == null)
         {
             throw new IllegalArgumentException("Given object isn't string serializable: (" + type.getName() + ") -> " + object);
         }
-        return ((StringSerializer<T>) this.stringSerializerMap.get(type)).serialize(object);
+        return ((StringSerializer<T>) this.stringSerializerMap.get(asStringSerializable)).serialize(object);
     }
 
     /**
@@ -443,11 +488,12 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public <T> T deserializeFromString(Class<T> type, String str)
     {
-        if (! this.isStringSerializable(type))
+        Class<?> stringSerializable = this.getAsStringSerializable(type);
+        if (stringSerializable == null)
         {
             throw new IllegalArgumentException("Given type isn't string serializable: (" + type.getName() + ") -> " + str);
         }
-        return ((StringSerializer<T>) this.stringSerializerMap.get(type)).deserialize(str);
+        return ((StringSerializer<T>) this.stringSerializerMap.get(stringSerializable)).deserialize(str, type);
     }
 
     /**
@@ -464,14 +510,16 @@ public final class Serialization
     @SuppressWarnings("unchecked")
     public String serializeToString(Object object)
     {
-        if (! this.isStringSerializable(object))
+        Class<?> stringSerializable = this.getAsStringSerializable(object.getClass());
+        if (stringSerializable == null)
         {
-            throw new IllegalArgumentException("Given object isn't string serializable: " + object);
+            throw new IllegalArgumentException("Given object isn't string serializable: (" + object.getClass() + ") " + object);
         }
-        return ((StringSerializer<Object>) this.stringSerializerMap.get(object.getClass())).serialize(object);
+        return ((StringSerializer<Object>) this.stringSerializerMap.get(stringSerializable)).serialize(object);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
     Object serialize(Object object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
         if (isSimple(object))
@@ -481,6 +529,7 @@ public final class Serialization
         return this.serialize((Class) object.getClass(), object, serializationType, comments);
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     <T> Object serialize(Class<T> type, T object, SerializationType serializationType, @Nullable DocumentComments comments)
     {
@@ -516,7 +565,6 @@ public final class Serialization
 
     // private
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T> StringSerializer<T> registerStringSerializableByAnnotations(Class<T> clazz)
     {
@@ -570,8 +618,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(String.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
+                        deserialization = constructorInvoker::invokeWith;
                     }
                     else
                     {
@@ -589,7 +636,6 @@ public final class Serialization
         return stringSerializer;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
     private <T extends org.diorite.config.serialization.StringSerializable> StringSerializer<T> registerStringSerializableByType(Class<T> clazz)
     {
@@ -668,7 +714,7 @@ public final class Serialization
                 throw new DeserializationException(clazz, data, throwable);
             }
         });
-        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         this.registerSerializer(serializer);
         return serializer;
     }
@@ -739,8 +785,7 @@ public final class Serialization
                     if ((params.length == 1) && params[0].equals(DeserializationData.class))
                     {
                         ConstructorInvoker<T> constructorInvoker = new ConstructorInvoker<>(constructor);
-                        //noinspection Convert2MethodRef Java 9 conpiler bug: http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8171993 // FIXME
-                        deserialization = (arguments) -> constructorInvoker.invokeWith(arguments);
+                        deserialization = constructorInvoker::invokeWith;
                     }
                     else
                     {
@@ -754,7 +799,7 @@ public final class Serialization
             }
         }
         Serializer<T> serializer = Serializer.of(getRedirectionClass(clazz), serialization, deserialization);
-        this.registerSerializer(Serializer.of(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
+        this.registerSerializer(Serializer.ofDynamic(clazz, serializer.getSerializerFunction(), serializer.getDeserializerFunction()));
         this.registerSerializer(serializer);
         return serializer;
     }
@@ -815,47 +860,33 @@ public final class Serialization
 
     static boolean isSimpleType(Class<?> type)
     {
-        if (type.isPrimitive())
+        while (true)
         {
-            return true;
+            if (DioriteReflectionUtils.getPrimitive(type).isPrimitive())
+            {
+                return true;
+            }
+            if (DynamicEnum.class.isAssignableFrom(type))
+            {
+                return true;
+            }
+            if (type.isEnum())
+            {
+                return true;
+            }
+            if (type.equals(String.class))
+            {
+                return true;
+            }
+            if (type.isArray())
+            {
+                type = type.getComponentType();
+            }
+            else
+            {
+                return false;
+            }
         }
-        if (type.isEnum())
-        {
-            return true;
-        }
-        if (type.equals(String.class))
-        {
-            return true;
-        }
-        if (type.equals(Boolean.class))
-        {
-            return true;
-        }
-        if (type.equals(Byte.class))
-        {
-            return true;
-        }
-        if (type.equals(Character.class))
-        {
-            return true;
-        }
-        if (type.equals(Short.class))
-        {
-            return true;
-        }
-        if (type.equals(Integer.class))
-        {
-            return true;
-        }
-        if (type.equals(Long.class))
-        {
-            return true;
-        }
-        if (type.equals(Float.class))
-        {
-            return true;
-        }
-        return type.equals(Double.class);
     }
 
     static boolean isSimple(@Nullable Object object)
@@ -864,43 +895,7 @@ public final class Serialization
         {
             return true;
         }
-        if (object instanceof Enum)
-        {
-            return true;
-        }
-        if (object instanceof String)
-        {
-            return true;
-        }
-        if (object instanceof Boolean)
-        {
-            return true;
-        }
-        if (object instanceof Byte)
-        {
-            return true;
-        }
-        if (object instanceof Character)
-        {
-            return true;
-        }
-        if (object instanceof Short)
-        {
-            return true;
-        }
-        if (object instanceof Integer)
-        {
-            return true;
-        }
-        if (object instanceof Long)
-        {
-            return true;
-        }
-        if (object instanceof Float)
-        {
-            return true;
-        }
-        return object instanceof Double;
+        return isSimpleType(object.getClass());
     }
 
     // json delegates.
@@ -1535,6 +1530,7 @@ public final class Serialization
      *
      * @return loaded object.
      */
+    @Nullable
     public <T> T fromYamlNode(Node node, Class<T> type)
     {
         return this.yaml().fromYamlNode(node, type);
@@ -1549,6 +1545,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(String yaml)
     {
         return this.yaml().fromYaml(yaml);
@@ -1563,6 +1560,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(InputStream io)
     {
         return this.yaml().fromYaml(io);
@@ -1577,6 +1575,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public Object fromYaml(Reader io)
     {
         return this.yaml().fromYaml(io);
@@ -1594,6 +1593,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T extends Config> T fromYaml(ConfigTemplate<T> template, Reader io)
     {
         return this.yaml().fromYaml(template, io);
@@ -1612,6 +1612,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(Reader io, Class<T> type)
     {
         return this.yaml().fromYaml(io, type);
@@ -1630,6 +1631,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(String yaml, Class<T> type)
     {
         return this.yaml().fromYaml(yaml, type);
@@ -1648,6 +1650,7 @@ public final class Serialization
      *
      * @return parsed object
      */
+    @Nullable
     public <T> T fromYaml(InputStream input, Class<T> type)
     {
         return this.yaml().fromYaml(input, type);
@@ -1694,5 +1697,24 @@ public final class Serialization
     public Iterable<Object> fromAllYaml(InputStream yaml)
     {
         return this.yaml().fromAllYaml(yaml);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static class StringSerializableTypeAdapterFactory implements TypeAdapterFactory
+    {
+        private final StringSerializer<?> stringSerializer;
+
+        StringSerializableTypeAdapterFactory(StringSerializer<?> stringSerializer) {this.stringSerializer = stringSerializer;}
+
+        @Override
+        @Nullable
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type)
+        {
+            if (! this.stringSerializer.getType().isAssignableFrom(type.getRawType()))
+            {
+                return null;
+            }
+            return new JsonStringSerializerImpl(this.stringSerializer, type.getRawType());
+        }
     }
 }

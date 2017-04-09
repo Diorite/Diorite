@@ -24,6 +24,8 @@
 
 package org.diorite.inject.impl.controller;
 
+import javax.annotation.Nullable;
+
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Module;
@@ -38,9 +40,9 @@ public final class TransformerOfInjectedClass extends AbstractClassTransformer
         super(controller, instrumentation);
     }
 
-    @Override
-    public byte[] transform(Controller controller, Instrumentation instr, Module module, ClassLoader loader, String className, Class<?> clazz,
-                            ProtectionDomain pd, byte[] bytes) throws IllegalClassFormatException
+    @Override @Nullable
+    public byte[] transform(Controller controller, Instrumentation instr, Module module, @Nullable ClassLoader loader, String className,
+                            @Nullable Class<?> clazz, ProtectionDomain pd, byte[] bytes) throws IllegalClassFormatException
     {
         if (clazz == null)
         {
@@ -58,7 +60,8 @@ public final class TransformerOfInjectedClass extends AbstractClassTransformer
             classTransformer.run();
 //            AsmUtils.printBytecodeSource(classTransformer.getWriter(), System.out);
             return classTransformer.getWriter().toByteArray();
-        } catch (Throwable e)
+        }
+        catch (Throwable e)
         {
             e.printStackTrace();
             return null;

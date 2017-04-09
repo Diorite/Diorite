@@ -24,6 +24,8 @@
 
 package org.diorite.inject.impl.controller;
 
+import javax.annotation.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,8 +45,8 @@ final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
 {
     private final Controller diController;
     private final Collection<QualifierPattern> patterns = new HashSet<>(2);
-    private final Predicate<Generic> typePredicate;
-    private       DynamicProvider<T> provider;
+    private final     Predicate<Generic> typePredicate;
+    @Nullable private DynamicProvider<T> provider;
 
     BinderSimpleInstance(Controller diController, Predicate<Generic> typePredicate)
     {
@@ -128,6 +130,10 @@ final class BinderSimpleInstance<T> implements BinderInstance<T>, Binder<T>
 
     private void bind()
     {
+        if (this.provider == null)
+        {
+            throw new RuntimeException("Can't create binding without provider!");
+        }
         Predicate<Generic> typePredicate =
                 type -> type.asErasure().equals(Controller.PROVIDER) ?
                         this.typePredicate.test(type.getTypeArguments().get(0)) :

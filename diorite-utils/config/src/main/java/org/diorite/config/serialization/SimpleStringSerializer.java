@@ -24,15 +24,18 @@
 
 package org.diorite.config.serialization;
 
+import javax.annotation.Nullable;
+
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 class SimpleStringSerializer<T> implements StringSerializer<T>
 {
-    private final Class<? super T>    type;
-    private final Function<String, T> deserializer;
-    private final Function<T, String> serializer;
+    private final Class<? super T>                type;
+    private final BiFunction<String, Class<?>, T> deserializer;
+    private final Function<T, String>             serializer;
 
-    SimpleStringSerializer(Class<? super T> type, Function<String, T> deserializer, Function<T, String> serializer)
+    SimpleStringSerializer(Class<? super T> type, BiFunction<String, Class<?>, T> deserializer, Function<T, String> serializer)
     {
         this.type = type;
         this.deserializer = deserializer;
@@ -46,7 +49,7 @@ class SimpleStringSerializer<T> implements StringSerializer<T>
     }
 
     @Override
-    public Function<String, T> deserializerFunction()
+    public BiFunction<String, Class<?>, T> deserializerFunction()
     {
         return this.deserializer;
     }
@@ -58,14 +61,41 @@ class SimpleStringSerializer<T> implements StringSerializer<T>
     }
 
     @Override
+    public T deserialize(String data, @Nullable Class<?> type)
+    {
+        try
+        {
+            return this.deserializer.apply(data, type);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, data, e);
+        }
+    }
+
+    @Override
     public T deserialize(String data)
     {
-        return this.deserializer.apply(data);
+        try
+        {
+            return this.deserializer.apply(data, null);
+        }
+        catch (Throwable e)
+        {
+            throw new DeserializationException(this.type, data, e);
+        }
     }
 
     @Override
     public String serialize(T data)
     {
-        return this.serializer.apply(data);
+        try
+        {
+            return this.serializer.apply(data);
+        }
+        catch (Throwable e)
+        {
+            throw new SerializationException(this.type, "toSerialize: " + data, e);
+        }
     }
 }

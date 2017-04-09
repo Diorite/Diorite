@@ -29,6 +29,23 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.IntFunction;
 
+import it.unimi.dsi.fastutil.booleans.BooleanBidirectionalIterator;
+import it.unimi.dsi.fastutil.booleans.BooleanIterable;
+import it.unimi.dsi.fastutil.bytes.ByteBidirectionalIterator;
+import it.unimi.dsi.fastutil.bytes.ByteIterable;
+import it.unimi.dsi.fastutil.chars.CharBidirectionalIterator;
+import it.unimi.dsi.fastutil.chars.CharIterable;
+import it.unimi.dsi.fastutil.doubles.DoubleBidirectionalIterator;
+import it.unimi.dsi.fastutil.doubles.DoubleIterable;
+import it.unimi.dsi.fastutil.floats.FloatBidirectionalIterator;
+import it.unimi.dsi.fastutil.floats.FloatIterable;
+import it.unimi.dsi.fastutil.ints.IntBidirectionalIterator;
+import it.unimi.dsi.fastutil.ints.IntIterable;
+import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
+import it.unimi.dsi.fastutil.longs.LongIterable;
+import it.unimi.dsi.fastutil.shorts.ShortBidirectionalIterator;
+import it.unimi.dsi.fastutil.shorts.ShortIterable;
+
 /**
  * Utility class for empty arrays and joining multiple arrays into one.
  */
@@ -190,7 +207,6 @@ public final class DioriteArrayUtils
      *
      * @return empty array of given type.
      */
-    @SuppressWarnings("unchecked")
     public static Object getEmptyArray(Class<?> clazz)
     {
         Object o = arrayMaps.get(clazz);
@@ -275,7 +291,6 @@ public final class DioriteArrayUtils
      *
      * @return array of given type and size.
      */
-    @SuppressWarnings("unchecked")
     public static Object newArray(Class<?> clazz, int size)
     {
         if (size == 0)
@@ -880,7 +895,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayFunction
      *         function that create array of given size, just T[]::new.
@@ -896,11 +911,11 @@ public final class DioriteArrayUtils
     @SafeVarargs
     public static <T> T[] append(IntFunction<T[]> arrayFunction, T[] arrayA, T... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -910,7 +925,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayFunction
      *         function that create array of given size, just T[]::new.
@@ -926,11 +941,11 @@ public final class DioriteArrayUtils
     @SafeVarargs
     public static <T> T[] prepend(IntFunction<T[]> arrayFunction, T[] arrayA, T... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -940,7 +955,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything. <br>
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything. <br>
      * NOTE: this method use reflections!
      *
      * @param arrayA
@@ -960,7 +975,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything. <br>
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything. <br>
      * NOTE: this method use reflections!
      *
      * @param arrayA
@@ -980,7 +995,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -991,11 +1006,11 @@ public final class DioriteArrayUtils
      */
     public static boolean[] append(boolean[] arrayA, boolean... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1005,7 +1020,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1016,11 +1031,11 @@ public final class DioriteArrayUtils
      */
     public static boolean[] prepend(boolean[] arrayA, boolean... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1030,7 +1045,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1041,11 +1056,11 @@ public final class DioriteArrayUtils
      */
     public static char[] append(char[] arrayA, char... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1055,7 +1070,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1066,11 +1081,11 @@ public final class DioriteArrayUtils
      */
     public static char[] prepend(char[] arrayA, char... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1080,7 +1095,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1091,11 +1106,11 @@ public final class DioriteArrayUtils
      */
     public static byte[] append(byte[] arrayA, byte... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1105,7 +1120,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1116,11 +1131,11 @@ public final class DioriteArrayUtils
      */
     public static byte[] prepend(byte[] arrayA, byte... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1130,7 +1145,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1141,11 +1156,11 @@ public final class DioriteArrayUtils
      */
     public static short[] append(short[] arrayA, short... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1155,7 +1170,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1166,11 +1181,11 @@ public final class DioriteArrayUtils
      */
     public static short[] prepend(short[] arrayA, short... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1180,7 +1195,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1191,11 +1206,11 @@ public final class DioriteArrayUtils
      */
     public static int[] append(int[] arrayA, int... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1205,7 +1220,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1216,11 +1231,11 @@ public final class DioriteArrayUtils
      */
     public static int[] prepend(int[] arrayA, int... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1230,7 +1245,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1241,11 +1256,11 @@ public final class DioriteArrayUtils
      */
     public static long[] append(long[] arrayA, long... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1255,7 +1270,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1266,11 +1281,11 @@ public final class DioriteArrayUtils
      */
     public static long[] prepend(long[] arrayA, long... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1280,7 +1295,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1291,11 +1306,11 @@ public final class DioriteArrayUtils
      */
     public static float[] append(float[] arrayA, float... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1305,7 +1320,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1316,11 +1331,11 @@ public final class DioriteArrayUtils
      */
     public static float[] prepend(float[] arrayA, float... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1330,7 +1345,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1341,11 +1356,11 @@ public final class DioriteArrayUtils
      */
     public static double[] append(double[] arrayA, double... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -1355,7 +1370,7 @@ public final class DioriteArrayUtils
     }
 
     /**
-     * Joins 2 arrays together, if any array is null or empty then other array will be returned without coping anything.
+     * Joins 2 arrays together, if any array is empty then other array will be returned without coping anything.
      *
      * @param arrayA
      *         first array.
@@ -1366,11 +1381,11 @@ public final class DioriteArrayUtils
      */
     public static double[] prepend(double[] arrayA, double... arrayB)
     {
-        if ((arrayB == null) || (arrayB.length == 0))
+        if (arrayB.length == 0)
         {
             return arrayA;
         }
-        if ((arrayA == null) || (arrayA.length == 0))
+        if (arrayA.length == 0)
         {
             return arrayB;
         }
@@ -2638,7 +2653,6 @@ public final class DioriteArrayUtils
         byte[] result = new byte[array.length];
         for (int i = 0; i < array.length; i++)
         {
-            //noinspection UnnecessaryUnboxing
             result[i] = ((byte) array[i].charValue());
         }
         return result;
@@ -2801,7 +2815,6 @@ public final class DioriteArrayUtils
         short[] result = new short[array.length];
         for (int i = 0; i < array.length; i++)
         {
-            //noinspection UnnecessaryUnboxing
             result[i] = ((short) array[i].charValue());
         }
         return result;
@@ -3907,6 +3920,214 @@ public final class DioriteArrayUtils
             sum += x;
         }
         return sum;
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static BooleanBidirectionalIterator iteratorOf(boolean[] array)
+    {
+        return new BooleanIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static ByteBidirectionalIterator iteratorOf(byte[] array)
+    {
+        return new ByteIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static ShortBidirectionalIterator iteratorOf(short[] array)
+    {
+        return new ShortIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static CharBidirectionalIterator iteratorOf(char[] array)
+    {
+        return new CharIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static IntBidirectionalIterator iteratorOf(int[] array)
+    {
+        return new IntIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static LongBidirectionalIterator iteratorOf(long[] array)
+    {
+        return new LongIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static FloatBidirectionalIterator iteratorOf(float[] array)
+    {
+        return new FloatIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static DoubleBidirectionalIterator iteratorOf(double[] array)
+    {
+        return new DoubleIterator(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static BooleanIterable iterableOf(boolean[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static ByteIterable iterableOf(byte[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static ShortIterable iterableOf(short[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static CharIterable iterableOf(char[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static IntIterable iterableOf(int[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static LongIterable iterableOf(long[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static FloatIterable iterableOf(float[] array)
+    {
+        return () -> iteratorOf(array);
+    }
+
+    /**
+     * Creates primitive iterator of given array.
+     *
+     * @param array
+     *         array to warp.
+     *
+     * @return primitive iterator for given array.
+     */
+    public static DoubleIterable iterableOf(double[] array)
+    {
+        return () -> iteratorOf(array);
     }
 
     private static <T> void copy(T[] array, T[] arrayA, T[] arrayB, boolean append)

@@ -36,7 +36,6 @@ final class RepresentDate extends AbstractRepresent
         super(representer);
     }
 
-    @SuppressWarnings("MagicNumber")
     @Override
     public Node representData(Object data)
     {

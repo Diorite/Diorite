@@ -38,7 +38,7 @@ import org.diorite.config.serialization.Serialization;
 
 public class CommentsManager
 {
-    private Map<Class<?>, DocumentComments> commentsMap = new ConcurrentHashMap<>(10);
+    private final Map<Class<?>, DocumentComments> commentsMap = new ConcurrentHashMap<>(10);
 
     public DocumentComments getComments(Class<?> clazz)
     {
@@ -76,7 +76,8 @@ public class CommentsManager
 
     public void addComments(Class<?> clazz, @WillNotClose Reader reader)
     {
-        this.addComments(clazz, Serialization.getGlobal().fromYaml(reader, DocumentComments.class));
+        DocumentComments comments = Serialization.getInstance().fromYaml(reader, DocumentComments.class);
+        this.addComments(clazz, (comments == null) ? DocumentComments.empty() : comments);
     }
 
 }

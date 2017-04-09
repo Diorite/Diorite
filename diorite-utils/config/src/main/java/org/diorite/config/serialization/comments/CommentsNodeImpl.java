@@ -41,7 +41,7 @@ class CommentsNodeImpl implements CommentsNode
 {
     @Nullable private final DocumentComments root;
     @Nullable private final CommentsNode     parent;
-    Map<String, MutablePair<String, CommentsNodeImpl>> dataMap = new LinkedHashMap<>(15);
+    final Map<String, MutablePair<String, CommentsNodeImpl>> dataMap = new LinkedHashMap<>(15);
 
     CommentsNodeImpl(CommentsNode parent)
     {
@@ -118,7 +118,6 @@ class CommentsNodeImpl implements CommentsNode
         }
     }
 
-    @SuppressWarnings("unchecked")
     Map<String, MutablePair<String, ?>> buildMap()
     {
         Map<String, MutablePair<String, ?>> resultMap = new LinkedHashMap<>(this.dataMap.size());

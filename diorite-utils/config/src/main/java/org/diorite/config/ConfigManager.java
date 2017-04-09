@@ -45,6 +45,11 @@ public final class ConfigManager
     @Nullable
     private static ConfigManager configManager;
 
+    /**
+     * Returns config manager instance.
+     *
+     * @return config manager instance.
+     */
     public static ConfigManager get()
     {
         if (configManager == null)
@@ -89,5 +94,20 @@ public final class ConfigManager
             this.configs.put(type, configTemplate);
         }
         return configTemplate;
+    }
+
+    /**
+     * Create instance of given config type.
+     *
+     * @param type
+     *         type of config class.
+     * @param <T>
+     *         type of config class.
+     *
+     * @return created instance.
+     */
+    public static <T extends Config> T createInstance(Class<T> type)
+    {
+        return get().getConfigFile(type).create();
     }
 }
