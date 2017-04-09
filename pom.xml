@@ -96,12 +96,12 @@
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>ord.diorite.shared</groupId>
+                <groupId>org.diorite.shared</groupId>
                 <artifactId>shared-api</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>ord.diorite.shared</groupId>
+                <groupId>org.diorite.shared</groupId>
                 <artifactId>shared-core</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
