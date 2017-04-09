@@ -15,8 +15,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>ord.diorite.shared</groupId>
-            <artifactId>shared-api</artifactId>
+            <groupId>org.diorite.shared</groupId>
+            <artifactId>shared-core</artifactId>
         </dependency>
     </dependencies>
 </project>
