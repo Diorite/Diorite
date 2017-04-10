@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ord.diorite.shared</groupId>
+    <groupId>org.diorite.shared</groupId>
     <artifactId>diorite-shared</artifactId>
     <version>0.1-SNAPSHOT</version>
     <modules>

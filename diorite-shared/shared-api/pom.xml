@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>diorite-shared</artifactId>
-        <groupId>ord.diorite.shared</groupId>
+        <groupId>org.diorite.shared</groupId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>shared-api</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>Diorite Shaded API</name>
+    <name>Diorite Shared API</name>
 
     <dependencies>
         <dependency>

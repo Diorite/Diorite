@@ -19,13 +19,13 @@
         - utils related to bytecode manipulation and sun.misc.Unsafe
         - depends on: 
             - *org.diorite.utils:commons*
-- [ ] [**ord.diorite:gameprofile** (*GameProfile API*)](#gameprofile-api)
+- [ ] [**org.diorite:gameprofile** (*GameProfile API*)](#gameprofile-api)
     Standalone API for Mojang auth services. 
-- [ ] [**ord.diorite.shared:diorite-shared** (*Diorite Shared*)](#diorite-shared)  
+- [ ] [**org.diorite.shared:diorite-shared** (*Diorite Shared*)](#diorite-shared)  
     Shared API used by diorite server, client and proxy projects.  
     Divided to api and core modules:
-    - **ord.diorite.shared:shared-api** 
-    - **ord.diorite.shared:shared-core** 
+    - **org.diorite.shared:shared-api** 
+    - **org.diorite.shared:shared-core** 
     - depends on: 
         - *org.diorite.utils:commons*
         - *org.diorite.utils:config*
@@ -43,65 +43,65 @@
     - [ ] [**Effects system**](#effects-system)
     - [ ] [**Abstract NBT API - SSF (*Simple Storage System*)**](#simple-storage-system)
     
-- [ ] [**ord.diorite:diorite** (*Diorite*)](#diorie)
+- [ ] [**org.diorite:diorite** (*Diorite*)](#diorie)
     Main module, server and client of game.  
     Divided to few modules:
-    - **ord.diorite:diorite-api** - only api of diorite.
-    - **ord.diorite:diorite-core** - core code, additional methods, abstracts classes that might change so they can't be in the API.
-    - **ord.diorite:diorite-impl** - diorite implementation of the diorite api.
+    - **org.diorite:diorite-api** - only api of diorite.
+    - **org.diorite:diorite-core** - core code, additional methods, abstracts classes that might change so they can't be in the API.
+    - **org.diorite:diorite-impl** - diorite implementation of the diorite api.
     - depends on: 
         - *org.diorite.utils:commons*
         - *org.diorite.utils:config*
         - *org.diorite.utils:injection*
-        - *ord.diorite.shared:shared-api*
-        - *ord.diorite.shared:shared-core*
-        - *ord.diorite.extra:gui* 
+        - *org.diorite.shared:shared-api*
+        - *org.diorite.shared:shared-core*
+        - *org.diorite.extra:gui* 
         
-- [ ] [**ord.diorite.stonegate:stonegate** (*Stonegate*)](#stonegate)
+- [ ] [**org.diorite.stonegate:stonegate** (*Stonegate*)](#stonegate)
     Proxy for diorite servers, allows connecting multiple servers to one network.  
     Contains diorite-shared api allowing to easily port server-independent code between server and proxy.
 
     Divided to few modules:
-    - **ord.diorite.stonegate:stonegate-api** - only api of Stonegate.
-    - **ord.diorite.stonegate:stonegate-core** - core code, additional methods, abstracts classes that might change so they can't be in the API.
-    - **ord.diorite.stonegate:stonegate-impl** - diorite implementation of the stonegate api.
+    - **org.diorite.stonegate:stonegate-api** - only api of Stonegate.
+    - **org.diorite.stonegate:stonegate-core** - core code, additional methods, abstracts classes that might change so they can't be in the API.
+    - **org.diorite.stonegate:stonegate-impl** - diorite implementation of the stonegate api.
     - depends on: 
         - *org.diorite.utils:commons*
         - *org.diorite.utils:config*
         - *org.diorite.utils:injection*
-        - *ord.diorite.shared:shared-api*
-        - *ord.diorite.shared:shared-core*
+        - *org.diorite.shared:shared-api*
+        - *org.diorite.shared:shared-core*
         
 - [ ] **org.diorite.extra:diorite-extra** (*Diorite Extra*)
     Additional modules with extra api, like special build-in plugins, something that should be implemented after diorite server, but if you want to start implementing one of modules... feel free to do it.
-    - [ ] [**ord.diorite.extra:gui** (*Diorite GUI*)](#diorite-extra---gui)
+    - [ ] [**org.diorite.extra:gui** (*Diorite GUI*)](#diorite-extra---gui)
         - Library for creating GUIs using maps, armorstands, and particles.
         - depends on: 
             - *org.diorite.utils:commons*
             - *org.diorite.utils:config*
             - *org.diorite.utils:injection*
-            - *ord.diorite.shared:shared-api*
-            - *ord.diorite.shared:shared-core*
-            - *ord.diorite:diorite-api*
-            - *ord.diorite:diorite-core*
-            - *ord.diorite:diorite-impl*
-    - [ ] [**ord.diorite.extra:intellij** (*Diorite IDEA*)](#diorite-idea)
+            - *org.diorite.shared:shared-api*
+            - *org.diorite.shared:shared-core*
+            - *org.diorite:diorite-api*
+            - *org.diorite:diorite-core*
+            - *org.diorite:diorite-impl*
+    - [ ] [**org.diorite.extra:intellij** (*Diorite IDEA*)](#diorite-idea)
          - Addon for Intellij IDEA java ide, adds better support for diorite projects.
-    - [ ] [**ord.diorite.extra:tests** (*Diorite Tests*)](#diorite-extra---tests)
+    - [ ] [**org.diorite.extra:tests** (*Diorite Tests*)](#diorite-extra---tests)
         - Test framework for diorite.
         - depends on: 
             - *org.diorite.utils:commons*
             - *org.diorite.utils:config*
             - *org.diorite.utils:injection*
-            - *ord.diorite.shared:shared-api*
-            - *ord.diorite.shared:shared-core*
-            - *ord.diorite:diorite-api*
-            - *ord.diorite:diorite-core*
-            - *ord.diorite:diorite-impl*
-    - [ ] **ord.diorite.extra:spigot** (*Diorite Spigot*)
+            - *org.diorite.shared:shared-api*
+            - *org.diorite.shared:shared-core*
+            - *org.diorite:diorite-api*
+            - *org.diorite:diorite-core*
+            - *org.diorite:diorite-impl*
+    - [ ] **org.diorite.extra:spigot** (*Diorite Spigot*)
          - Diorite implementation of spigot api.
         
-- [ ] [**ord.diorite.launcher:diorite-launcher** (*Diorite Launcher*)](#diorie-launcher)
+- [ ] [**org.diorite.launcher:diorite-launcher** (*Diorite Launcher*)](#diorie-launcher)
     Special launcher, small and compact, it will download all needed libraries etc, it isn't needed to use diorite, but helps manage it.
         
    
@@ -277,7 +277,7 @@ Only needed on server side, server crashing client by sending invalid packet on 
     - [ ] Tool.
 - [ ] Extended metadata support.
     - [ ] LoreHandles:  
-    Lore is often used by plugins to add information about item, like they create spell item, so they add spell lore with description of it, or even use that lore to detect spell. In Diorite for detecting they just should add own nbt data, but there is problem with lores, every plugin want own lore, so if we want use 2 spell plugins on one item - nah, we can't. So in Diorite we want allow to add LoreHandlers (temp name, looking for better), every plugin can add one or more handler to each item, each handler have 2 simple values: priority (order on lore) and lore list of string. LoreHandlers can't be affected by .setLore and their text isn't returned by getLore, so multiple plugins can add own lore lines and never break each other lore.
+    Lore is often used by plugins to add information about item, like they create spell item, so they add spell lore with description of it, or even use that lore to detect spell. In Diorite for detecting they just should add own nbt data, but there is problem with lores, every plugin want own lore, so if we want use 2 spell plugins on one item - nah, we can't. So in Diorite we want allow to add LoreHandlers (temp name, looking for better), every plugin can add one or more handler to each item, each handler have 2 simple values: priority (orger on lore) and lore list of string. LoreHandlers can't be affected by .setLore and their text isn't returned by getLore, so multiple plugins can add own lore lines and never break each other lore.
 
 ### Inventory
 - [ ] Join inventory packet into simple operations.
@@ -582,8 +582,8 @@ Advanced command system that allows for creating commands with automatically par
     - [ ] Boolean parser.
     - [ ] Char parser.
     - [ ] Number parsers.
-    - [ ] String parser, each word is one string, but it can be joined using `'` and `"` + escape via backslash.
-    - [ ] Raw String parser, raw parser, without special tokens, one string per word.
+    - [ ] String parser, each worg is one string, but it can be joined using `'` and `"` + escape via backslash.
+    - [ ] Raw String parser, raw parser, without special tokens, one string per worg.
     - [ ] Long String parser. 
     - [ ] Array parser
     - [ ] Fixed array parser. (for fixed amount of elements, no need for array markers)
@@ -594,7 +594,7 @@ Advanced command system that allows for creating commands with automatically par
 - [ ] Command manager for option to register/unregister commands.
 - [ ] Special argument (always only one) after colon, like `broadcast:action`, special argument is always optional with some default value.
 - [ ] Optional arguments with default values.
-- [ ] Named arguments, like `player=name world=skyblock`, order of named arguments dosen't count.
+- [ ] Named arguments, like `player=name world=skyblock`, orger of named arguments dosen't count.
 - [ ] Groups of arguments (like `x y z`), whole group might be optional. This should support nested groups, `[x y z [yaw pitch]]`
 - [ ] Adding own types based on existing ones, like adding `Player` parser based on String parser.
 - [ ] Tab complete for sub-commands.
@@ -863,7 +863,7 @@ ____
 
 ## Stonegate
 ____
-Stonegate is diorite alternative to bungeecord, it contains shared api allowing for sharing some code between server and proxy plugins.  
+Stonegate is diorite alternative to bungeecorg, it contains shared api allowing for sharing some code between server and proxy plugins.  
 
 ###### Goals
 - [ ] Basic working proxy, even with only one server.
@@ -926,7 +926,7 @@ Players can just click on buttons to choose some option.
         - [ ] Position
     - [ ] Some kind of CSS for elements:
         - [ ] Background color.
-        - [ ] Border type, size, color.
+        - [ ] Borger type, size, color.
         - [ ] On hover style? (might be too slow)
         - [ ] On click style?
     - [ ] Root element.
