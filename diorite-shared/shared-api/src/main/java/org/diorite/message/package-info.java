@@ -22,18 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.sender;
-
-import org.diorite.permissions.GroupablePermissionsContainer;
-
 /**
- * Represent player command sender.
+ * Messages API used to load and send messages with variables and placeholders to players.
  */
-public interface PlayerCommandSender extends CommandSender
-{
-    @Override
-    GroupablePermissionsContainer getPermissionsContainer();
+@NonnullByDefault
+package org.diorite.message;
 
-    @Override
-    default String getMessageKey() {return "player";}
-}
+import org.diorite.annotations.NonnullByDefault;

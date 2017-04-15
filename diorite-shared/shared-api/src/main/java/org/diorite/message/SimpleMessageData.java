@@ -22,18 +22,28 @@
  * SOFTWARE.
  */
 
-package org.diorite.sender;
+package org.diorite.message;
 
-import org.diorite.permissions.GroupablePermissionsContainer;
-
-/**
- * Represent player command sender.
- */
-public interface PlayerCommandSender extends CommandSender
+class SimpleMessageData<T> implements MessageData<T>
 {
-    @Override
-    GroupablePermissionsContainer getPermissionsContainer();
+    private final String key;
+    private final T      value;
+
+    SimpleMessageData(String key, T value)
+    {
+        this.key = key;
+        this.value = value;
+    }
 
     @Override
-    default String getMessageKey() {return "player";}
+    public String getMessageKey()
+    {
+        return this.key;
+    }
+
+    @Override
+    public T getMessageValue()
+    {
+        return this.value;
+    }
 }
