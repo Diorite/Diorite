@@ -41,9 +41,8 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     @Nullable String       translate;
     @Nullable List<Object> with;
 
-    // TODO: add score
-
-    @Nullable String selector;
+    @Nullable ChatScore score;
+    @Nullable String    selector;
 
     @Nullable ChatColor color;
     @Nullable Boolean   bold;
@@ -129,7 +128,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         this.translate = null;
         this.with = null;
         this.selector = null;
-        // TODO: reset score
+        this.score = null;
     }
 
     @Nullable
@@ -166,7 +165,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         this.text = null;
         this.with = null;
         this.selector = null;
-        // TODO: reset score
+        this.score = null;
     }
 
     @Nullable
@@ -185,7 +184,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         this.text = null;
         this.with = null;
         this.selector = null;
-        // TODO: reset score
+        this.score = null;
     }
 
     @Nullable
@@ -200,7 +199,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         this.text = null;
         this.with = null;
         this.translate = null;
-        // TODO: reset score
+        this.score = null;
     }
 
     @Nullable
