@@ -25,6 +25,7 @@
 package org.diorite.chat;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 abstract class ChatEventStringAbstract implements ChatMessageEvent
 {
@@ -40,6 +41,9 @@ abstract class ChatEventStringAbstract implements ChatMessageEvent
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("value", this.value).toString();
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                       .append("action", this.getAction().toString().toLowerCase())
+                       .append("value", this.value)
+                       .toString();
     }
 }
