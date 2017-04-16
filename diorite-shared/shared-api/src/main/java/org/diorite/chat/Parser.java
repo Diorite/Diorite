@@ -27,18 +27,26 @@ package org.diorite.chat;
 import javax.annotation.Nullable;
 
 import java.text.CharacterIterator;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.diorite.commons.ParserContext;
 
-import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
-import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-
 public class Parser
 {
+    private static final Pattern URL_PATTERN = Pattern.compile(
+            "(?:(?:https?)://)?(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\" +
+            ".\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+            "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\." +
+            "(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?",
+            Pattern.UNICODE_CASE & Pattern.CASE_INSENSITIVE);
+
     private static final int NONE = - 1;
 
     private static final char ESCAPE = '\\';
@@ -48,13 +56,14 @@ public class Parser
 
     private final ParserSettings settings;
     private final ParserContext  context;
-    private final ComponentElement             rootElement = new ComponentElement().setText("");
-    private final Char2ObjectMap<FormatParser> parsers     = new Char2ObjectOpenHashMap<>(5);
+    private final ComponentElement                    rootElement       = new ComponentElement().setText("");
+    private final Collection<AbstractElementParser>   parsers           = new ArrayList<>(20);
+    private final Collection<ApplicableElementParser> applicableParsers = new ArrayList<>(20);
 
     public Parser(String toParse, @Nullable ParserSettings settings)
     {
         this.context = new ParserContext(toParse);
-        this.settings = (settings == null) ? new ParserSettings() : settings;
+        this.settings = (settings == null) ? ParserSettings.ALL_ALLOWED : settings;
 
         this.initParsers();
     }
@@ -91,9 +100,13 @@ public class Parser
         }
     }
 
-    private void addParser(FormatParser parser)
+    private void addParser(AbstractElementParser parser)
     {
-        this.parsers.put(parser.key, parser);
+        this.parsers.add(parser);
+        if (parser instanceof ApplicableElementParser)
+        {
+            this.applicableParsers.add((ApplicableElementParser) parser);
+        }
     }
 
     private LinkedList<ComponentElement> levelQueue  = new LinkedList<>(List.of(this.rootElement));
@@ -111,33 +124,36 @@ public class Parser
         while (context.hasNext())
         {
             char c = context.next();
-            FormatParser formatParser = this.parsers.get(c);
-            if (formatParser != null)
+            boolean any = false;
+            for (AbstractElementParser parser : this.parsers)
             {
-                formatParser.onKey(context, c);
+                any |= parser.onKey(context, c);
             }
-            else if (c == '\\')
+            if (! any)
             {
-                if (this.escaped)
+                if (c == '\\')
                 {
-                    this.sb.append(c);
-                    this.escaped = false;
+                    if (this.escaped)
+                    {
+                        this.sb.append(c);
+                        this.escaped = false;
+                    }
+                    else
+                    {
+                        this.escaped = true;
+                    }
                 }
                 else
                 {
-                    this.escaped = true;
+                    this.escaped = false;
+                    this.sb.append(c);
                 }
-            }
-            else
-            {
-                this.escaped = false;
-                this.sb.append(c);
             }
         }
 
         this.prepareElement();
-        System.out.println("Parsed from: `" + this.context.getText() + "` To: " + this.rootElement);
-        return this.rootElement.optimize().toString();
+        this.rootElement.optimize();
+        return this.rootElement.toString();
     }
 
     void resetStringBuilder()
@@ -152,7 +168,42 @@ public class Parser
             return;
         }
         String text = this.sb.toString();
-        ComponentElement element = new ComponentElement().setText(text);
+        ComponentElement element;
+        if (this.settings.autoLinksEnabled)
+        {
+            List<ComponentElement> allElements = new ArrayList<>(5);
+            Matcher matcher = URL_PATTERN.matcher(text);
+            int lastMatchEnd = 0;
+            while (matcher.find())
+            {
+                String group = matcher.group();
+                if (group.startsWith("http://"))
+                {
+                    group = group.substring(7);
+                }
+                else if (group.startsWith("https://"))
+                {
+                    group = group.substring(8);
+                }
+                int start = matcher.start();
+                if (start != lastMatchEnd)
+                {
+                    allElements.add(new ComponentElement().setText(text.substring(lastMatchEnd, start)));
+                }
+                allElements.add(new ComponentElement().setText(group).setClickEvent(ChatMessageEvent.openURL(matcher.group())));
+                lastMatchEnd = matcher.end();
+            }
+            if (lastMatchEnd < (text.length() - 1))
+            {
+                allElements.add(new ComponentElement().setText(text.substring(lastMatchEnd)));
+            }
+            element = new ComponentElement().setText("");
+            element.setExtra(allElements);
+        }
+        else
+        {
+            element = new ComponentElement().setText(text);
+        }
         ComponentElement last = this.levelQueue.getLast();
 
         ChatColor chatColor = null;
@@ -186,11 +237,15 @@ public class Parser
         ComponentElement element = new ComponentElement().setText("");
         this.levelQueue.getLast().addExtra(element);
         this.levelQueue.add(element);
-        for (FormatParser parser : this.parsers.values())
+        for (AbstractElementParser abstractElementParser : this.parsers)
         {
-            if (parser.active && ! parser.check(element))
+            if (abstractElementParser instanceof ApplicableElementParser)
             {
-                parser.apply(element);
+                ApplicableElementParser parser = (ApplicableElementParser) abstractElementParser;
+                if (parser.active && ! parser.check(element))
+                {
+                    parser.apply(element);
+                }
             }
         }
     }
@@ -221,20 +276,19 @@ public class Parser
         }
     }
 
-    class SkipColorParser extends FormatParser
+    class SkipColorParser extends AbstractElementParser
     {
         SkipColorParser()
         {
-            super(ChatColor.COLOR_CHAR, null, null);
             this.active = true;
         }
 
         @Override
-        void onKey(ParserContext context, char c)
+        boolean onKey(ParserContext context, char c)
         {
-            if (c != this.key)
+            if (c != ChatColor.COLOR_CHAR)
             {
-                return;
+                return false;
             }
             char next = context.next();
             ChatColor byChar = ChatColor.getByChar(next);
@@ -243,42 +297,31 @@ public class Parser
                 context.previous();
                 Parser.this.sb.append(c);
             }
-        }
-
-        @Override
-        void apply(ComponentElement element)
-        {
-        }
-
-        @Override
-        boolean check(ComponentElement element)
-        {
             return true;
         }
     }
 
-    class ColorParser extends FormatParser
+    class ColorParser extends ApplicableElementParser
     {
         char color = NULL;
 
         ColorParser(char key)
         {
-            super(key, null, null);
             this.active = true;
         }
 
         @Override
-        void onKey(ParserContext context, char c)
+        boolean onKey(ParserContext context, char c)
         {
-            if (c != this.key)
+            if (c != '&')
             {
-                return;
+                return false;
             }
             if (Parser.this.escaped)
             {
                 Parser.this.sb.append(c);
                 Parser.this.escaped = false;
-                return;
+                return true;
             }
             char next = context.next();
             ChatColor byChar = ChatColor.getByChar(next);
@@ -286,7 +329,7 @@ public class Parser
             {
                 context.previous();
                 Parser.this.sb.append(c);
-                return;
+                return true;
             }
             if (Parser.this.sb.length() != 0)
             {
@@ -295,6 +338,7 @@ public class Parser
             Parser.this.resetStringBuilder();
             this.color = next;
             Parser.this.increaseLevel();
+            return true;
         }
 
         @Override
@@ -402,11 +446,26 @@ public class Parser
         }
     }
 
-    class FormatParser
+    abstract static class AbstractElementParser
     {
-        final char key;
         int index = NONE;
         boolean active;
+
+        void deactivate() {this.active = false;}
+
+        abstract boolean onKey(ParserContext context, char c);
+    }
+
+    abstract static class ApplicableElementParser extends AbstractElementParser
+    {
+        abstract boolean check(ComponentElement element);
+
+        abstract void apply(ComponentElement element);
+    }
+
+    class FormatParser extends ApplicableElementParser
+    {
+        final char key;
 
         @Nullable final BiConsumer<? super FormatParser, ComponentElement>  applyFunc;
         @Nullable final BiPredicate<? super FormatParser, ComponentElement> checkFunc;
@@ -419,10 +478,7 @@ public class Parser
             this.checkFunc = checkFunc;
         }
 
-        boolean isKey(char key) {return this.key == key;}
-
-        void deactivate() {this.active = false;}
-
+        @Override
         boolean check(ComponentElement element)
         {
             if (this.checkFunc != null)
@@ -432,6 +488,7 @@ public class Parser
             return false;
         }
 
+        @Override
         void apply(ComponentElement element)
         {
             if (this.applyFunc != null)
@@ -440,17 +497,27 @@ public class Parser
             }
         }
 
-        void onKey(ParserContext context, char c)
+        @Override
+        boolean onKey(ParserContext context, char c)
         {
             if (c != this.key)
             {
-                return;
+                return false;
             }
             if (Parser.this.escaped)
             {
                 Parser.this.sb.append(c);
                 Parser.this.escaped = false;
-                return;
+                return true;
+            }
+            char checkNext = context.next();
+            context.previous();
+            char checkPrev = context.previous();
+            context.next();
+            if ((checkNext == this.key) || (checkPrev == this.key))
+            {
+                Parser.this.sb.append(c);
+                return true;
             }
             if (this.index == NONE)
             {
@@ -459,12 +526,12 @@ public class Parser
                 if (next == SPACE)
                 {
                     Parser.this.sb.append(c);
-                    return;
+                    return true;
                 }
                 if (next == END)
                 {
                     Parser.this.sb.append(this.key);
-                    return;
+                    return true;
                 }
                 this.index = context.getIndex();
                 if (Parser.this.sb.length() != 0)
@@ -474,11 +541,11 @@ public class Parser
                 Parser.this.resetStringBuilder();
                 this.active = true;
                 Parser.this.increaseLevel();
-                return;
+                return true;
             }
             if (this.index == (context.getEndIndex() - 1))
             {
-                Parser.this.sb.append('_');
+                Parser.this.sb.append(this.key);
             }
             if (Parser.this.sb.length() != 0)
             {
@@ -489,6 +556,7 @@ public class Parser
             this.active = false;
             this.index = NONE;
             Parser.this.decreaseLevel();
+            return true;
         }
     }
 }

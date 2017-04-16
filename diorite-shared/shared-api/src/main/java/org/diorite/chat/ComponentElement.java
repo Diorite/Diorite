@@ -24,7 +24,7 @@
 
 package org.diorite.chat;
 
-class ComponentElement extends BaseComponentElement<ComponentElement, ChatMutableEvent, ChatMutableEvent>
+class ComponentElement extends BaseComponentElement<ComponentElement, ChatMessageEvent, ChatEventAppendChat>
 {
     @Override
     protected ComponentElement createElement()
