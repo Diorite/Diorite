@@ -24,43 +24,14 @@
 
 package org.diorite.chat;
 
-import javax.annotation.Nullable;
-
-public class SimpleChatScore implements ChatScore
+public final class ParserSettings
 {
-    private final           String name;
-    private final           String objective;
-    private final @Nullable String value;
-
-    public SimpleChatScore(String name, String objective, @Nullable String value)
-    {
-        this.name = name;
-        this.objective = objective;
-        this.value = value;
-    }
-
-    @Override
-    public String getName()
-    {
-        return this.name;
-    }
-
-    @Override
-    public String getObjective()
-    {
-        return this.objective;
-    }
-
-    @Nullable
-    @Override
-    public String getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public ChatScore duplicate()
-    {
-        return this;
-    }
+    char    alternateColorChar        = '&';
+    boolean alternateColorCharEnabled = true;
+    boolean colorCharEnabled          = true; // if false it should remove color codes
+    boolean underlineEnabled          = true;
+    boolean italicEnabled             = true;
+    boolean boldEnabled               = true;
+    boolean strikethroughEnabled      = true;
+    boolean obfuscateEnabled          = true;
 }

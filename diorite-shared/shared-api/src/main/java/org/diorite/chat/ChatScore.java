@@ -55,6 +55,13 @@ public interface ChatScore
     String getValue();
 
     /**
+     * Returns copy of this score. Might return this same instance if object is immutable and does not require creating of copy.
+     *
+     * @return copy of this score.
+     */
+    ChatScore duplicate();
+
+    /**
      * Returns new instance if chat score with given value.
      *
      * @param value

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT, EVENT, INSERT>, EVENT extends ChatMessageEvent, INSERT extends EVENT>
 {
@@ -55,15 +57,219 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     @Nullable EVENT  hoverEvent;
     @Nullable EVENT  clickEvent;
 
+    /**
+     * Changes structure of component to reduce amount of nodes.
+     */
+    public ELEMENT optimize()
+    {
+        return this.optimize(this.getThis());
+    }
+
+    private boolean optimizeFirstChild()
+    {
+        if (((this.parent != null) && (this.parent.extra != null)) && (this.text != null) && ! this.hasFormatting() && (this.parent.extra.indexOf(this) == 0))
+        {
+            this.parent.text += this.text;
+            this.text = "";
+            this.parent.extra.remove(this);
+            if (this.extra != null)
+            {
+                this.parent.extra.addAll(0, this.extra);
+                for (ELEMENT element : this.extra)
+                {
+                    element.parent = this.parent;
+                }
+            }
+            this.parent = null;
+            return true;
+        }
+        return false;
+    }
+
+    private void optimizeSingleExtraInstance(ELEMENT root)
+    {
+        if ((this.text != null) || (this.translate != null))
+        {
+            if (this.extra != null)
+            {
+                for (ELEMENT element : new ArrayList<>(this.extra))
+                {
+                    element.optimize(root);
+                }
+                if (this.extra.size() == 1)
+                {
+                    ELEMENT extra = this.extra.get(0);
+                    if (! extra.hasFormatting())
+                    {
+                        this.text = extra.text;
+                        this.translate = extra.translate;
+                        this.with = extra.with;
+                        this.extra = null;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean optimizeWhitespaceByChild()
+    {
+        if (this.parent == null)
+        {
+            return false;
+        }
+        if ((this.extra != null) && ! this.extra.isEmpty())
+        {
+            ELEMENT extra = this.extra.get(0);
+            if ((this.isObfuscated() == extra.isObfuscated()) && (this.isStrikethrough() == extra.isStrikethrough()) &&
+                (this.isUnderlined() == extra.isUnderlined()))
+            {
+                extra.text = this.text + extra.text;
+                this.text = "";
+                if ((this.extra == null) || this.extra.isEmpty())
+                {
+                    assert this.parent.extra != null; // can't be null if we are child of it.
+                    this.parent.extra.remove(this);
+                    this.parent = null;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean optimizeWhitespaceByRightNeighborhood(int indexOf)
+    {
+        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
+        if (this.parent.extra.size() > (indexOf + 1))
+        {
+            ELEMENT element = this.parent.extra.get(indexOf + 1);
+            if ((element.text != null))
+            {
+                if ((this.isObfuscated() == element.isObfuscated()) && (this.isStrikethrough() == element.isStrikethrough()) &&
+                    (this.isUnderlined() == element.isUnderlined()))
+                {
+                    element.text = this.text + element.text;
+                    this.text = "";
+                    if ((this.extra == null) || this.extra.isEmpty())
+                    {
+                        this.parent.extra.remove(this);
+                        this.parent = null;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean optimizeWhitespaceByLeftNeighborhood(int indexOf)
+    {
+        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
+        ELEMENT element = this.parent.extra.get(indexOf - 1);
+        if (element.text != null)
+        {
+            if ((this.isObfuscated() == element.isObfuscated()) && (this.isStrikethrough() == element.isStrikethrough()) &&
+                (this.isUnderlined() == element.isUnderlined()))
+            {
+                element.text += this.text;
+                this.text = "";
+                if ((this.extra == null) || this.extra.isEmpty())
+                {
+                    this.parent.extra.remove(this);
+                    this.parent = null;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean optimizeWhitespaceByParent()
+    {
+        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
+        if ((this.parent.text != null))
+        {
+            if ((this.isObfuscated() == this.parent.isObfuscated()) && (this.isStrikethrough() == this.parent.isStrikethrough()) &&
+                (this.isUnderlined() == this.parent.isUnderlined()))
+            {
+                this.parent.text += this.text;
+                this.text = "";
+                if ((this.extra == null) || this.extra.isEmpty())
+                {
+                    this.parent.extra.remove(this);
+                    this.parent = null;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean optimizeWhitespaces()
+    {
+        boolean repeat = false;
+        if ((this.text != null) && ! this.text.isEmpty() && this.text.trim().isEmpty())
+        {
+            if ((this.parent != null))
+            {
+                assert this.parent.extra != null; // can't be null if there are children!
+                int indexOf = this.parent.extra.indexOf(this);
+                assert indexOf >= 0;
+                if (indexOf == 0)
+                {
+                    repeat = this.optimizeWhitespaceByParent();
+                }
+                else
+                {
+                    repeat = this.optimizeWhitespaceByLeftNeighborhood(indexOf) || this.optimizeWhitespaceByRightNeighborhood(indexOf);
+                }
+            }
+            if (! repeat)
+            {
+                repeat = this.optimizeWhitespaceByChild();
+            }
+        }
+        return repeat;
+    }
+
+    ELEMENT optimize(ELEMENT root)
+    {
+        if ((this.parent == null) && (root != this))
+        {
+            return this.getThis();
+        }
+        boolean repeat = this.optimizeFirstChild();
+        if (! repeat)
+        {
+            this.optimizeSingleExtraInstance(root);
+        }
+        if (! repeat)
+        {
+            repeat = this.optimizeWhitespaces();
+        }
+        if (repeat)
+        {
+            return root.optimize(root);
+        }
+        return this.getThis();
+    }
+
     @Nullable
     public ELEMENT getParent()
     {
         return this.parent;
     }
 
-    public void setParent(@Nullable ELEMENT parent)
+    public ELEMENT setParent(@Nullable ELEMENT parent)
     {
         this.parent = parent;
+        return this.getThis();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected ELEMENT getThis()
+    {
+        return (ELEMENT) this;
     }
 
     /**
@@ -122,13 +328,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.text;
     }
 
-    public void setText(@Nullable String text)
+    public ELEMENT setText(@Nullable String text)
     {
         this.text = text;
         this.translate = null;
         this.with = null;
         this.selector = null;
         this.score = null;
+        return this.getThis();
     }
 
     @Nullable
@@ -137,13 +344,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.extra;
     }
 
-    public void setExtra(@Nullable List<ELEMENT> extra)
+    public ELEMENT setExtra(@Nullable List<ELEMENT> extra)
     {
         this.extra = extra;
+        return this.getThis();
     }
 
     @SuppressWarnings("unchecked")
-    public void addExtra(ELEMENT element)
+    public ELEMENT addExtra(ELEMENT element)
     {
         if (this.extra == null)
         {
@@ -151,6 +359,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
         this.extra.add(element);
         element.setParent((ELEMENT) this);
+        return this.getThis();
     }
 
     @Nullable
@@ -159,13 +368,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.translate;
     }
 
-    public void setTranslate(@Nullable String translate)
+    public ELEMENT setTranslate(@Nullable String translate)
     {
         this.translate = translate;
         this.text = null;
         this.with = null;
         this.selector = null;
         this.score = null;
+        return this.getThis();
     }
 
     @Nullable
@@ -174,7 +384,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.with;
     }
 
-    public void setWith(@Nullable List<Object> with)
+    public ELEMENT setWith(@Nullable List<Object> with)
     {
         this.with = with;
         if (this.translate == null)
@@ -185,6 +395,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         this.with = null;
         this.selector = null;
         this.score = null;
+        return this.getThis();
     }
 
     @Nullable
@@ -193,13 +404,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.selector;
     }
 
-    public void setSelector(@Nullable String selector)
+    public ELEMENT setSelector(@Nullable String selector)
     {
         this.selector = selector;
         this.text = null;
         this.with = null;
         this.translate = null;
         this.score = null;
+        return this.getThis();
     }
 
     @Nullable
@@ -208,6 +420,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.color;
     }
 
+    @Nullable
     public ChatColor getColor()
     {
         BaseComponentElement<ELEMENT, EVENT, INSERT> other = this;
@@ -217,7 +430,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
             {
                 if (other.parent == null)
                 {
-                    return ChatColor.WHITE;
+                    return null;
                 }
                 other = other.parent;
                 continue;
@@ -226,13 +439,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    public void setColor(@Nullable ChatColor color)
+    public ELEMENT setColor(@Nullable ChatColor color)
     {
         if ((color != null) && (color == this.getColor()))
         {
             this.color = null;
         }
         this.color = color;
+        return this.getThis();
     }
 
     public boolean isBold()
@@ -253,19 +467,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawBold()
-    {
-        return this.bold;
-    }
-
-    public void setBold(@Nullable Boolean bold)
+    public ELEMENT setBold(@Nullable Boolean bold)
     {
         if ((bold != null) && (bold == this.isBold()))
         {
             this.bold = null;
         }
         this.bold = bold;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawBold()
+    {
+        return this.bold;
     }
 
     public boolean isUnderlined()
@@ -286,19 +501,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawUnderlined()
-    {
-        return this.underlined;
-    }
-
-    public void setUnderlined(@Nullable Boolean underlined)
+    public ELEMENT setUnderlined(@Nullable Boolean underlined)
     {
         if ((underlined != null) && (underlined == this.isUnderlined()))
         {
             this.underlined = null;
         }
         this.underlined = underlined;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawUnderlined()
+    {
+        return this.underlined;
     }
 
     public boolean isItalic()
@@ -319,19 +535,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawItalic()
-    {
-        return this.italic;
-    }
-
-    public void setItalic(@Nullable Boolean italic)
+    public ELEMENT setItalic(@Nullable Boolean italic)
     {
         if ((italic != null) && (italic == this.isItalic()))
         {
             this.italic = null;
         }
         this.italic = italic;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawItalic()
+    {
+        return this.italic;
     }
 
     public boolean isStrikethrough()
@@ -352,19 +569,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawStrikethrough()
-    {
-        return this.strikethrough;
-    }
-
-    public void setStrikethrough(@Nullable Boolean strikethrough)
+    public ELEMENT setStrikethrough(@Nullable Boolean strikethrough)
     {
         if ((strikethrough != null) && (strikethrough == this.isStrikethrough()))
         {
             this.strikethrough = null;
         }
         this.strikethrough = strikethrough;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawStrikethrough()
+    {
+        return this.strikethrough;
     }
 
     public boolean isObfuscated()
@@ -385,19 +603,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawObfuscated()
-    {
-        return this.obfuscated;
-    }
-
-    public void setObfuscated(@Nullable Boolean obfuscated)
+    public ELEMENT setObfuscated(@Nullable Boolean obfuscated)
     {
         if ((obfuscated != null) && (obfuscated == this.isObfuscated()))
         {
             this.obfuscated = null;
         }
         this.obfuscated = obfuscated;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawObfuscated()
+    {
+        return this.obfuscated;
     }
 
     @Nullable
@@ -419,15 +638,16 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT setInsertion(@Nullable INSERT insertion)
+    {
+        this.insertion = insertion;
+        return this.getThis();
+    }
+
     @Nullable
     public INSERT getRawInsertion()
     {
         return this.insertion;
-    }
-
-    public void setInsertion(@Nullable INSERT insertion)
-    {
-        this.insertion = insertion;
     }
 
     @Nullable
@@ -449,15 +669,16 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT setHoverEvent(@Nullable EVENT hoverEvent)
+    {
+        this.hoverEvent = hoverEvent;
+        return this.getThis();
+    }
+
     @Nullable
     public EVENT getRawHoverEvent()
     {
         return this.hoverEvent;
-    }
-
-    public void setHoverEvent(@Nullable EVENT hoverEvent)
-    {
-        this.hoverEvent = hoverEvent;
     }
 
     @Nullable
@@ -479,15 +700,16 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT setClickEvent(@Nullable EVENT clickEvent)
+    {
+        this.clickEvent = clickEvent;
+        return this.getThis();
+    }
+
     @Nullable
     public EVENT getRawClickEvent()
     {
         return this.clickEvent;
-    }
-
-    public void setClickEvent(@Nullable EVENT clickEvent)
-    {
-        this.clickEvent = clickEvent;
     }
 
     protected abstract ELEMENT createElement();
@@ -507,8 +729,8 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         copy.hoverEvent = (this.hoverEvent == null) ? null : (EVENT) this.hoverEvent.duplicate();
         copy.clickEvent = (this.clickEvent == null) ? null : (EVENT) this.clickEvent.duplicate();
 
+        copy.score = this.score;
         copy.text = this.text;
-        copy.insertion = this.insertion;
         copy.translate = this.translate;
 
         if (this.extra == null)
@@ -548,5 +770,72 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
 
         return copy;
+    }
+
+    @Override
+    public String toString()
+    {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.JSON_STYLE).appendSuper(super.toString());
+        if (this.text != null)
+        {
+            toStringBuilder.append("text", this.text);
+        }
+        if ((this.extra != null) && ! this.extra.isEmpty())
+        {
+            toStringBuilder.append("extra", this.extra);
+        }
+        if (this.translate != null)
+        {
+            toStringBuilder.append("translate", this.translate);
+        }
+        if ((this.with != null) && ! this.with.isEmpty())
+        {
+            toStringBuilder.append("with", this.with);
+        }
+        if (this.score != null)
+        {
+            toStringBuilder.append("score", this.score);
+        }
+        if (this.selector != null)
+        {
+            toStringBuilder.append("selector", this.selector);
+        }
+        if (this.color != null)
+        {
+            toStringBuilder.append("color", this.color.name().toLowerCase());
+        }
+        if (this.bold != null)
+        {
+            toStringBuilder.append("bold", this.bold);
+        }
+        if (this.underlined != null)
+        {
+            toStringBuilder.append("underlined", this.underlined);
+        }
+        if (this.italic != null)
+        {
+            toStringBuilder.append("italic", this.italic);
+        }
+        if (this.strikethrough != null)
+        {
+            toStringBuilder.append("strikethrough", this.strikethrough);
+        }
+        if (this.obfuscated != null)
+        {
+            toStringBuilder.append("obfuscated", this.obfuscated);
+        }
+        if (this.insertion != null)
+        {
+            toStringBuilder.append("insertion", this.insertion);
+        }
+        if (this.hoverEvent != null)
+        {
+            toStringBuilder.append("hoverEvent", this.hoverEvent);
+        }
+        if (this.clickEvent != null)
+        {
+            toStringBuilder.append("clickEvent", this.clickEvent);
+        }
+        return toStringBuilder.toString();
     }
 }
