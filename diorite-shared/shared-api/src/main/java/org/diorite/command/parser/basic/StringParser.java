@@ -31,8 +31,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.diorite.command.annotation.arguments.StrArg;
 import org.diorite.command.parser.ArgumentParseResult;
 import org.diorite.command.parser.ArgumentParseResultType;
-import org.diorite.command.parser.ParserContext;
 import org.diorite.command.parser.TypeParser;
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.function.predicate.CharPredicate;
 
 /**

@@ -22,40 +22,68 @@
  * SOFTWARE.
  */
 
-package org.diorite.chat;
+package org.diorite.commons;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
-class ParserContext implements CharacterIterator, Cloneable
+/**
+ * Simple parser context class for easier parsers implementation.
+ */
+public class ParserContext implements CharacterIterator, Cloneable
 {
-    private final StringCharacterIterator iterator;
-    private final String                  data;
+    public static char NULL = '\0';
+    public static char END  = StringCharacterIterator.DONE;
 
-    ParserContext(String data)
+    protected final StringCharacterIterator iterator;
+    protected final String                  data;
+
+    public ParserContext(String data)
     {
         this.data = data;
         this.iterator = new StringCharacterIterator('\0' + data);
     }
 
+    /**
+     * Returns true if parsers contains more chars.
+     *
+     * @return true if parsers contains more chars.
+     */
     public boolean hasNext()
     {
         return (this.iterator.getIndex() + 1) < this.iterator.getEndIndex();
     }
 
+    /**
+     * Returns raw text of parser.
+     *
+     * @return raw text of parser.
+     */
     public String getText()
     {
         return this.data;
     }
 
-    public String substring(int beginIndex)
+    /**
+     * Skips all whitespaces from current index.
+     *
+     * @return amount of skipped chars.
+     */
+    public int skipWhitespaces()
     {
-        return this.data.substring(beginIndex);
-    }
-
-    public String substring(int beginIndex, int endIndex)
-    {
-        return this.data.substring(beginIndex, endIndex);
+        int i = 0;
+        while (this.hasNext())
+        {
+            char c = this.next();
+            if (Character.isWhitespace(c))
+            {
+                i++;
+                continue;
+            }
+            this.previous();
+            break;
+        }
+        return i;
     }
 
     @Override

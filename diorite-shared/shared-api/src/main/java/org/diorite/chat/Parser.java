@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 
+import org.diorite.commons.ParserContext;
+
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 

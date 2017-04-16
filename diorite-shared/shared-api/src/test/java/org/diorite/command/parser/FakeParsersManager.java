@@ -32,13 +32,13 @@ import org.diorite.command.Argument;
 public class FakeParsersManager implements ParsersManager
 {
     @Override
-    public ParserContext createContext(String data, Collection<? extends Argument<?>> arguments)
+    public CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments)
     {
-        return new SimpleParserContext(data, arguments);
+        return new CommandParserContext(data, arguments);
     }
 
-    public ParserContext createContext(String data, Argument<?>... arguments)
+    public CommandParserContext createContext(String data, Argument<?>... arguments)
     {
-        return new SimpleParserContext(data, List.of(arguments));
+        return new CommandParserContext(data, List.of(arguments));
     }
 }

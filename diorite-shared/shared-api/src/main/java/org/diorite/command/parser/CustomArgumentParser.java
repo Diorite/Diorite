@@ -26,6 +26,7 @@ package org.diorite.command.parser;
 
 import java.util.Collection;
 
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.function.predicate.CharPredicate;
 
 /**

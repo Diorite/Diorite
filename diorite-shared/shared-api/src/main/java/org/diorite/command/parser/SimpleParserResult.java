@@ -26,13 +26,13 @@ package org.diorite.command.parser;
 
 class SimpleParserResult implements ParserResult
 {
-    private final ParserContext          context;
+    private final CommandParserContext   context;
     private final Object[]               parsed;
     private final int                    lastIndex;
     private final ArgumentParseResult<?> lastResult;
     private final ParserResultType       type;
 
-    SimpleParserResult(ParserContext context, Object[] parsed, int lastIndex, ArgumentParseResult<?> lastResult, ParserResultType type)
+    SimpleParserResult(CommandParserContext context, Object[] parsed, int lastIndex, ArgumentParseResult<?> lastResult, ParserResultType type)
     {
         this.context = context;
         this.parsed = parsed;
@@ -60,7 +60,7 @@ class SimpleParserResult implements ParserResult
     }
 
     @Override
-    public ParserContext getContext()
+    public CommandParserContext getContext()
     {
         return this.context;
     }
@@ -71,17 +71,17 @@ class SimpleParserResult implements ParserResult
         return this.type;
     }
 
-    public static SimpleParserResult success(ParserContext context, Object[] parsed, ArgumentParseResult<?> last)
+    public static SimpleParserResult success(CommandParserContext context, Object[] parsed, ArgumentParseResult<?> last)
     {
         return new SimpleParserResult(context, parsed, parsed.length - 1, last, ParserResultType.SUCCESS);
     }
 
-    public static SimpleParserResult error(ParserContext context, Object[] parsed, int index, ArgumentParseResult<?> last)
+    public static SimpleParserResult error(CommandParserContext context, Object[] parsed, int index, ArgumentParseResult<?> last)
     {
         return new SimpleParserResult(context, parsed, index, last, ParserResultType.ERROR);
     }
 
-    public static SimpleParserResult badSize(ParserContext context, Object[] parsed, int index, ArgumentParseResult<?> last)
+    public static SimpleParserResult badSize(CommandParserContext context, Object[] parsed, int index, ArgumentParseResult<?> last)
     {
         return new SimpleParserResult(context, parsed, index, last, ParserResultType.BAD_SIZE);
     }

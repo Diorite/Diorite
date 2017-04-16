@@ -65,7 +65,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.optimize(this.getThis());
     }
 
-    private boolean optimizeFirstChild()
+    final boolean optimizeFirstChild()
     {
         if (((this.parent != null) && (this.parent.extra != null)) && (this.text != null) && ! this.hasFormatting() && (this.parent.extra.indexOf(this) == 0))
         {
@@ -86,7 +86,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return false;
     }
 
-    private void optimizeSingleExtraInstance(ELEMENT root)
+    final void optimizeSingleExtraInstance(ELEMENT root)
     {
         if ((this.text != null) || (this.translate != null))
         {
@@ -111,7 +111,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    private boolean optimizeWhitespaceByChild()
+    final boolean optimizeWhitespaceByChild()
     {
         if (this.parent == null)
         {
@@ -137,7 +137,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return false;
     }
 
-    private boolean optimizeWhitespaceByRightNeighborhood(int indexOf)
+    final boolean optimizeWhitespaceByRightNeighborhood(int indexOf)
     {
         assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
         if (this.parent.extra.size() > (indexOf + 1))
@@ -162,7 +162,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return false;
     }
 
-    private boolean optimizeWhitespaceByLeftNeighborhood(int indexOf)
+    final boolean optimizeWhitespaceByLeftNeighborhood(int indexOf)
     {
         assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
         ELEMENT element = this.parent.extra.get(indexOf - 1);
@@ -184,7 +184,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return false;
     }
 
-    private boolean optimizeWhitespaceByParent()
+    final boolean optimizeWhitespaceByParent()
     {
         assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
         if ((this.parent.text != null))
@@ -205,7 +205,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return false;
     }
 
-    private boolean optimizeWhitespaces()
+    final boolean optimizeWhitespaces()
     {
         boolean repeat = false;
         if ((this.text != null) && ! this.text.isEmpty() && this.text.trim().isEmpty())
@@ -234,24 +234,29 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
 
     ELEMENT optimize(ELEMENT root)
     {
-        if ((this.parent == null) && (root != this))
+        ELEMENT other = this.getThis();
+        while (true)
         {
-            return this.getThis();
+            if ((other.parent == null) && (root != other))
+            {
+                return other.getThis();
+            }
+            boolean repeat = other.optimizeFirstChild();
+            if (! repeat)
+            {
+                other.optimizeSingleExtraInstance(root);
+            }
+            if (! repeat)
+            {
+                repeat = other.optimizeWhitespaces();
+            }
+            if (repeat)
+            {
+                other = root;
+                continue;
+            }
+            return other.getThis();
         }
-        boolean repeat = this.optimizeFirstChild();
-        if (! repeat)
-        {
-            this.optimizeSingleExtraInstance(root);
-        }
-        if (! repeat)
-        {
-            repeat = this.optimizeWhitespaces();
-        }
-        if (repeat)
-        {
-            return root.optimize(root);
-        }
-        return this.getThis();
     }
 
     @Nullable

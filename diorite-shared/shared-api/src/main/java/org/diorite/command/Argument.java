@@ -25,7 +25,7 @@
 package org.diorite.command;
 
 import org.diorite.command.parser.ArgumentParseResult;
-import org.diorite.command.parser.ParserContext;
+import org.diorite.command.parser.CommandParserContext;
 import org.diorite.commons.function.consumer.Consumer;
 
 /**
@@ -46,5 +46,5 @@ public interface Argument<T>
      *
      * @return parse result.
      */
-    ArgumentParseResult<T> tryParse(ParserContext context, Consumer<T> endConsumer);
+    ArgumentParseResult<T> tryParse(CommandParserContext context, Consumer<T> endConsumer);
 }

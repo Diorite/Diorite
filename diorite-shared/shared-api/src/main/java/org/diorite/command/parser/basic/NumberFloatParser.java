@@ -24,8 +24,8 @@
 
 package org.diorite.command.parser.basic;
 
-import org.diorite.command.parser.ParserContext;
 import org.diorite.command.parser.ArgumentParseResult;
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.function.predicate.CharPredicate;
 
 /**

@@ -24,29 +24,32 @@
 
 package org.diorite.command.parser;
 
-import java.text.StringCharacterIterator;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import org.diorite.command.Argument;
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.arrays.DioriteArrayUtils;
 
-class SimpleParserContext implements ParserContext
+public class CommandParserContext extends ParserContext
 {
     private final Deque<Argument<?>> arguments = new LinkedBlockingDeque<>();
-    private final StringCharacterIterator iterator;
-    private final Object[]                result;
+    private final Object[] result;
     private int index = 0;
 
-    SimpleParserContext(String data, Collection<? extends Argument<?>> arguments)
+    CommandParserContext(String data, Collection<? extends Argument<?>> arguments)
     {
-        this.iterator = new StringCharacterIterator("\0" + data);
+        super(data);
         this.arguments.addAll(arguments);
         this.result = this.arguments.isEmpty() ? DioriteArrayUtils.EMPTY_OBJECT : new Object[this.arguments.size()];
     }
 
-    @Override
+    /**
+     * Run parser.
+     *
+     * @return parser result object.
+     */
     public ParserResult parse()
     {
         if (this.arguments.isEmpty())
@@ -74,7 +77,7 @@ class SimpleParserContext implements ParserContext
             char next = this.next();
             if (next != TypeParser.SPACE)
             {
-                if (next == ParserContext.DONE)
+                if (next == CommandParserContext.DONE)
                 {
                     if (! this.arguments.isEmpty())
                     {
@@ -96,82 +99,19 @@ class SimpleParserContext implements ParserContext
         return SimpleParserResult.success(this, this.result, parseResult);
     }
 
-    @Override
+    /**
+     * Returns expected amount of arguments.
+     *
+     * @return expected amount of arguments.
+     */
     public int getExpectedSize()
     {
         return this.result.length;
     }
 
     @Override
-    public boolean hasNext()
+    public CommandParserContext clone()
     {
-        return (this.iterator.getIndex() + 1) < this.iterator.getEndIndex();
-    }
-
-    @Override
-    public char first()
-    {
-        return this.iterator.first();
-    }
-
-    @Override
-    public char last()
-    {
-        return this.iterator.last();
-    }
-
-    @Override
-    public char setIndex(int p)
-    {
-        return this.iterator.setIndex(p);
-    }
-
-    @Override
-    public char current()
-    {
-        return this.iterator.current();
-    }
-
-    @Override
-    public char next()
-    {
-        return this.iterator.next();
-    }
-
-    @Override
-    public char previous()
-    {
-        return this.iterator.previous();
-    }
-
-    @Override
-    public int getBeginIndex()
-    {
-        return this.iterator.getBeginIndex();
-    }
-
-    @Override
-    public int getEndIndex()
-    {
-        return this.iterator.getEndIndex();
-    }
-
-    @Override
-    public int getIndex()
-    {
-        return this.iterator.getIndex();
-    }
-
-    @Override
-    public ParserContext clone()
-    {
-        try
-        {
-            return (ParserContext) super.clone();
-        }
-        catch (CloneNotSupportedException e)
-        {
-            throw new InternalError(e);
-        }
+        return (CommandParserContext) super.clone();
     }
 }
