@@ -22,8 +22,56 @@
  * SOFTWARE.
  */
 
-package org.diorite.plugin;
+package org.diorite.nbt;
 
-public interface PluginManager
+/**
+ * Represent nbt tag element, placed at the end of nbt container etc..
+ */
+public final class NbtTagEnd extends NbtAbstractTag
 {
+    private static final long      serialVersionUID = 0;
+    public static final  NbtTagEnd INSTANCE         = new NbtTagEnd();
+
+    /**
+     * Construct new NbtTagEnd.
+     */
+    public NbtTagEnd()
+    {
+    }
+
+    /**
+     * Clone constructor.
+     *
+     * @param nbtTagEnd
+     *         tag to be cloned.
+     */
+    private NbtTagEnd(NbtTagEnd nbtTagEnd)
+    {
+        super(nbtTagEnd);
+    }
+
+    @Override
+    public Void getNBTValue()
+    {
+        return null;
+    }
+
+    @Override
+    public NbtTagType getTagType()
+    {
+        return NbtTagType.END;
+    }
+
+    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @Override
+    public NbtTagEnd clone()
+    {
+        return new NbtTagEnd(this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "END";
+    }
 }

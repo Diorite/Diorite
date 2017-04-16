@@ -22,63 +22,54 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.nbt;
 
-import java.text.CharacterIterator;
+import javax.annotation.Nonnull;
+
+import java.util.List;
 
 /**
- * Represent parser context, each parsed command will create own instance of this class.
+ * Represent {@link NbtTagContainer} where all elements are anonymous. (they don't have name)
  */
-public interface ParserContext extends CharacterIterator, Cloneable
+public interface NbtAnonymousTagContainer extends NbtTagContainer, List<NbtTag>
 {
     /**
-     * Run parser.
+     * Add new nbt tag to this container.
      *
-     * @return parser result object.
+     * @param tag
+     *         nbt tag to be added.
+     *
+     * @return true if tag was added.
      */
-    ParserResult parse();
+    @Override
+    boolean addTag(@Nonnull NbtTag tag);
 
     /**
-     * Returns expected amount of arguments.
+     * Returns list of all nbt tags in this container.
      *
-     * @return expected amount of arguments.
+     * @return list of all nbt tags in this container.
      */
-    int getExpectedSize();
+    List<NbtTag> getTags();
 
     /**
-     * Returns if there is more characters in parser/iterator.
+     * Returns list of all nbt tags in this container casted to given type.
      *
-     * @return if there is more characters in parser/iterator.
+     * @param tagClass
+     *         type of nbt tags.
+     * @param <T>
+     *         type of nbt tags.
+     *
+     * @return list of all nbt tags in this container casted to given type.
      */
-    boolean hasNext();
+    <T extends NbtTag> List<T> getTags(Class<T> tagClass);
 
-    @Override
-    char first();
-
-    @Override
-    char last();
-
-    @Override
-    char setIndex(int p);
-
-    @Override
-    char current();
-
-    @Override
-    char next();
-
-    @Override
-    char previous();
-
-    @Override
-    int getBeginIndex();
-
-    @Override
-    int getEndIndex();
-
-    @Override
-    int getIndex();
-
-    @Override
-    ParserContext clone();
+    /**
+     * Set nbt tag on given index to given tag.
+     *
+     * @param i
+     *         index of element.
+     * @param tag
+     *         nbt tag to set.
+     */
+    void setTag(int i, @Nonnull NbtTag tag);
 }
