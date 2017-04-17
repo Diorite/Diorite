@@ -29,10 +29,9 @@ import javax.annotation.Nullable;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,25 +39,25 @@ import org.diorite.commons.ParserContext;
 
 public class Parser
 {
-    private static final Pattern URL_PATTERN = Pattern.compile(
+    static final Pattern URL_PATTERN = Pattern.compile(
             "(?:(?:https?)://)?(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\" +
             ".\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
             "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\." +
             "(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?",
             Pattern.UNICODE_CASE & Pattern.CASE_INSENSITIVE);
 
-    private static final int NONE = - 1;
+    static final int NONE = - 1;
 
-    private static final char ESCAPE = '\\';
-    private static final char SPACE  = ' ';
-    private static final char NULL   = '\0';
-    private static final char END    = CharacterIterator.DONE;
+    static final char ESCAPE = '\\';
+    static final char SPACE  = ' ';
+    static final char NULL   = '\0';
+    static final char END    = CharacterIterator.DONE;
 
-    private final ParserSettings settings;
-    private final ParserContext  context;
-    private final ComponentElement                    rootElement       = new ComponentElement().setText("");
-    private final Collection<AbstractElementParser>   parsers           = new ArrayList<>(20);
-    private final Collection<ApplicableElementParser> applicableParsers = new ArrayList<>(20);
+    final ParserSettings settings;
+    final ParserContext  context;
+    final ComponentElement                    rootElement       = new ComponentElement().setText("");
+    final Collection<ParserAbstractElement>   parsers           = new ArrayList<>(20);
+    final Collection<ParserApplicableElement> applicableParsers = new ArrayList<>(20);
 
     public Parser(String toParse, @Nullable ParserSettings settings)
     {
@@ -72,51 +71,51 @@ public class Parser
     {
         if (this.settings.underlineEnabled)
         {
-            this.addParser(new FormatParser('_', (p, e) -> e.setUnderlined(true), (p, e) -> e.isUnderlined()));
+            this.addParser(new ParserFormat(this, '_', (p, e) -> e.setUnderlined(true), (p, e) -> e.isUnderlined()));
         }
         if (this.settings.italicEnabled)
         {
-            this.addParser(new FormatParser('/', (p, e) -> e.setItalic(true), (p, e) -> e.isItalic()));
+            this.addParser(new ParserFormat(this, '/', (p, e) -> e.setItalic(true), (p, e) -> e.isItalic()));
         }
         if (this.settings.boldEnabled)
         {
-            this.addParser(new FormatParser('*', (p, e) -> e.setBold(true), (p, e) -> e.isBold()));
+            this.addParser(new ParserFormat(this, '*', (p, e) -> e.setBold(true), (p, e) -> e.isBold()));
         }
         if (this.settings.strikethroughEnabled)
         {
-            this.addParser(new FormatParser('~', (p, e) -> e.setStrikethrough(true), (p, e) -> e.isStrikethrough()));
+            this.addParser(new ParserFormat(this, '~', (p, e) -> e.setStrikethrough(true), (p, e) -> e.isStrikethrough()));
         }
         if (this.settings.obfuscateEnabled)
         {
-            this.addParser(new FormatParser('%', (p, e) -> e.setObfuscated(true), (p, e) -> e.isObfuscated()));
+            this.addParser(new ParserFormat(this, '%', (p, e) -> e.setObfuscated(true), (p, e) -> e.isObfuscated()));
         }
         if (this.settings.alternateColorCharEnabled)
         {
-            this.addParser(this.colorParser = new ColorParser('&'));
+            this.addParser(this.colorParser = new ParserColor(this, '&'));
         }
         if (! this.settings.colorCharEnabled)
         {
-            this.addParser(new SkipColorParser());
+            this.addParser(new ParserSkipColor(this));
         }
     }
 
-    private void addParser(AbstractElementParser parser)
+    private void addParser(ParserAbstractElement parser)
     {
         this.parsers.add(parser);
-        if (parser instanceof ApplicableElementParser)
+        if (parser instanceof ParserApplicableElement)
         {
-            this.applicableParsers.add((ApplicableElementParser) parser);
+            this.applicableParsers.add((ParserApplicableElement) parser);
         }
     }
 
-    private LinkedList<ComponentElement> levelQueue  = new LinkedList<>(List.of(this.rootElement));
-    private LinkedList<ComponentElement> colorsQueue = new LinkedList<>();
+    Deque<ComponentElement> levelQueue  = new LinkedList<>(List.of(this.rootElement));
+    Deque<ComponentElement> colorsQueue = new LinkedList<>();
 
-    private @Nullable ColorParser colorParser;
-    private boolean       escaped     = false;
-    private StringBuilder sb          = new StringBuilder(128);
-    private int           indexOfText = 0;
-    private int level;
+    @Nullable ParserColor colorParser;
+    boolean       escaped     = false;
+    StringBuilder sb          = new StringBuilder(128);
+    int           indexOfText = 0;
+    int level;
 
     public String parse()
     {
@@ -125,7 +124,7 @@ public class Parser
         {
             char c = context.next();
             boolean any = false;
-            for (AbstractElementParser parser : this.parsers)
+            for (ParserAbstractElement parser : this.parsers)
             {
                 any |= parser.onKey(context, c);
             }
@@ -237,11 +236,11 @@ public class Parser
         ComponentElement element = new ComponentElement().setText("");
         this.levelQueue.getLast().addExtra(element);
         this.levelQueue.add(element);
-        for (AbstractElementParser abstractElementParser : this.parsers)
+        for (ParserAbstractElement abstractElementParser : this.parsers)
         {
-            if (abstractElementParser instanceof ApplicableElementParser)
+            if (abstractElementParser instanceof ParserApplicableElement)
             {
-                ApplicableElementParser parser = (ApplicableElementParser) abstractElementParser;
+                ParserApplicableElement parser = (ParserApplicableElement) abstractElementParser;
                 if (parser.active && ! parser.check(element))
                 {
                     parser.apply(element);
@@ -276,287 +275,4 @@ public class Parser
         }
     }
 
-    class SkipColorParser extends AbstractElementParser
-    {
-        SkipColorParser()
-        {
-            this.active = true;
-        }
-
-        @Override
-        boolean onKey(ParserContext context, char c)
-        {
-            if (c != ChatColor.COLOR_CHAR)
-            {
-                return false;
-            }
-            char next = context.next();
-            ChatColor byChar = ChatColor.getByChar(next);
-            if (byChar == null)
-            {
-                context.previous();
-                Parser.this.sb.append(c);
-            }
-            return true;
-        }
-    }
-
-    class ColorParser extends ApplicableElementParser
-    {
-        char color = NULL;
-
-        ColorParser(char key)
-        {
-            this.active = true;
-        }
-
-        @Override
-        boolean onKey(ParserContext context, char c)
-        {
-            if (c != '&')
-            {
-                return false;
-            }
-            if (Parser.this.escaped)
-            {
-                Parser.this.sb.append(c);
-                Parser.this.escaped = false;
-                return true;
-            }
-            char next = context.next();
-            ChatColor byChar = ChatColor.getByChar(next);
-            if (byChar == null)
-            {
-                context.previous();
-                Parser.this.sb.append(c);
-                return true;
-            }
-            if (Parser.this.sb.length() != 0)
-            {
-                Parser.this.prepareElement();
-            }
-            Parser.this.resetStringBuilder();
-            this.color = next;
-            Parser.this.increaseLevel();
-            return true;
-        }
-
-        @Override
-        void apply(ComponentElement element)
-        {
-            if (this.color == NULL)
-            {
-                return;
-            }
-            ChatColor byChar = ChatColor.getByChar(this.color);
-            if (byChar == null)
-            {
-                throw new IllegalStateException("Unknown color: " + this.color);
-            }
-            switch (byChar)
-            {
-                case BLACK:
-                case DARK_BLUE:
-                case DARK_GREEN:
-                case DARK_AQUA:
-                case DARK_RED:
-                case DARK_PURPLE:
-                case GOLD:
-                case GRAY:
-                case DARK_GRAY:
-                case BLUE:
-                case GREEN:
-                case AQUA:
-                case RED:
-                case LIGHT_PURPLE:
-                case YELLOW:
-                case WHITE:
-                case RESET:
-                    element.setColor(byChar);
-                    element.setBold(null);
-                    element.setItalic(null);
-                    element.setUnderlined(null);
-                    element.setStrikethrough(null);
-                    element.setObfuscated(null);
-                    break;
-                case OBFUSCATE:
-                    element.setObfuscated(true);
-                    break;
-                case BOLD:
-                    element.setBold(true);
-                    break;
-                case STRIKETHROUGH:
-                    element.setStrikethrough(true);
-                    break;
-                case UNDERLINE:
-                    element.setUnderlined(true);
-                    break;
-                case ITALIC:
-                    element.setItalic(true);
-                    break;
-            }
-            Parser.this.colorsQueue.add(element);
-        }
-
-        @Override
-        boolean check(ComponentElement element)
-        {
-            if (this.color == NULL)
-            {
-                return false;
-            }
-            ChatColor byChar = ChatColor.getByChar(this.color);
-            if (byChar == null)
-            {
-                throw new IllegalStateException("Unknown color: " + this.color);
-            }
-            switch (byChar)
-            {
-                case BLACK:
-                case DARK_BLUE:
-                case DARK_GREEN:
-                case DARK_AQUA:
-                case DARK_RED:
-                case DARK_PURPLE:
-                case GOLD:
-                case GRAY:
-                case DARK_GRAY:
-                case BLUE:
-                case GREEN:
-                case AQUA:
-                case RED:
-                case LIGHT_PURPLE:
-                case YELLOW:
-                case WHITE:
-                case RESET:
-                    return element.getColor() == byChar;
-                case OBFUSCATE:
-                    return element.isObfuscated();
-                case BOLD:
-                    return element.isBold();
-                case STRIKETHROUGH:
-                    return element.isStrikethrough();
-                case UNDERLINE:
-                    return element.isUnderlined();
-                case ITALIC:
-                    return element.isItalic();
-                default:
-                    throw new AssertionError();
-            }
-        }
-    }
-
-    abstract static class AbstractElementParser
-    {
-        int index = NONE;
-        boolean active;
-
-        void deactivate() {this.active = false;}
-
-        abstract boolean onKey(ParserContext context, char c);
-    }
-
-    abstract static class ApplicableElementParser extends AbstractElementParser
-    {
-        abstract boolean check(ComponentElement element);
-
-        abstract void apply(ComponentElement element);
-    }
-
-    class FormatParser extends ApplicableElementParser
-    {
-        final char key;
-
-        @Nullable final BiConsumer<? super FormatParser, ComponentElement>  applyFunc;
-        @Nullable final BiPredicate<? super FormatParser, ComponentElement> checkFunc;
-
-        FormatParser(char key, @Nullable BiConsumer<? super FormatParser, ComponentElement> applyFunc,
-                     @Nullable BiPredicate<? super FormatParser, ComponentElement> checkFunc)
-        {
-            this.key = key;
-            this.applyFunc = applyFunc;
-            this.checkFunc = checkFunc;
-        }
-
-        @Override
-        boolean check(ComponentElement element)
-        {
-            if (this.checkFunc != null)
-            {
-                return this.checkFunc.test(this, element);
-            }
-            return false;
-        }
-
-        @Override
-        void apply(ComponentElement element)
-        {
-            if (this.applyFunc != null)
-            {
-                this.applyFunc.accept(this, element);
-            }
-        }
-
-        @Override
-        boolean onKey(ParserContext context, char c)
-        {
-            if (c != this.key)
-            {
-                return false;
-            }
-            if (Parser.this.escaped)
-            {
-                Parser.this.sb.append(c);
-                Parser.this.escaped = false;
-                return true;
-            }
-            char checkNext = context.next();
-            context.previous();
-            char checkPrev = context.previous();
-            context.next();
-            if ((checkNext == this.key) || (checkPrev == this.key))
-            {
-                Parser.this.sb.append(c);
-                return true;
-            }
-            if (this.index == NONE)
-            {
-                char next = context.next();
-                context.previous();
-                if (next == SPACE)
-                {
-                    Parser.this.sb.append(c);
-                    return true;
-                }
-                if (next == END)
-                {
-                    Parser.this.sb.append(this.key);
-                    return true;
-                }
-                this.index = context.getIndex();
-                if (Parser.this.sb.length() != 0)
-                {
-                    Parser.this.prepareElement();
-                }
-                Parser.this.resetStringBuilder();
-                this.active = true;
-                Parser.this.increaseLevel();
-                return true;
-            }
-            if (this.index == (context.getEndIndex() - 1))
-            {
-                Parser.this.sb.append(this.key);
-            }
-            if (Parser.this.sb.length() != 0)
-            {
-                Parser.this.prepareElement();
-            }
-            Parser.this.resetStringBuilder();
-            Parser.this.indexOfText = context.getIndex() + 1;
-            this.active = false;
-            this.index = NONE;
-            Parser.this.decreaseLevel();
-            return true;
-        }
-    }
 }
