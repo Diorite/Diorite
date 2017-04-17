@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import org.diorite.nbt.NbtTag;
+
 /**
  * Represent some message event.
  */
@@ -134,6 +136,31 @@ public interface ChatMessageEvent
     {
         return new ChatEventChangePageImpl(value);
     }
+    /**
+     * Create new event of {@link Action#CHANGE_PAGE} type.
+     *
+     * @param value
+     *         number of page.
+     *
+     * @return created event instance.
+     */
+    static ChatEventShowEntity showEntity(NbtTag value)
+    {
+        return new ChatEventShowEntityImpl(value);
+    }
+    /**
+     * Create new event of {@link Action#CHANGE_PAGE} type.
+     *
+     * @param value
+     *         number of page.
+     *
+     * @return created event instance.
+     */
+    static ChatEventShowItem showItem(NbtTag value)
+    {
+        return new ChatEventShowItemImpl(value);
+    }
+
 
     /**
      * Enum of possible actions.
