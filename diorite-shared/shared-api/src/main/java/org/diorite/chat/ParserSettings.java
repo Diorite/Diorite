@@ -45,6 +45,7 @@ public final class ParserSettings implements Cloneable
         SAFE_AND_CLEAN = builder.withoutObfuscate().build();
     }
 
+    boolean useOptimizer              = true;
     char    alternateColorChar        = '&';
     boolean alternateColorCharEnabled = true;
     boolean colorCharEnabled          = true;
@@ -98,6 +99,11 @@ public final class ParserSettings implements Cloneable
         public ParserSettings build()
         {
             return this.settings.clone();
+        }
+
+        public void setUseOptimizer(boolean useOptimizer)
+        {
+            this.settings.useOptimizer = useOptimizer;
         }
 
         public void setAlternateColorChar(char alternateColorChar)
@@ -218,6 +224,18 @@ public final class ParserSettings implements Cloneable
         public void setKeyBindEnabled(boolean keyBindEnabled)
         {
             this.settings.keyBindEnabled = keyBindEnabled;
+        }
+
+        public ParserSettingsBuilder withOptimizer()
+        {
+            this.settings.useOptimizer = true;
+            return this;
+        }
+
+        public ParserSettingsBuilder withoutOptimizer()
+        {
+            this.settings.useOptimizer = false;
+            return this;
         }
 
         public ParserSettingsBuilder withAlternateColorChar()

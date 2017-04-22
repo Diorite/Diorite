@@ -154,10 +154,14 @@ public class Parser
         // TODO: remove this debug length code
         System.out.println(this.rootElement.toString());
         int length = this.rootElement.toString().length();
-        this.rootElement.optimize();
+        if (this.settings.useOptimizer)
+        {
+            this.rootElement.optimize();
+        }
         System.out.println(this.rootElement);
         int newLength = this.rootElement.toString().length();
-        System.out.println("Smaller by: " + (length - newLength) + " (from: " + length + ", to: " + newLength + ")");
+        int saved = length - newLength;
+        System.out.println("Smaller by: " + saved + " (from: " + length + ", to: " + newLength + ") Use optimizer: " + this.settings.useOptimizer);
         return this.rootElement.toString();
     }
 
