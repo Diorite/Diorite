@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -45,6 +47,27 @@ class ChatEventShowEntityImpl implements ChatEventShowEntity
     public ChatMessageEvent duplicate()
     {
         return new ChatEventShowEntityImpl(this.value);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ChatEventShowEntityImpl))
+        {
+            return false;
+        }
+        ChatEventShowEntityImpl that = (ChatEventShowEntityImpl) o;
+        return Objects.equals(this.value, that.value);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.value);
     }
 
     @Override

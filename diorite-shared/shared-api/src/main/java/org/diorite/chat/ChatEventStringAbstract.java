@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -36,6 +38,27 @@ abstract class ChatEventStringAbstract implements ChatMessageEvent
     public String getValue()
     {
         return this.value;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ChatEventStringAbstract))
+        {
+            return false;
+        }
+        ChatEventStringAbstract that = (ChatEventStringAbstract) o;
+        return Objects.equals(this.value, that.value);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.value);
     }
 
     @Override

@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -43,6 +45,27 @@ class ChatEventChangePageImpl implements ChatEventChangePage
     public ChatMessageEvent duplicate()
     {
         return new ChatEventChangePageImpl(this.value);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ChatEventChangePageImpl))
+        {
+            return false;
+        }
+        ChatEventChangePageImpl that = (ChatEventChangePageImpl) o;
+        return this.value == that.value;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.value);
     }
 
     @Override
