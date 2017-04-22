@@ -91,12 +91,13 @@ public class Parser
         }
         if (this.settings.alternateColorCharEnabled)
         {
-            this.addParser(this.colorParser = new ParserColor(this, '&'));
+            this.addParser(this.colorParser = new ParserColor(this));
         }
         if (! this.settings.colorCharEnabled)
         {
             this.addParser(new ParserSkipColor(this));
         }
+        this.addParser(new ParserDescriptionElement(this));
     }
 
     private void addParser(ParserAbstractElement parser)
@@ -115,7 +116,6 @@ public class Parser
     boolean       escaped     = false;
     StringBuilder sb          = new StringBuilder(128);
     int           indexOfText = 0;
-    int level;
 
     public String parse()
     {
@@ -151,7 +151,13 @@ public class Parser
         }
 
         this.prepareElement();
+        // TODO: remove this debug length code
+        System.out.println(this.rootElement.toString());
+        int length = this.rootElement.toString().length();
         this.rootElement.optimize();
+        System.out.println(this.rootElement);
+        int newLength = this.rootElement.toString().length();
+        System.out.println("Smaller by: " + (length - newLength) + " (from: " + length + ", to: " + newLength + ")");
         return this.rootElement.toString();
     }
 
@@ -192,7 +198,7 @@ public class Parser
                 allElements.add(new ComponentElement().setText(group).setClickEvent(ChatMessageEvent.openURL(matcher.group())));
                 lastMatchEnd = matcher.end();
             }
-            if (lastMatchEnd < (text.length() - 1))
+            if (lastMatchEnd < text.length())
             {
                 allElements.add(new ComponentElement().setText(text.substring(lastMatchEnd)));
             }
@@ -204,35 +210,11 @@ public class Parser
             element = new ComponentElement().setText(text);
         }
         ComponentElement last = this.levelQueue.getLast();
-
-        ChatColor chatColor = null;
-        List<ComponentElement> extra = last.getExtra();
-        if ((extra != null) && ! extra.isEmpty())
-        {
-            ComponentElement lastColor = this.colorsQueue.peekLast();
-            ComponentElement lastExtra = extra.get(extra.size() - 1);
-            if (lastColor == lastExtra)
-            {
-                chatColor = lastExtra.getColor();
-            }
-        }
-
-        if ((last.getColor() != chatColor) && (chatColor != null))
-        {
-            this.decreaseLevel();
-            if (this.colorParser != null)
-            {
-                this.colorParser.deactivate();
-            }
-            this.colorsQueue.removeLast();
-            last = this.levelQueue.getLast();
-        }
         last.addExtra(element);
     }
 
-    void increaseLevel()
+    ComponentElement increaseLevel()
     {
-        this.level++;
         ComponentElement element = new ComponentElement().setText("");
         this.levelQueue.getLast().addExtra(element);
         this.levelQueue.add(element);
@@ -247,30 +229,16 @@ public class Parser
                 }
             }
         }
+        return element;
     }
 
     void decreaseLevel()
     {
-        this.level--;
-        ComponentElement last = this.levelQueue.removeLast();
-        ComponentElement peekLast = this.levelQueue.peekLast();
-        if (peekLast == null)
-        {
-            return;
-        }
+        ComponentElement lastLevel = this.levelQueue.pollLast();
         ComponentElement lastColor = this.colorsQueue.peekLast();
-        ChatColor color = null;
-        if (lastColor == last)
+        if (lastLevel == lastColor)
         {
-            color = last.getColor();
-        }
-        if ((color != peekLast.getColor()) && (color != null))
-        {
-            if (this.colorParser != null)
-            {
-                this.colorParser.deactivate();
-            }
-            this.colorsQueue.removeLast();
+            this.colorsQueue.pollLast();
             this.decreaseLevel();
         }
     }

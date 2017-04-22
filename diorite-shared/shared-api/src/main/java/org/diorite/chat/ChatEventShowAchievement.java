@@ -24,49 +24,29 @@
 
 package org.diorite.chat;
 
-import javax.annotation.Nullable;
-
-public class SimpleChatScore implements ChatScore
+/**
+ * Represent {@link Action#SHOW_ACHIEVEMENT} action type.
+ */
+public interface ChatEventShowAchievement extends ChatMessageEvent
 {
-    private final           String name;
-    private final           String objective;
-    private final @Nullable String value;
+    /**
+     * Returns name of achievement or statistic to display.
+     *
+     * @return name of achievement or statistic to display.
+     */
+    String getValue();
 
-    public SimpleChatScore(String name, String objective, @Nullable String value)
+    // TODO: add method to fetch achievement or statistic object.
+
+    @Override
+    default Object getRawValue()
     {
-        this.name = name;
-        this.objective = objective;
-        this.value = value;
+        return this.getValue();
     }
 
     @Override
-    public String getName()
+    default Action getAction()
     {
-        return this.name;
-    }
-
-    @Override
-    public String getObjective()
-    {
-        return this.objective;
-    }
-
-    @Nullable
-    @Override
-    public String getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public ChatScore duplicate()
-    {
-        return this;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.asJson();
+        return Action.SHOW_ACHIEVEMENT;
     }
 }

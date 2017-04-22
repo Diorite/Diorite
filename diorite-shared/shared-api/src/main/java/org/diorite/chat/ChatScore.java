@@ -26,6 +26,8 @@ package org.diorite.chat;
 
 import javax.annotation.Nullable;
 
+import com.google.gson.JsonObject;
+
 /**
  * Represent score of objective on chat
  */
@@ -53,6 +55,24 @@ public interface ChatScore
      */
     @Nullable
     String getValue();
+
+    /**
+     * Returns score representation as json.
+     *
+     * @return score representation as json.
+     */
+    default String asJson()
+    {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", this.getName());
+        jsonObject.addProperty("objective", this.getObjective());
+        String value = this.getValue();
+        if (value != null)
+        {
+            jsonObject.addProperty("value", value);
+        }
+        return jsonObject.toString();
+    }
 
     /**
      * Returns copy of this score. Might return this same instance if object is immutable and does not require creating of copy.

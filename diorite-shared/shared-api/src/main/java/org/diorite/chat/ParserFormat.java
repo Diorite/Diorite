@@ -79,10 +79,11 @@ class ParserFormat extends ParserApplicableElement
             this.parser.escaped = false;
             return true;
         }
+        int currentIndex = context.getIndex();
         char checkNext = context.next();
-        context.previous();
+        context.setIndex(currentIndex);
         char checkPrev = context.previous();
-        context.next();
+        context.setIndex(currentIndex);
         if ((checkNext == this.key) || (checkPrev == this.key))
         {
             this.parser.sb.append(c);
@@ -103,10 +104,7 @@ class ParserFormat extends ParserApplicableElement
                 return true;
             }
             this.index = context.getIndex();
-            if (this.parser.sb.length() != 0)
-            {
-                this.parser.prepareElement();
-            }
+            this.parser.prepareElement();
             this.parser.resetStringBuilder();
             this.active = true;
             this.parser.increaseLevel();
@@ -116,10 +114,7 @@ class ParserFormat extends ParserApplicableElement
         {
             this.parser.sb.append(this.key);
         }
-        if (this.parser.sb.length() != 0)
-        {
-            this.parser.prepareElement();
-        }
+        this.parser.prepareElement();
         this.parser.resetStringBuilder();
         this.parser.indexOfText = context.getIndex() + 1;
         this.active = false;

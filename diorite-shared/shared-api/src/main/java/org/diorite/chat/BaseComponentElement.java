@@ -28,10 +28,15 @@ import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.KeyBind;
+import org.diorite.chat.ChatMessageEvent.Action;
+import org.diorite.chat.ChatMessageEvent.Action.ActionType;
 
 abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT, EVENT, INSERT>, EVENT extends ChatMessageEvent, INSERT extends EVENT>
 {
@@ -45,6 +50,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
 
     @Nullable ChatScore score;
     @Nullable String    selector;
+    @Nullable KeyBind   keyBind;
 
     @Nullable ChatColor color;
     @Nullable Boolean   bold;
@@ -62,201 +68,18 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
      */
     public ELEMENT optimize()
     {
-        return this.optimize(this.getThis());
+        BaseComponentOptimizer.optimize(this.getThis());
+        return this.getThis();
     }
 
-    final boolean optimizeFirstChild()
-    {
-        if (((this.parent != null) && (this.parent.extra != null)) && (this.text != null) && ! this.hasFormatting() && (this.parent.extra.indexOf(this) == 0))
-        {
-            this.parent.text += this.text;
-            this.text = "";
-            this.parent.extra.remove(this);
-            if (this.extra != null)
-            {
-                this.parent.extra.addAll(0, this.extra);
-                for (ELEMENT element : this.extra)
-                {
-                    element.parent = this.parent;
-                }
-            }
-            this.parent = null;
-            return true;
-        }
-        return false;
-    }
-
-    final void optimizeSingleExtraInstance(ELEMENT root)
-    {
-        if ((this.text != null) || (this.translate != null))
-        {
-            if (this.extra != null)
-            {
-                for (ELEMENT element : new ArrayList<>(this.extra))
-                {
-                    element.optimize(root);
-                }
-                if (this.extra.size() == 1)
-                {
-                    ELEMENT extra = this.extra.get(0);
-                    if (! extra.hasFormatting())
-                    {
-                        this.text = extra.text;
-                        this.translate = extra.translate;
-                        this.with = extra.with;
-                        this.extra = null;
-                    }
-                }
-            }
-        }
-    }
-
-    final boolean optimizeWhitespaceByChild()
-    {
-        if (this.parent == null)
-        {
-            return false;
-        }
-        if ((this.extra != null) && ! this.extra.isEmpty())
-        {
-            ELEMENT extra = this.extra.get(0);
-            if ((this.isObfuscated() == extra.isObfuscated()) && (this.isStrikethrough() == extra.isStrikethrough()) &&
-                (this.isUnderlined() == extra.isUnderlined()))
-            {
-                extra.text = this.text + extra.text;
-                this.text = "";
-                if ((this.extra == null) || this.extra.isEmpty())
-                {
-                    assert this.parent.extra != null; // can't be null if we are child of it.
-                    this.parent.extra.remove(this);
-                    this.parent = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    final boolean optimizeWhitespaceByRightNeighborhood(int indexOf)
-    {
-        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
-        if (this.parent.extra.size() > (indexOf + 1))
-        {
-            ELEMENT element = this.parent.extra.get(indexOf + 1);
-            if ((element.text != null))
-            {
-                if ((this.isObfuscated() == element.isObfuscated()) && (this.isStrikethrough() == element.isStrikethrough()) &&
-                    (this.isUnderlined() == element.isUnderlined()))
-                {
-                    element.text = this.text + element.text;
-                    this.text = "";
-                    if ((this.extra == null) || this.extra.isEmpty())
-                    {
-                        this.parent.extra.remove(this);
-                        this.parent = null;
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    final boolean optimizeWhitespaceByLeftNeighborhood(int indexOf)
-    {
-        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
-        ELEMENT element = this.parent.extra.get(indexOf - 1);
-        if (element.text != null)
-        {
-            if ((this.isObfuscated() == element.isObfuscated()) && (this.isStrikethrough() == element.isStrikethrough()) &&
-                (this.isUnderlined() == element.isUnderlined()))
-            {
-                element.text += this.text;
-                this.text = "";
-                if ((this.extra == null) || this.extra.isEmpty())
-                {
-                    this.parent.extra.remove(this);
-                    this.parent = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    final boolean optimizeWhitespaceByParent()
-    {
-        assert (this.parent != null) && (this.parent.extra != null); // we are a child of it.
-        if ((this.parent.text != null))
-        {
-            if ((this.isObfuscated() == this.parent.isObfuscated()) && (this.isStrikethrough() == this.parent.isStrikethrough()) &&
-                (this.isUnderlined() == this.parent.isUnderlined()))
-            {
-                this.parent.text += this.text;
-                this.text = "";
-                if ((this.extra == null) || this.extra.isEmpty())
-                {
-                    this.parent.extra.remove(this);
-                    this.parent = null;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    final boolean optimizeWhitespaces()
-    {
-        boolean repeat = false;
-        if ((this.text != null) && ! this.text.isEmpty() && this.text.trim().isEmpty())
-        {
-            if ((this.parent != null))
-            {
-                assert this.parent.extra != null; // can't be null if there are children!
-                int indexOf = this.parent.extra.indexOf(this);
-                assert indexOf >= 0;
-                if (indexOf == 0)
-                {
-                    repeat = this.optimizeWhitespaceByParent();
-                }
-                else
-                {
-                    repeat = this.optimizeWhitespaceByLeftNeighborhood(indexOf) || this.optimizeWhitespaceByRightNeighborhood(indexOf);
-                }
-            }
-            if (! repeat)
-            {
-                repeat = this.optimizeWhitespaceByChild();
-            }
-        }
-        return repeat;
-    }
-
-    ELEMENT optimize(ELEMENT root)
+    public ELEMENT getRoot()
     {
         ELEMENT other = this.getThis();
-        while (true)
+        while (other.parent != null)
         {
-            if ((other.parent == null) && (root != other))
-            {
-                return other.getThis();
-            }
-            boolean repeat = other.optimizeFirstChild();
-            if (! repeat)
-            {
-                other.optimizeSingleExtraInstance(root);
-            }
-            if (! repeat)
-            {
-                repeat = other.optimizeWhitespaces();
-            }
-            if (repeat)
-            {
-                other = root;
-                continue;
-            }
-            return other.getThis();
+            other = other.parent.getThis();
         }
+        return other;
     }
 
     @Nullable
@@ -323,8 +146,8 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
      */
     public boolean hasFormatting()
     {
-        return (this.text == null) || (this.color != null) || (this.bold != null) || (this.italic != null) || (this.underlined != null) ||
-               (this.strikethrough != null) || (this.obfuscated != null) || (this.hoverEvent != null) || (this.clickEvent != null) || (this.insertion != null);
+        return (this.color != null) || (this.bold != null) || (this.italic != null) || (this.underlined != null) || (this.strikethrough != null) ||
+               (this.obfuscated != null) || (this.hoverEvent != null) || (this.clickEvent != null) || (this.insertion != null);
     }
 
     @Nullable
@@ -336,10 +159,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     public ELEMENT setText(@Nullable String text)
     {
         this.text = text;
-        this.translate = null;
-        this.with = null;
-        this.selector = null;
-        this.score = null;
+        if (text != null)
+        {
+            this.translate = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
+        }
         return this.getThis();
     }
 
@@ -360,7 +187,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     {
         if (this.extra == null)
         {
-            this.extra = new ArrayList<>(1);
+            this.extra = new ArrayList<>(4);
         }
         this.extra.add(element);
         element.setParent((ELEMENT) this);
@@ -376,10 +203,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     public ELEMENT setTranslate(@Nullable String translate)
     {
         this.translate = translate;
-        this.text = null;
-        this.with = null;
-        this.selector = null;
-        this.score = null;
+        if (translate != null)
+        {
+            this.text = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
+        }
         return this.getThis();
     }
 
@@ -392,14 +223,18 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     public ELEMENT setWith(@Nullable List<Object> with)
     {
         this.with = with;
-        if (this.translate == null)
+        if (with != null)
         {
-            this.translate = StringUtils.EMPTY;
+            if (this.translate == null)
+            {
+                this.translate = StringUtils.EMPTY;
+            }
+            this.text = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
         }
-        this.text = null;
-        this.with = null;
-        this.selector = null;
-        this.score = null;
         return this.getThis();
     }
 
@@ -412,10 +247,34 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     public ELEMENT setSelector(@Nullable String selector)
     {
         this.selector = selector;
-        this.text = null;
-        this.with = null;
-        this.translate = null;
-        this.score = null;
+        if (selector != null)
+        {
+            this.text = null;
+            this.with = null;
+            this.keyBind = null;
+            this.translate = null;
+            this.score = null;
+        }
+        return this.getThis();
+    }
+
+    @Nullable
+    public KeyBind getKeyBind()
+    {
+        return this.keyBind;
+    }
+
+    public ELEMENT setKeyBind(@Nullable KeyBind keyBind)
+    {
+        this.keyBind = keyBind;
+        if (keyBind != null)
+        {
+            this.selector = null;
+            this.text = null;
+            this.with = null;
+            this.translate = null;
+            this.score = null;
+        }
         return this.getThis();
     }
 
@@ -643,8 +502,47 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT removeEvent(EVENT event)
+    {
+        if (event.equals(this.clickEvent))
+        {
+            return this.setClickEvent(null);
+        }
+        if (event.equals(this.hoverEvent))
+        {
+            return this.setHoverEvent(null);
+        }
+        if (event.equals(this.insertion))
+        {
+            return this.setInsertion(null);
+        }
+        return this.getThis();
+    }
+
+    @SuppressWarnings("unchecked")
+    public ELEMENT addEvent(EVENT event)
+    {
+        if (event.getAction() == Action.APPEND_CHAT)
+        {
+            return this.setInsertion((INSERT) event);
+        }
+        switch (event.getAction().getType())
+        {
+            case HOVER:
+                return this.setHoverEvent(event);
+            case CLICK:
+                return this.setClickEvent(event);
+            default:
+                throw new IllegalStateException("Unexpected event type.");
+        }
+    }
+
     public ELEMENT setInsertion(@Nullable INSERT insertion)
     {
+        if ((insertion != null) && (insertion.getAction() != Action.APPEND_CHAT))
+        {
+            throw new IllegalStateException("Invalid type of event (expected append chat): " + insertion.getAction());
+        }
         this.insertion = insertion;
         return this.getThis();
     }
@@ -676,6 +574,10 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
 
     public ELEMENT setHoverEvent(@Nullable EVENT hoverEvent)
     {
+        if ((hoverEvent != null) && (hoverEvent.getAction().getType() != ActionType.HOVER))
+        {
+            throw new IllegalStateException("Invalid type of event (expected hover): " + hoverEvent.getAction().getType());
+        }
         this.hoverEvent = hoverEvent;
         return this.getThis();
     }
@@ -707,6 +609,10 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
 
     public ELEMENT setClickEvent(@Nullable EVENT clickEvent)
     {
+        if ((clickEvent != null) && (clickEvent.getAction().getType() != ActionType.CLICK))
+        {
+            throw new IllegalStateException("Invalid type of event (expected click): " + clickEvent.getAction().getType());
+        }
         this.clickEvent = clickEvent;
         return this.getThis();
     }
@@ -735,6 +641,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         copy.clickEvent = (this.clickEvent == null) ? null : (EVENT) this.clickEvent.duplicate();
 
         copy.score = this.score;
+        copy.keyBind = this.keyBind;
         copy.text = this.text;
         copy.translate = this.translate;
 
@@ -796,6 +703,10 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         if ((this.with != null) && ! this.with.isEmpty())
         {
             toStringBuilder.append("with", this.with);
+        }
+        if (this.keyBind != null)
+        {
+            toStringBuilder.append("keybind", this.keyBind.getName());
         }
         if (this.score != null)
         {

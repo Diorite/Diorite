@@ -68,6 +68,7 @@ public final class ParserSettings implements Cloneable
     boolean translatableEnabled       = true;
     boolean scoreEnabled              = true;
     boolean selectorEnabled           = true;
+    boolean keyBindEnabled            = true;
 
     public static ParserSettingsBuilder builder()
     {
@@ -212,6 +213,11 @@ public final class ParserSettings implements Cloneable
         public void setSelectorEnabled(boolean selectorEnabled)
         {
             this.settings.selectorEnabled = selectorEnabled;
+        }
+
+        public void setKeyBindEnabled(boolean keyBindEnabled)
+        {
+            this.settings.keyBindEnabled = keyBindEnabled;
         }
 
         public ParserSettingsBuilder withAlternateColorChar()
@@ -475,6 +481,18 @@ public final class ParserSettings implements Cloneable
         public ParserSettingsBuilder withoutSelector()
         {
             this.settings.selectorEnabled = false;
+            return this;
+        }
+
+        public ParserSettingsBuilder withKeyBind()
+        {
+            this.settings.keyBindEnabled = true;
+            return this;
+        }
+
+        public ParserSettingsBuilder withoutKeyBind()
+        {
+            this.settings.keyBindEnabled = false;
             return this;
         }
     }

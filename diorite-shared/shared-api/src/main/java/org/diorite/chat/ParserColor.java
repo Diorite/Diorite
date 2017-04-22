@@ -30,16 +30,15 @@ class ParserColor extends ParserApplicableElement
 {
     char color = Parser.NULL;
 
-    ParserColor(Parser parser, char key)
+    ParserColor(Parser parser)
     {
         super(parser);
-        this.active = true;
     }
 
     @Override
     boolean onKey(ParserContext context, char c)
     {
-        if (c != '&')
+        if (c != this.parser.settings.alternateColorChar)
         {
             return false;
         }
@@ -57,10 +56,8 @@ class ParserColor extends ParserApplicableElement
             this.parser.sb.append(c);
             return true;
         }
-        if (this.parser.sb.length() != 0)
-        {
-            this.parser.prepareElement();
-        }
+        this.active = true;
+        this.parser.prepareElement();
         this.parser.resetStringBuilder();
         this.color = next;
         this.parser.increaseLevel();
@@ -79,48 +76,8 @@ class ParserColor extends ParserApplicableElement
         {
             throw new IllegalStateException("Unknown color: " + this.color);
         }
-        switch (byChar)
-        {
-            case BLACK:
-            case DARK_BLUE:
-            case DARK_GREEN:
-            case DARK_AQUA:
-            case DARK_RED:
-            case DARK_PURPLE:
-            case GOLD:
-            case GRAY:
-            case DARK_GRAY:
-            case BLUE:
-            case GREEN:
-            case AQUA:
-            case RED:
-            case LIGHT_PURPLE:
-            case YELLOW:
-            case WHITE:
-            case RESET:
-                element.setColor(byChar);
-                element.setBold(null);
-                element.setItalic(null);
-                element.setUnderlined(null);
-                element.setStrikethrough(null);
-                element.setObfuscated(null);
-                break;
-            case OBFUSCATE:
-                element.setObfuscated(true);
-                break;
-            case BOLD:
-                element.setBold(true);
-                break;
-            case STRIKETHROUGH:
-                element.setStrikethrough(true);
-                break;
-            case UNDERLINE:
-                element.setUnderlined(true);
-                break;
-            case ITALIC:
-                element.setItalic(true);
-                break;
-        }
+        this.color = Parser.NULL;
+        element.setColor(byChar);
         this.parser.colorsQueue.add(element);
     }
 
@@ -136,38 +93,6 @@ class ParserColor extends ParserApplicableElement
         {
             throw new IllegalStateException("Unknown color: " + this.color);
         }
-        switch (byChar)
-        {
-            case BLACK:
-            case DARK_BLUE:
-            case DARK_GREEN:
-            case DARK_AQUA:
-            case DARK_RED:
-            case DARK_PURPLE:
-            case GOLD:
-            case GRAY:
-            case DARK_GRAY:
-            case BLUE:
-            case GREEN:
-            case AQUA:
-            case RED:
-            case LIGHT_PURPLE:
-            case YELLOW:
-            case WHITE:
-            case RESET:
-                return element.getColor() == byChar;
-            case OBFUSCATE:
-                return element.isObfuscated();
-            case BOLD:
-                return element.isBold();
-            case STRIKETHROUGH:
-                return element.isStrikethrough();
-            case UNDERLINE:
-                return element.isUnderlined();
-            case ITALIC:
-                return element.isItalic();
-            default:
-                throw new AssertionError();
-        }
+        return false;
     }
 }
