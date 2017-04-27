@@ -22,38 +22,32 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity.metadata.entry;
+package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataByteEntry extends EntityMetadataEntry<Byte>
+public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
 {
-    private byte value;
+    private int value;
 
-    public EntityMetadataByteEntry(final byte index, final byte value)
+    public EntityMetadataIntegerValue(final byte index, final int value)
     {
         super(index);
         this.value = value;
     }
 
-    public EntityMetadataByteEntry(final byte index, final int value)
+    @Override
+    public EntityMetadataValueType getType()
     {
-        super(index);
-        this.value = (byte) value;
+        return EntityMetadataValueType.INT;
     }
 
     @Override
-    public EntityMetadataEntryType getType()
-    {
-        return EntityMetadataEntryType.BYTE;
-    }
-
-    @Override
-    public Byte getValue()
+    public Integer getValue()
     {
         return this.value;
     }
 
     @Override
-    public void setValue(Byte value)
+    public void setValue(Integer value)
     {
         this.value = value;
     }

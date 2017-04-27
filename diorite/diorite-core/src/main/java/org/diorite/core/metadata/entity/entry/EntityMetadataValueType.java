@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity.metadata.entry;
+package org.diorite.core.metadata.entity.entry;
 
-public enum EntityMetadataEntryType
+public enum EntityMetadataValueType
 {
     BYTE,
-    INT,
-    STRING
+    INTEGER,
+    STRING,
+    BOOLEAN
 
     //TODO
 }

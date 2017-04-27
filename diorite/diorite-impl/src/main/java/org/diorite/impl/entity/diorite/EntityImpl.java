@@ -26,11 +26,12 @@ package org.diorite.impl.entity.diorite;
 
 import org.diorite.ImmutableLocation;
 import org.diorite.Location;
+import org.diorite.core.metadata.entity.entry.EntityMetadataBooleanValue;
 import org.diorite.impl.entity.IEntity;
-import org.diorite.impl.entity.metadata.EntityMetadata;
-import org.diorite.impl.entity.metadata.entry.EntityMetadataByteEntry;
-import org.diorite.impl.entity.metadata.entry.EntityMetadataIntEntry;
-import org.diorite.impl.entity.metadata.entry.EntityMetadataStringEntry;
+import org.diorite.core.metadata.entity.EntityMetadata;
+import org.diorite.core.metadata.entity.entry.EntityMetadataByteValue;
+import org.diorite.core.metadata.entity.entry.EntityMetadataIntegerValue;
+import org.diorite.core.metadata.entity.entry.EntityMetadataStringValue;
 
 import javax.annotation.Nullable;
 
@@ -51,35 +52,38 @@ public class EntityImpl implements IEntity
 
         //Metadata
         this.metadata = new EntityMetadata(METADATA_SIZE);
-        this.metadata.store(new EntityMetadataByteEntry((byte) 0, 0));
-        this.metadata.store(new EntityMetadataIntEntry((byte) 1, 0));
-        this.metadata.store(new EntityMetadataStringEntry((byte) 2, ""));
+        this.metadata.store(new EntityMetadataByteValue(METADATA_ENTITY_BASIC_FLAGS, ENTITY_BASIC_FLAGS));
+        this.metadata.store(new EntityMetadataIntegerValue(METADATA_ENTITY_AIR_LEVEL, ENTITY_AIR_LEVEL));
+        this.metadata.store(new EntityMetadataStringValue(METADATA_ENTITY_NAME, ENTITY_NAME));
+        this.metadata.store(new EntityMetadataBooleanValue(METADATA_ENTITY_SOUND, ENTITY_SOUND));
+        this.metadata.store(new EntityMetadataBooleanValue(METADATA_ENTITY_NAME_TAG_VISIBILITY, ENTITY_NAME_TAG_VISIBILITY));
+        this.metadata.store(new EntityMetadataBooleanValue(METADATA_ENTITY_GRAVITY, ENTITY_GRAVITY));
 
-        //TODO: lazy entity, metadata
+        //TODO: lazy entity
     }
 
     @Nullable
     @Override
     public String getCustomName()
     {
-        return (String) this.metadata.get((byte) 2).getValue();
+        return this.metadata.getString(METADATA_ENTITY_NAME);
     }
 
     @Override
     public void setCustomName(@Nullable String name)
     {
-        ((EntityMetadataStringEntry)this.metadata.get((byte) 2)).setValue(name);
+        this.metadata.setString(METADATA_ENTITY_NAME, name);
     }
 
     @Override
     public boolean isCustomNameVisible()
     {
-        return false; //TODO: metadata
+        return this.metadata.getBoolean(METADATA_ENTITY_NAME_TAG_VISIBILITY);
     }
 
     @Override
-    public void setCustomNameVisible(boolean visible)
+    public void setCustomNameVisible(boolean visibility)
     {
-        //TODO: metadata
+        this.metadata.setBoolean(METADATA_ENTITY_NAME_TAG_VISIBILITY, visibility);
     }
 }

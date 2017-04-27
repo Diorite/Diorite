@@ -22,26 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity.metadata;
+package org.diorite.core.metadata.entity.entry;
 
-import org.diorite.impl.entity.metadata.entry.EntityMetadataEntry;
-
-public class EntityMetadata
+public abstract class EntityMetadataValue<T>
 {
-    private final EntityMetadataEntry<?>[] values;
+    private final byte index;
 
-    public EntityMetadata(final short size)
+    protected EntityMetadataValue(final byte index)
     {
-        this.values = new EntityMetadataEntry<?>[size];
+        this.index = index;
     }
 
-    public void store(final EntityMetadataEntry<?> value)
+    public byte getIndex()
     {
-        this.values[value.getIndex()] = value;
+        return this.index;
     }
 
-    public EntityMetadataEntry<?> get(final byte index)
-    {
-        return this.values[index];
-    }
+    public abstract EntityMetadataValueType getType();
+
+    public abstract T getValue();
+
+    public abstract void setValue(final T value);
 }

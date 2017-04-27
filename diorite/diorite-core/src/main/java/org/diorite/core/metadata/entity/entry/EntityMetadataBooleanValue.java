@@ -22,25 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity.metadata.entry;
+package org.diorite.core.metadata.entity.entry;
 
-public abstract class EntityMetadataEntry<T>
+public class EntityMetadataBooleanValue extends EntityMetadataValue<Boolean>
 {
-    private final byte index;
+    private boolean value;
 
-    protected EntityMetadataEntry(final byte index)
+    public EntityMetadataBooleanValue(final byte index, final boolean value)
     {
-        this.index = index;
+        super(index);
+        this.value = value;
     }
 
-    public byte getIndex()
+    @Override
+    public EntityMetadataValueType getType()
     {
-        return this.index;
+        return EntityMetadataValueType.BOOLEAN;
     }
 
-    public abstract EntityMetadataEntryType getType();
+    @Override
+    public Boolean getValue()
+    {
+        return this.value;
+    }
 
-    public abstract T getValue();
-
-    public abstract void setValue(final T value);
+    @Override
+    public void setValue(Boolean value)
+    {
+        this.value = value;
+    }
 }

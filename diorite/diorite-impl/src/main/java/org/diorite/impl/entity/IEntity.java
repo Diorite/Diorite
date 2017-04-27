@@ -28,5 +28,47 @@ import org.diorite.entity.Entity;
 
 public interface IEntity extends Entity
 {
+    /* DEFAULT VALUES */
+    byte    ENTITY_BASIC_FLAGS           = 0;
+    int     ENTITY_AIR_LEVEL             = 300;
+    String  ENTITY_NAME                  = "";
+    boolean ENTITY_NAME_TAG_VISIBILITY   = false;
+    boolean ENTITY_SOUND                 = true;
+    boolean ENTITY_GRAVITY               = true;
+
+    /* METADATA */
+    /**
+     * Size of metadata.
+     */
     byte METADATA_SIZE = 6;
+
+    /**
+     * Basic flags.
+     */
+    byte METADATA_ENTITY_BASIC_FLAGS = 0;
+
+    /**
+     * Air level.
+     */
+    byte METADATA_ENTITY_AIR_LEVEL = 1;
+
+    /**
+     * Name or name tag.
+     */
+    byte METADATA_ENTITY_NAME = 2;
+
+    /**
+     * Name tag visibility.
+     */
+    byte METADATA_ENTITY_NAME_TAG_VISIBILITY = 3;
+
+    /**
+     * Sound effects of entity.
+     */
+    byte METADATA_ENTITY_SOUND = 4;
+
+    /**
+     * Gravity.
+     */
+    byte METADATA_ENTITY_GRAVITY = 5;
 }

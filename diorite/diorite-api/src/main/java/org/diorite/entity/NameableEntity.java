@@ -58,8 +58,8 @@ public interface NameableEntity
     /**
      * Set if custom name should be visible.
      *
-     * @param visible
+     * @param visibility
      *         if custom name should be visible.
      */
-    void setCustomNameVisible(boolean visible);
+    void setCustomNameVisible(boolean visibility);
 }
