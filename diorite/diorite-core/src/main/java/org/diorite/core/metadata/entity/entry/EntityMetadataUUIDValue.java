@@ -24,31 +24,20 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
-{
-    private int value;
+import java.util.UUID;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
+public class EntityMetadataUUIDValue extends EntityMetadataObjectValue<UUID>
+{
+    public EntityMetadataUUIDValue(final byte index, final UUID value)
     {
-        super(index);
-        this.value = value;
+        super(index, value);
     }
 
     @Override
     public EntityMetadataValueType getType()
     {
-        return EntityMetadataValueType.INTEGER;
+        return EntityMetadataValueType.OPTIONAL_UUID;
     }
 
-    @Override
-    public Integer getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setValue(Integer value)
-    {
-        this.value = value;
-    }
+    //TODO: Writer
 }

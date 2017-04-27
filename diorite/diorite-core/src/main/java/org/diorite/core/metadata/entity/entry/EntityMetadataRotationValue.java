@@ -24,31 +24,20 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
-{
-    private int value;
+import javax.vecmath.Vector3f;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
+public class EntityMetadataRotationValue extends EntityMetadataObjectValue<Vector3f>
+{
+    public EntityMetadataRotationValue(final byte index, final Vector3f value)
     {
-        super(index);
-        this.value = value;
+        super(index, value);
     }
 
     @Override
     public EntityMetadataValueType getType()
     {
-        return EntityMetadataValueType.INTEGER;
+        return EntityMetadataValueType.ROTATION;
     }
 
-    @Override
-    public Integer getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setValue(Integer value)
-    {
-        this.value = value;
-    }
+    //TODO: Writer
 }

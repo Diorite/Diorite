@@ -28,8 +28,20 @@ public enum EntityMetadataValueType
 {
     BYTE,
     INTEGER,
+    FLOAT,
     STRING,
-    BOOLEAN
+    CHAT,
+    SLOT,
+    BOOLEAN,
+    ROTATION,
+    LOCATION,
+    OPTIONAL_LOCATION,
+    DIRECTION,
+    OPTIONAL_UUID,
+    MATERIAL;
 
-    //TODO
+    public int getIndex()
+    {
+        return this.ordinal();
+    }
 }

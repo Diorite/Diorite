@@ -24,31 +24,23 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
-{
-    private int value;
+import org.diorite.BlockLocation;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
+public class EntityMetadataLocationValue extends EntityMetadataObjectValue<BlockLocation>
+{
+    private final boolean optional;
+
+    public EntityMetadataLocationValue(final byte index, final BlockLocation value, final boolean optional)
     {
-        super(index);
-        this.value = value;
+        super(index, value);
+        this.optional = optional;
     }
 
     @Override
     public EntityMetadataValueType getType()
     {
-        return EntityMetadataValueType.INTEGER;
+        return this.optional ? EntityMetadataValueType.OPTIONAL_LOCATION : EntityMetadataValueType.LOCATION;
     }
 
-    @Override
-    public Integer getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setValue(Integer value)
-    {
-        this.value = value;
-    }
+    //TODO: Writer
 }

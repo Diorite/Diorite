@@ -24,11 +24,11 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
+public class EntityMetadataFloatValue extends EntityMetadataValue<Float>
 {
-    private int value;
+    private float value;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
+    public EntityMetadataFloatValue(final byte index, final float value)
     {
         super(index);
         this.value = value;
@@ -37,17 +37,17 @@ public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
     @Override
     public EntityMetadataValueType getType()
     {
-        return EntityMetadataValueType.INTEGER;
+        return EntityMetadataValueType.FLOAT;
     }
 
     @Override
-    public Integer getValue()
+    public Float getValue()
     {
         return this.value;
     }
 
     @Override
-    public void setValue(Integer value)
+    public void setValue(Float value)
     {
         this.value = value;
     }

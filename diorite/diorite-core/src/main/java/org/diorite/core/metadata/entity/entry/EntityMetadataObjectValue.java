@@ -24,30 +24,24 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
+public abstract class EntityMetadataObjectValue<T> extends EntityMetadataValue<T>
 {
-    private int value;
+    protected T value;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
+    protected EntityMetadataObjectValue(final byte index, final T value)
     {
         super(index);
         this.value = value;
     }
 
     @Override
-    public EntityMetadataValueType getType()
-    {
-        return EntityMetadataValueType.INTEGER;
-    }
-
-    @Override
-    public Integer getValue()
+    public T getValue()
     {
         return this.value;
     }
 
     @Override
-    public void setValue(Integer value)
+    public void setValue(final T value)
     {
         this.value = value;
     }

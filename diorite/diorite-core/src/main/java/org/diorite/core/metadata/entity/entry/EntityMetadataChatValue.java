@@ -24,31 +24,7 @@
 
 package org.diorite.core.metadata.entity.entry;
 
-public class EntityMetadataIntegerValue extends EntityMetadataValue<Integer>
+public class EntityMetadataChatValue
 {
-    private int value;
 
-    public EntityMetadataIntegerValue(final byte index, final int value)
-    {
-        super(index);
-        this.value = value;
-    }
-
-    @Override
-    public EntityMetadataValueType getType()
-    {
-        return EntityMetadataValueType.INTEGER;
-    }
-
-    @Override
-    public Integer getValue()
-    {
-        return this.value;
-    }
-
-    @Override
-    public void setValue(Integer value)
-    {
-        this.value = value;
-    }
 }
