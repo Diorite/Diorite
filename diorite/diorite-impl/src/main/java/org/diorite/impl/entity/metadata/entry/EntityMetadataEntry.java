@@ -22,11 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.metadata.entry;
 
-import org.diorite.entity.Entity;
-
-public interface IEntity extends Entity
+public abstract class EntityMetadataEntry<T>
 {
-    byte METADATA_SIZE = 6;
+    private final byte index;
+
+    protected EntityMetadataEntry(final byte index)
+    {
+        this.index = index;
+    }
+
+    public byte getIndex()
+    {
+        return this.index;
+    }
+
+    public abstract EntityMetadataEntryType getType();
+
+    public abstract T getValue();
+
+    public abstract void setValue(final T value);
 }

@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.entity;
+package org.diorite.impl.entity.metadata.entry;
 
-import org.diorite.entity.Entity;
-
-public interface IEntity extends Entity
+public enum EntityMetadataEntryType
 {
-    byte METADATA_SIZE = 6;
+    BYTE,
+    INT,
+    STRING
+
+    //TODO
 }

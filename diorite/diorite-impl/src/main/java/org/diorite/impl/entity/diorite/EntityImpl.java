@@ -27,12 +27,17 @@ package org.diorite.impl.entity.diorite;
 import org.diorite.ImmutableLocation;
 import org.diorite.Location;
 import org.diorite.impl.entity.IEntity;
+import org.diorite.impl.entity.metadata.EntityMetadata;
+import org.diorite.impl.entity.metadata.entry.EntityMetadataByteEntry;
+import org.diorite.impl.entity.metadata.entry.EntityMetadataIntEntry;
+import org.diorite.impl.entity.metadata.entry.EntityMetadataStringEntry;
 
 import javax.annotation.Nullable;
 
 public class EntityImpl implements IEntity
 {
     private int id;
+    protected EntityMetadata metadata;
 
     private Location location;
 
@@ -44,20 +49,26 @@ public class EntityImpl implements IEntity
         this.id = id;
         this.location = location; //TODO: check
 
-        //TODO: metadata, lazy entity
+        //Metadata
+        this.metadata = new EntityMetadata(METADATA_SIZE);
+        this.metadata.store(new EntityMetadataByteEntry((byte) 0, 0));
+        this.metadata.store(new EntityMetadataIntEntry((byte) 1, 0));
+        this.metadata.store(new EntityMetadataStringEntry((byte) 2, ""));
+
+        //TODO: lazy entity, metadata
     }
 
     @Nullable
     @Override
     public String getCustomName()
     {
-        return ""; //TODO: metadata
+        return (String) this.metadata.get((byte) 2).getValue();
     }
 
     @Override
     public void setCustomName(@Nullable String name)
     {
-        //TODO: metadata
+        ((EntityMetadataStringEntry)this.metadata.get((byte) 2)).setValue(name);
     }
 
     @Override
