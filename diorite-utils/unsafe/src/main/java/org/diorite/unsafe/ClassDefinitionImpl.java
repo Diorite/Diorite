@@ -26,7 +26,6 @@ package org.diorite.unsafe;
 
 import javax.annotation.Nullable;
 
-import java.lang.reflect.Module;
 import java.security.ProtectionDomain;
 
 import org.objectweb.asm.ClassReader;

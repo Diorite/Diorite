@@ -44,7 +44,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-import net.bytebuddy.description.annotation.AnnotatedCodeElement;
+import net.bytebuddy.description.annotation.AnnotationSource;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.annotation.AnnotationList;
 import net.bytebuddy.description.type.TypeDescription;
@@ -365,7 +365,7 @@ public final class AsmUtils implements Opcodes
         throw new Error("Unknown primitive type?"); // not possible?
     }
 
-    public static AnnotationList getAnnotationList(AnnotatedCodeElement element)
+    public static AnnotationList getAnnotationList(AnnotationSource element)
     {
         if (element instanceof TypeDescription)
         {
@@ -377,7 +377,7 @@ public final class AsmUtils implements Opcodes
         }
     }
 
-    public static Annotation[] getAnnotations(AnnotatedCodeElement element, RetentionPolicy... policies)
+    public static Annotation[] getAnnotations(AnnotationSource element, RetentionPolicy... policies)
     {
         Set<RetentionPolicy> policySet = Set.of(policies);
         AnnotationList annotationList = getAnnotationList(element);

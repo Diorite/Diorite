@@ -183,7 +183,7 @@ public final class DioriteMain
                 throw new RuntimeException("Can't create config file: " + configFile.getAbsolutePath(), e);
             }
         }
-        addBindings(dioriteConfig);
+        //addBindings(dioriteConfig); //TODO
 
         DioriteServer dioriteServer = new DioriteServer(dioriteConfig);
         printDioriteHello(dioriteServer, args);

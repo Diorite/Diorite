@@ -27,10 +27,10 @@ package org.diorite.inject.impl.controller;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-import net.bytebuddy.description.annotation.AnnotatedCodeElement;
+import net.bytebuddy.description.annotation.AnnotationSource;
 import net.bytebuddy.description.type.TypeDescription;
 
-class ControllerMemberDataBuilderImpl<T extends AnnotatedCodeElement> implements org.diorite.inject.AnnotatedMemberData<T, TypeDescription>
+class ControllerMemberDataBuilderImpl<T extends AnnotationSource> implements org.diorite.inject.AnnotatedMemberData<T, TypeDescription>
 {
     private final TypeDescription                                        classType;
     private final String                                                 name;

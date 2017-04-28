@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Module;
 import java.security.ProtectionDomain;
 
 import org.diorite.inject.impl.asm.AbstractClassTransformer;
