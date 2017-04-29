@@ -22,44 +22,48 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.annotation;
+package org.diorite.command;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import org.diorite.command.Argument;
+import org.diorite.command.parser.ParserResult;
+import org.diorite.sender.CommandSender;
 
 /**
- * Annotation used to mark command executor methods.
+ * Context in which a command is called
  */
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command
+public class CommandContext
 {
-    /**
-     * If name of command is empty, method name will be used. <br>
-     * First string is name, every next one is a alias.
-     *
-     * @return name and aliases of command.
-     */
-    String[] value() default {};
+    private ParserResult parserResult;
+    private CommandSender sender;
+    private String name;
+
+    public CommandContext(ParserResult parserResult, CommandSender sender, String name)
+    {
+        this.parserResult = parserResult;
+        this.sender = sender;
+        this.name = name;
+    }
 
     /**
-     * If name of sub command is empty command will be registered as master command.
-     *
-     * @return name of subCommand.
+     * @return parser result
      */
-    String subCommandOf() default "";
+    public ParserResult getParserResult()
+    {
+        return parserResult;
+    }
 
     /**
-     * @return description of command
+     * @return command sender
      */
-    String description() default "";
+    public CommandSender getCommandSender()
+    {
+        return sender;
+    }
 
     /**
-     * @return array of arguments
+     * @return the name or alias of the command used
      */
-    Class<? extends Argument<?>>[] arguments();
+    public String commandName()
+    {
+        return name;
+    }
 }

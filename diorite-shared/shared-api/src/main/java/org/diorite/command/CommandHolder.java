@@ -22,44 +22,11 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import org.diorite.command.Argument;
+package org.diorite.command;
 
 /**
- * Annotation used to mark command executor methods.
+ * Interface that represents an object that holds command methods
  */
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command
+public interface CommandHolder
 {
-    /**
-     * If name of command is empty, method name will be used. <br>
-     * First string is name, every next one is a alias.
-     *
-     * @return name and aliases of command.
-     */
-    String[] value() default {};
-
-    /**
-     * If name of sub command is empty command will be registered as master command.
-     *
-     * @return name of subCommand.
-     */
-    String subCommandOf() default "";
-
-    /**
-     * @return description of command
-     */
-    String description() default "";
-
-    /**
-     * @return array of arguments
-     */
-    Class<? extends Argument<?>>[] arguments();
 }

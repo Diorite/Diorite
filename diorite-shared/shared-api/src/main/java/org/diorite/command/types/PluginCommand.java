@@ -22,44 +22,41 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.annotation;
+package org.diorite.command.types;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-import org.diorite.command.Argument;
+import org.diorite.command.CommandContext;
+import org.diorite.command.CommandExecutor;
+import org.diorite.command.CommandObject;
 
-/**
- * Annotation used to mark command executor methods.
- */
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Command
+public class PluginCommand extends CommandObject
 {
-    /**
-     * If name of command is empty, method name will be used. <br>
-     * First string is name, every next one is a alias.
-     *
-     * @return name and aliases of command.
-     */
-    String[] value() default {};
+    private CommandExecutor executor;
 
-    /**
-     * If name of sub command is empty command will be registered as master command.
-     *
-     * @return name of subCommand.
-     */
-    String subCommandOf() default "";
+    public PluginCommand(String name)
+    {
+        super(name);
+    }
 
-    /**
-     * @return description of command
-     */
-    String description() default "";
+    public PluginCommand(String name, String description, String use, List<String> aliases)
+    {
+        super(name, description, use, aliases);
+    }
 
-    /**
-     * @return array of arguments
-     */
-    Class<? extends Argument<?>>[] arguments();
+    @Override
+    public boolean invoke(CommandContext context)
+    {
+        return executor != null && executor.execute(context);
+    }
+
+    public CommandExecutor getExecutor()
+    {
+        return executor;
+    }
+
+    public void setExecutor(CommandExecutor executor)
+    {
+        this.executor = executor;
+    }
 }
