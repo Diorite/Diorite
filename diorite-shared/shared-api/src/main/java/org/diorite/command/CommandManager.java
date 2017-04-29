@@ -65,9 +65,11 @@ public interface CommandManager
      *
      * @param name
      *          name of the command
+     * @param plugin
+     *          the plugin that owns the command
      * @return the plugin command registered
      */
-    PluginCommand registerCommand(String name);
+    PluginCommand registerCommand(String name, Plugin plugin);
 
     /**
      * Removes a command from the manager.

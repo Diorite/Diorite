@@ -113,9 +113,9 @@ public class DioriteCommandManager implements CommandManager
     }
 
     @Override
-    public PluginCommand registerCommand(String name)
+    public PluginCommand registerCommand(String name, Plugin plugin)
     {
-        return new PluginCommand(name);
+        return new PluginCommand(name, plugin);
     }
 
     @Override

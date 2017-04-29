@@ -29,19 +29,23 @@ import java.util.List;
 import org.diorite.command.CommandContext;
 import org.diorite.command.CommandExecutor;
 import org.diorite.command.CommandObject;
+import org.diorite.plugin.Plugin;
 
 public class PluginCommand extends CommandObject
 {
     private CommandExecutor executor;
+    private Plugin plugin;
 
-    public PluginCommand(String name)
+    public PluginCommand(String name, Plugin plugin)
     {
         super(name);
+        this.plugin = plugin;
     }
 
-    public PluginCommand(String name, String description, String use, List<String> aliases)
+    public PluginCommand(String name, String description, String use, List<String> aliases, Plugin plugin)
     {
         super(name, description, use, aliases);
+        this.plugin = plugin;
     }
 
     @Override
@@ -58,5 +62,10 @@ public class PluginCommand extends CommandObject
     public void setExecutor(CommandExecutor executor)
     {
         this.executor = executor;
+    }
+
+    public Plugin getPlugin()
+    {
+        return plugin;
     }
 }
