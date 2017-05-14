@@ -61,7 +61,7 @@ import org.diorite.inject.impl.utils.AsmUtils;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.description.NamedElement;
-import net.bytebuddy.description.annotation.AnnotatedCodeElement;
+import net.bytebuddy.description.annotation.AnnotationSource;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.field.FieldDescription.InDefinedShape;
 import net.bytebuddy.description.method.MethodDescription;
@@ -69,7 +69,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 import net.bytebuddy.description.type.TypeDescription.Generic;
 
-public final class Controller extends InjectionController<AnnotatedCodeElement, TypeDescription, Generic>
+public final class Controller extends InjectionController<AnnotationSource, TypeDescription, Generic>
 {
     static final TypeDescription.ForLoadedType INJECT              = new TypeDescription.ForLoadedType(Inject.class);
     static final TypeDescription.ForLoadedType PROVIDER            = new TypeDescription.ForLoadedType(Provider.class);
@@ -510,7 +510,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     }
 
     @Override
-    protected boolean isInjectElement(AnnotatedCodeElement element)
+    protected boolean isInjectElement(AnnotationSource element)
     {
         for (AnnotationDescription annotation : AsmUtils.getAnnotationList(element))
         {
@@ -611,7 +611,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     }
 
     @Override
-    protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawQualifierAnnotations(AnnotatedCodeElement element)
+    protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawQualifierAnnotations(AnnotationSource element)
     {
         Annotation[] annotations = AsmUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
         Map<Class<? extends Annotation>, Annotation> resultMap = new HashMap<>(annotations.length + 1);
@@ -644,7 +644,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
     }
 
     @Override
-    protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawScopeAnnotations(AnnotatedCodeElement element)
+    protected Map<Class<? extends Annotation>, ? extends Annotation> extractRawScopeAnnotations(AnnotationSource element)
     {
         Annotation[] annotations = AsmUtils.getAnnotations(element, RetentionPolicy.RUNTIME);
         Map<Class<? extends Annotation>, Annotation> resultMap = new HashMap<>(annotations.length + 1);
@@ -687,7 +687,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
 
     @Override
     protected Map<Class<? extends Annotation>, ? extends Annotation> transformAll(TypeDescription classType, String name,
-                                                                                  AnnotatedCodeElement member,
+                                                                                  AnnotationSource member,
                                                                                   Map<Class<? extends Annotation>, ? extends Annotation> raw)
     {
         Map<Class<? extends Annotation>, Annotation> scopeAnnotations = new HashMap<>(raw.size());
@@ -699,7 +699,7 @@ public final class Controller extends InjectionController<AnnotatedCodeElement, 
         return scopeAnnotations;
     }
 
-    <T, B extends AnnotatedCodeElement & NamedElement.WithRuntimeName> ControllerInjectValueData<T> createValue
+    <T, B extends AnnotationSource & NamedElement.WithRuntimeName> ControllerInjectValueData<T> createValue
             (int index, TypeDescription classType, TypeDescription.ForLoadedType.Generic type, B member, String name,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawScopeAnnotations,
              Map<Class<? extends Annotation>, ? extends Annotation> parentRawQualifierAnnotations)

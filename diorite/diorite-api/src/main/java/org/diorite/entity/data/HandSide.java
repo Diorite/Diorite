@@ -22,44 +22,37 @@
  * SOFTWARE.
  */
 
-package org.diorite.entity;
-
-import javax.annotation.Nullable;
+package org.diorite.entity.data;
 
 /**
- * Represent entity that can have custom name.
+ * Represents hand side.
  */
-public interface NameableEntity
+public enum HandSide
 {
     /**
-     * Returns custom name of entity.
-     *
-     * @return custom name of entity.
+     * Left side.
      */
-    @Nullable
-    String getCustomName();
+    LEFT,
+    /**
+     * Right side.
+     */
+    RIGHT;
 
     /**
-     * Sets a custom name on a mob or block. This name will be used in death messages and can be sent to the client as a nameplate over the entity.
+     * Returns opposite hand side depending on current side.
      *
-     * @param name
-     *         new name, or null to disable.
+     * @return opposite hand side depending on current side.
      */
-    void setCustomName(@Nullable String name);
-
-    /**
-     * Returns true if custom name should be visible. <br>
-     * Note that players always need to display name.
-     *
-     * @return true if custom name should be visible.
-     */
-    boolean isCustomNameVisible();
-
-    /**
-     * Set if custom name should be visible.
-     *
-     * @param visibility
-     *         if custom name should be visible.
-     */
-    void setCustomNameVisible(boolean visibility);
+    public HandSide getOpposite()
+    {
+        switch (this)
+        {
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            default:
+                throw new AssertionError();
+        }
+    }
 }

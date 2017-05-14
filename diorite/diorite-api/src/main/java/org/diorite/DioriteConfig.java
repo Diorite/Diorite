@@ -264,7 +264,7 @@ public interface DioriteConfig extends Config
                     from = null;
                 }
             }
-            this.metadata().put("favicon-prepared", from);
+
             return from;
         }
 

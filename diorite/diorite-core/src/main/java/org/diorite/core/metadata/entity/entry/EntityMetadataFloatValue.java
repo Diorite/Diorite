@@ -22,44 +22,33 @@
  * SOFTWARE.
  */
 
-package org.diorite.entity;
+package org.diorite.core.metadata.entity.entry;
 
-import javax.annotation.Nullable;
-
-/**
- * Represent entity that can have custom name.
- */
-public interface NameableEntity
+public class EntityMetadataFloatValue extends EntityMetadataValue<Float>
 {
-    /**
-     * Returns custom name of entity.
-     *
-     * @return custom name of entity.
-     */
-    @Nullable
-    String getCustomName();
+    private float value;
 
-    /**
-     * Sets a custom name on a mob or block. This name will be used in death messages and can be sent to the client as a nameplate over the entity.
-     *
-     * @param name
-     *         new name, or null to disable.
-     */
-    void setCustomName(@Nullable String name);
+    public EntityMetadataFloatValue(final byte index, final float value)
+    {
+        super(index);
+        this.value = value;
+    }
 
-    /**
-     * Returns true if custom name should be visible. <br>
-     * Note that players always need to display name.
-     *
-     * @return true if custom name should be visible.
-     */
-    boolean isCustomNameVisible();
+    @Override
+    public EntityMetadataValueType getType()
+    {
+        return EntityMetadataValueType.FLOAT;
+    }
 
-    /**
-     * Set if custom name should be visible.
-     *
-     * @param visibility
-     *         if custom name should be visible.
-     */
-    void setCustomNameVisible(boolean visibility);
+    @Override
+    public Float getValue()
+    {
+        return this.value;
+    }
+
+    @Override
+    public void setValue(Float value)
+    {
+        this.value = value;
+    }
 }

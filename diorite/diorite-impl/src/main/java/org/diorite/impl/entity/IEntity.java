@@ -22,44 +22,53 @@
  * SOFTWARE.
  */
 
-package org.diorite.entity;
+package org.diorite.impl.entity;
 
-import javax.annotation.Nullable;
+import org.diorite.entity.Entity;
 
-/**
- * Represent entity that can have custom name.
- */
-public interface NameableEntity
+public interface IEntity extends Entity
 {
+    /* DEFAULT VALUES */
+    byte    ENTITY_BASIC_FLAGS           = 0;
+    int     ENTITY_AIR_LEVEL             = 300;
+    String  ENTITY_NAME                  = "";
+    boolean ENTITY_NAME_TAG_VISIBILITY   = false;
+    boolean ENTITY_SOUND                 = true;
+    boolean ENTITY_GRAVITY               = true;
+
+    /* METADATA */
     /**
-     * Returns custom name of entity.
-     *
-     * @return custom name of entity.
+     * Size of metadata.
      */
-    @Nullable
-    String getCustomName();
+    byte METADATA_SIZE = 6;
 
     /**
-     * Sets a custom name on a mob or block. This name will be used in death messages and can be sent to the client as a nameplate over the entity.
-     *
-     * @param name
-     *         new name, or null to disable.
+     * Basic flags.
      */
-    void setCustomName(@Nullable String name);
+    byte METADATA_ENTITY_BASIC_FLAGS = 0;
 
     /**
-     * Returns true if custom name should be visible. <br>
-     * Note that players always need to display name.
-     *
-     * @return true if custom name should be visible.
+     * Air level.
      */
-    boolean isCustomNameVisible();
+    byte METADATA_ENTITY_AIR_LEVEL = 1;
 
     /**
-     * Set if custom name should be visible.
-     *
-     * @param visibility
-     *         if custom name should be visible.
+     * Name or name tag.
      */
-    void setCustomNameVisible(boolean visibility);
+    byte METADATA_ENTITY_NAME = 2;
+
+    /**
+     * Name tag visibility.
+     */
+    byte METADATA_ENTITY_NAME_TAG_VISIBILITY = 3;
+
+    /**
+     * Sound effects of entity.
+     */
+    byte METADATA_ENTITY_SOUND = 4;
+
+    /**
+     * Gravity.
+     */
+    byte METADATA_ENTITY_GRAVITY = 5;
 }
