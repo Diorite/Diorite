@@ -153,6 +153,9 @@ public class ConfigTest
         Assert.assertTrue(someConfig.isInNicknames("GotoFinal"));
         Assert.assertFalse(someConfig.containsNicknames("GotoFinal", "NorthPL", "Someone"));
         Assert.assertTrue(someConfig.containsInNicknames("GotoFinal", "NorthPL", "skprime"));
+        Assert.assertTrue(someConfig.excludesInNicknames("nope"));
+        Assert.assertTrue(someConfig.excludesInNicknames("nope", "nope2"));
+        Assert.assertFalse(someConfig.excludesInNicknames("nope", "nope2", "NorthPL"));
 
         Assert.assertTrue(someConfig.removeFromNicknames("Dzikoysk"));
         Assert.assertEquals(4, someConfig.nicknamesSize());
@@ -161,5 +164,10 @@ public class ConfigTest
         Assert.assertTrue(someConfig.removeFromNicknames("skprime", "GotoFinal"));
         Assert.assertEquals(1, someConfig.nicknamesSize());
         Assert.assertEquals("NorthPL", someConfig.getFromNicknames(0));
+        someConfig.removeFromNicknamesIfNot(s -> s.contains("PL"));
+        Assert.assertEquals(1, someConfig.nicknamesSize());
+        Assert.assertEquals("NorthPL", someConfig.getFromNicknames(0));
+        someConfig.removeFromNicknamesIfNot(s -> s.contains("17"));
+        Assert.assertEquals(0, someConfig.nicknamesSize());
     }
 }

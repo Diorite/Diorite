@@ -24,23 +24,22 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import javax.annotation.Nonnull;
-
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyValue;
 import org.diorite.config.impl.actions.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
+public class RemoveFromCollectionIfPropertyNegatedAction extends AbstractPropertyAction
 {
-    public ContainsInCollectionPropertyAction()
+    public RemoveFromCollectionIfPropertyNegatedAction()
     {
-        super("containsInCollection", "(?:contains(?:Key?)(?:In?)|isIn)(?<property>[A-Z0-9].*)", "(?:contains(?:In?)|isIn)(?<property>[A-Z0-9].*)",
-              "(?:contains|isIn)(?<property>[A-Z0-9].*)");
+        super("removeFromCollectionIfNot", "removeFrom(?<property>[A-Z0-9].*?)IfNot", "remove(?<property>[A-Z0-9].*?)IfNot");
     }
 
     @Override
@@ -50,11 +49,19 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
         {
             return false;
         }
+        if (method.isVarArgs())
+        {
+            return false;
+        }
+        Class<?> parameter = parameters[0];
+        if (! Predicate.class.isAssignableFrom(parameter))
+        {
+            return false;
+        }
         Class<?> returnType = method.getReturnType();
-        return (returnType == boolean.class);
+        return (returnType == void.class) || (returnType == boolean.class);
     }
 
-    @Nonnull
     @Override
     public Boolean perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
@@ -63,36 +70,27 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
         {
             return false;
         }
+
+        Predicate<Object> predicate = ((Predicate<Object>) args[0]).negate();
         if (rawValue instanceof Collection)
         {
             Collection<Object> collection = (Collection<Object>) rawValue;
-            if (method.isVarArgs())
-            {
-                Object[] arg = (Object[]) args[0];
-                return collection.containsAll(Arrays.asList(arg));
-            }
-            return collection.contains(args[0]);
+            return collection.removeIf(predicate);
         }
         if (rawValue instanceof Map)
         {
             Map<Object, Object> map = (Map<Object, Object>) rawValue;
-            if (method.isVarArgs())
+            boolean any = false;
+            for (Iterator<Entry<Object, Object>> iterator = map.entrySet().iterator(); iterator.hasNext(); )
             {
-                Object[] arg = (Object[]) args[0];
-                if (arg.length == 0)
+                Entry<Object, Object> entry = iterator.next();
+                if (predicate.test(entry))
                 {
-                    return false;
+                    iterator.remove();
+                    any = true;
                 }
-                for (Object o : arg)
-                {
-                    if (! map.containsKey(o))
-                    {
-                        return false;
-                    }
-                }
-                return true;
             }
-            return map.containsKey(args[0]);
+            return any;
         }
         throw new IllegalStateException("Expected collection on " + value);
     }

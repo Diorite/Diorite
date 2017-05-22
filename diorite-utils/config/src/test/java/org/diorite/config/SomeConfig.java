@@ -69,10 +69,13 @@ public interface SomeConfig extends Config
     boolean isInNicknames(String name);
     boolean containsNicknames(String... names);
     boolean containsInNicknames(String... names);
+    boolean excludesInNicknames(String... names);
+    boolean notContainsNicknames(String... names);
 
     boolean removeFromNicknames(String name);
     boolean removeFromNicknames(String... names);
     boolean removeFromNicknamesIf(Predicate<String> predicate);
+    boolean removeFromNicknamesIfNot(Predicate<String> predicate);
 
     EntityStorage getStorage();
     void setStorage(EntityStorage storage);

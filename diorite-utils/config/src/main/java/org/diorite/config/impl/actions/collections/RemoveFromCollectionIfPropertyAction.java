@@ -24,6 +24,8 @@
 
 package org.diorite.config.impl.actions.collections;
 
+import javax.annotation.Nonnull;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -62,8 +64,9 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
         return (returnType == void.class) || (returnType == boolean.class);
     }
 
+    @Nonnull
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    public Boolean perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
     {
         Object rawValue = value.getRawValue();
         if (rawValue == null)
