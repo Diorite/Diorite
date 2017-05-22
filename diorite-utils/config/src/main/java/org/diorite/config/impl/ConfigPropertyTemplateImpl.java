@@ -91,35 +91,35 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         this.template = template;
         this.rawType = rawType;
         this.genericType = genericType;
-        this.name = name;
         this.defaultValueSupplier = defaultValueSupplier;
         this.annotatedElement = annotatedElement;
+
+
+        Comment comment = this.annotatedElement.getAnnotation(Comment.class);
+        if (this.annotatedElement.isAnnotationPresent(CustomKey.class))
+        {
+            this.name = this.annotatedElement.getAnnotation(CustomKey.class).value();
+        }
+        else if ((comment != null) && ! comment.name().isEmpty())
+        {
+            this.name = comment.name();
+        }
+        else
+        {
+            this.name = name;
+        }
     }
 
     public void init()
     {
         Comment comment = this.annotatedElement.getAnnotation(Comment.class);
 
-        String key;
-        if (this.annotatedElement.isAnnotationPresent(CustomKey.class))
-        {
-            key = this.annotatedElement.getAnnotation(CustomKey.class).value();
-        }
-        else if ((comment != null) && ! comment.name().isEmpty())
-        {
-            key = comment.name();
-        }
-        else
-        {
-            key = this.name;
-        }
-
-        this.initSerializeFunc(key);
+        this.initSerializeFunc(this.name);
 
         if (comment != null)
         {
             DocumentComments comments = this.template.getComments();
-            comments.setComment(key, comment.value());
+            comments.setComment(this.name, comment.value());
         }
 
         this.returnUnmodifiableCollections = this.annotatedElement.isAnnotationPresent(Unmodifiable.class);

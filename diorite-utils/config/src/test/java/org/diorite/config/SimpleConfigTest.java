@@ -147,12 +147,12 @@ public class SimpleConfigTest
 
             Assert.assertEquals(10, config.getMoney(), 0.001);
             config.setMoney(20);
-            Assert.assertEquals(20, config.get("money", 0.0, double.class), 0.001);
-            config.set("money", 5);
+            Assert.assertEquals(20, config.get("player-money", 0.0, double.class), 0.001);
+            config.set("player-money", 5);
             Assert.assertEquals(5, config.getMoney(), 0.001);
 
             System.out.print("[SimpleConfigTest] testing remove, default value of money: ");
-            config.remove("money");
+            config.remove("player-money");
             System.out.println(config.getMoney());
             Assert.assertEquals(0.1, config.getMoney(), 0.001);
             config.addMoney(0.1);
@@ -161,7 +161,7 @@ public class SimpleConfigTest
             config.setMoney(20);
             Assert.assertEquals(20, config.getMoney(), 0.001);
             config.setMoney(0);
-            Assert.assertEquals(0.0, (Double) config.get("money"), 0.001);
+            Assert.assertEquals(0.0, (Double) config.get("player-money"), 0.001);
             System.out.println("[SimpleConfigTest] done\n");
 
             StringBuilderWriter writer = new StringBuilderWriter(200);

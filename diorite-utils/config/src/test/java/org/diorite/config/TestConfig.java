@@ -24,7 +24,10 @@
 
 package org.diorite.config;
 
+import java.util.List;
+
 import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.CustomKey;
 import org.diorite.config.annotations.Footer;
 import org.diorite.config.annotations.Header;
 import org.diorite.config.annotations.PredefinedComment;
@@ -36,6 +39,7 @@ import org.diorite.config.annotations.PredefinedComment;
 public interface TestConfig extends Config
 {
     @Comment("Player money.")
+    @CustomKey("player-money")
     default double getMoney()
     {
         return 0.1;

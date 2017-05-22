@@ -336,9 +336,15 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             propertyTemplate.setToStringMapper(entry.getValue());
         }
 
-        for (ConfigPropertyTemplateImpl<?> template : this.mutableProperties.values())
+        List<ConfigPropertyTemplateImpl<?>> templates = new ArrayList<>(this.mutableProperties.size());
+        templates.addAll(this.mutableProperties.values());
+        this.mutableProperties.clear();
+        this.order.clear();
+        for (ConfigPropertyTemplateImpl<?> template : templates)
         {
             template.init();
+            this.mutableProperties.put(template.getName(), template);
+            this.order.add(template.getName());
         }
     }
 
