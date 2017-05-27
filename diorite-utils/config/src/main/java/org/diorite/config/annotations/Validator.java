@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,28 @@
  * SOFTWARE.
  */
 
-/**
- * package with proxy implementation classes.
- */
-@NonnullByDefault
-package org.diorite.config.impl.proxy;
+package org.diorite.config.annotations;
 
-import org.diorite.annotations.NonnullByDefault;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Used to annotate private/default methods in config interfaces that should be used to validate value of given property. <br>
+ * Each validator method can be used for more than one property.
+ */
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Validator
+{
+    /**
+     * Returns names of properties, each validator method can be used for more than one property. <br>
+     * If array is empty then name of property will be fetched from method name using pattern: propertyValidator
+     *
+     * @return names of properties.
+     */
+    String[] value() default {};
+}

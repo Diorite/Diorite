@@ -45,6 +45,7 @@ import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
 import org.diorite.config.ConfigTemplate;
+import org.diorite.config.ValidatorFunction;
 import org.diorite.config.annotations.AsList;
 import org.diorite.config.annotations.BooleanFormat;
 import org.diorite.config.annotations.CollectionType;
@@ -67,11 +68,13 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
 {
     private final ConfigTemplate<?> template;
 
-    private final Class<T>            rawType;
-    private final Type                genericType;
-    private final String              name;
-    private       Function<Config, T> defaultValueSupplier;
-    private final AnnotatedElement    annotatedElement;
+    private final     Class<T>             rawType;
+    private final     Type                 genericType;
+    private final     String               originalName;
+    private final     String               name;
+    private           Function<Config, T>  defaultValueSupplier;
+    private @Nullable ValidatorFunction<Config, T> validator;
+    private final     AnnotatedElement     annotatedElement;
 
     @Nullable
     private BiConsumer<SerializationData, ConfigPropertyValue>   serializeFunc;
@@ -93,8 +96,7 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         this.genericType = genericType;
         this.defaultValueSupplier = defaultValueSupplier;
         this.annotatedElement = annotatedElement;
-
-
+        this.originalName = name;
         Comment comment = this.annotatedElement.getAnnotation(Comment.class);
         if (this.annotatedElement.isAnnotationPresent(CustomKey.class))
         {
@@ -108,6 +110,42 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         {
             this.name = name;
         }
+    }
+
+    @Override
+    public void appendValidator(ValidatorFunction<Config, T> validator)
+    {
+        if (this.validator == null)
+        {
+            this.validator = validator;
+            return;
+        }
+        ValidatorFunction<Config, T> old = this.validator;
+        this.validator = (t, c) -> validator.validate(old.validate(t, c), c);
+    }
+
+    @Override
+    public void prependValidator(ValidatorFunction<Config, T> validator)
+    {
+        if (this.validator == null)
+        {
+            this.validator = validator;
+            return;
+        }
+        ValidatorFunction<Config, T> old = this.validator;
+        this.validator = (t, c) -> old.validate(validator.validate(t, c), c);
+    }
+
+    @Override
+    public ValidatorFunction<Config, T> getValidator()
+    {
+        return (this.validator == null) ? ValidatorFunction.nothing() : this.validator;
+    }
+
+    @Override
+    public String getOriginalName()
+    {
+        return this.originalName;
     }
 
     public void init()

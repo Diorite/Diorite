@@ -24,14 +24,10 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class GetFromCollectionPropertyAction extends AbstractPropertyAction
@@ -48,50 +44,11 @@ public class GetFromCollectionPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
-        {
-            return null;
-        }
-        if (rawValue instanceof Collection)
-        {
-            Number index;
-            if (! (args[0] instanceof Number))
-            {
-                String arg0 = String.valueOf(args[0]);
-                index = DioriteMathUtils.asInt(arg0);
-                if (index == null)
-                {
-                    throw new IllegalStateException("Expected index of list but got: " + args[0]);
-                }
-            }
-            else
-            {
-                index = (Number) args[0];
-            }
-            int intIndex = index.intValue();
-            if (rawValue instanceof List)
-            {
-                List<Object> collection = (List<Object>) rawValue;
-                return collection.get(intIndex);
-            }
-            Collection<Object> collection = (Collection<Object>) rawValue;
-            for (Object o : collection)
-            {
-                if (intIndex-- == 0)
-                {
-                    return o;
-                }
-            }
-            throw new IndexOutOfBoundsException(index.intValue());
-        }
-        if (rawValue instanceof Map)
-        {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
-            return map.get(args[0]);
-        }
-        throw new IllegalStateException("Expected collection on " + value);
+        // language=groovy
+        return "def v = $rawValue\n" +
+               "if (v == null) return null\n" +
+               "return v[var1]";
     }
 }

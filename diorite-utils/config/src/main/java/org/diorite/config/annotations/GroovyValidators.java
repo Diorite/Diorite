@@ -22,22 +22,24 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.config.annotations;
 
-import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@SuppressWarnings({"rawtypes"})
-public class AddNumericPropertyAction extends NumericPropertyAction
+import org.intellij.lang.annotations.Language;
+
+/**
+ * Used to add simple groovy validators to property annotated with this validator.
+ */
+@Documented
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface GroovyValidators
 {
-    public AddNumericPropertyAction()
-    {
-        super("add", "(?:add(?<property>[A-Z0-9].*))","(?:increment(?<property>[A-Z0-9].*?)(?:By|))");
-    }
-
-    @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
-    {
-        return performNumericAdd(value, args);
-    }
+    GroovyValidator[] value();
 }

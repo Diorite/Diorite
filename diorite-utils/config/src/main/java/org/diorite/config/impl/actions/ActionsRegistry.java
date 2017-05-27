@@ -46,10 +46,6 @@ import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropert
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyNegatedAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.SizeOfCollectionPropertyAction;
-import org.diorite.config.impl.actions.numeric.AddNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.DivideNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.MultipleNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.SubtractNumericPropertyAction;
 
 /**
  * Registry for actions.
@@ -65,13 +61,24 @@ public final class ActionsRegistry
 
     static
     {
+
+        // @formatter:off
+        registerAction(new NumericPropertyAction(
+                "add", "+", "(?:add(?<property>[A-Z0-9].*))", "(?:increment(?<property>[A-Z0-9].*?)(?:By)?)"), 100);
+        registerAction(new NumericPropertyAction(
+                "subtract", "-", "(?:subtract(?:From)?(?<property>[A-Z0-9].*))", "(?:decrement(?<property>[A-Z0-9].*?)(?:By)?)"), 100);
+        registerAction(new NumericPropertyAction(
+                "multiple", "*", "(?:multiple|multi)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        registerAction(new NumericPropertyAction(
+                "divide", "/", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        registerAction(new NumericPropertyAction(
+                "power", "**", "(?:power|pow)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        // @formatter:on
+
         registerAction(new GetPropertyAction(), 100);
         registerAction(new SetPropertyAction(), 100);
         registerAction(new EqualsPropertyAction(), 100);
-        registerAction(new AddNumericPropertyAction(), 100);
-        registerAction(new SubtractNumericPropertyAction(), 100);
-        registerAction(new MultipleNumericPropertyAction(), 100);
-        registerAction(new DivideNumericPropertyAction(), 100);
+        registerAction(new NotEqualsPropertyAction(), 100);
         registerAction(new AddToCollectionPropertyAction(), 100);
         registerAction(new ContainsInCollectionPropertyAction(), 100);
         registerAction(new ContainsInCollectionPropertyNegatedAction(), 100);
@@ -90,7 +97,7 @@ public final class ActionsRegistry
      * @param priority
      *         priority of action.
      */
-    static void registerAction(ConfigPropertyAction action, double priority)
+    public static void registerAction(ConfigPropertyAction action, double priority)
     {
         actions.add(new ConfigPropertyActionEntry(action, priority));
     }

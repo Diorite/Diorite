@@ -36,6 +36,7 @@ import org.junit.Test;
 
 import org.diorite.commons.io.StringBuilderWriter;
 import org.diorite.config.SomeConfig.TestEnum;
+import org.diorite.config.impl.groovy.GroovyImplementationProvider;
 import org.diorite.config.serialization.MetaObject;
 import org.diorite.config.serialization.MetaValue;
 import org.diorite.config.serialization.SerializationTest;
@@ -43,6 +44,11 @@ import org.diorite.config.serialization.SerializationTest;
 public class ConfigTest
 {
     private final ConfigManager configManager = ConfigManager.get();
+
+    static
+    {
+        GroovyImplementationProvider.getInstance().setPrintCode(true);
+    }
 
     @Test
     public void testTypes() throws Exception
@@ -141,6 +147,8 @@ public class ConfigTest
         Assert.assertEquals(2, someConfig.sizeOfNicknames());
         Assert.assertEquals("GotoFinal", someConfig.getFromNicknames(0));
         Assert.assertEquals("NorthPL", someConfig.getFromNicknames(1));
+        Assert.assertTrue(someConfig.isEqualsToNicknames(List.of("GotoFinal", "NorthPL")));
+        Assert.assertFalse(someConfig.isEqualsToNicknames(List.of("GotoFinal", "NorthPL", "huh")));
 
         someConfig.addToNicknames("skprime");
         someConfig.putInNicknames("Dzikoysk", "joda17");

@@ -24,15 +24,13 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import javax.annotation.Nonnull;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
@@ -54,46 +52,52 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
         return (returnType == boolean.class);
     }
 
-    @Nonnull
     @Override
-    public Boolean perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
+        StringBuilder methodBuilder = new StringBuilder(500);
+        // language=groovy
+        methodBuilder.append("def v = $rawValue\n" +
+                             "if (v == null) return false\n");
+        if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            return false;
-        }
-        if (rawValue instanceof Collection)
-        {
-            Collection<Object> collection = (Collection<Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                Object[] arg = (Object[]) args[0];
-                return collection.containsAll(Arrays.asList(arg));
+                methodBuilder.append("return v.containsAll(Arrays.asList(var1))");
             }
-            return collection.contains(args[0]);
+            else
+            {
+                methodBuilder.append("return v.contains(var1)");
+            }
         }
-        if (rawValue instanceof Map)
+        else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                Object[] arg = (Object[]) args[0];
-                if (arg.length == 0)
-                {
-                    return false;
-                }
-                for (Object o : arg)
-                {
-                    if (! map.containsKey(o))
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                methodBuilder.append("if (var1.length == 0)\n" +
+                                     "{\n" +
+                                     "    return false \n" +
+                                     "}\n" +
+                                     "for (Object o : var1)\n" +
+                                     "{\n" +
+                                     "    if (! map.containsKey(o))\n" +
+                                     "    {\n" +
+                                     "        return false \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "return true");
             }
-            return map.containsKey(args[0]);
+            else
+            {
+                methodBuilder.append("return v.containsKey(var1)");
+            }
         }
-        throw new IllegalStateException("Expected collection on " + value);
+        else
+        {
+            throw new IllegalStateException("Unsupported type of property: " + propertyTemplate.getGenericType());
+        }
+        return methodBuilder.toString();
     }
 }

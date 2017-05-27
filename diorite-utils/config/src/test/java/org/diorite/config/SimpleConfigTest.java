@@ -27,24 +27,75 @@ package org.diorite.config;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import org.diorite.commons.io.StringBuilderWriter;
+import org.diorite.config.exceptions.ValidationException;
+import org.diorite.config.impl.groovy.GroovyImplementationProvider;
 import org.diorite.config.serialization.BeanObject;
 
 public class SimpleConfigTest
 {
     private final ConfigManager configManager = ConfigManager.get();
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+    @Test
+    public void validatorsTest() throws Exception
+    {
+        GroovyImplementationProvider.getInstance().setPrintCode(true);
+        ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
+        ConfigTemplate<TestConfig> configTemplate = this.configManager.getConfigFile(TestConfig.class);
+        try (InputStream stream = SimpleConfigTest.class.getResourceAsStream("/simpleConfig.yml"))
+        {
+            Assert.assertNotNull(stream);
+
+            TestConfig config = configTemplate.load(stream);
+            this.testException("config.setMoney(3_000)", () -> config.setMoney(3_000), false);
+            this.testException("config.setMoney(110_000)", () -> config.setMoney(110_000), true);
+            this.testException("config.setMoney(5_000)", () -> config.setMoney(5_000), true);
+            this.testException("config.setMoney(6_000)", () -> config.setMoney(6_000), false);
+            Assert.assertEquals(7_000, config.getMoney(), 0.001);
+            this.testException("config.setMoney(13_000)", () -> config.setMoney(13_000), true);
+            this.testException("config.setMoney(14_000)", () -> config.setMoney(14_000), true);
+            this.testException("config.setMoney(15_000)", () -> config.setMoney(15_000), true);
+            this.testException("config.setMoney(16_000)", () -> config.setMoney(16_000), true);
+            this.testException("config.setMoney(17_000)", () -> config.setMoney(17_000), false);
+            this.testException("config.powMoneyBy(2)", () -> config.powMoneyBy(2), true);
+        }
+    }
+
+    private void testException(String name, Runnable runnable, boolean shouldThrow)
+    {
+        try
+        {
+            runnable.run();
+        }
+        catch (ValidationException ignored)
+        {
+            System.out.println("[testException] `" + name + "` thrown exception: " + ignored.getMessage());
+            Assert.assertTrue("Unexpected ValidationException", shouldThrow);
+            return;
+        }
+        System.out.println("[testException] `" + name + "` didn't thrown exception.");
+        Assert.assertFalse("Expected ValidationException", shouldThrow);
+    }
+
     @Test
     public void loadTest() throws Exception
     {
+        GroovyImplementationProvider.getInstance().setPrintCode(true);
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
 
         ConfigTemplate<TestConfig> configTemplate = this.configManager.getConfigFile(TestConfig.class);
@@ -72,19 +123,19 @@ public class SimpleConfigTest
             {
                 Assert.assertSame(null, config.get("nope"));
                 config.set("nope", 54);
-                Assert.assertEquals(54, config.get("nope"));
+                Assert.assertEquals(54, config.<Object>get("nope"));
                 Assert.assertEquals(54, config.remove("nope"));
             }
             {
                 BeanObject beanObject = new BeanObject();
                 beanObject.setIntMap(new LinkedHashMap<>(5));
-                beanObject.setList(List.of("a", "b", "c"));
+                beanObject.setList(new ArrayList<>(List.of("a", "b", "c")));
                 beanObject.setIntProperty(12);
                 Assert.assertSame(null, config.get("nested.bean"));
                 config.set("nested.bean", beanObject);
 
                 Assert.assertEquals(beanObject, config.get("nested.bean"));
-                Assert.assertEquals(12, config.get("nested.bean.intProperty"));
+                Assert.assertEquals(12, config.<Object>get("nested.bean.intProperty"));
                 Assert.assertSame(null, config.get("nested.bean.stringProperty"));
                 Assert.assertSame(null, config.get("nested.bean.list2"));
 
@@ -99,7 +150,7 @@ public class SimpleConfigTest
             }
             {
                 Assert.assertSame(null, config.get("nope.more"));
-                config.set("nope.more", List.of("a", "b", "c"));
+                config.set("nope.more", new ArrayList<>(List.of("a", "b", "c")));
                 Assert.assertEquals(List.of("a", "b", "c"), config.get("nope.more"));
                 Assert.assertEquals("b", config.get("nope.more.1"));
                 config.set("nope.more.3", "d");
@@ -143,8 +194,17 @@ public class SimpleConfigTest
             Assert.assertEquals(configMoney, config.getMoney(), 0.001);
             System.out.println("[SimpleConfigTest] subtract test: " + config.getMoney());
 
+            config.powMoneyBy(2);
+            Assert.assertEquals(configMoney * configMoney, config.getMoney(), 0.001);
+            System.out.println("[SimpleConfigTest] power test: " + config.getMoney());
+
+            config.powMoneyBy(1d / 2d);
+            Assert.assertEquals(configMoney, config.getMoney(), 0.001);
+            System.out.println("[SimpleConfigTest] square test: " + config.getMoney());
+
             System.out.println("[SimpleConfigTest] testing basic values: ");
 
+            Assert.assertEquals(configMoney * 10, config.getMoreMoney(10), 0.001);
             Assert.assertEquals(10, config.getMoney(), 0.001);
             config.setMoney(20);
             Assert.assertEquals(20, config.get("player-money", 0.0, double.class), 0.001);
@@ -167,6 +227,9 @@ public class SimpleConfigTest
             StringBuilderWriter writer = new StringBuilderWriter(200);
             config.save(writer);
             Assert.assertEquals(config, configTemplate.load(new StringReader(writer.toString())));
+
+            this.exception.expect(ValidationException.class);
+            config.set("player-money", - 1);
         }
     }
 }

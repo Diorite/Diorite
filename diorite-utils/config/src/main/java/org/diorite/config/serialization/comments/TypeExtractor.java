@@ -30,6 +30,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -52,22 +53,28 @@ final class TypeExtractor
     // might cause IllegalStateException: Recursive update
     static DocumentComments getAnnotationData(@Nullable Class<?> clazz)
     {
+        return getAnnotationData(clazz, Collections.emptySet());
+    }
+
+    private static DocumentComments getAnnotationData(@Nullable Class<?> clazz, Set<Object> scanned)
+    {
         if ((clazz == null) || clazz.isPrimitive() || (clazz == Object.class) || (clazz.getClassLoader() == null) || (clazz.getPackageName() == null) ||
-            clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("jdk."))
+            clazz.getPackageName().startsWith("java.") || clazz.getPackageName().startsWith("jdk.") || clazz.getPackageName().startsWith("groovy.")
+            || clazz.getPackageName().startsWith("org.codehaus.groovy."))
         {
             return DocumentComments.empty();
         }
         DocumentComments documentComments = cache.get(clazz);
         if (documentComments == null)
         {
-            documentComments = new TypeExtractor(clazz).scan();
+            documentComments = new TypeExtractor(clazz, scanned).scan();
             documentComments.trim();
             cache.put(clazz, documentComments);
         }
         return documentComments;
     }
 
-    private final Set<Class<?>> scanned = new HashSet<>(20);
+    private final Set<Object> scanned = new HashSet<>(20);
 
     private DocumentComments getAnnotationDataSafe(@Nullable Class<?> type)
     {
@@ -75,13 +82,20 @@ final class TypeExtractor
         {
             return DocumentComments.empty();
         }
-        return getAnnotationData(type);
+        return getAnnotationData(type, this.scanned);
     }
 
     private TypeExtractor(Class<?> type)
     {
         this.type = type;
         this.comments = DocumentComments.create();
+    }
+
+    private TypeExtractor(Class<?> type, Set<Object> scanned)
+    {
+        this.type = type;
+        this.comments = DocumentComments.create();
+        this.scanned.addAll(scanned);
     }
 
     private DocumentComments scan()
@@ -136,6 +150,10 @@ final class TypeExtractor
 
     private void scan(Field member)
     {
+        if (! this.scanned.add(member))
+        {
+            return;
+        }
         String name = member.getName();
         this.scan(member, member.getName());
         DocumentComments annotationData = this.getAnnotationDataSafe(member.getType());
@@ -145,6 +163,10 @@ final class TypeExtractor
     @SuppressWarnings("IfStatementWithIdenticalBranches")
     private void scan(Method member)
     {
+        if (! this.scanned.add(member))
+        {
+            return;
+        }
         boolean isGetter = false;
         boolean isSetter = false;
 

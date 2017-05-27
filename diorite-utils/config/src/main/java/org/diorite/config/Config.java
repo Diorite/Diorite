@@ -41,7 +41,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 import org.diorite.config.exceptions.ConfigLoadException;
 import org.diorite.config.exceptions.ConfigSaveException;
@@ -50,7 +55,7 @@ import org.diorite.config.exceptions.ConfigSaveException;
  * Config interface with basic operations, all config file instances must implementing this.
  */
 @SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
-public interface Config extends Map<String, Object>
+public interface Config
 {
     /**
      * Returns config template for this config object.
@@ -75,6 +80,11 @@ public interface Config extends Map<String, Object>
     void fillWithDefaults();
 
     /**
+     * Remove all config values.
+     */
+    void clear();
+
+    /**
      * Check if config contains given key, note that value on that key still might be null!
      *
      * @param key
@@ -82,7 +92,7 @@ public interface Config extends Map<String, Object>
      *
      * @return true if config contains given key.
      */
-    boolean containsKey(String key);
+    boolean contains(String key);
 
     /**
      * Check if config contains given key, note that value on that key still might be null!
@@ -92,7 +102,49 @@ public interface Config extends Map<String, Object>
      *
      * @return true if config contains given key.
      */
-    boolean containsKey(String... key);
+    boolean contains(String... key);
+
+    /**
+     * Returns set of keys.
+     *
+     * @return set of keys.
+     */
+    Set<String> keys();
+
+    /**
+     * Returns collection of values.
+     *
+     * @return collection of values.
+     */
+    Collection<Object> values();
+
+    /**
+     * Returns set of entries.
+     *
+     * @return set of entries.
+     */
+    Set<Entry<String, Object>> entries();
+
+    /**
+     * Returns this config as normal map.
+     *
+     * @return this config as normal map.
+     */
+    Map<String, Object> asMap();
+
+    /**
+     * Returns true if this config does not contains any entries.
+     *
+     * @return true if this config does not contains any entries.
+     */
+    boolean isEmpty();
+
+    /**
+     * Returns size of this config.
+     *
+     * @return size of this config.
+     */
+    int size();
 
     /**
      * Returns metadata map. <br>
@@ -111,7 +163,7 @@ public interface Config extends Map<String, Object>
      * @return value on that key.
      */
     @Nullable
-    Object get(String key);
+    <T> T get(String key);
 
     /**
      * Get selected value from config.
@@ -122,7 +174,7 @@ public interface Config extends Map<String, Object>
      * @return value on that key.
      */
     @Nullable
-    Object get(String[] key);
+    <T> T get(String[] key);
 
     /**
      * Get selected value from config or default one.
@@ -135,7 +187,7 @@ public interface Config extends Map<String, Object>
      * @return value on that key.
      */
     @Nullable
-    Object get(String key, @Nullable Object def);
+    <T> T get(String key, @Nullable T def);
 
     /**
      * Get selected value from config or default one.
@@ -148,7 +200,7 @@ public interface Config extends Map<String, Object>
      * @return value on that key.
      */
     @Nullable
-    Object get(String[] key, @Nullable Object def);
+    <T> T get(String[] key, @Nullable T def);
 
     /**
      * Get selected value from config (or default value) as given type, library will try convert types where possible. (like from String to Integer, List of
@@ -166,7 +218,7 @@ public interface Config extends Map<String, Object>
      *
      * @return value on that key.
      *
-     * @throws ClassCastException
+     * @exception ClassCastException
      *         if type can't be converted.
      */
     @Nullable
@@ -188,7 +240,7 @@ public interface Config extends Map<String, Object>
      *
      * @return value on that key.
      *
-     * @throws ClassCastException
+     * @exception ClassCastException
      *         if type can't be converted.
      */
     @Nullable
@@ -207,7 +259,7 @@ public interface Config extends Map<String, Object>
      *
      * @return value on that key.
      *
-     * @throws ClassCastException
+     * @exception ClassCastException
      *         if type can't be converted.
      */
     @Nullable
@@ -226,7 +278,7 @@ public interface Config extends Map<String, Object>
      *
      * @return value on that key.
      *
-     * @throws ClassCastException
+     * @exception ClassCastException
      *         if type can't be converted.
      */
     @Nullable
@@ -422,7 +474,38 @@ public interface Config extends Map<String, Object>
      */
     void load(@WillNotClose Reader reader);
 
+    /**
+     * Returns clone of this config object.
+     *
+     * @return clone of this config object.
+     */
     Config clone();
+
+    /**
+     * Perform operation for each config entry.
+     *
+     * @param action
+     *         action to perform.
+     */
+    default void forEach(BiConsumer<? super String, ? super Object> action)
+    {
+        for (Map.Entry<String, Object> entry : this.entries())
+        {
+            String k;
+            Object v;
+            try
+            {
+                k = entry.getKey();
+                v = entry.getValue();
+            }
+            catch (IllegalStateException ise)
+            {
+                // this usually means the entry is no longer in the map.
+                throw new ConcurrentModificationException(ise);
+            }
+            action.accept(k, v);
+        }
+    }
 
     private OutputStreamWriter createOutputStreamWriter(File file)
     {
@@ -473,46 +556,6 @@ public interface Config extends Map<String, Object>
         catch (IOException e)
         {
             throw new ConfigLoadException(this.template(), file, e.getMessage(), e);
-        }
-    }
-
-    // default map method implementations.
-
-    @Override
-    default boolean containsKey(Object key)
-    {
-        return this.containsKey(key.toString());
-    }
-
-    @Nullable
-    @Override
-    default Object get(Object key)
-    {
-        return this.get(key.toString());
-    }
-
-    @Nullable
-    @Override
-    default Object put(String key, Object value)
-    {
-        Object prev = this.get(key);
-        this.set(key, value);
-        return prev;
-    }
-
-    @Nullable
-    @Override
-    default Object remove(Object key)
-    {
-        return this.remove(key.toString());
-    }
-
-    @Override
-    default void putAll(Map<? extends String, ?> m)
-    {
-        for (Entry<? extends String, ?> entry : m.entrySet())
-        {
-            this.put(entry.getKey(), entry.getValue());
         }
     }
 }

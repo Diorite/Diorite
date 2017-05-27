@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import org.diorite.commons.math.DioriteRandomUtils;
 import org.diorite.config.annotations.AsList;
 import org.diorite.config.annotations.Comment;
 import org.diorite.config.annotations.HelperMethod;
@@ -49,6 +50,8 @@ public interface SomeConfig extends Config
     {
         return new ArrayList<>(Arrays.asList("GotoFinal", "NorthPL"));
     }
+
+    boolean isEqualsToNicknames(Collection<? extends String> strings);
 
     int nicknamesSize();
     int sizeOfNicknames();

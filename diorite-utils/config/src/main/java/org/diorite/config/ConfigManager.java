@@ -25,13 +25,22 @@
 package org.diorite.config;
 
 import javax.annotation.Nullable;
+import javax.script.ScriptEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
+
+import org.diorite.commons.classes.DynamicClassLoader;
 import org.diorite.config.impl.ConfigImplementationProvider;
 import org.diorite.config.impl.ConfigTemplateImpl;
-import org.diorite.config.impl.proxy.ProxyImplementationProvider;
+import org.diorite.config.impl.actions.ActionsRegistry;
+import org.diorite.config.impl.groovy.GroovyImplementationProvider;
+
+import groovy.lang.GroovyClassLoader;
 
 /**
  * Root class of library.
@@ -40,10 +49,20 @@ public final class ConfigManager
 {
     private ConfigManager()
     {
+        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
+        ImportCustomizer importCustomizer = new ImportCustomizer();
+        importCustomizer.addStarImports("org.diorite.config", "org.diorite", "org.diorite.config.exceptions");
+        compilerConfiguration.addCompilationCustomizers(importCustomizer);
+        GroovyClassLoader groovyClassLoader = new GroovyClassLoader(this.getClass().getClassLoader(), compilerConfiguration);
+        this.groovy = new GroovyScriptEngineImpl(groovyClassLoader);
+        DynamicClassLoader classLoader = DynamicClassLoader.injectAsSystemClassLoader();
+        classLoader.addClassLoader(groovyClassLoader, 0);
+        this.setImplementationProvider(GroovyImplementationProvider.getInstance());
     }
 
     @Nullable
-    private static ConfigManager configManager;
+    private static ConfigManager          configManager;
+    private        GroovyScriptEngineImpl groovy;
 
     /**
      * Returns config manager instance.
@@ -59,9 +78,19 @@ public final class ConfigManager
         return configManager;
     }
 
+    public ScriptEngine getGroovy()
+    {
+        return this.groovy;
+    }
+
+    public GroovyClassLoader getGroovyClassLoader()
+    {
+        return this.groovy.getClassLoader();
+    }
+
     private final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);
 
-    private ConfigImplementationProvider implementationProvider = ProxyImplementationProvider.getInstance();
+    private ConfigImplementationProvider implementationProvider;
 
     /**
      * Change config implementation provider.
@@ -72,6 +101,20 @@ public final class ConfigManager
     public void setImplementationProvider(ConfigImplementationProvider implementationProvider)
     {
         this.implementationProvider = implementationProvider;
+        implementationProvider.init(this);
+    }
+
+    /**
+     * Register new property action that can be used by any new created config file.
+     *
+     * @param action
+     *         action to register.
+     * @param priority
+     *         priority of action.
+     */
+    public void registerPropertyAction(ConfigPropertyAction action, int priority)
+    {
+        ActionsRegistry.registerAction(action, priority);
     }
 
     /**

@@ -24,33 +24,60 @@
 
 package org.diorite.config.impl.actions;
 
+import org.intellij.lang.annotations.RegExp;
+
+import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.AbstractPropertyAction;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
 
-public class EqualsPropertyAction extends AbstractPropertyAction
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class NumericPropertyAction extends AbstractPropertyAction
 {
-    protected EqualsPropertyAction()
+    private final String operation;
+
+    public NumericPropertyAction(String name, String operation, @RegExp String... pattern)
     {
-        super("isEqualsTo", "isEqualsTo(?<property>[A-Z0-9].*)", "areEqualsTo(?<property>[A-Z0-9].*)", "(?<property>[A-Z0-9].*)isEqualsTo",
-              "(?<property>[A-Z0-9].*)areEqualsTo");
+        super(name, pattern);
+        this.operation = operation;
     }
 
     @Override
     protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
     {
+        Class<?> returnType = method.getReturnType();
         if (parameters.length != 1)
         {
             return false;
         }
-        Class<?> returnType = method.getReturnType();
-        return (returnType == boolean.class);
+        Class<?> parameterType = parameters[0];
+
+        if ((returnType != void.class) && (! returnType.isAssignableFrom(parameterType) && ! (returnType.isPrimitive() && parameterType.isPrimitive())))
+        {
+            return false;
+        }
+
+        return Number.class.isAssignableFrom(DioriteReflectionUtils.getWrapperClass(parameterType));
     }
 
     @Override
     protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        return "return $rawValue == var1";
+        StringBuilder methodBuilder = new StringBuilder(100);
+        // language=groovy
+        {
+            methodBuilder.append("def v = $value\n");
+            if (! propertyTemplate.getRawType().isPrimitive())
+            {
+                methodBuilder.append("if (v == null) v = 0\n");
+            }
+            methodBuilder.append("$value = v ").append(this.operation).append(" var1\n");
+            if (method.getReturnType() != void.class)
+            {
+                methodBuilder.append("return v");
+            }
+        }
+        return methodBuilder.toString();
     }
 }

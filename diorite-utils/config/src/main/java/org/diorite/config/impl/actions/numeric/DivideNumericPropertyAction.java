@@ -24,20 +24,21 @@
 
 package org.diorite.config.impl.actions.numeric;
 
-import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import java.lang.reflect.Method;
 
-@SuppressWarnings({"rawtypes"})
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+
 public class DivideNumericPropertyAction extends NumericPropertyAction
 {
     public DivideNumericPropertyAction()
     {
-        super("divide", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By|)");
+        super("divide", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By)?");
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(Method method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        return performNumericDiv(value, args);
+        return "this.$property / var1";
     }
 }

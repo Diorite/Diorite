@@ -24,8 +24,6 @@
 
 package org.diorite.config;
 
-import javax.annotation.Nullable;
-
 import java.lang.reflect.Method;
 
 import org.diorite.commons.reflections.MethodInvoker;
@@ -35,14 +33,6 @@ import org.diorite.commons.reflections.MethodInvoker;
  */
 public interface ConfigPropertyAction
 {
-//    /**
-//     * Returns property regex pattern. <br>
-//     * Action pattern MUST contains one named matching group named `property` that will match property name: {@literal (?<property>[A-Z0-9].*)}
-//     *
-//     * @return property regex pattern.
-//     */
-//    Pattern getActionPattern();
-
     /**
      * Returns true if this action is used to declare property type.
      *
@@ -71,17 +61,17 @@ public interface ConfigPropertyAction
     String getActionName();
 
     /**
-     * Perform this operation on given object with given values.
+     * Returns groovy implementation of this operation for given action instance and method. <br>
+     * In methods you can use `this.@property` to access {@link ConfigPropertyValue} and `this.property` to access value.
      *
      * @param method
-     *         used method.
-     * @param value
-     *         value of property.
-     * @param args
-     *         arguments of action if any.
+     *         method to implement.
+     * @param propertyTemplate
+     *         property template.
+     * @param actionInstance
+     *         action instance.
      *
-     * @return result of action.
+     * @return method implemented in groovy.
      */
-    @Nullable
-    Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args);
+    String getGroovyImplementation(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance);
 }

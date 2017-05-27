@@ -28,8 +28,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 public class MethodSignature
 {
     private final String     name;
@@ -54,6 +52,21 @@ public class MethodSignature
         this.returnType = method.getReturnType();
 
         this.hashCode = Objects.hash(this.name, this.returnType) + Arrays.hashCode(this.arguments);
+    }
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public Class<?>[] getArguments()
+    {
+        return this.arguments;
+    }
+
+    public Class<?> getReturnType()
+    {
+        return this.returnType;
     }
 
     @Override
@@ -82,7 +95,25 @@ public class MethodSignature
     @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("name", this.name).append("returnType", this.returnType)
-                                        .append("arguments", this.arguments).toString();
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("public ")
+          .append(this.returnType.getCanonicalName())
+          .append(" ")
+          .append(this.name)
+          .append("(");
+        int i = 1;
+        for (int k = 0; k < this.arguments.length; k++)
+        {
+            Class<?> argument = this.arguments[k];
+            sb.append(argument.getCanonicalName())
+              .append(" ")
+              .append("var").append(i++);
+            if ((k + 1) < this.arguments.length)
+            {
+                sb.append(", ");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
     }
 }

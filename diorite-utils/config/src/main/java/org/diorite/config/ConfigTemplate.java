@@ -77,11 +77,25 @@ public interface ConfigTemplate<T extends Config>
     Map<String, ? extends ConfigPropertyTemplate<?>> getProperties();
 
     /**
+     * Returns ordered map of properties of this config class.
+     *
+     * @return ordered map of properties of this config class.
+     */
+    Map<String, ? extends ConfigPropertyTemplate<?>> getOrderedProperties();
+
+    /**
      * Returns map of available actions.
      *
      * @return map of available actions.
      */
     Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getActionsMap();
+
+    /**
+     * Returns ordered map of available actions.
+     *
+     * @return ordered map of available actions.
+     */
+    Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getOrderedActionsMap();
 
     /**
      * Returns template for given property.

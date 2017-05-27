@@ -24,14 +24,13 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ContainsInCollectionPropertyNegatedAction extends AbstractPropertyAction
@@ -55,55 +54,64 @@ public class ContainsInCollectionPropertyNegatedAction extends AbstractPropertyA
     }
 
     @Override
-    public Boolean perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
+        StringBuilder methodBuilder = new StringBuilder(500);
+        // language=groovy
+        methodBuilder.append("def v = $rawValue\n" +
+                             "if (v == null) return true\n");
+        if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            return true;
-        }
-        if (rawValue instanceof Collection)
-        {
-            Collection<Object> collection = (Collection<Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                List<Object> notIn = Arrays.asList((Object[]) args[0]);
-                if (notIn.isEmpty())
-                {
-                    return true;
-                }
-                for (Object o : collection)
-                {
-                    if (notIn.contains(o))
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                methodBuilder.append("List notIn = Arrays.asList(var1) \n" +
+                                     "if (notIn.isEmpty())\n" +
+                                     "{\n" +
+                                     "    return true \n" +
+                                     "}\n" +
+                                     "for (Object o : v)\n" +
+                                     "{\n" +
+                                     "    if (notIn.contains(o))\n" +
+                                     "    {\n" +
+                                     "        return false \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "return true");
             }
-            return ! collection.contains(args[0]);
+            else
+            {
+                methodBuilder.append("return ! v.contains(var1)");
+            }
         }
-        if (rawValue instanceof Map)
+        else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                List<Object> notIn = Arrays.asList((Object[]) args[0]);
-                if (notIn.isEmpty())
-                {
-                    return true;
-                }
-                for (Object o : map.keySet())
-                {
-                    if (notIn.contains(o))
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                methodBuilder.append("List notIn = Arrays.asList(var1) \n" +
+                                     "if (notIn.isEmpty())\n" +
+                                     "{\n" +
+                                     "    return true \n" +
+                                     "}\n" +
+                                     "for (Object o : map.keySet())\n" +
+                                     "{\n" +
+                                     "    if (notIn.contains(o))\n" +
+                                     "    {\n" +
+                                     "        return false \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "return true \n");
             }
-            return ! map.containsKey(args[0]);
+            else
+            {
+                methodBuilder.append("return ! v.containsKey(var1)");
+            }
         }
-        throw new IllegalStateException("Expected collection on " + value);
+        else
+        {
+            throw new IllegalStateException("Unsupported type of property: " + propertyTemplate.getGenericType());
+        }
+        return methodBuilder.toString();
     }
 }

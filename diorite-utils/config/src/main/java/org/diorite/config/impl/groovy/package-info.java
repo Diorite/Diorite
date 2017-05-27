@@ -22,35 +22,10 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions;
+/**
+ * package with groovy implementation of config system.
+ */
+@NonnullByDefault
+package org.diorite.config.impl.groovy;
 
-import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.AbstractPropertyAction;
-import org.diorite.config.ConfigPropertyActionInstance;
-import org.diorite.config.ConfigPropertyTemplate;
-
-public class EqualsPropertyAction extends AbstractPropertyAction
-{
-    protected EqualsPropertyAction()
-    {
-        super("isEqualsTo", "isEqualsTo(?<property>[A-Z0-9].*)", "areEqualsTo(?<property>[A-Z0-9].*)", "(?<property>[A-Z0-9].*)isEqualsTo",
-              "(?<property>[A-Z0-9].*)areEqualsTo");
-    }
-
-    @Override
-    protected boolean matchesAction0(MethodInvoker method, Class<?>[] parameters)
-    {
-        if (parameters.length != 1)
-        {
-            return false;
-        }
-        Class<?> returnType = method.getReturnType();
-        return (returnType == boolean.class);
-    }
-
-    @Override
-    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
-    {
-        return "return $rawValue == var1";
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

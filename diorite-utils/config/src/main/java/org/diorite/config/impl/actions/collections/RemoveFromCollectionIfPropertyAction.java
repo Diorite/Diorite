@@ -24,17 +24,14 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import javax.annotation.Nonnull;
-
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
@@ -64,37 +61,37 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
         return (returnType == void.class) || (returnType == boolean.class);
     }
 
-    @Nonnull
     @Override
-    public Boolean perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
+        StringBuilder methodBuilder = new StringBuilder(500);
+        // language=groovy
+        methodBuilder.append("def v = $rawValue\n")
+                     .append("if (v == null) $returnOrNothing false\n");
+        if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            return false;
+            // language=groovy
+            methodBuilder.append("$returnOrNothing v.removeIf(var1)\n");
         }
-
-        Predicate<Object> predicate = (Predicate<Object>) args[0];
-        if (rawValue instanceof Collection)
+        else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            Collection<Object> collection = (Collection<Object>) rawValue;
-            return collection.removeIf(predicate);
+            // language=groovy
+            methodBuilder.append("boolean any = false \n" +
+                                 "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
+                                 "{\n" +
+                                 "    Map.Entry entry = iterator.next() \n" +
+                                 "    if (predicate.test(entry))\n" +
+                                 "    {\n" +
+                                 "        iterator.remove() \n" +
+                                 "        any = true \n" +
+                                 "    }\n" +
+                                 "}\n" +
+                                 "$returnOrNothing any");
         }
-        if (rawValue instanceof Map)
+        else
         {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
-            boolean any = false;
-            for (Iterator<Entry<Object, Object>> iterator = map.entrySet().iterator(); iterator.hasNext(); )
-            {
-                Entry<Object, Object> entry = iterator.next();
-                if (predicate.test(entry))
-                {
-                    iterator.remove();
-                    any = true;
-                }
-            }
-            return any;
+            throw new IllegalStateException("Unsupported type of property: " + propertyTemplate.getGenericType());
         }
-        throw new IllegalStateException("Expected collection on " + value);
+        return methodBuilder.toString();
     }
 }

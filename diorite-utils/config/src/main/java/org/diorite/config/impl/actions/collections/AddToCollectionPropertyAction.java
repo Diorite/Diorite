@@ -25,14 +25,13 @@
 package org.diorite.config.impl.actions.collections;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
-import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class AddToCollectionPropertyAction extends AbstractPropertyAction
@@ -49,54 +48,63 @@ public class AddToCollectionPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
+        StringBuilder methodBuilder = new StringBuilder(100);
+        // language=groovy
+        methodBuilder.append("def v = $rawValue\n")
+                     .append("if (v == null)\n" +
+                             "{\n" +
+                             "    v = org.diorite.config.serialization.snakeyaml.YamlCollectionCreator.createCollection($propType, 5);\n" +
+                             "    $rawValue = v;\n" +
+                             "}\n");
+        if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            rawValue = YamlCollectionCreator.createCollection(value.getRawType(), 5);
-            value.setRawValue(rawValue);
-        }
-        if (rawValue instanceof Collection)
-        {
-            Collection<Object> collection = (Collection<Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                Object[] arg = (Object[]) args[0];
-                return Collections.addAll(collection, arg);
+                methodBuilder.append("$returnOrNothing Collections.addAll(v, var1)");
             }
-            return collection.add(args[0]);
+            else
+            {
+                methodBuilder.append("$returnOrNothing v.add(var1)");
+            }
         }
-        if (rawValue instanceof Map)
+        else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                if (Entry.class.isAssignableFrom(method.getParameterTypes()[0]))
+                if (Entry[].class.isAssignableFrom(method.getParameterTypes()[0]))
                 {
-                    Entry<Object, Object>[] arg = (Entry<Object, Object>[]) args[0];
-                    for (Entry<Object, Object> entry : arg)
-                    {
-                        map.put(entry.getKey(), entry.getValue());
-                    }
-                    return arg.length != 0;
+                    methodBuilder.append("for (Map.Entry entry : var1)\n" +
+                                         "{\n" +
+                                         "    map.put(entry.getKey(), entry.getValue()) \n" +
+                                         "}\n" +
+                                         "$returnOrNothing var1.length != 0");
                 }
                 else
                 {
-                    Object[] arg = (Object[]) args[0];
-                    if ((arg.length % 2) != 0)
-                    {
-                        throw new IllegalStateException("Expected key-value arguments in: " + method.getMethod() + " of " + value);
-                    }
-                    for (int i = 0; i < arg.length; i += 2)
-                    {
-                        map.put(arg[0], arg[1]);
-                    }
-                    return arg.length != 0;
+                    methodBuilder.append("if ((v.length % 2) != 0)\n" +
+                                         "{\n" +
+                                         "    throw new IllegalStateException(\"Expected key-value arguments: $v\") \n" +
+                                         "}\n" +
+                                         "for (int i = 0; i < v.length; i += 2)\n" +
+                                         "{\n" +
+                                         "    map.put(v[i], v[i+1]) \n" +
+                                         "}\n" +
+                                         "$returnOrNothing arg.length != 0");
                 }
             }
-            return map.put(args[0], args[1]);
+            else
+            {
+                methodBuilder.append("$returnOrNothing v.put(var1, var2)");
+            }
         }
-        throw new IllegalStateException("Expected collection on " + value);
+        else
+        {
+            throw new IllegalStateException("Unsupported type of property: " + propertyTemplate.getGenericType());
+        }
+        return methodBuilder.toString();
     }
 }

@@ -29,12 +29,12 @@ import org.diorite.config.AbstractPropertyAction;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
 
-public class EqualsPropertyAction extends AbstractPropertyAction
+public class NotEqualsPropertyAction extends AbstractPropertyAction
 {
-    protected EqualsPropertyAction()
+    protected NotEqualsPropertyAction()
     {
-        super("isEqualsTo", "isEqualsTo(?<property>[A-Z0-9].*)", "areEqualsTo(?<property>[A-Z0-9].*)", "(?<property>[A-Z0-9].*)isEqualsTo",
-              "(?<property>[A-Z0-9].*)areEqualsTo");
+        super("isNotEqualsTo", "isNotEqualsTo(?<property>[A-Z0-9].*)", "areNotEqualsTo(?<property>[A-Z0-9].*)", "(?<property>[A-Z0-9].*)isNotEqualsTo",
+              "(?<property>[A-Z0-9].*)areNotEqualsTo");
     }
 
     @Override
@@ -51,6 +51,6 @@ public class EqualsPropertyAction extends AbstractPropertyAction
     @Override
     protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        return "return $rawValue == var1";
+        return "return $rawValue != var1";
     }
 }
