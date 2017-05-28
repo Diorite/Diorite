@@ -49,6 +49,6 @@ public class GetFromCollectionPropertyAction extends AbstractPropertyAction
         // language=groovy
         return "def v = $rawValue\n" +
                "if (v == null) return null\n" +
-               "return v[var1]";
+               "return ($returnType) v[var1]";
     }
 }

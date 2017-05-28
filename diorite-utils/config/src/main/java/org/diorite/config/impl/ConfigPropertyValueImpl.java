@@ -38,6 +38,9 @@ import org.diorite.config.ConfigPropertyValue;
 import org.diorite.config.exceptions.ValidationException;
 import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
 
+import groovy.transform.CompileStatic;
+import groovy.transform.TypeCheckingMode;
+
 public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
 {
     private final Config config;

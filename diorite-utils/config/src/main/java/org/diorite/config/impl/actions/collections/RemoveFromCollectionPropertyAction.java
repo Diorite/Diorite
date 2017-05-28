@@ -52,7 +52,7 @@ public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
     {
         // language=groovy
         StringBuilder methodBuilder = new StringBuilder(500);
-        methodBuilder.append("def v = $rawValue\n")
+        methodBuilder.append("$rawType v = $rawValue\n")
                      .append("if ($value == null) return $nullOrNothing\n");
         Parameter parameter = method.getParameters()[0];
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
@@ -78,11 +78,11 @@ public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
                                      "{\n" +
                                      "    removed.add(v.remove(anArg)) \n" +
                                      "}\n" +
-                                     "$returnOrNothing removed");
+                                     "$returnOrNothing ($returnType) removed");
             }
             else
             {
-                methodBuilder.append("$returnOrNothing v.remove(var1)");
+                methodBuilder.append("$returnOrNothing ($returnType) v.remove(var1)");
             }
         }
         else

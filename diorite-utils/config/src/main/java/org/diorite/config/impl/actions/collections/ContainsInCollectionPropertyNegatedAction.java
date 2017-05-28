@@ -58,7 +58,7 @@ public class ContainsInCollectionPropertyNegatedAction extends AbstractPropertyA
     {
         StringBuilder methodBuilder = new StringBuilder(500);
         // language=groovy
-        methodBuilder.append("def v = $rawValue\n" +
+        methodBuilder.append("$rawType v = $rawValue\n" +
                              "if (v == null) return true\n");
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {

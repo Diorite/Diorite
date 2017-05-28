@@ -52,10 +52,10 @@ public class AddToCollectionPropertyAction extends AbstractPropertyAction
     {
         StringBuilder methodBuilder = new StringBuilder(100);
         // language=groovy
-        methodBuilder.append("def v = $rawValue\n")
+        methodBuilder.append("$rawType v = $rawValue\n")
                      .append("if (v == null)\n" +
                              "{\n" +
-                             "    v = org.diorite.config.serialization.snakeyaml.YamlCollectionCreator.createCollection($propType, 5);\n" +
+                             "    v = ($type) org.diorite.config.serialization.snakeyaml.YamlCollectionCreator.createCollection($propType, 5);\n" +
                              "    $rawValue = v;\n" +
                              "}\n");
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
@@ -79,21 +79,21 @@ public class AddToCollectionPropertyAction extends AbstractPropertyAction
                 {
                     methodBuilder.append("for (Map.Entry entry : var1)\n" +
                                          "{\n" +
-                                         "    map.put(entry.getKey(), entry.getValue()) \n" +
+                                         "    v.put(entry.getKey(), entry.getValue()) \n" +
                                          "}\n" +
                                          "$returnOrNothing var1.length != 0");
                 }
                 else
                 {
-                    methodBuilder.append("if ((v.length % 2) != 0)\n" +
+                    methodBuilder.append("if ((var1.length % 2) != 0)\n" +
                                          "{\n" +
                                          "    throw new IllegalStateException(\"Expected key-value arguments: $v\") \n" +
                                          "}\n" +
-                                         "for (int i = 0; i < v.length; i += 2)\n" +
+                                         "for (int i = 0; i < var1.length; i += 2)\n" +
                                          "{\n" +
-                                         "    map.put(v[i], v[i+1]) \n" +
+                                         "    v.put(var1[i], var1[i+1]) \n" +
                                          "}\n" +
-                                         "$returnOrNothing arg.length != 0");
+                                         "$returnOrNothing var1.length != 0");
                 }
             }
             else

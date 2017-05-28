@@ -57,7 +57,7 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
     {
         StringBuilder methodBuilder = new StringBuilder(500);
         // language=groovy
-        methodBuilder.append("def v = $rawValue\n" +
+        methodBuilder.append("$rawType v = $rawValue\n" +
                              "if (v == null) return false\n");
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
@@ -82,7 +82,7 @@ public class ContainsInCollectionPropertyAction extends AbstractPropertyAction
                                      "}\n" +
                                      "for (Object o : var1)\n" +
                                      "{\n" +
-                                     "    if (! map.containsKey(o))\n" +
+                                     "    if (! v.containsKey(o))\n" +
                                      "    {\n" +
                                      "        return false \n" +
                                      "    }\n" +

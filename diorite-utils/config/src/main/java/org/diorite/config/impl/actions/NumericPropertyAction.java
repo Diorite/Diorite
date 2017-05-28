@@ -72,7 +72,7 @@ public class NumericPropertyAction extends AbstractPropertyAction
             {
                 methodBuilder.append("if (v == null) v = 0\n");
             }
-            methodBuilder.append("$value = v ").append(this.operation).append(" var1\n");
+            methodBuilder.append("$value = ($type) (v ").append(this.operation).append(" ($type) var1)\n");
             if (method.getReturnType() != void.class)
             {
                 methodBuilder.append("return v");

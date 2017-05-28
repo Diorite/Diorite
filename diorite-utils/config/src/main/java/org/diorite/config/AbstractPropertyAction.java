@@ -48,6 +48,7 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
 {
     protected final String              name;
     protected final Collection<Pattern> patterns;
+    protected boolean useStaticCompiler = true; // faster if true, but code needs to be different.
 
     /**
      * Construct new action with given name and regex patterns.
@@ -129,13 +130,16 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
     @Override
     public String getGroovyImplementation(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        String groovyImplementation = "@Override\n" +
+        //groovy.transform.TypeCheckingMode.SKIP
+        String groovyImplementation = "@Override " + (this.useStaticCompiler ? "@CompileStatic()" : "") + "\n" +
                                       actionInstance.getMethodSignature() + "\n" +
                                       "{\n" +
-                                      "" + addMethodIndent(this.getGroovyImplementation0(method, propertyTemplate, actionInstance)) +
+                                      addMethodIndent(this.getGroovyImplementation0(method, propertyTemplate, actionInstance)) +
                                       "}\n";
-        groovyImplementation = StringUtils.replace(groovyImplementation, "$type", propertyTemplate.getGenericType().getTypeName());
-        groovyImplementation = StringUtils.replace(groovyImplementation, "$property", propertyTemplate.getOriginalName());
+        groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$type", propertyTemplate.getGenericType().getTypeName());
+        groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$rawType", propertyTemplate.getGenericType().getTypeName());
+        groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$returnType", method.getGenericReturnType().getTypeName());
+        groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$property", propertyTemplate.getOriginalName());
         groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$propName", propertyTemplate.getName());
         groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$value", "this.@" + propertyTemplate.getOriginalName() + ".propertyValue");
         groovyImplementation = StringUtils.replaceIgnoreCase(groovyImplementation, "$rawValue", "this.@" + propertyTemplate.getOriginalName() + ".rawValue");
@@ -161,6 +165,10 @@ public abstract class AbstractPropertyAction implements ConfigPropertyAction
      * later replaced with valid code: <br>
      * <ol><li>
      * $type - replaced with type name.
+     * </li><li>
+     * $rawType - replaced with raw type name.
+     * </li><li>
+     * $returnType - replaced with return type of method.
      * </li><li>
      * $property - replaced with property original name.
      * </li><li>
