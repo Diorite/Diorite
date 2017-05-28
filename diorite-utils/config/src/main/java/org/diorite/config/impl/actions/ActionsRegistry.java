@@ -30,6 +30,9 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -54,6 +57,7 @@ import org.diorite.config.impl.actions.collections.SizeOfCollectionPropertyActio
 public final class ActionsRegistry
 {
     private static final SortedSet<ConfigPropertyActionEntry> actions = new TreeSet<>();
+    private static final ReentrantReadWriteLock               lock    = new ReentrantReadWriteLock();
 
     private ActionsRegistry()
     {
@@ -61,7 +65,6 @@ public final class ActionsRegistry
 
     static
     {
-
         // @formatter:off
         registerAction(new NumericPropertyAction(
                 "add", "+", "(?:add(?<property>[A-Z0-9].*))", "(?:increment(?<property>[A-Z0-9].*?)(?:By)?)"), 100);
@@ -99,7 +102,16 @@ public final class ActionsRegistry
      */
     public static void registerAction(ConfigPropertyAction action, double priority)
     {
-        actions.add(new ConfigPropertyActionEntry(action, priority));
+        WriteLock writeLock = lock.writeLock();
+        try
+        {
+            writeLock.lock();
+            actions.add(new ConfigPropertyActionEntry(action, priority));
+        }
+        finally
+        {
+            writeLock.unlock();
+        }
     }
 
     @Nullable
@@ -112,19 +124,29 @@ public final class ActionsRegistry
     public static Pair<ConfigPropertyAction, ActionMatcherResult> findMethod(Method method, Predicate<String> propertyNameChecker)
     {
         Pair<ConfigPropertyAction, ActionMatcherResult> lastMatching = null;
-        for (ConfigPropertyActionEntry actionEntry : actions)
+
+        ReadLock readLock = lock.readLock();
+        try
         {
-            ConfigPropertyAction action = actionEntry.action;
-            ActionMatcherResult actionMatcherResult = action.matchesAction(method);
-            if (actionMatcherResult.isMatching())
+            readLock.lock();
+            for (ConfigPropertyActionEntry actionEntry : actions)
             {
-                actionMatcherResult.setValidatedName(action.declaresProperty() || propertyNameChecker.test(actionMatcherResult.getPropertyName()));
-                lastMatching = new ImmutablePair<>(action, actionMatcherResult);
-                if (actionMatcherResult.isValidatedName())
+                ConfigPropertyAction action = actionEntry.action;
+                ActionMatcherResult actionMatcherResult = action.matchesAction(method);
+                if (actionMatcherResult.isMatching())
                 {
-                    return lastMatching;
+                    actionMatcherResult.setValidatedName(action.declaresProperty() || propertyNameChecker.test(actionMatcherResult.getPropertyName()));
+                    lastMatching = new ImmutablePair<>(action, actionMatcherResult);
+                    if (actionMatcherResult.isValidatedName())
+                    {
+                        return lastMatching;
+                    }
                 }
             }
+        }
+        finally
+        {
+            readLock.unlock();
         }
         return lastMatching;
     }
