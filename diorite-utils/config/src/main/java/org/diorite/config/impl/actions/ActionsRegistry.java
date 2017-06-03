@@ -45,6 +45,7 @@ import org.diorite.config.impl.actions.collections.AddToCollectionPropertyAction
 import org.diorite.config.impl.actions.collections.ContainsInCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.ContainsInCollectionPropertyNegatedAction;
 import org.diorite.config.impl.actions.collections.GetFromCollectionPropertyAction;
+import org.diorite.config.impl.actions.collections.IsEmptyCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyNegatedAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionPropertyAction;
@@ -90,6 +91,7 @@ public final class ActionsRegistry
         registerAction(new RemoveFromCollectionPropertyAction(), 100);
         registerAction(new GetFromCollectionPropertyAction(), 90);
         registerAction(new SizeOfCollectionPropertyAction(), 90);
+        registerAction(new IsEmptyCollectionPropertyAction(), 90);
     }
 
     /**

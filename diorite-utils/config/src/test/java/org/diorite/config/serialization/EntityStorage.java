@@ -54,6 +54,11 @@ public class EntityStorage implements Serializable
     {
     }
 
+    public Collection<EntityData> getEntityData()
+    {
+        return this.entityData;
+    }
+
     public EntityStorage(DeserializationData data)
     {
         data.getAsCollection("entities", EntityData.class, this.entityData);

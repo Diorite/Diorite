@@ -56,7 +56,6 @@ public class ConfigTest
         SerializationTest.prepareSerialization();
         ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
 
-
         ConfigTemplate<TypeTestConfig> configTemplate = this.configManager.getConfigFile(TypeTestConfig.class);
         Assert.assertNotNull(configTemplate);
         Assert.assertEquals(TypeTestConfig.class.getSimpleName(), configTemplate.getName());
@@ -145,6 +144,7 @@ public class ConfigTest
     private void testNicknames(SomeConfig someConfig)
     {
         Assert.assertEquals(2, someConfig.sizeOfNicknames());
+        Assert.assertFalse(someConfig.isNicknamesEmpty());
         Assert.assertEquals("GotoFinal", someConfig.getFromNicknames(0));
         Assert.assertEquals("NorthPL", someConfig.getFromNicknames(1));
         Assert.assertTrue(someConfig.isEqualsToNicknames(List.of("GotoFinal", "NorthPL")));
@@ -177,5 +177,6 @@ public class ConfigTest
         Assert.assertEquals("NorthPL", someConfig.getFromNicknames(0));
         someConfig.removeFromNicknamesIfNot(s -> s.contains("17"));
         Assert.assertEquals(0, someConfig.nicknamesSize());
+        Assert.assertTrue(someConfig.isNicknamesEmpty());
     }
 }
