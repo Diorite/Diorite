@@ -33,6 +33,7 @@ import org.diorite.core.material.InternalItemRegistry;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
 import org.diorite.gameprofile.SessionService;
+import org.diorite.plugin.Plugin;
 
 public interface DioriteCore extends Diorite
 {
@@ -50,12 +51,18 @@ public interface DioriteCore extends Diorite
     @Override
     InternalItemRegistry getItemRegistry();
 
+    @Override
+    EventManagerImpl getEventManager();
+
+    /**
+     * Returns internal diorite plugin instance.
+     *
+     * @return internal diorite plugin instance.
+     */
+    Plugin getDioritePlugin();
 
     static DioriteCore getDiorite()
     {
         return (DioriteCore) Diorite.getDiorite();
     }
-
-    @Override
-    EventManagerImpl getEventManager();
 }
