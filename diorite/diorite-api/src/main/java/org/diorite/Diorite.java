@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.event.EventManager;
+import org.diorite.material.BlockRegistry;
+import org.diorite.material.ItemRegistry;
 import org.diorite.player.Player;
 
 /**
@@ -60,6 +62,20 @@ public interface Diorite extends SharedAPI
      * @return event manager.
      */
     EventManager getEventManager();
+
+    /**
+     * Returns server blocks registry.
+     *
+     * @return server blocks registry.
+     */
+    BlockRegistry<?> getBlockRegistry();
+
+    /**
+     * Returns server items registry.
+     *
+     * @return server items registry.
+     */
+    ItemRegistry<?> getItemRegistry();
 
     @Override
     PlayersManager<? extends Player> getPlayers();

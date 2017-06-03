@@ -22,40 +22,29 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
+package org.diorite.impl.material;
 
-import java.security.KeyPair;
-
-import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
-import org.diorite.core.material.InternalBlockRegistry;
+import org.diorite.impl.DioriteServer;
 import org.diorite.core.material.InternalItemRegistry;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
+import org.diorite.core.material.SimpleItemType;
+import org.diorite.registry.GameId;
 
-public interface DioriteCore extends Diorite
+public class ItemsInit
 {
-    SessionService getSessionService();
+    private final DioriteServer dioriteServer;
+    private final InternalItemRegistry registry;
 
-    KeyPair getKeyPair();
-
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    @Override
-    InternalBlockRegistry getBlockRegistry();
-
-    @Override
-    InternalItemRegistry getItemRegistry();
-
-
-    static DioriteCore getDiorite()
-    {
-        return (DioriteCore) Diorite.getDiorite();
+    public ItemsInit(DioriteServer dioriteServer, InternalItemRegistry registry) {
+        this.dioriteServer = dioriteServer;
+        this.registry = registry;
     }
 
-    @Override
-    EventManagerImpl getEventManager();
+    public void init()
+    {
+        this.dioriteServer.debug("Started initialization of items...");
+        this.registry.register(new SimpleItemType(GameId.ofMinecraft("air"), 0, 0));
+        this.registry.register(new SimpleItemType(GameId.ofMinecraft("stone"), 1, 0));
+        this.registry.register(new SimpleItemType(GameId.ofMinecraft("grass"), 2, 0));
+        this.registry.register(new SimpleItemType(GameId.ofMinecraft("dirt"), 3, 0));
+    }
 }

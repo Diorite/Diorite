@@ -22,40 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
-
-import java.security.KeyPair;
+package org.diorite.material;
 
 import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
-import org.diorite.core.material.InternalBlockRegistry;
-import org.diorite.core.material.InternalItemRegistry;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
+import org.diorite.registry.GameId;
 
-public interface DioriteCore extends Diorite
+/**
+ * Pseudo-enum of basic available blocks in vanilla diorite.
+ */
+public final class Blocks
 {
-    SessionService getSessionService();
+    private static final BlockType AIR;
+    private static final BlockType STONE;
+    private static final BlockType DIRT;
+    private static final BlockType GRASS;
 
-    KeyPair getKeyPair();
+    private Blocks() {}
 
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    @Override
-    InternalBlockRegistry getBlockRegistry();
-
-    @Override
-    InternalItemRegistry getItemRegistry();
-
-
-    static DioriteCore getDiorite()
+    static
     {
-        return (DioriteCore) Diorite.getDiorite();
+        Diorite diorite = Diorite.getDiorite();
+        BlockRegistry<?> blockRegistry = diorite.getBlockRegistry();
+        AIR = blockRegistry.getOrThrow(GameId.ofMinecraft("air"));
+        STONE = blockRegistry.getOrThrow(GameId.ofMinecraft("stone"));
+        DIRT = blockRegistry.getOrThrow(GameId.ofMinecraft("dirt"));
+        GRASS = blockRegistry.getOrThrow(GameId.ofMinecraft("grass"));
     }
-
-    @Override
-    EventManagerImpl getEventManager();
 }

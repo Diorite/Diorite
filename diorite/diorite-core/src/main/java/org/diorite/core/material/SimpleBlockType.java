@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.core.material;
 
-import java.lang.reflect.Method;
+import org.diorite.registry.GameId;
 
-import org.diorite.config.ConfigPropertyActionInstance;
-import org.diorite.config.ConfigPropertyTemplate;
-
-public class MultipleNumericPropertyAction extends NumericPropertyAction
+public class SimpleBlockType extends AbstractType implements InternalBlockType
 {
-    public MultipleNumericPropertyAction()
+    public SimpleBlockType(GameId gameId, int minecraftId, int minecraftData)
     {
-        super("multiple", "(?:multiple|multi)(?<property>[A-Z0-9].*?)(?:By)?");
+        super(gameId, minecraftId, minecraftData);
     }
 
     @Override
-    protected String getGroovyImplementation0(Method method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
+    public final int getMinecraftIdAndData()
     {
-        return "this.$property * var1";
+        return (this.minecraftId << 4) | this.minecraftData;
     }
 }

@@ -22,40 +22,43 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
+package org.diorite.core.material;
 
-import java.security.KeyPair;
+import org.diorite.registry.GameId;
 
-import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
-import org.diorite.core.material.InternalBlockRegistry;
-import org.diorite.core.material.InternalItemRegistry;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
-
-public interface DioriteCore extends Diorite
+abstract class AbstractType implements InternalType
 {
-    SessionService getSessionService();
+    protected final GameId gameId;
+    protected final int    minecraftId, minecraftData;
 
-    KeyPair getKeyPair();
-
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    @Override
-    InternalBlockRegistry getBlockRegistry();
-
-    @Override
-    InternalItemRegistry getItemRegistry();
-
-
-    static DioriteCore getDiorite()
+    protected AbstractType(GameId gameId, int minecraftId, int minecraftData)
     {
-        return (DioriteCore) Diorite.getDiorite();
+        this.gameId = gameId;
+        this.minecraftId = minecraftId;
+        this.minecraftData = minecraftData;
     }
 
     @Override
-    EventManagerImpl getEventManager();
+    public final String getId()
+    {
+        return this.gameId.toString();
+    }
+
+    @Override
+    public final GameId getGameId()
+    {
+        return this.gameId;
+    }
+
+    @Override
+    public final int getMinecraftId()
+    {
+        return this.minecraftId;
+    }
+
+    @Override
+    public final int getMinecraftData()
+    {
+        return this.minecraftData;
+    }
 }

@@ -22,23 +22,12 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.material;
 
-import java.lang.reflect.Method;
-
-import org.diorite.config.ConfigPropertyActionInstance;
-import org.diorite.config.ConfigPropertyTemplate;
-
-public class DivideNumericPropertyAction extends NumericPropertyAction
+/**
+ * Represents item type.
+ */
+public interface ItemType extends Type
 {
-    public DivideNumericPropertyAction()
-    {
-        super("divide", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By)?");
-    }
 
-    @Override
-    protected String getGroovyImplementation0(Method method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
-    {
-        return "this.$property / var1";
-    }
 }

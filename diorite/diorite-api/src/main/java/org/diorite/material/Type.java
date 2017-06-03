@@ -22,40 +22,22 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
+package org.diorite.material;
 
-import java.security.KeyPair;
+import org.diorite.registry.HasGameId;
 
-import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
-import org.diorite.core.material.InternalBlockRegistry;
-import org.diorite.core.material.InternalItemRegistry;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
-
-public interface DioriteCore extends Diorite
+/**
+ * Represents block or item type
+ */
+public interface Type extends HasGameId
 {
-    SessionService getSessionService();
-
-    KeyPair getKeyPair();
-
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    @Override
-    InternalBlockRegistry getBlockRegistry();
-
-    @Override
-    InternalItemRegistry getItemRegistry();
-
-
-    static DioriteCore getDiorite()
+    /**
+     * Returns game id of this type.
+     *
+     * @return game id of this type.
+     */
+    default String getId()
     {
-        return (DioriteCore) Diorite.getDiorite();
+        return this.getGameId().toString();
     }
-
-    @Override
-    EventManagerImpl getEventManager();
 }

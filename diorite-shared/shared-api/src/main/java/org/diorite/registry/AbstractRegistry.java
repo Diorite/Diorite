@@ -43,13 +43,12 @@ import org.diorite.commons.sets.ConcurrentSet;
  *
  * @see GameId#isMatching(GameId)
  */
-public class GameIdRegistry<V extends HasGameId> implements Registry<GameId, V>
+public abstract class AbstractRegistry<V extends HasGameId> implements Registry<V>
 {
-    private final Map<GameId, V>                cache   = new ConcurrentHashMap<>(50);
-    private final Map<GameId, V>                data    = new ConcurrentHashMap<>(50);
-    private final Set<GameId>                   keys    = new ConcurrentSet<>();
-    private final Set<V>                        values  = new ConcurrentSet<>();
-    private final Set<RegistryEntry<GameId, V>> entries = new ConcurrentSet<>();
+    private final Map<GameId, V> cache  = new ConcurrentHashMap<>(50);
+    private final Map<GameId, V> data   = new ConcurrentHashMap<>(50);
+    private final Set<GameId>    keys   = new ConcurrentSet<>();
+    private final Set<V>         values = new ConcurrentSet<>();
 
     private final Map<String, Set<V>> namespaceCache = new ConcurrentHashMap<>(1);
 
@@ -94,6 +93,7 @@ public class GameIdRegistry<V extends HasGameId> implements Registry<GameId, V>
      *
      * @return all values from given namespace.
      */
+    @Override
     public Set<? extends V> getAll(String namespace)
     {
         namespace = namespace.toLowerCase();
@@ -110,36 +110,19 @@ public class GameIdRegistry<V extends HasGameId> implements Registry<GameId, V>
         }));
     }
 
-    /**
-     * Register new registry entry using value and key provided by value.
-     *
-     * @param value
-     *         value to register.
-     *
-     * @see HasGameId#getGameId()
-     */
+    @Override
     public void register(V value)
     {
-        this.register(value.getGameId(), value);
-    }
-
-    @Override
-    public void register(GameId key, V value)
-    {
+        GameId key = value.getGameId();
         if (! key.hasNamespace())
         {
             throw new IllegalStateException("Can't register value with game id of unknown namespace!");
-        }
-        if (key != value.getGameId())
-        {
-            throw new IllegalStateException("Can't register value with different game id than provided by value!");
         }
         synchronized (this.data)
         {
             this.data.put(key, value);
             this.keys.add(key);
             this.values.add(value);
-            this.entries.add(new GameIdRegistryEntry<>(value));
             if (key.getNamespace() != GameId.MINECRAFT)
             {
                 this.data.put(key.toUnknownNamespace(), value);
@@ -162,12 +145,6 @@ public class GameIdRegistry<V extends HasGameId> implements Registry<GameId, V>
     }
 
     @Override
-    public Set<? extends RegistryEntry<? extends GameId, ? extends V>> entries()
-    {
-        return new HashSet<>(this.entries);
-    }
-
-    @Override
     public int size()
     {
         return this.keys.size();
@@ -177,24 +154,5 @@ public class GameIdRegistry<V extends HasGameId> implements Registry<GameId, V>
     public String toString()
     {
         return this.keys.toString();
-    }
-
-    private static final class GameIdRegistryEntry<V extends HasGameId> implements RegistryEntry<GameId, V>
-    {
-        private final V value;
-
-        private GameIdRegistryEntry(V value) {this.value = value;}
-
-        @Override
-        public GameId getKey()
-        {
-            return this.value.getGameId();
-        }
-
-        @Override
-        public V getValue()
-        {
-            return this.value;
-        }
     }
 }

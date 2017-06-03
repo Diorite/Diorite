@@ -22,40 +22,30 @@
  * SOFTWARE.
  */
 
-package org.diorite.core;
+package org.diorite.impl.material;
 
-import java.security.KeyPair;
-
-import org.diorite.Diorite;
-import org.diorite.core.event.EventManagerImpl;
+import org.diorite.impl.DioriteServer;
 import org.diorite.core.material.InternalBlockRegistry;
-import org.diorite.core.material.InternalItemRegistry;
-import org.diorite.core.protocol.Protocol;
-import org.diorite.core.protocol.connection.ServerConnection;
-import org.diorite.gameprofile.SessionService;
+import org.diorite.core.material.SimpleBlockType;
+import org.diorite.registry.GameId;
 
-public interface DioriteCore extends Diorite
+public class BlocksInit
 {
-    SessionService getSessionService();
+    private final DioriteServer         dioriteServer;
+    private final InternalBlockRegistry registry;
 
-    KeyPair getKeyPair();
-
-    Protocol<?> getProtocol();
-
-    ServerConnection getServerConnection();
-
-    @Override
-    InternalBlockRegistry getBlockRegistry();
-
-    @Override
-    InternalItemRegistry getItemRegistry();
-
-
-    static DioriteCore getDiorite()
+    public BlocksInit(DioriteServer dioriteServer, InternalBlockRegistry registry)
     {
-        return (DioriteCore) Diorite.getDiorite();
+        this.dioriteServer = dioriteServer;
+        this.registry = registry;
     }
 
-    @Override
-    EventManagerImpl getEventManager();
+    public void init()
+    {
+        this.dioriteServer.debug("Started initialization of blocks...");
+        this.registry.register(new SimpleBlockType(GameId.ofMinecraft("air"), 0, 0));
+        this.registry.register(new SimpleBlockType(GameId.ofMinecraft("stone"), 1, 0));
+        this.registry.register(new SimpleBlockType(GameId.ofMinecraft("grass"), 2, 0));
+        this.registry.register(new SimpleBlockType(GameId.ofMinecraft("dirt"), 3, 0));
+    }
 }

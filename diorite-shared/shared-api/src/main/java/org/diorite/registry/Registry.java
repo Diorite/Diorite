@@ -24,91 +24,22 @@
 
 package org.diorite.registry;
 
-import javax.annotation.Nullable;
-
-import java.util.Set;
-
 /**
  * Represents registry, registry is like simple Map, but often optimized for concurrent reads and with support for wildcard keys. <br>
- * In registry both keys and values are unique.
+ * In registry both keys and values are unique. <br>
+ * When requested game id is from unknown namespace registry will try to find value from minecraft namespace, and if value isn't found it will try to find any
+ * matching one.
  *
- * @param <K>
- *         key type.
  * @param <V>
  *         value type.
  */
-public interface Registry<K, V>
+public interface Registry<V extends HasGameId> extends SimpleRegistry<V>
 {
     /**
-     * Returns registry value for given key.
+     * Register new registry value.
      *
-     * @param key
-     *         key object.
-     *
-     * @return registry value for given key.
-     */
-    @Nullable
-    V get(K key);
-
-    /**
-     * Returns all registry values that are registered using matching key.
-     *
-     * @param key
-     *         key object.
-     *
-     * @return all registry values that are registered using matching key.
-     */
-    Set<? extends V> getAll(K key);
-
-    /**
-     * Register new registry entry with given key and value.
-     *
-     * @param key
-     *         entry key.
      * @param value
      *         entry value.
      */
-    void register(K key, V value);
-
-    /**
-     * Returns set of available values.
-     *
-     * @return set of available values.
-     */
-    Set<? extends V> values();
-
-    /**
-     * Returns set of available keys.
-     *
-     * @return set of available keys.
-     */
-    Set<? extends K> keys();
-
-    /**
-     * Returns set of available entries.
-     *
-     * @return set of available entries.
-     */
-    Set<? extends RegistryEntry<? extends K, ? extends V>> entries();
-
-    /**
-     * Returns size of registry.
-     *
-     * @return size of registry.
-     */
-    int size();
-
-    /**
-     * Represents registry entry.
-     *
-     * @param <K>
-     *         key type.
-     * @param <V>
-     *         value type.
-     */
-    interface RegistryEntry<K, V>
-    {
-        K getKey();
-        V getValue();
-    }
+    void register(V value);
 }
