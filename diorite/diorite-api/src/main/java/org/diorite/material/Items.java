@@ -33,10 +33,10 @@ import org.diorite.registry.Registry;
  */
 public final class Items
 {
-    private static final ItemType AIR;
-    private static final ItemType STONE;
-    private static final ItemType DIRT;
-    private static final ItemType GRASS;
+    public static final ItemType AIR;
+    public static final ItemType STONE;
+    public static final ItemType DIRT;
+    public static final ItemType GRASS;
 
     private Items() {}
 

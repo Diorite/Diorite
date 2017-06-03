@@ -32,10 +32,10 @@ import org.diorite.registry.GameId;
  */
 public final class Blocks
 {
-    private static final BlockType AIR;
-    private static final BlockType STONE;
-    private static final BlockType DIRT;
-    private static final BlockType GRASS;
+    public static final BlockType AIR;
+    public static final BlockType STONE;
+    public static final BlockType DIRT;
+    public static final BlockType GRASS;
 
     private Blocks() {}
 
