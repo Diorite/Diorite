@@ -191,6 +191,18 @@ public final class ChunkPosition
         return new ChunkPosition(this.x, this.z, this.world);
     }
 
+    @SuppressWarnings("MagicNumber")
+    public long asLong()
+    {
+        return (((long) this.x) << 32) | (this.z & 0xffffffffL);
+    }
+
+    @SuppressWarnings("MagicNumber")
+    public static ChunkPosition fromLong(long l)
+    {
+        return new ChunkPosition((int) (l >> 32), (int) l);
+    }
+
     @Override
     public int hashCode()
     {
