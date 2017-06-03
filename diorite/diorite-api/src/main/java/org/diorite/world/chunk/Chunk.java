@@ -27,15 +27,23 @@ package org.diorite.world.chunk;
 import java.util.Collection;
 
 import org.diorite.BlockLocation;
+import org.diorite.block.BlockContainer;
 import org.diorite.event.chunk.ChunkAnchorRemovedEvent;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.world.World;
 
 /**
  * Represents chunk, chunk is some part of world that can be loaded/saved/unloaded/generated. <br>
  * Chunks are always square but their size may be different depending on implementation.
  */
-public interface Chunk
+public interface Chunk extends BlockContainer, Synchronizable
 {
+    @Override
+    default World getParent()
+    {
+        return this.getWorld();
+    }
+
     /**
      * Returns world where this chunk is stored.
      *
@@ -49,6 +57,20 @@ public interface Chunk
      * @return position of this chunk.
      */
     ChunkPosition getPosition();
+
+    /**
+     * Returns position of chunk on X axis.
+     *
+     * @return position of chunk on X axis.
+     */
+    int getX();
+
+    /**
+     * Returns position of chunk on Z axis.
+     *
+     * @return position of chunk on Z axis.
+     */
+    int getZ();
 
     /**
      * Returns true if this is valid chunk instance. <br>
@@ -145,25 +167,14 @@ public interface Chunk
     boolean isEmpty();
 
     /**
-     * Number of blocks in X axis.
-     *
-     * @return size in X axis.
-     */
-    int getSizeX();
-
-    /**
-     * Number of blocks in Z axis.
-     *
-     * @return size in Z axis.
-     */
-    int getSizeZ();
-
-    /**
      * Returns block location of minimal point on chunk, so location win minimal x/y/z coordinates on this chunk.
      *
      * @return block location of minimal point on chunk.
      */
-    BlockLocation getMinimalPoint();
+    default BlockLocation getMinimalPoint()
+    {
+        return this.getRelativeOrigin();
+    }
 
     /**
      * Returns block location of maximal point on chunk, so location win maximal x/y/z coordinates on this chunk.
