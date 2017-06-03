@@ -26,6 +26,8 @@ package org.diorite;
 
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.plugin.PluginManager;
+import org.diorite.scheduler.Scheduler;
+import org.diorite.scheduler.Synchronizable;
 import org.diorite.sender.PlayerCommandSender;
 import org.diorite.service.ServiceManager;
 
@@ -34,6 +36,20 @@ import org.diorite.service.ServiceManager;
  */
 public interface SharedAPI
 {
+    /**
+     * Returns main synchronizable object for scheduler api.
+     *
+     * @return main synchronizable object for scheduler api.
+     */
+    Synchronizable getMainSynchronizable();
+
+    /**
+     * Returns instance of scheduler.
+     *
+     * @return instance of scheduler.
+     */
+    Scheduler getScheduler();
+
     /**
      * Returns plugin manager.
      *
