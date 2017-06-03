@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.diorite.impl.protocol.any.serverbound.H00Handshake;
 import org.diorite.DioriteConfig.ProtocolSettings;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.ProtocolVersion;
 import org.diorite.core.protocol.connection.ServerConnection;
 import org.diorite.core.protocol.connection.internal.Packet;

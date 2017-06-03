@@ -27,15 +27,22 @@ package org.diorite.impl.protocol.p16w50a.clientbound;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.chat.ChatMessage;
+import org.diorite.chat.Parser;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.PacketClass;
 import org.diorite.core.protocol.connection.ProtocolDirection;
@@ -90,7 +97,24 @@ public class CS00Response extends ClientboundPacket
         }
         if (this.description != null)
         {
-            response.add("description", this.description.toJsonElement());
+            JsonParser parser = new JsonParser();
+//            String parse = new Parser("s&2*/hi/*", null).parse();
+            String parse = new Parser("*Test* _T&ao ~je&bst~ /*sformatowane* &dd MOTD/!!_ _I_ po /formatowaniu/. &5%nah%  [&4Even [Mo&3re](links.com)](diorite.org) dfd", null).parse();
+//            String parse = new Parser("hi &6diorite.org lel &8https://diorite.org&r lel", null).parse()
+
+            JsonWriter jsonWriter = new JsonWriter(new OutputStreamWriter(System.out));
+            jsonWriter.setIndent("  ");
+            JsonElement jsonElement = parser.parse(parse);
+            try
+            {
+                Streams.write(jsonElement, jsonWriter);
+                jsonWriter.flush();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            response.add("description", jsonElement);
         }
         if (this.encodedFavicon != null)
         {

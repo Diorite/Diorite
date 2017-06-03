@@ -24,7 +24,7 @@
 
 package org.diorite.impl.protocol.p16w50a;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 
 import io.netty.buffer.ByteBuf;
 

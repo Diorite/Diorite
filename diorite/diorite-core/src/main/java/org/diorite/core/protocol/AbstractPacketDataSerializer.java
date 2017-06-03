@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.diorite.impl.protocol;
+package org.diorite.core.protocol;
 
 import javax.vecmath.Vector3f;
 
@@ -46,6 +46,7 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
 
+@SuppressWarnings("NullableProblems")
 public class AbstractPacketDataSerializer extends ByteBuf
 {
     protected final ByteBuf byteBuf;

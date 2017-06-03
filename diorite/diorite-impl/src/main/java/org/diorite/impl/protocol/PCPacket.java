@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.diorite.commons.lazy.IntLazyValue;
 import org.diorite.commons.objects.Dirtable;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.connection.internal.Packet;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;

@@ -24,7 +24,7 @@
 
 package org.diorite.impl.protocol.p16w50a.serverbound;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.p16w50a.PCp16w50aPacket;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;

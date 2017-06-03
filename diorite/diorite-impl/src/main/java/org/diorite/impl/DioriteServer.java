@@ -42,6 +42,7 @@ import org.diorite.impl.plugin.DioriteServerPlugin;
 import org.diorite.impl.protocol.MinecraftEncryption;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.connection.ServerConnectionImpl;
+import org.diorite.impl.scheduler.SchedulerImpl;
 import org.diorite.impl.service.ServiceManagerImpl;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
@@ -57,12 +58,12 @@ import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
 import org.diorite.gameprofile.SessionService;
 import org.diorite.gameprofile.internal.yggdrasil.YggdrasilSessionService;
-import org.diorite.material.BlockRegistry;
-import org.diorite.material.ItemRegistry;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.ping.Favicon;
 import org.diorite.player.Player;
+import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginManager;
+import org.diorite.scheduler.Scheduler;
 import org.diorite.serializers.SerializersInit;
 import org.diorite.service.ServiceManager;
 import org.diorite.services.AutoAuthMode;
@@ -74,14 +75,16 @@ public class DioriteServer implements DioriteCore
     private final PCProtocol       pcProtocol;
     private final DioriteConfig    dioriteConfig;
     private final ServerConnection serverConnection;
-    private final EventManagerImpl      eventManager   = new EventManagerImpl();
-    private final ServiceManager        serviceManager = new ServiceManagerImpl();
-    private final DioriteServerPlugin   plugin         = new DioriteServerPlugin();
-    private final KeyPair               keyPair        = MinecraftEncryption.generateKeyPair();
-    private final InternalBlockRegistry blockRegistry  = new InternalBlockRegistry();
-    private final InternalItemRegistry  itemRegistry   = new InternalItemRegistry();
-    private final BlocksInit            blocksInit     = new BlocksInit(this, this.blockRegistry);
-    private final ItemsInit             itemsInit      = new ItemsInit(this, this.itemRegistry);
+    private final     EventManagerImpl      eventManager   = new EventManagerImpl();
+    private final     ServiceManager        serviceManager = new ServiceManagerImpl();
+    private final     DioriteServerPlugin   plugin         = new DioriteServerPlugin();
+    private final     KeyPair               keyPair        = MinecraftEncryption.generateKeyPair();
+    private final     InternalBlockRegistry blockRegistry  = new InternalBlockRegistry();
+    private final     InternalItemRegistry  itemRegistry   = new InternalItemRegistry();
+    private final     BlocksInit            blocksInit     = new BlocksInit(this, this.blockRegistry);
+    private final     ItemsInit             itemsInit      = new ItemsInit(this, this.itemRegistry);
+    private final     Scheduler             scheduler      = new SchedulerImpl(this.plugin);
+    private @Nullable Thread                serverThread   = null;
     private @Nullable Favicon favicon;
 
     @Nullable private final String serverVersion;
@@ -160,6 +163,7 @@ public class DioriteServer implements DioriteCore
 
     void start()
     {
+        this.serverThread = Thread.currentThread();
         this.blocksInit.init();
         this.itemsInit.init();
 
@@ -179,6 +183,18 @@ public class DioriteServer implements DioriteCore
     public ServerConnection getServerConnection()
     {
         return this.serverConnection;
+    }
+
+    @Override
+    public Scheduler getScheduler()
+    {
+        return this.scheduler;
+    }
+
+    @Override
+    public Thread getLastTickThread()
+    {
+        return this.serverThread;
     }
 
     @Override
@@ -215,6 +231,12 @@ public class DioriteServer implements DioriteCore
     }
 
     @Override
+    public Plugin getDioritePlugin()
+    {
+        return this.plugin;
+    }
+
+    @Override
     public InternalBlockRegistry getBlockRegistry()
     {
         return this.blockRegistry;
@@ -229,6 +251,7 @@ public class DioriteServer implements DioriteCore
     @Override
     public PlayersManager<? extends Player> getPlayers()
     {
+        // TODO
         return null;
     }
 
