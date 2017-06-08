@@ -38,6 +38,7 @@ public abstract class CommandObject
     private String       name;
     private List<String> aliases;
     private @Nullable Collection<? extends Argument<?>> arguments = null;
+    private int[] optional = {};
     private @Nullable CommandManager manager = null;
     private @Nullable Permission permission;
     protected @Nullable String description = "";
@@ -141,5 +142,15 @@ public abstract class CommandObject
     public void setArguments(Collection<? extends Argument<?>> arguments)
     {
         this.arguments = arguments;
+    }
+
+    public int[] getOptional()
+    {
+        return optional;
+    }
+
+    public void setOptional(int[] optional)
+    {
+        this.optional = optional;
     }
 }

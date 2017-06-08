@@ -101,6 +101,7 @@ public class DioriteCommandManager implements CommandManager
                 newCommand.setAliases(aliases);
 
                 newCommand.setDescription(annotation.description());
+                newCommand.setOptional(annotation.optional());
                 newCommand.register(this);
 
                 commandMap.put(newCommand, newCommand.getName());

@@ -62,4 +62,9 @@ public @interface Command
      * @return array of arguments
      */
     Class<? extends Argument<?>>[] arguments();
+
+    /**
+     * @return the position of the optional args
+     */
+    int[] optional();
 }
