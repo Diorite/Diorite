@@ -30,6 +30,7 @@ import java.text.CharacterIterator;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.function.predicate.CharPredicate;
 
 /**

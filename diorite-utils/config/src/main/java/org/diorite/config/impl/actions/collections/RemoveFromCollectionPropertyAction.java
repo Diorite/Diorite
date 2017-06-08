@@ -24,16 +24,14 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.reflect.Parameter;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
@@ -50,46 +48,47 @@ public class RemoveFromCollectionPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
+        // language=groovy
+        StringBuilder methodBuilder = new StringBuilder(500);
+        methodBuilder.append("$rawType v = $rawValue\n")
+                     .append("if ($value == null) return $nullOrNothing\n");
+        Parameter parameter = method.getParameters()[0];
+        if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            if (Collection.class.isAssignableFrom(value.getRawType()))
-            {
-                return false;
-            }
-            return null;
-        }
-        if (rawValue instanceof Collection)
-        {
-            Collection<Object> collection = (Collection<Object>) rawValue;
+            // language=groovy
             if (method.isVarArgs())
             {
-                Object[] arg = (Object[]) args[0];
-                return collection.removeAll(Arrays.asList(arg));
+                methodBuilder.append("$returnOrNothing v.removeAll(Arrays.asList(var1))\n");
             }
-            return collection.remove(args[0]);
-        }
-        if (rawValue instanceof Map)
-        {
-            Map<Object, Object> map = (Map<Object, Object>) rawValue;
-            if (method.isVarArgs())
+            else
             {
-                Object[] arg = (Object[]) args[0];
-                if (arg.length == 0)
-                {
-                    return Collections.emptyList();
-                }
-                List<Object> removed = new ArrayList<>(arg.length);
-                for (Object anArg : arg)
-                {
-                    removed.add(map.remove(anArg));
-                }
-                return removed;
+                methodBuilder.append("$returnOrNothing v.remove(var1)\n");
             }
-            return map.remove(args[0]);
         }
-        throw new IllegalStateException("Expected collection on " + value);
+        else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
+        {
+            // language=groovy
+            if (parameter.isVarArgs())
+            {
+                methodBuilder.append("if (var1.length == 0) $returnOrNothing Collections.emptyList()\n");
+                methodBuilder.append("List removed = new ArrayList() \n" +
+                                     "for (Object anArg : var1)\n" +
+                                     "{\n" +
+                                     "    removed.add(v.remove(anArg)) \n" +
+                                     "}\n" +
+                                     "$returnOrNothing ($returnType) removed");
+            }
+            else
+            {
+                methodBuilder.append("$returnOrNothing ($returnType) v.remove(var1)");
+            }
+        }
+        else
+        {
+            throw new IllegalStateException("Unsupported type of property: " + propertyTemplate.getGenericType());
+        }
+        return methodBuilder.toString();
     }
 }

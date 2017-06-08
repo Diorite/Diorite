@@ -26,12 +26,13 @@ package org.diorite.sender;
 
 import org.diorite.chat.MessageOutput;
 import org.diorite.chat.MessageReceiver;
+import org.diorite.message.MessageData;
 import org.diorite.permissions.ServerOperator;
 
 /**
  * Represent source of command.
  */
-public interface CommandSender extends ServerOperator, MessageReceiver
+public interface CommandSender extends ServerOperator, MessageReceiver, MessageData<CommandSender>
 {
     /**
      * Returns name of command sender.
@@ -57,4 +58,7 @@ public interface CommandSender extends ServerOperator, MessageReceiver
      *         new message output.
      */
     void setMessageOutput(MessageOutput messageOutput);
+
+    @Override
+    default String getMessageKey() {return "sender";}
 }

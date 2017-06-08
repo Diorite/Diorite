@@ -33,4 +33,7 @@ public interface PlayerCommandSender extends CommandSender
 {
     @Override
     GroupablePermissionsContainer getPermissionsContainer();
+
+    @Override
+    default String getMessageKey() {return "player";}
 }

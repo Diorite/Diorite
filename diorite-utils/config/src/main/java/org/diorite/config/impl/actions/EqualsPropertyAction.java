@@ -24,17 +24,17 @@
 
 package org.diorite.config.impl.actions;
 
-import java.util.Objects;
-
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
 
-@SuppressWarnings({"rawtypes"})
 public class EqualsPropertyAction extends AbstractPropertyAction
 {
     protected EqualsPropertyAction()
     {
-        super("isEqualsTo", "isEqualsTo(?<property>[A-Z0-9].*)");
+        super("isEqualsTo", "isEqualsTo(?<property>[A-Z0-9].*)", "areEqualsTo(?<property>[A-Z0-9].*)", "(?<property>[A-Z0-9].*)isEqualsTo",
+              "(?<property>[A-Z0-9].*)areEqualsTo");
     }
 
     @Override
@@ -49,8 +49,8 @@ public class EqualsPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        return Objects.equals(value.getPropertyValue(), args[0]);
+        return "return $rawValue == var1";
     }
 }

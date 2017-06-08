@@ -35,7 +35,11 @@ import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.exceptions.ValidationException;
 import org.diorite.config.serialization.snakeyaml.YamlCollectionCreator;
+
+import groovy.transform.CompileStatic;
+import groovy.transform.TypeCheckingMode;
 
 public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
 {
@@ -46,14 +50,15 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
 
     public ConfigPropertyValueImpl(Config config, ConfigPropertyTemplate<T> template)
     {
+        Validate.notNull(config, "config can't be null");
+        Validate.notNull(template, "template can't be null");
         this.config = config;
         this.template = template;
     }
 
     public ConfigPropertyValueImpl(Config config, ConfigPropertyTemplate<T> template, @Nullable T value)
     {
-        this.config = config;
-        this.template = template;
+        this(config, template);
         this.rawValue = value;
     }
 
@@ -76,10 +81,24 @@ public class ConfigPropertyValueImpl<T> implements ConfigPropertyValue<T>
         return this.rawValue;
     }
 
+    @Nullable
+    public T validate(@Nullable T input) throws ValidationException
+    {
+        try
+        {
+            return this.template.getValidator().validate(input, this.config);
+        }
+        catch (Exception e)
+        {
+            throw ValidationException.of(this, input, e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public void setRawValue(@Nullable T value)
+    public void setRawValue(@Nullable T value) throws ValidationException
     {
+        value = this.validate(value);
         Class<T> rawType = this.template.getRawType();
         Class<?> primitiveRawType = DioriteReflectionUtils.getPrimitive(rawType);
         if (! primitiveRawType.isPrimitive())

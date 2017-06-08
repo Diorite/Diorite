@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 
 import java.net.Proxy;
 import java.security.KeyPair;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -36,11 +35,14 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.diorite.impl.material.BlocksInit;
+import org.diorite.impl.material.ItemsInit;
 import org.diorite.impl.permissions.DioritePermissionsManager;
 import org.diorite.impl.plugin.DioriteServerPlugin;
 import org.diorite.impl.protocol.MinecraftEncryption;
 import org.diorite.impl.protocol.PCProtocol;
 import org.diorite.impl.protocol.connection.ServerConnectionImpl;
+import org.diorite.impl.scheduler.SchedulerImpl;
 import org.diorite.impl.service.ServiceManagerImpl;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
@@ -50,6 +52,8 @@ import org.diorite.commons.SpammyError;
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.core.DioriteCore;
 import org.diorite.core.event.EventManagerImpl;
+import org.diorite.core.material.InternalBlockRegistry;
+import org.diorite.core.material.InternalItemRegistry;
 import org.diorite.core.protocol.Protocol;
 import org.diorite.core.protocol.connection.ServerConnection;
 import org.diorite.gameprofile.SessionService;
@@ -57,7 +61,9 @@ import org.diorite.gameprofile.internal.yggdrasil.YggdrasilSessionService;
 import org.diorite.permissions.PermissionsManager;
 import org.diorite.ping.Favicon;
 import org.diorite.player.Player;
+import org.diorite.plugin.Plugin;
 import org.diorite.plugin.PluginManager;
+import org.diorite.scheduler.Scheduler;
 import org.diorite.serializers.SerializersInit;
 import org.diorite.service.ServiceManager;
 import org.diorite.services.AutoAuthMode;
@@ -69,10 +75,16 @@ public class DioriteServer implements DioriteCore
     private final PCProtocol       pcProtocol;
     private final DioriteConfig    dioriteConfig;
     private final ServerConnection serverConnection;
-    private final EventManagerImpl    eventManager   = new EventManagerImpl();
-    private final ServiceManager      serviceManager = new ServiceManagerImpl();
-    private final DioriteServerPlugin plugin         = new DioriteServerPlugin();
-    private final KeyPair             keyPair        = MinecraftEncryption.generateKeyPair();
+    private final     EventManagerImpl      eventManager   = new EventManagerImpl();
+    private final     ServiceManager        serviceManager = new ServiceManagerImpl();
+    private final     DioriteServerPlugin   plugin         = new DioriteServerPlugin();
+    private final     KeyPair               keyPair        = MinecraftEncryption.generateKeyPair();
+    private final     InternalBlockRegistry blockRegistry  = new InternalBlockRegistry();
+    private final     InternalItemRegistry  itemRegistry   = new InternalItemRegistry();
+    private final     BlocksInit            blocksInit     = new BlocksInit(this, this.blockRegistry);
+    private final     ItemsInit             itemsInit      = new ItemsInit(this, this.itemRegistry);
+    private final     Scheduler             scheduler      = new SchedulerImpl(this.plugin);
+    private @Nullable Thread                serverThread   = null;
     private @Nullable Favicon favicon;
 
     @Nullable private final String serverVersion;
@@ -151,6 +163,10 @@ public class DioriteServer implements DioriteCore
 
     void start()
     {
+        this.serverThread = Thread.currentThread();
+        this.blocksInit.init();
+        this.itemsInit.init();
+
         this.serverConnection.init();
         while (true)
         {
@@ -167,6 +183,18 @@ public class DioriteServer implements DioriteCore
     public ServerConnection getServerConnection()
     {
         return this.serverConnection;
+    }
+
+    @Override
+    public Scheduler getScheduler()
+    {
+        return this.scheduler;
+    }
+
+    @Override
+    public Thread getLastTickThread()
+    {
+        return this.serverThread;
     }
 
     @Override
@@ -203,8 +231,27 @@ public class DioriteServer implements DioriteCore
     }
 
     @Override
+    public Plugin getDioritePlugin()
+    {
+        return this.plugin;
+    }
+
+    @Override
+    public InternalBlockRegistry getBlockRegistry()
+    {
+        return this.blockRegistry;
+    }
+
+    @Override
+    public InternalItemRegistry getItemRegistry()
+    {
+        return this.itemRegistry;
+    }
+
+    @Override
     public PlayersManager<? extends Player> getPlayers()
     {
+        // TODO
         return null;
     }
 

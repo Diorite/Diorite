@@ -24,7 +24,7 @@
 
 package org.diorite.impl.protocol.any.serverbound;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 
 import io.netty.buffer.ByteBuf;
 

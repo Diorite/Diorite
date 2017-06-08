@@ -27,11 +27,12 @@ package org.diorite.plugin;
 import javax.annotation.Nonnull;
 
 import org.diorite.commons.objects.Nameable;
+import org.diorite.message.MessageData;
 
 /**
  * Represents diorite plugin.
  */
-public interface Plugin extends Nameable
+public interface Plugin extends Nameable, MessageData<Plugin>
 {
     /**
      * Returns name of this plugin.
@@ -41,4 +42,10 @@ public interface Plugin extends Nameable
     @Nonnull
     @Override
     String getName();
+
+    @Override
+    default String getMessageKey()
+    {
+        return "plugin";
+    }
 }

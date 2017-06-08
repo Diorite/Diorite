@@ -24,6 +24,17 @@
 
 package org.diorite.plugin;
 
+import java.util.Set;
+
+/**
+ * Represents plugin manager, plugin manager is used to control all plugins loaded by server.
+ */
 public interface PluginManager
 {
+    /**
+     * Returns set of loaded plugins.
+     *
+     * @return set of loaded plugins.
+     */
+    Set<Plugin> getAllLoadedPlugins();
 }

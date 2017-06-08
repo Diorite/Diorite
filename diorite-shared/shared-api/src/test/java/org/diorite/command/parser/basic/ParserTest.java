@@ -30,8 +30,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 
 import org.diorite.command.parser.ArgumentParseResult;
+import org.diorite.command.parser.CommandParserContext;
 import org.diorite.command.parser.FakeParsersManager;
-import org.diorite.command.parser.ParserContext;
 import org.diorite.command.parser.TypeParser;
 
 public class ParserTest<T>
@@ -60,7 +60,7 @@ public class ParserTest<T>
             sb.append(")");
         }
         sb.append(": `").append(input).append("` -> ");
-        ParserContext context = manager.createContext(input);
+        CommandParserContext context = manager.createContext(input);
         ArgumentParseResult<? extends T> parseResult = parser.checkAndParse(context, TypeParser.SPACE_PREDICATE);
         if (parseResult.isSuccess())
         {

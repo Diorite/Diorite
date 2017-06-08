@@ -24,12 +24,10 @@
 
 package org.diorite.config.impl.actions.collections;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
-import org.diorite.config.impl.actions.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"rawtypes"})
 public class SizeOfCollectionPropertyAction extends AbstractPropertyAction
@@ -46,21 +44,8 @@ public class SizeOfCollectionPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getRawValue();
-        if (rawValue == null)
-        {
-            return 0;
-        }
-        if (rawValue instanceof Collection)
-        {
-            return ((Collection) rawValue).size();
-        }
-        if (rawValue instanceof Map)
-        {
-            return ((Map) rawValue).size();
-        }
-        throw new IllegalStateException("Expected collection on " + value);
+        return "return $rawValue.size()";
     }
 }

@@ -24,7 +24,7 @@
 
 package org.diorite.command.parser.basic;
 
-import org.diorite.command.parser.ParserContext;
+import org.diorite.commons.ParserContext;
 
 /**
  * Abstract parser for integer numbers.

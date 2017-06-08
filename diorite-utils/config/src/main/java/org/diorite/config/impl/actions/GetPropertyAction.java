@@ -25,7 +25,9 @@
 package org.diorite.config.impl.actions;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
 
 public class GetPropertyAction extends AbstractPropertyAction
 {
@@ -47,46 +49,8 @@ public class GetPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getPropertyValue();
-        Class<?> returnType = method.getReturnType();
-        if (returnType.isPrimitive() && (rawValue == null))
-        {
-            if (returnType == boolean.class)
-            {
-                return false;
-            }
-            if (returnType == byte.class)
-            {
-                return (byte) 0;
-            }
-            if (returnType == short.class)
-            {
-                return (short) 0;
-            }
-            if (returnType == char.class)
-            {
-                return '\0';
-            }
-            if (returnType == int.class)
-            {
-                return 0;
-            }
-            if (returnType == long.class)
-            {
-                return 0L;
-            }
-            if (returnType == float.class)
-            {
-                return 0.0F;
-            }
-            if (returnType == double.class)
-            {
-                return 0.0;
-            }
-            throw new AssertionError("Unknown primitive: " + returnType);
-        }
-        return rawValue;
+        return "return $value";
     }
 }

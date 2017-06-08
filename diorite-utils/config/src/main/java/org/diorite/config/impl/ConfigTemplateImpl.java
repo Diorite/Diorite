@@ -25,44 +25,55 @@
 package org.diorite.config.impl;
 
 import javax.annotation.Nullable;
+import javax.script.ScriptException;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 
 import org.diorite.commons.DioriteUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
 import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.Config;
+import org.diorite.config.ConfigManager;
 import org.diorite.config.ConfigPropertyAction;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.config.MethodSignature;
 import org.diorite.config.Property;
+import org.diorite.config.ValidatorFunction;
+import org.diorite.config.annotations.GroovyValidator;
 import org.diorite.config.annotations.HelperMethod;
 import org.diorite.config.annotations.ToKeyMapperFunction;
 import org.diorite.config.annotations.ToStringMapperFunction;
+import org.diorite.config.annotations.Validator;
 import org.diorite.config.impl.actions.ActionsRegistry;
 import org.diorite.config.serialization.Serialization;
 import org.diorite.config.serialization.comments.DocumentComments;
@@ -76,11 +87,13 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     private final ConfigImplementationProvider implementationProvider;
 
     private final List<String>                               order             = new ArrayList<>(10);
-    private final Map<String, ConfigPropertyTemplateImpl<?>> mutableProperties = new ConcurrentSkipListMap<>(Comparator.comparingInt(this.order::indexOf));
+    private final Map<String, ConfigPropertyTemplateImpl<?>> mutableProperties = new ConcurrentHashMap<>(10);
     private final Map<String, ConfigPropertyTemplate<?>>     properties        = Collections.unmodifiableMap(this.mutableProperties);
+    private @Nullable Map<String, ConfigPropertyTemplate<?>> orderedProperties;
 
     private final Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> mutableActions = new ConcurrentHashMap<>(15);
     private final Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> actions        = Collections.unmodifiableMap(this.mutableActions);
+    private @Nullable Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> orderedActions;
 
     private final Map<MethodSignature, ConfigPropertyActionInstance> actionsDispatcher = new ConcurrentHashMap<>(10);
 
@@ -115,16 +128,50 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             if (methodInvoker.isPublic())
             {
                 methods.add(methodInvoker);
+                continue;
             }
             if (methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class) || methodInvoker.isAnnotationPresent(ToStringMapperFunction.class))
             {
                 methods.add(methodInvoker);
+                continue;
+            }
+            if (methodInvoker.isAnnotationPresent(Validator.class))
+            {
+                if (methodInvoker.isDefault() || methodInvoker.isPrivate())
+                {
+                    if (methodInvoker.getParameterCount() == 1)
+                    {
+                        methods.add(methodInvoker);
+                        continue;
+                    }
+                    else if (methodInvoker.isStatic() && ((methodInvoker.getParameterCount() == 2) || (methodInvoker.getParameterCount() == 1)))
+                    {
+                        Parameter[] parameters = methodInvoker.getParameters();
+                        if (parameters[0].getType().isAssignableFrom(this.type) || parameters[1].getType().isAssignableFrom(this.type))
+                        {
+                            methods.add(methodInvoker);
+                            continue;
+                        }
+                    }
+                }
+                throw this.throwInvalidValidatorMethodException(methodInvoker);
             }
         }
         for (Class<?> subType : type.getInterfaces())
         {
             this.scanInterface(subType, methods);
         }
+    }
+
+    private IllegalStateException throwInvalidValidatorMethodException(MethodInvoker methodInvoker)
+    {
+        throw new IllegalStateException("Invalid validator method! Validator method should be non static method with single argument or static method" +
+                                        " with two or one arguments where second one is config instance.\n    Instead this method was found: " + methodInvoker +
+                                        "\n    Example methods:\n" +
+                                        "        private T validateName(T name){...}\n" +
+                                        "        default void validateSomething(T something){...}\n" +
+                                        "        static void validateAge(T age){...}\n" +
+                                        "        static T validateNickname(ConfigType config, T nickname){...} (any order)");
     }
 
     private void scanStringMapper(MethodInvoker methodInvoker, Map<String, MethodInvoker> toStringMappers)
@@ -176,9 +223,132 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         return name;
     }
 
+    private static final String VALIDATOR_SUFFIX = "Validator";
+
+    @SuppressWarnings("unchecked")
+    private <X> void processGroovyValidators(@Nullable GroovyValidator[] groovyValidators, ConfigPropertyTemplateImpl<X> template)
+    {
+        if ((groovyValidators == null) || (groovyValidators.length == 0))
+        {
+            return;
+        }
+        StringBuilder groovyScript = new StringBuilder(groovyValidators.length * 100);
+        groovyScript.append("ValidatorFunction func = { def x, Config cfg -> \n");
+        for (GroovyValidator groovyValidator : groovyValidators)
+        {
+            groovyScript.append("    if (!(").append(groovyValidator.isTrue()).append(")) throw new RuntimeException(\"\"\"")
+                        .append(groovyValidator.elseThrow())
+                        .append("\"\"\")\n");
+        }
+        groovyScript.append("    return x;\n}\nreturn func");
+        String script = groovyScript.toString();
+        GroovyScriptEngineImpl groovy = (GroovyScriptEngineImpl) ConfigManager.get().getGroovy();
+        try
+        {
+            ValidatorFunction<Config, X> validatorFunction = (ValidatorFunction<Config, X>) groovy.eval(groovyScript.toString());
+            template.appendValidator(validatorFunction);
+        }
+        catch (ScriptException e)
+        {
+            throw new RuntimeException("Can't compile validator script for: " + template.getName() + " in " + this.type.getCanonicalName() + "\n\n" +
+                                       groovyScript.toString() + "\n====================", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X> ValidatorFunction<Config, X> createValidator(MethodInvoker methodInvoker, ConfigPropertyTemplateImpl<X> template)
+    {
+        methodInvoker.ensureAccessible();
+        boolean isVoid = methodInvoker.getReturnType() == void.class;
+        if (! isVoid)
+        {
+            if (! template.getRawType().isAssignableFrom(methodInvoker.getReturnType()))
+            {
+                throw this.throwInvalidValidatorMethodException(methodInvoker);
+            }
+        }
+        Parameter[] parameters = methodInvoker.getParameters();
+        if (methodInvoker.isStatic())
+        {
+            if (parameters.length == 1)
+            {
+                if (isVoid)
+                {
+                    return ValidatorFunction.ofSimple((data, cfg) -> methodInvoker.invoke(null, data));
+                }
+                return (data, cfg) -> (X) methodInvoker.invoke(null, data);
+            }
+            else if (parameters.length == 2)
+            {
+                if (parameters[1].getType().isAssignableFrom(this.type) && parameters[0].getType().isAssignableFrom(template.getRawType()))
+                {
+                    if (isVoid)
+                    {
+                        return ValidatorFunction.ofSimple((data, cfg) -> methodInvoker.invoke(null, data, cfg));
+                    }
+                    return (data, cfg) -> (X) methodInvoker.invoke(null, data, cfg);
+                }
+                else if (parameters[0].getType().isAssignableFrom(this.type) && parameters[1].getType().isAssignableFrom(template.getRawType()))
+                {
+                    if (isVoid)
+                    {
+                        return ValidatorFunction.ofSimple((data, cfg) -> methodInvoker.invoke(null, cfg, data));
+                    }
+                    return (data, cfg) -> (X) methodInvoker.invoke(null, cfg, data);
+                }
+                else
+                {
+                    throw this.throwInvalidValidatorMethodException(methodInvoker);
+                }
+            }
+            else
+            {
+                throw this.throwInvalidValidatorMethodException(methodInvoker);
+            }
+        }
+        if ((parameters.length != 1) || ! parameters[0].getType().isAssignableFrom(template.getRawType()))
+        {
+            throw this.throwInvalidValidatorMethodException(methodInvoker);
+        }
+        if (isVoid)
+        {
+            return ValidatorFunction.ofSimple((data, cfg) -> methodInvoker.invoke(cfg, data));
+        }
+        return (data, cfg) -> (X) methodInvoker.invoke(cfg, data);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void processValidators(MethodInvoker methodInvoker, Collection<String> properties, Set<Entry<String, MethodInvoker>> processedValidators)
+    {
+        if (properties.isEmpty())
+        {
+            String invokerName = methodInvoker.getName();
+            if (invokerName.endsWith(VALIDATOR_SUFFIX))
+            {
+                invokerName = invokerName.substring(0, invokerName.length() - VALIDATOR_SUFFIX.length());
+            }
+            properties.add(invokerName);
+        }
+        for (Iterator<String> propIterator = properties.iterator(); propIterator.hasNext(); )
+        {
+            String property = propIterator.next();
+            if (! processedValidators.add(Map.entry(property, methodInvoker)))
+            {
+                propIterator.remove();
+                continue;
+            }
+            ConfigPropertyTemplateImpl<?> propertyTemplate = this.mutableProperties.get(property);
+            if (propertyTemplate != null)
+            {
+                ValidatorFunction<Config, ?> validator = this.createValidator(methodInvoker, propertyTemplate);
+                propertyTemplate.appendValidator((ValidatorFunction) validator);
+            }
+        }
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     private void scanMethods(LinkedList<MethodInvoker> methods, Map<String, MethodInvoker> toKeyMappers,
-                             Map<String, MethodInvoker> toStringMappers, Set<String> knownProperties)
+                             Map<String, MethodInvoker> toStringMappers, Set<Entry<String, MethodInvoker>> processedValidators, Set<String> knownProperties)
     {
         int sizeBefore = methods.size();
         for (Iterator<MethodInvoker> iterator = methods.iterator(); iterator.hasNext(); )
@@ -189,6 +359,17 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             Type genericReturnType = methodInvoker.getGenericReturnType();
             String name;
             Method method = methodInvoker.getMethod();
+            if (methodInvoker.isAnnotationPresent(Validator.class))
+            {
+                Validator annotation = methodInvoker.getAnnotation(Validator.class);
+                Collection<String> properties = new HashSet<>(Arrays.asList(annotation.value()));
+                this.processValidators(methodInvoker, properties, processedValidators);
+                if (properties.isEmpty())
+                {
+                    iterator.remove();
+                }
+                continue;
+            }
             if (methodInvoker.isPrivate())
             {
                 if (methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class))
@@ -259,7 +440,10 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 {
                     this.defaultValueFromDefaultMethod(methodInvoker, template);
                 }
-
+                if (propertyAction.getActionName().equals("set") || propertyAction.getActionName().equals("get"))
+                {
+                    this.processGroovyValidators(methodInvoker.getAnnotationsByType(GroovyValidator.class), template);
+                }
                 MethodSignature methodSignature = new MethodSignature(method);
                 PropertyActionKey propertyActionKey = new PropertyActionKey(propertyAction, methodSignature);
                 this.mutableActions.put(propertyActionKey, template);
@@ -277,7 +461,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         {
             throw new IllegalStateException("Can't create config template, can't find how to implement: " + methods);
         }
-        this.scanMethods(methods, toKeyMappers, toStringMappers, knownProperties);
+        this.scanMethods(methods, toKeyMappers, toStringMappers, processedValidators, knownProperties);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -315,7 +499,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
 
         Map<String, MethodInvoker> toKeyMappers = new HashMap<>(methods.size());
         Map<String, MethodInvoker> toStringMappers = new HashMap<>(methods.size());
-        this.scanMethods(new LinkedList<>(methods), toKeyMappers, toStringMappers, new HashSet<>(10));
+        this.scanMethods(new LinkedList<>(methods), toKeyMappers, toStringMappers, new HashSet<>(10), new HashSet<>(10));
 
         for (Entry<String, MethodInvoker> entry : toKeyMappers.entrySet())
         {
@@ -336,10 +520,37 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
             propertyTemplate.setToStringMapper(entry.getValue());
         }
 
-        for (ConfigPropertyTemplateImpl<?> template : this.mutableProperties.values())
+        List<ConfigPropertyTemplateImpl<?>> templates = new ArrayList<>(this.mutableProperties.size());
+        templates.addAll(this.mutableProperties.values());
+        this.mutableProperties.clear();
+        this.order.clear();
+        Map<String, ConfigPropertyTemplate<?>> orderedProperties = new LinkedHashMap<>(templates.size());
+        for (ConfigPropertyTemplateImpl<?> template : templates)
         {
             template.init();
+            this.mutableProperties.put(template.getName(), template);
+            this.order.add(template.getName());
+            orderedProperties.put(template.getName(), template);
         }
+        this.orderedProperties = Collections.unmodifiableMap(orderedProperties);
+
+        Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> actions = this.actions;
+        Multimap<ConfigPropertyTemplate<?>, ConfigPropertyActionInstance> actionsMultimap =
+                Multimaps.newMultimap(new LinkedHashMap<>(this.order.size()), () -> new ArrayList<>(5));
+        for (Entry<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> entry : actions.entrySet())
+        {
+            actionsMultimap.put(entry.getValue(), entry.getKey());
+        }
+        Map<ConfigPropertyActionInstance, ConfigPropertyTemplate<?>> orderedActions = new LinkedHashMap<>(actions.size());
+        for (ConfigPropertyTemplate<?> configPropertyTemplate : this.orderedProperties.values())
+        {
+            Collection<ConfigPropertyActionInstance> actionInstances = actionsMultimap.get(configPropertyTemplate);
+            for (ConfigPropertyActionInstance actionInstance : actionInstances)
+            {
+                orderedActions.put(actionInstance, configPropertyTemplate);
+            }
+        }
+        this.orderedActions = Collections.unmodifiableMap(orderedActions);
     }
 
     @Override
@@ -361,9 +572,29 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @Override
+    public Map<String, ? extends ConfigPropertyTemplate<?>> getOrderedProperties()
+    {
+        if (this.orderedProperties == null)
+        {
+            throw new IllegalStateException("Template not prepared yet!");
+        }
+        return this.orderedProperties;
+    }
+
+    @Override
     public Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getActionsMap()
     {
         return this.actions;
+    }
+
+    @Override
+    public Map<? extends ConfigPropertyActionInstance, ? extends ConfigPropertyTemplate<?>> getOrderedActionsMap()
+    {
+        if (this.orderedActions == null)
+        {
+            throw new IllegalStateException("Template not prepared yet!");
+        }
+        return this.orderedActions;
     }
 
     @Override
@@ -425,6 +656,6 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     @Override
     public T create()
     {
-        return this.implementationProvider.createImplementation(this.type, this);
+        return this.implementationProvider.createImplementation(this);
     }
 }

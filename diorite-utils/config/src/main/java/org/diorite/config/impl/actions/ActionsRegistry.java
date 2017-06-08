@@ -30,6 +30,9 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -40,14 +43,13 @@ import org.diorite.config.ActionMatcherResult;
 import org.diorite.config.ConfigPropertyAction;
 import org.diorite.config.impl.actions.collections.AddToCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.ContainsInCollectionPropertyAction;
+import org.diorite.config.impl.actions.collections.ContainsInCollectionPropertyNegatedAction;
 import org.diorite.config.impl.actions.collections.GetFromCollectionPropertyAction;
+import org.diorite.config.impl.actions.collections.IsEmptyCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyAction;
+import org.diorite.config.impl.actions.collections.RemoveFromCollectionIfPropertyNegatedAction;
 import org.diorite.config.impl.actions.collections.RemoveFromCollectionPropertyAction;
 import org.diorite.config.impl.actions.collections.SizeOfCollectionPropertyAction;
-import org.diorite.config.impl.actions.numeric.AddNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.DivideNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.MultipleNumericPropertyAction;
-import org.diorite.config.impl.actions.numeric.SubtractNumericPropertyAction;
 
 /**
  * Registry for actions.
@@ -56,6 +58,7 @@ import org.diorite.config.impl.actions.numeric.SubtractNumericPropertyAction;
 public final class ActionsRegistry
 {
     private static final SortedSet<ConfigPropertyActionEntry> actions = new TreeSet<>();
+    private static final ReentrantReadWriteLock               lock    = new ReentrantReadWriteLock();
 
     private ActionsRegistry()
     {
@@ -63,19 +66,32 @@ public final class ActionsRegistry
 
     static
     {
+        // @formatter:off
+        registerAction(new NumericPropertyAction(
+                "add", "+", "(?:add(?<property>[A-Z0-9].*))", "(?:increment(?<property>[A-Z0-9].*?)(?:By)?)"), 100);
+        registerAction(new NumericPropertyAction(
+                "subtract", "-", "(?:subtract(?:From)?(?<property>[A-Z0-9].*))", "(?:decrement(?<property>[A-Z0-9].*?)(?:By)?)"), 100);
+        registerAction(new NumericPropertyAction(
+                "multiple", "*", "(?:multiple|multi)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        registerAction(new NumericPropertyAction(
+                "divide", "/", "(?:divide|div)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        registerAction(new NumericPropertyAction(
+                "power", "**", "(?:power|pow)(?<property>[A-Z0-9].*?)(?:By)?"), 100);
+        // @formatter:on
+
         registerAction(new GetPropertyAction(), 100);
         registerAction(new SetPropertyAction(), 100);
         registerAction(new EqualsPropertyAction(), 100);
-        registerAction(new AddNumericPropertyAction(), 100);
-        registerAction(new SubtractNumericPropertyAction(), 100);
-        registerAction(new MultipleNumericPropertyAction(), 100);
-        registerAction(new DivideNumericPropertyAction(), 100);
+        registerAction(new NotEqualsPropertyAction(), 100);
         registerAction(new AddToCollectionPropertyAction(), 100);
         registerAction(new ContainsInCollectionPropertyAction(), 100);
+        registerAction(new ContainsInCollectionPropertyNegatedAction(), 100);
         registerAction(new RemoveFromCollectionIfPropertyAction(), 100);
+        registerAction(new RemoveFromCollectionIfPropertyNegatedAction(), 100);
         registerAction(new RemoveFromCollectionPropertyAction(), 100);
         registerAction(new GetFromCollectionPropertyAction(), 90);
         registerAction(new SizeOfCollectionPropertyAction(), 90);
+        registerAction(new IsEmptyCollectionPropertyAction(), 90);
     }
 
     /**
@@ -86,9 +102,18 @@ public final class ActionsRegistry
      * @param priority
      *         priority of action.
      */
-    static void registerAction(ConfigPropertyAction action, double priority)
+    public static void registerAction(ConfigPropertyAction action, double priority)
     {
-        actions.add(new ConfigPropertyActionEntry(action, priority));
+        WriteLock writeLock = lock.writeLock();
+        try
+        {
+            writeLock.lock();
+            actions.add(new ConfigPropertyActionEntry(action, priority));
+        }
+        finally
+        {
+            writeLock.unlock();
+        }
     }
 
     @Nullable
@@ -101,19 +126,29 @@ public final class ActionsRegistry
     public static Pair<ConfigPropertyAction, ActionMatcherResult> findMethod(Method method, Predicate<String> propertyNameChecker)
     {
         Pair<ConfigPropertyAction, ActionMatcherResult> lastMatching = null;
-        for (ConfigPropertyActionEntry actionEntry : actions)
+
+        ReadLock readLock = lock.readLock();
+        try
         {
-            ConfigPropertyAction action = actionEntry.action;
-            ActionMatcherResult actionMatcherResult = action.matchesAction(method);
-            if (actionMatcherResult.isMatching())
+            readLock.lock();
+            for (ConfigPropertyActionEntry actionEntry : actions)
             {
-                actionMatcherResult.setValidatedName(action.declaresProperty() || propertyNameChecker.test(actionMatcherResult.getPropertyName()));
-                lastMatching = new ImmutablePair<>(action, actionMatcherResult);
-                if (actionMatcherResult.isValidatedName())
+                ConfigPropertyAction action = actionEntry.action;
+                ActionMatcherResult actionMatcherResult = action.matchesAction(method);
+                if (actionMatcherResult.isMatching())
                 {
-                    return lastMatching;
+                    actionMatcherResult.setValidatedName(action.declaresProperty() || propertyNameChecker.test(actionMatcherResult.getPropertyName()));
+                    lastMatching = new ImmutablePair<>(action, actionMatcherResult);
+                    if (actionMatcherResult.isValidatedName())
+                    {
+                        return lastMatching;
+                    }
                 }
             }
+        }
+        finally
+        {
+            readLock.unlock();
         }
         return lastMatching;
     }

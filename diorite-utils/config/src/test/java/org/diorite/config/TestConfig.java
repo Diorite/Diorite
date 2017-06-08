@@ -25,9 +25,12 @@
 package org.diorite.config;
 
 import org.diorite.config.annotations.Comment;
+import org.diorite.config.annotations.CustomKey;
 import org.diorite.config.annotations.Footer;
+import org.diorite.config.annotations.GroovyValidator;
 import org.diorite.config.annotations.Header;
 import org.diorite.config.annotations.PredefinedComment;
+import org.diorite.config.annotations.Validator;
 
 @Header("Test config")
 @Footer("Footer!")
@@ -36,9 +39,66 @@ import org.diorite.config.annotations.PredefinedComment;
 public interface TestConfig extends Config
 {
     @Comment("Player money.")
+    @CustomKey("player-money")
+    @GroovyValidator(isTrue = "x >= 0", elseThrow = "money ($x) can't be lower than 0.")
+    @GroovyValidator(isTrue = "x < 100_000", elseThrow = "huh")
     default double getMoney()
     {
         return 0.1;
+    }
+
+    @Validator
+    default void moneyValidator(double money)
+    {
+        if (money == 5_000)
+        {
+            throw new RuntimeException("5_000 is magic number!");
+        }
+    }
+
+    @Validator("money")
+    private double moneyValidator2(double money)
+    {
+        if (money == 6_000)
+        {
+            return 7_000;
+        }
+        return money;
+    }
+
+    @Validator("money")
+    static double moneyValidator3(double money)
+    {
+        if (money == 13_000)
+        {
+            throw new RuntimeException("13_000 is magic number!");
+        }
+        return money;
+    }
+    @Validator("money")
+    static void moneyValidator4(double money)
+    {
+        if (money == 14_000)
+        {
+            throw new RuntimeException("14_000 is magic number!");
+        }
+    }
+    @Validator("money")
+    static void moneyValidator5(double money, TestConfig testConfig)
+    {
+        if (money == 15_000)
+        {
+            throw new RuntimeException("15_000 is magic number! (" + testConfig.name() + ")");
+        }
+    }
+    @Validator("money")
+    static double moneyValidator6(Config config, double money)
+    {
+        if (money == 16_000)
+        {
+            throw new RuntimeException("16_000 is magic number! (" + config.name() + ")");
+        }
+        return money;
     }
 
     void setMoney(double money);
@@ -50,4 +110,11 @@ public interface TestConfig extends Config
     double multipleMoneyBy(float multi);
 
     double divideMoney(int div);
+
+    double powMoneyBy(double exp);
+
+    default double getMoreMoney(int more)
+    {
+        return this.getMoney() * more;
+    }
 }

@@ -28,13 +28,22 @@ import org.slf4j.Logger;
 
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.event.EventManager;
+import org.diorite.material.BlockRegistry;
+import org.diorite.material.ItemRegistry;
 import org.diorite.player.Player;
+import org.diorite.scheduler.Synchronizable;
 
 /**
  * Diorite server interface, with all main methods to control diorite server instance, there can be only single instance od diorite server at runtime!
  */
-public interface Diorite extends SharedAPI
+public interface Diorite extends SharedAPI, Synchronizable
 {
+    @Override
+    default Synchronizable getMainSynchronizable()
+    {
+        return this;
+    }
+
     /**
      * Default server port.
      */
@@ -61,6 +70,20 @@ public interface Diorite extends SharedAPI
      */
     EventManager getEventManager();
 
+    /**
+     * Returns server blocks registry.
+     *
+     * @return server blocks registry.
+     */
+    BlockRegistry<?> getBlockRegistry();
+
+    /**
+     * Returns server items registry.
+     *
+     * @return server items registry.
+     */
+    ItemRegistry<?> getItemRegistry();
+
     @Override
     PlayersManager<? extends Player> getPlayers();
 
@@ -77,6 +100,12 @@ public interface Diorite extends SharedAPI
      * @return true if debug is enabled.
      */
     boolean isEnabledDebug();
+
+    @Override
+    default boolean isValidSynchronizable()
+    {
+        return true;
+    }
 
     /**
      * Prints throwable to logger but only if debug is enabled.

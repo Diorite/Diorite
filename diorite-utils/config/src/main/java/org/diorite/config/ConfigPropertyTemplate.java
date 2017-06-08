@@ -62,6 +62,31 @@ public interface ConfigPropertyTemplate<T>
     String getName();
 
     /**
+     * Append new validator to this property template.
+     *
+     * @param validator
+     *         validator of property.
+     */
+    void appendValidator(ValidatorFunction<Config, T> validator);
+
+    /**
+     * Prepend new validator to this property template.
+     *
+     * @param validator
+     *         validator of property.
+     */
+    void prependValidator(ValidatorFunction<Config, T> validator);
+
+    ValidatorFunction<Config, T> getValidator();
+
+    /**
+     * Returns original name of property, if name of property was changed by same annotation, this method will still return original one.
+     *
+     * @return original name of property.
+     */
+    String getOriginalName();
+
+    /**
      * Generate and returns default value for this template. <br>
      * This value should never return null for primitive types!
      *

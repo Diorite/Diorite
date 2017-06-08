@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import java.lang.reflect.Type;
 
+import org.diorite.config.exceptions.ValidationException;
 import org.diorite.config.serialization.DeserializationData;
 import org.diorite.config.serialization.SerializationData;
 
@@ -70,10 +71,11 @@ public interface ConfigPropertyValue<T>
      * @param value
      *         new value.
      */
-    default void setPropertyValue(@Nullable T value)
+    default void setPropertyValue(@Nullable T value) throws ValidationException
     {
         this.getProperty().set(this, value);
     }
+
     /**
      * Returns raw property value.
      *
@@ -88,7 +90,7 @@ public interface ConfigPropertyValue<T>
      * @param value
      *         new value.
      */
-    void setRawValue(@Nullable T value);
+    void setRawValue(@Nullable T value) throws ValidationException;
 
     /**
      * Look for nested value on given path and set their value to given one.
@@ -98,7 +100,7 @@ public interface ConfigPropertyValue<T>
      * @param value
      *         new value.
      *
-     * @throws IllegalStateException
+     * @exception IllegalStateException
      *         if property do not contain given path.
      */
     void set(String[] path, @Nullable Object value) throws IllegalStateException;
@@ -111,7 +113,7 @@ public interface ConfigPropertyValue<T>
      *
      * @return object on given nested path.
      *
-     * @throws IllegalStateException
+     * @exception IllegalStateException
      *         if property do not contain given path.
      */
     @Nullable
@@ -125,7 +127,7 @@ public interface ConfigPropertyValue<T>
      *
      * @return removed object on given nested path.
      *
-     * @throws IllegalStateException
+     * @exception IllegalStateException
      *         if property do not contain given path, or property can not nbe removed.
      */
     @Nullable

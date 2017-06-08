@@ -24,7 +24,7 @@
 
 package org.diorite.impl.protocol.p16w50a;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.PCPacket;
 import org.diorite.core.protocol.connection.internal.ServerboundPacketListener;
 

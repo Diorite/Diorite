@@ -35,6 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.diorite.commons.io.StringBuilderWriter;
+import org.diorite.config.impl.groovy.GroovyImplementationProvider;
 import org.diorite.config.serialization.MetaObject;
 import org.diorite.config.serialization.MetaValue;
 import org.diorite.config.serialization.SerializationTest;
@@ -42,6 +43,11 @@ import org.diorite.config.serialization.SerializationTest;
 public class ConfigTestNoSpecial
 {
     private final ConfigManager configManager = ConfigManager.get();
+
+    static
+    {
+        GroovyImplementationProvider.getInstance().setPrintCode(true);
+    }
 
     @Test
     public void test() throws Exception

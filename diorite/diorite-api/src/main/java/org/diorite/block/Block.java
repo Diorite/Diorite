@@ -24,9 +24,54 @@
 
 package org.diorite.block;
 
+import org.diorite.BlockLocation;
+import org.diorite.material.BlockType;
+import org.diorite.world.World;
+
 /**
- * Represent block on map, this object does not store any state of block, each operator fetch new data from world. <br>
+ * Represent block on map, this object does not store any state of block, each operator fetch new data from block source.
  */
 public interface Block
 {
+    /**
+     * Returns type of this block.
+     *
+     * @return type of this block.
+     */
+    BlockType getType();
+
+    /**
+     * Returns location of this block. (relative to world)
+     *
+     * @return location of this block. (relative to world)
+     */
+    BlockLocation getLocation();
+
+    /**
+     * Returns location of this block on `x` axis of world.
+     *
+     * @return location of this block on `x` axis of world.
+     */
+    int getX();
+
+    /**
+     * Returns location of this block on `y` axis of world.
+     *
+     * @return location of this block on `y` axis of world.
+     */
+    int getY();
+
+    /**
+     * Returns location of this block on `z` axis of world.
+     *
+     * @return location of this block on `z` axis of world.
+     */
+    int getZ();
+
+    /**
+     * Returns world where block is located.
+     *
+     * @return world where block is located.
+     */
+    World getWorld();
 }

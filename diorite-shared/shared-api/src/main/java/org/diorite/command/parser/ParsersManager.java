@@ -25,10 +25,8 @@
 package org.diorite.command.parser;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 import org.diorite.command.Argument;
-import org.diorite.command.parser.basic.StringParser;
 
 /**
  *
@@ -45,7 +43,7 @@ public interface ParsersManager
      *
      * @return created parser context.
      */
-    ParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
+    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
 //
 //    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
 //    {

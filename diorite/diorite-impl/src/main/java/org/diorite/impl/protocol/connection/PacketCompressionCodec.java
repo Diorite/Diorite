@@ -32,7 +32,7 @@ import java.util.zip.Inflater;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.connection.ByteToMessageCodec.PacketByteBufByteToMessageCodec;
 
 import io.netty.buffer.ByteBuf;
@@ -139,7 +139,7 @@ public class PacketCompressionCodec extends PacketByteBufByteToMessageCodec
     @Override
     protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, ByteBuf msg, boolean preferDirect) throws Exception
     {
-        // TODO: keep this in valid values, to keep byte buffers not extends when writing, but also don't crate 2 000 000 byte buffers for 50 000 bytes data.
+        // TODO: keep this in sane values, to keep byte buffers not extends when writing, but also don't crate 2 000 000 byte buffers for 50 000 bytes data.
         int i = msg.readableBytes();
         int sizesKey = getKey(i);
         int size = getSize(sizesKey);

@@ -24,11 +24,7 @@
 
 package org.diorite.config;
 
-import javax.annotation.Nullable;
-
 import java.lang.reflect.Method;
-
-import org.diorite.commons.reflections.MethodInvoker;
 
 /**
  * Represents instance of property action, pair of the action and a method signature.
@@ -80,23 +76,5 @@ public interface ConfigPropertyActionInstance
     default String getActionName()
     {
         return this.getPropertyAction().getActionName();
-    }
-
-    /**
-     * Perform this operation on given object with given values.
-     *
-     * @param method
-     *         used method.
-     * @param value
-     *         value of property.
-     * @param args
-     *         arguments of action if any.
-     *
-     * @return result of action.
-     */
-    @Nullable
-    default Object perform(MethodInvoker method, ConfigPropertyValue<?> value, Object... args)
-    {
-        return this.getPropertyAction().perform(method, value, args);
     }
 }

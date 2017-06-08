@@ -25,6 +25,7 @@
 package org.diorite.config.impl;
 
 import org.diorite.config.Config;
+import org.diorite.config.ConfigManager;
 import org.diorite.config.ConfigTemplate;
 
 /**
@@ -35,8 +36,6 @@ public interface ConfigImplementationProvider
     /**
      * Create implementation for given config class.
      *
-     * @param clazz
-     *         config class.
      * @param template
      *         template of config.
      * @param <T>
@@ -44,5 +43,13 @@ public interface ConfigImplementationProvider
      *
      * @return created implementation of config.
      */
-    <T extends Config> T createImplementation(Class<T> clazz, ConfigTemplate<T> template);
+    <T extends Config> T createImplementation(ConfigTemplate<T> template);
+
+    /**
+     * Invoked on startup of provider
+     *
+     * @param configManager
+     *         config manager to use.
+     */
+    void init(ConfigManager configManager);
 }

@@ -26,18 +26,17 @@ package org.diorite.command.parser.basic;
 
 import javax.annotation.Nullable;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.IntFunction;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import org.diorite.command.parser.ParserContext;
 import org.diorite.command.annotation.arguments.MapArg;
 import org.diorite.command.parser.ArgumentParseResult;
 import org.diorite.command.parser.ArgumentParseResultType;
 import org.diorite.command.parser.TypeParser;
+import org.diorite.commons.ParserContext;
 import org.diorite.commons.function.predicate.CharPredicate;
 
 /**

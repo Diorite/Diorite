@@ -24,6 +24,8 @@
 
 package org.diorite.chat;
 
+import org.diorite.nbt.NbtTag;
+
 /**
  * Represent some message event.
  */
@@ -87,6 +89,19 @@ public interface ChatMessageEvent
         return new ChatEventOpenURLImpl(value);
     }
     /**
+     * Create new event of {@link Action#SHOW_ACHIEVEMENT} type.
+     *
+     * @param value
+     *         full name of achievement or statistic
+     *
+     * @return created event instance.
+     */
+    static ChatEventShowAchievement showAchievement(String value)
+    {
+        return new ChatEventShowAchievementImpl(value);
+    }
+    // TODO: add method to create ChatEventShowAchievement form achievement or statistic object.
+    /**
      * Create new event of {@link Action#RUN_COMMAND} type.
      *
      * @param value
@@ -134,6 +149,30 @@ public interface ChatMessageEvent
     {
         return new ChatEventChangePageImpl(value);
     }
+    /**
+     * Create new event of {@link Action#SHOW_ENTITY} type.
+     *
+     * @param value
+     *         nbt tag with entity data.
+     *
+     * @return created event instance.
+     */
+    static ChatEventShowEntity showEntity(NbtTag value)
+    {
+        return new ChatEventShowEntityImpl(value);
+    }
+    /**
+     * Create new event of {@link Action#SHOW_ITEM} type.
+     *
+     * @param value
+     *         nbt tag with item data.
+     *
+     * @return created event instance.
+     */
+    static ChatEventShowItem showItem(NbtTag value)
+    {
+        return new ChatEventShowItemImpl(value);
+    }
 
     /**
      * Enum of possible actions.
@@ -146,15 +185,15 @@ public interface ChatMessageEvent
         SHOW_TEXT(ActionType.HOVER),
         /**
          * Show achievement-like box when hovered.
-         */ // TODO
+         */
         SHOW_ACHIEVEMENT(ActionType.HOVER),
         /**
          * Show special box with item in it when hovered.
-         */ // TODO
+         */
         SHOW_ITEM(ActionType.HOVER),
         /**
          * Show special box with entity in it when hovered.
-         */   // TODO
+         */
         SHOW_ENTITY(ActionType.HOVER),
 
         /**

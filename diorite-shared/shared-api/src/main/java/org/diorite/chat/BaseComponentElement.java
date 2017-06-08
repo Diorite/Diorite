@@ -28,8 +28,15 @@ import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.KeyBind;
+import org.diorite.chat.ChatMessageEvent.Action;
+import org.diorite.chat.ChatMessageEvent.Action.ActionType;
 
 abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT, EVENT, INSERT>, EVENT extends ChatMessageEvent, INSERT extends EVENT>
 {
@@ -41,9 +48,9 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     @Nullable String       translate;
     @Nullable List<Object> with;
 
-    // TODO: add score
-
-    @Nullable String selector;
+    @Nullable ChatScore score;
+    @Nullable String    selector;
+    @Nullable KeyBind   keyBind;
 
     @Nullable ChatColor color;
     @Nullable Boolean   bold;
@@ -56,15 +63,41 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
     @Nullable EVENT  hoverEvent;
     @Nullable EVENT  clickEvent;
 
+    /**
+     * Changes structure of component to reduce amount of nodes.
+     */
+    public ELEMENT optimize()
+    {
+        BaseComponentOptimizer.optimize(this.getThis());
+        return this.getThis();
+    }
+
+    public ELEMENT getRoot()
+    {
+        ELEMENT other = this.getThis();
+        while (other.parent != null)
+        {
+            other = other.parent.getThis();
+        }
+        return other;
+    }
+
     @Nullable
     public ELEMENT getParent()
     {
         return this.parent;
     }
 
-    public void setParent(@Nullable ELEMENT parent)
+    public ELEMENT setParent(@Nullable ELEMENT parent)
     {
         this.parent = parent;
+        return this.getThis();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected ELEMENT getThis()
+    {
+        return (ELEMENT) this;
     }
 
     /**
@@ -113,8 +146,8 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
      */
     public boolean hasFormatting()
     {
-        return (this.text == null) || (this.color != null) || (this.bold != null) || (this.italic != null) || (this.underlined != null) ||
-               (this.strikethrough != null) || (this.obfuscated != null) || (this.hoverEvent != null) || (this.clickEvent != null) || (this.insertion != null);
+        return (this.color != null) || (this.bold != null) || (this.italic != null) || (this.underlined != null) || (this.strikethrough != null) ||
+               (this.obfuscated != null) || (this.hoverEvent != null) || (this.clickEvent != null) || (this.insertion != null);
     }
 
     @Nullable
@@ -123,13 +156,18 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.text;
     }
 
-    public void setText(@Nullable String text)
+    public ELEMENT setText(@Nullable String text)
     {
         this.text = text;
-        this.translate = null;
-        this.with = null;
-        this.selector = null;
-        // TODO: reset score
+        if (text != null)
+        {
+            this.translate = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
+        }
+        return this.getThis();
     }
 
     @Nullable
@@ -138,20 +176,22 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.extra;
     }
 
-    public void setExtra(@Nullable List<ELEMENT> extra)
+    public ELEMENT setExtra(@Nullable List<ELEMENT> extra)
     {
         this.extra = extra;
+        return this.getThis();
     }
 
     @SuppressWarnings("unchecked")
-    public void addExtra(ELEMENT element)
+    public ELEMENT addExtra(ELEMENT element)
     {
         if (this.extra == null)
         {
-            this.extra = new ArrayList<>(1);
+            this.extra = new ArrayList<>(4);
         }
         this.extra.add(element);
         element.setParent((ELEMENT) this);
+        return this.getThis();
     }
 
     @Nullable
@@ -160,13 +200,18 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.translate;
     }
 
-    public void setTranslate(@Nullable String translate)
+    public ELEMENT setTranslate(@Nullable String translate)
     {
         this.translate = translate;
-        this.text = null;
-        this.with = null;
-        this.selector = null;
-        // TODO: reset score
+        if (translate != null)
+        {
+            this.text = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
+        }
+        return this.getThis();
     }
 
     @Nullable
@@ -175,17 +220,22 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.with;
     }
 
-    public void setWith(@Nullable List<Object> with)
+    public ELEMENT setWith(@Nullable List<Object> with)
     {
         this.with = with;
-        if (this.translate == null)
+        if (with != null)
         {
-            this.translate = StringUtils.EMPTY;
+            if (this.translate == null)
+            {
+                this.translate = StringUtils.EMPTY;
+            }
+            this.text = null;
+            this.with = null;
+            this.selector = null;
+            this.keyBind = null;
+            this.score = null;
         }
-        this.text = null;
-        this.with = null;
-        this.selector = null;
-        // TODO: reset score
+        return this.getThis();
     }
 
     @Nullable
@@ -194,13 +244,38 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.selector;
     }
 
-    public void setSelector(@Nullable String selector)
+    public ELEMENT setSelector(@Nullable String selector)
     {
         this.selector = selector;
-        this.text = null;
-        this.with = null;
-        this.translate = null;
-        // TODO: reset score
+        if (selector != null)
+        {
+            this.text = null;
+            this.with = null;
+            this.keyBind = null;
+            this.translate = null;
+            this.score = null;
+        }
+        return this.getThis();
+    }
+
+    @Nullable
+    public KeyBind getKeyBind()
+    {
+        return this.keyBind;
+    }
+
+    public ELEMENT setKeyBind(@Nullable KeyBind keyBind)
+    {
+        this.keyBind = keyBind;
+        if (keyBind != null)
+        {
+            this.selector = null;
+            this.text = null;
+            this.with = null;
+            this.translate = null;
+            this.score = null;
+        }
+        return this.getThis();
     }
 
     @Nullable
@@ -209,6 +284,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         return this.color;
     }
 
+    @Nullable
     public ChatColor getColor()
     {
         BaseComponentElement<ELEMENT, EVENT, INSERT> other = this;
@@ -218,7 +294,7 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
             {
                 if (other.parent == null)
                 {
-                    return ChatColor.WHITE;
+                    return null;
                 }
                 other = other.parent;
                 continue;
@@ -227,13 +303,14 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    public void setColor(@Nullable ChatColor color)
+    public ELEMENT setColor(@Nullable ChatColor color)
     {
         if ((color != null) && (color == this.getColor()))
         {
             this.color = null;
         }
         this.color = color;
+        return this.getThis();
     }
 
     public boolean isBold()
@@ -254,19 +331,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawBold()
-    {
-        return this.bold;
-    }
-
-    public void setBold(@Nullable Boolean bold)
+    public ELEMENT setBold(@Nullable Boolean bold)
     {
         if ((bold != null) && (bold == this.isBold()))
         {
             this.bold = null;
         }
         this.bold = bold;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawBold()
+    {
+        return this.bold;
     }
 
     public boolean isUnderlined()
@@ -287,19 +365,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawUnderlined()
-    {
-        return this.underlined;
-    }
-
-    public void setUnderlined(@Nullable Boolean underlined)
+    public ELEMENT setUnderlined(@Nullable Boolean underlined)
     {
         if ((underlined != null) && (underlined == this.isUnderlined()))
         {
             this.underlined = null;
         }
         this.underlined = underlined;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawUnderlined()
+    {
+        return this.underlined;
     }
 
     public boolean isItalic()
@@ -320,19 +399,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawItalic()
-    {
-        return this.italic;
-    }
-
-    public void setItalic(@Nullable Boolean italic)
+    public ELEMENT setItalic(@Nullable Boolean italic)
     {
         if ((italic != null) && (italic == this.isItalic()))
         {
             this.italic = null;
         }
         this.italic = italic;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawItalic()
+    {
+        return this.italic;
     }
 
     public boolean isStrikethrough()
@@ -353,19 +433,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawStrikethrough()
-    {
-        return this.strikethrough;
-    }
-
-    public void setStrikethrough(@Nullable Boolean strikethrough)
+    public ELEMENT setStrikethrough(@Nullable Boolean strikethrough)
     {
         if ((strikethrough != null) && (strikethrough == this.isStrikethrough()))
         {
             this.strikethrough = null;
         }
         this.strikethrough = strikethrough;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawStrikethrough()
+    {
+        return this.strikethrough;
     }
 
     public boolean isObfuscated()
@@ -386,19 +467,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
-    @Nullable
-    public Boolean getRawObfuscated()
-    {
-        return this.obfuscated;
-    }
-
-    public void setObfuscated(@Nullable Boolean obfuscated)
+    public ELEMENT setObfuscated(@Nullable Boolean obfuscated)
     {
         if ((obfuscated != null) && (obfuscated == this.isObfuscated()))
         {
             this.obfuscated = null;
         }
         this.obfuscated = obfuscated;
+        return this.getThis();
+    }
+
+    @Nullable
+    public Boolean getRawObfuscated()
+    {
+        return this.obfuscated;
     }
 
     @Nullable
@@ -420,15 +502,55 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT removeEvent(EVENT event)
+    {
+        if (event.equals(this.clickEvent))
+        {
+            return this.setClickEvent(null);
+        }
+        if (event.equals(this.hoverEvent))
+        {
+            return this.setHoverEvent(null);
+        }
+        if (event.equals(this.insertion))
+        {
+            return this.setInsertion(null);
+        }
+        return this.getThis();
+    }
+
+    @SuppressWarnings("unchecked")
+    public ELEMENT addEvent(EVENT event)
+    {
+        if (event.getAction() == Action.APPEND_CHAT)
+        {
+            return this.setInsertion((INSERT) event);
+        }
+        switch (event.getAction().getType())
+        {
+            case HOVER:
+                return this.setHoverEvent(event);
+            case CLICK:
+                return this.setClickEvent(event);
+            default:
+                throw new IllegalStateException("Unexpected event type.");
+        }
+    }
+
+    public ELEMENT setInsertion(@Nullable INSERT insertion)
+    {
+        if ((insertion != null) && (insertion.getAction() != Action.APPEND_CHAT))
+        {
+            throw new IllegalStateException("Invalid type of event (expected append chat): " + insertion.getAction());
+        }
+        this.insertion = insertion;
+        return this.getThis();
+    }
+
     @Nullable
     public INSERT getRawInsertion()
     {
         return this.insertion;
-    }
-
-    public void setInsertion(@Nullable INSERT insertion)
-    {
-        this.insertion = insertion;
     }
 
     @Nullable
@@ -450,15 +572,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT setHoverEvent(@Nullable EVENT hoverEvent)
+    {
+        if ((hoverEvent != null) && (hoverEvent.getAction().getType() != ActionType.HOVER))
+        {
+            throw new IllegalStateException("Invalid type of event (expected hover): " + hoverEvent.getAction().getType());
+        }
+        this.hoverEvent = hoverEvent;
+        return this.getThis();
+    }
+
     @Nullable
     public EVENT getRawHoverEvent()
     {
         return this.hoverEvent;
-    }
-
-    public void setHoverEvent(@Nullable EVENT hoverEvent)
-    {
-        this.hoverEvent = hoverEvent;
     }
 
     @Nullable
@@ -480,15 +607,20 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
     }
 
+    public ELEMENT setClickEvent(@Nullable EVENT clickEvent)
+    {
+        if ((clickEvent != null) && (clickEvent.getAction().getType() != ActionType.CLICK))
+        {
+            throw new IllegalStateException("Invalid type of event (expected click): " + clickEvent.getAction().getType());
+        }
+        this.clickEvent = clickEvent;
+        return this.getThis();
+    }
+
     @Nullable
     public EVENT getRawClickEvent()
     {
         return this.clickEvent;
-    }
-
-    public void setClickEvent(@Nullable EVENT clickEvent)
-    {
-        this.clickEvent = clickEvent;
     }
 
     protected abstract ELEMENT createElement();
@@ -508,8 +640,9 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         copy.hoverEvent = (this.hoverEvent == null) ? null : (EVENT) this.hoverEvent.duplicate();
         copy.clickEvent = (this.clickEvent == null) ? null : (EVENT) this.clickEvent.duplicate();
 
+        copy.score = this.score;
+        copy.keyBind = this.keyBind;
         copy.text = this.text;
-        copy.insertion = this.insertion;
         copy.translate = this.translate;
 
         if (this.extra == null)
@@ -549,5 +682,76 @@ abstract class BaseComponentElement<ELEMENT extends BaseComponentElement<ELEMENT
         }
 
         return copy;
+    }
+
+    @Override
+    public String toString()
+    {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.JSON_STYLE).appendSuper(super.toString());
+        if (this.text != null)
+        {
+            toStringBuilder.append("text", this.text);
+        }
+        if ((this.extra != null) && ! this.extra.isEmpty())
+        {
+            toStringBuilder.append("extra", this.extra);
+        }
+        if (this.translate != null)
+        {
+            toStringBuilder.append("translate", this.translate);
+        }
+        if ((this.with != null) && ! this.with.isEmpty())
+        {
+            toStringBuilder.append("with", this.with);
+        }
+        if (this.keyBind != null)
+        {
+            toStringBuilder.append("keybind", this.keyBind.getName());
+        }
+        if (this.score != null)
+        {
+            toStringBuilder.append("score", this.score);
+        }
+        if (this.selector != null)
+        {
+            toStringBuilder.append("selector", this.selector);
+        }
+        if (this.color != null)
+        {
+            toStringBuilder.append("color", this.color.name().toLowerCase());
+        }
+        if (this.bold != null)
+        {
+            toStringBuilder.append("bold", this.bold);
+        }
+        if (this.underlined != null)
+        {
+            toStringBuilder.append("underlined", this.underlined);
+        }
+        if (this.italic != null)
+        {
+            toStringBuilder.append("italic", this.italic);
+        }
+        if (this.strikethrough != null)
+        {
+            toStringBuilder.append("strikethrough", this.strikethrough);
+        }
+        if (this.obfuscated != null)
+        {
+            toStringBuilder.append("obfuscated", this.obfuscated);
+        }
+        if (this.insertion != null)
+        {
+            toStringBuilder.append("insertion", this.insertion);
+        }
+        if (this.hoverEvent != null)
+        {
+            toStringBuilder.append("hoverEvent", this.hoverEvent);
+        }
+        if (this.clickEvent != null)
+        {
+            toStringBuilder.append("clickEvent", this.clickEvent);
+        }
+        return toStringBuilder.toString();
     }
 }

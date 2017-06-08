@@ -55,7 +55,7 @@ public interface ParserResult
      *
      * @return parser context.
      */
-    ParserContext getContext();
+    CommandParserContext getContext();
 
     /**
      * Returns type of result.

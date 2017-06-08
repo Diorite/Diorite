@@ -25,9 +25,10 @@
 package org.diorite.config.impl.actions;
 
 import org.diorite.commons.reflections.MethodInvoker;
-import org.diorite.config.ConfigPropertyValue;
+import org.diorite.config.AbstractPropertyAction;
+import org.diorite.config.ConfigPropertyActionInstance;
+import org.diorite.config.ConfigPropertyTemplate;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class SetPropertyAction extends AbstractPropertyAction
 {
     protected SetPropertyAction()
@@ -51,10 +52,17 @@ public class SetPropertyAction extends AbstractPropertyAction
     }
 
     @Override
-    public Object perform(MethodInvoker method, ConfigPropertyValue value, Object... args)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
-        Object rawValue = value.getPropertyValue();
-        value.setPropertyValue(args[0]);
-        return rawValue;
+        if (method.getReturnType() == void.class)
+        {
+            return "$value = var1";
+        }
+        else
+        {
+            return "Object rawValue = $value\n" +
+                   "$value = var1\n" +
+                   "return rawValue";
+        }
     }
 }

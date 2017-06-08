@@ -26,7 +26,7 @@ package org.diorite.impl.protocol.connection;
 
 import java.util.List;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.connection.ByteToMessageCodec.PacketByteBufByteToMessageCodec;
 import org.diorite.commons.math.DioriteMathUtils;
 import org.diorite.core.protocol.connection.ActiveConnection;

@@ -24,7 +24,10 @@
 
 package org.diorite.chat;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 class ChatEventChangePageImpl implements ChatEventChangePage
 {
@@ -45,8 +48,32 @@ class ChatEventChangePageImpl implements ChatEventChangePage
     }
 
     @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof ChatEventChangePageImpl))
+        {
+            return false;
+        }
+        ChatEventChangePageImpl that = (ChatEventChangePageImpl) o;
+        return this.value == that.value;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.value);
+    }
+
+    @Override
     public String toString()
     {
-        return new ToStringBuilder(this).appendSuper(super.toString()).append("value", this.value).toString();
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                       .append("action", this.getAction().toString().toLowerCase())
+                       .append("value", this.value)
+                       .toString();
     }
 }

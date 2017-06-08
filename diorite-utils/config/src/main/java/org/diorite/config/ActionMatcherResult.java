@@ -69,14 +69,14 @@ public final class ActionMatcherResult
      *
      * @return property name if found.
      *
-     * @throws IllegalStateException
+     * @exception IllegalStateException
      *         if property name was not found, so if {@link #isMatching()} is false.
      */
     public String getPropertyName() throws IllegalStateException
     {
         if (this.propertyName == null)
         {
-            throw new IllegalStateException("Propertuy name not found.");
+            throw new IllegalStateException("Property name not found.");
         }
         return this.propertyName;
     }

@@ -61,6 +61,29 @@ public interface ChunkAnchor
     void clearChunks();
 
     /**
+     * Returns true if given chunk is locked by this anchor.
+     *
+     * @param chunk
+     *         chunk to check.
+     *
+     * @return true if given chunk is locked by this anchor.
+     */
+    default boolean containsChunk(Chunk chunk)
+    {
+        return this.containsChunk(chunk.getPosition());
+    }
+
+    /**
+     * Returns true if given chunk is locked by this anchor.
+     *
+     * @param chunk
+     *         chunk position to check.
+     *
+     * @return true if given chunk is locked by this anchor.
+     */
+    boolean containsChunk(ChunkPosition chunk);
+
+    /**
      * Returns (read-only) collection of chunk positions affected by this anchor.
      *
      * @return (read-only) collection of chunk positions affected by this anchor.

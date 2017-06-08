@@ -26,7 +26,7 @@ package org.diorite.impl.protocol.p16w50a.serverbound;
 
 import javax.annotation.Nonnull;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.PacketClass;
 import org.diorite.core.protocol.connection.ProtocolDirection;

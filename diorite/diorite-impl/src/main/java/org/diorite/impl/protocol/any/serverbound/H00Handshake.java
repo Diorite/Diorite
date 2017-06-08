@@ -27,7 +27,7 @@ package org.diorite.impl.protocol.any.serverbound;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.diorite.impl.protocol.AbstractPacketDataSerializer;
+import org.diorite.core.protocol.AbstractPacketDataSerializer;
 import org.diorite.impl.protocol.PCPacket;
 import org.diorite.core.protocol.InvalidPacketException;
 import org.diorite.core.protocol.PacketClass;

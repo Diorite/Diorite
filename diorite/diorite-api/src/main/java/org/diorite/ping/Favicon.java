@@ -108,7 +108,7 @@ public interface Favicon
      */
     static Favicon from(File file) throws IOException
     {
-        return from(ImageIO.read(file));
+        return DynamicFaviconInstance.from(file);
     }
 
     /**
