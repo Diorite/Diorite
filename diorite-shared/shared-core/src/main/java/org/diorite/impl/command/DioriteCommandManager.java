@@ -96,11 +96,55 @@ public class DioriteCommandManager implements CommandManager
                 }
                 newCommand.setArguments(argumentList);
 
+                if(annotation.value().length == 0)
+                {
+                    newCommand.setName(method.getName());
+                }
+                else
+                {
+                    newCommand.setName(annotation.value()[0]);
+                }
+
                 List<String> aliases = Arrays.asList(annotation.value());
                 aliases.remove(0);
                 newCommand.setAliases(aliases);
 
                 newCommand.setDescription(annotation.description());
+
+                if(annotation.usage().equals(""))
+                {
+                    StringBuilder builder = new StringBuilder("/");
+                    builder.append(newCommand.getName());
+                    builder.append(" ");
+                    int i = 0;
+                    for(Argument<?> argument : argumentList)
+                    {
+                        boolean optional = false;
+                        for(Integer optionalInt : annotation.optional())
+                        {
+                           if(optionalInt.equals(i))
+                               optional = true;
+                        }
+                        if(optional)
+                        {
+                            builder.append("[");
+                            builder.append(argument.toString().toLowerCase());
+                            builder.append("]");
+                        }
+                        else
+                        {
+                            builder.append("<");
+                            builder.append(argument.toString().toLowerCase());
+                            builder.append(">");
+                        }
+                    }
+                    newCommand.setUse(builder.toString());
+                }
+                else
+                {
+                    newCommand.setUse(annotation.usage());
+                }
+
                 newCommand.setOptional(annotation.optional());
                 newCommand.register(this);
 

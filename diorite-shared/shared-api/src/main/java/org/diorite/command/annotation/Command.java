@@ -59,6 +59,11 @@ public @interface Command
     String description() default "";
 
     /**
+     * @return usage of command
+     */
+    String usage() default "";
+
+    /**
      * @return array of arguments
      */
     Class<? extends Argument<?>>[] arguments();
