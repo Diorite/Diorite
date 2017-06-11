@@ -26,8 +26,10 @@ package org.diorite.config.impl.actions.numeric;
 
 import java.lang.reflect.Method;
 
+import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
+import org.diorite.config.impl.actions.NumericPropertyAction;
 
 @SuppressWarnings({"rawtypes"})
 public class SubtractNumericPropertyAction extends NumericPropertyAction
@@ -38,7 +40,7 @@ public class SubtractNumericPropertyAction extends NumericPropertyAction
     }
 
     @Override
-    protected String getGroovyImplementation0(Method method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
+    protected String getGroovyImplementation0(MethodInvoker method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
     {
         return "this.$property - var1";
     }
