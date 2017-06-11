@@ -22,23 +22,49 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command.argument;
 
 import java.util.Collection;
-import java.util.List;
 
-import org.diorite.command.argument.Argument;
+import org.diorite.command.CommandExecutor;
+import org.diorite.command.CommandManager;
+import org.diorite.command.types.PluginCommand;
+import org.diorite.plugin.Plugin;
 
-public class FakeParsersManager implements ParsersManager
+/**
+ * Builder for building command arguments
+ */
+public final class ArgumentCommandBuilder
 {
-    @Override
-    public CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments)
+    private Collection<? extends Argument<?>> arguments;
+    private String                            name;
+    private Plugin                            plugin;
+    private CommandManager                    manager;
+    private CommandExecutor                   executor;
+    private PluginCommand                     command;
+
+    public ArgumentCommandBuilder(String commandName, Plugin plugin, CommandManager manager)
     {
-        return new CommandParserContext(data, arguments);
+        this.name = commandName;
+        this.plugin = plugin;
+        this.manager = manager;
+        this.command = manager.registerCommand(name, plugin);
     }
 
-    public CommandParserContext createContext(String data, Argument<?>... arguments)
+    public void withArgument(ArgumentBuilder builder)
     {
-        return new CommandParserContext(data, List.of(arguments));
+        arguments.add(builder.get());
+    }
+
+    public void withExecutor(CommandExecutor executor)
+    {
+        this.executor = executor;
+    }
+
+    public void register()
+    {
+        command.setExecutor(executor);
+        command.setArguments(arguments);
+        command.register(manager);
     }
 }

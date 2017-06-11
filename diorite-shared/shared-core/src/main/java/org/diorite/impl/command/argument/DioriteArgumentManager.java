@@ -22,33 +22,31 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.impl.command.argument;
 
-import java.util.Collection;
+import javax.annotation.Nullable;
 
-import org.diorite.command.argument.Argument;
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
 
-/**
- *
- */
-public interface ParsersManager
+import org.diorite.impl.command.argument.types.StringArgument;
+import org.diorite.command.annotation.arguments.StrArg;
+import org.diorite.command.argument.AnnotationHandler;
+import org.diorite.command.argument.ArgumentManager;
+
+public class DioriteArgumentManager implements ArgumentManager
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    private final HashMap<Class<? extends Annotation>, AnnotationHandler> annotationMap = new HashMap<>();
+
+    public DioriteArgumentManager()
+    {
+        //init
+        annotationMap.put(StrArg.class, () -> new StringArgument());
+    }
+
+    @Override
+    public @Nullable AnnotationHandler getAnnotationHandler(Annotation annotation)
+    {
+        return annotationMap.get(annotation.getClass());
+    }
 }

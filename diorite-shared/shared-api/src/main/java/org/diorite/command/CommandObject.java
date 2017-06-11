@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.diorite.command.argument.Argument;
 import org.diorite.permissions.Permission;
 import org.diorite.sender.CommandSender;
 
@@ -38,8 +39,8 @@ public abstract class CommandObject
     private String       name;
     private List<String> aliases;
     private @Nullable Collection<? extends Argument<?>> arguments = null;
-    private int[] optional = {};
-    private @Nullable CommandManager manager = null;
+    private int[]                                       optional  = {};
+    private @Nullable CommandManager                    manager   = null;
     private @Nullable Permission permission;
     protected @Nullable String description = "";
     protected String use;

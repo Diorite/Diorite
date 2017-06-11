@@ -24,13 +24,23 @@
 
 package org.diorite.command;
 
+import org.diorite.command.parser.UnparsedArguments;
+import org.diorite.sender.CommandSender;
+
 public interface CommandExecutor
 {
     /**
-     * Gets invoked when command(s) the executor was registered to was called
-     * @param context
-     *          the command context
-     * @return command failure or success
+     *
+     * @param sender
+     *          The command sender
+     * @param command
+     *          The command called
+     * @param alias
+     *          The alias the command was called under.
+     *          Null if no alias was used.
+     * @param args
+     *          The raw arguments for the command
+     * @return command success
      */
-    public boolean execute(CommandContext context);
+    public boolean execute(CommandSender sender, CommandObject command, String alias, UnparsedArguments args);
 }

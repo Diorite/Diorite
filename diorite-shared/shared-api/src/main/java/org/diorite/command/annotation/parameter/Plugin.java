@@ -22,33 +22,19 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command.annotation.parameter;
 
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- *
+ * Annotation used to mark a plugin parameter.
  */
-public interface ParsersManager
+@SpecialParameter
+@Target({ElementType.PARAMETER, ElementType.TYPE_USE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Plugin
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
 }

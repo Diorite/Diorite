@@ -26,6 +26,7 @@ package org.diorite.command;
 
 import java.util.Collection;
 
+import org.diorite.command.argument.ArgumentCommandBuilder;
 import org.diorite.command.types.PluginCommand;
 import org.diorite.plugin.Plugin;
 
@@ -57,8 +58,10 @@ public interface CommandManager
      *
      * @param holder
      *          the holder class.
+     * @param plugin
+     *          the plugin requesting the commands to be registered
      */
-    void addCommands(CommandHolder holder);
+    void addCommands(CommandHolder holder, Plugin plugin);
 
     /**
      * Register a plugin command with the given name
@@ -104,4 +107,15 @@ public interface CommandManager
      * @return the command object.
      */
     CommandObject getCommandFromName(String commandName);
+
+    /**
+     * Create an ArgumentCommandBuilder
+     *
+     * @param name
+     *          command name
+     * @param plugin
+     *          plugin requesting the builder
+     * @return the builder
+     */
+    ArgumentCommandBuilder createCommandWithArgs(String name, Plugin plugin);
 }

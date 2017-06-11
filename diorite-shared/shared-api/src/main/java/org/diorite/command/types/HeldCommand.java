@@ -75,19 +75,6 @@ public class HeldCommand extends CommandObject
     @Override
     public boolean invoke(CommandContext context)
     {
-        try
-        {
-            if((boolean) method.invoke(null, context))
-            {
-                return true;
-            }
-        } catch(IllegalAccessException e)
-        {
-            //can't access it
-        } catch(InvocationTargetException e)
-        {
-            //is not static
-        }
-        return false;
+
     }
 }

@@ -22,33 +22,29 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command.argument;
 
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
+import org.diorite.command.parser.ArgumentParseResult;
+import org.diorite.command.parser.CommandParserContext;
+import org.diorite.commons.function.consumer.Consumer;
 
 /**
+ * Represent argument of command.
  *
+ * @param <T>
+ *         Type of argument.
  */
-public interface ParsersManager
+public interface Argument<T>
 {
     /**
-     * Create context for given input data and collection of requested arguments.
+     * Method that tries parse given argument.
      *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
+     * @param context
+     *         context of parser, char sequence.
+     * @param endConsumer
+     *         consumer invoked for parsed argument (only on success).
      *
-     * @return created parser context.
+     * @return parse result.
      */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    ArgumentParseResult<T> tryParse(CommandParserContext context, Consumer<T> endConsumer);
 }

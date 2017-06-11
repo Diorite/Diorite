@@ -29,8 +29,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.diorite.command.Argument;
-
 /**
  * Annotation used to mark command executor methods.
  */
@@ -62,14 +60,4 @@ public @interface Command
      * @return usage of command
      */
     String usage() default "";
-
-    /**
-     * @return array of arguments
-     */
-    Class<? extends Argument<?>>[] arguments();
-
-    /**
-     * @return the position of the optional args
-     */
-    int[] optional();
 }

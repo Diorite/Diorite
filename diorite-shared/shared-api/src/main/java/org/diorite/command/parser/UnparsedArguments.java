@@ -24,31 +24,32 @@
 
 package org.diorite.command.parser;
 
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
-
 /**
- *
+ * Class representing unparsed arguments.
  */
-public interface ParsersManager
+public final class UnparsedArguments
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    private String raw;
+    private String[] argArray = { };
+
+    public UnparsedArguments(String raw)
+    {
+        this.raw = raw;
+        splitArgs();
+    }
+
+    private void splitArgs()
+    {
+        argArray = raw.split("\\s+");
+    }
+
+    public String getRaw()
+    {
+        return raw;
+    }
+
+    public String get(int index)
+    {
+        return argArray[index];
+    }
 }
