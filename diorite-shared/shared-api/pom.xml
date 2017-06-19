@@ -32,7 +32,7 @@
         </dependency>
 
         <dependency>
-            <groupId>net.engio</groupId>
+            <groupId>com.gotofinal</groupId>
             <artifactId>mbassador</artifactId>
         </dependency>
         <dependency>

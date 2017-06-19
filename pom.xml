@@ -27,12 +27,6 @@
         <developerConnection>scm:git:https://github.com/Diorite/Diorite.git</developerConnection>
         <url>https://github.com/Diorite/Diorite</url>
     </scm>
-    <distributionManagement>
-        <repository>
-            <id>diorite</id>
-            <url>sftp://maven.diorite.org</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <maven.compiler.source>9</maven.compiler.source>
@@ -40,7 +34,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.library.groovy>2.4.11</version.library.groovy>
-        <version.library.mbassador>1.3.0</version.library.mbassador>
+        <version.library.mbassador>2.0</version.library.mbassador>
         <version.library.netty>4.1.7.Final</version.library.netty>
         <version.library.jopt>6.0-alpha-1</version.library.jopt>
         <version.library.jline>2.14.3</version.library.jline>
@@ -164,7 +158,7 @@
                 <version>${version.library.groovy}</version>
             </dependency>
             <dependency>
-                <groupId>net.engio</groupId>
+                <groupId>com.gotofinal</groupId>
                 <artifactId>mbassador</artifactId>
                 <version>${version.library.mbassador}</version>
             </dependency>
@@ -321,4 +315,23 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>diorite</id>
+            <url>https://repo.diorite.org/repository/diorite/</url>
+        </snapshotRepository>
+        <repository>
+            <id>diorite</id>
+            <url>https://repo.diorite.org/repository/diorite/</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <name>Diorite repository</name>
+            <id>diorite</id>
+            <url>https://repo.diorite.org/repository/diorite/</url>
+        </repository>
+    </repositories>
 </project>
