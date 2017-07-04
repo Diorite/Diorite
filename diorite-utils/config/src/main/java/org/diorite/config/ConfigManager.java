@@ -27,6 +27,8 @@ package org.diorite.config;
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,6 +36,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 
+import org.diorite.commons.arrays.DioriteArrayUtils;
 import org.diorite.commons.classes.DynamicClassLoader;
 import org.diorite.config.impl.ConfigImplementationProvider;
 import org.diorite.config.impl.ConfigTemplateImpl;
@@ -88,7 +91,7 @@ public final class ConfigManager
         return this.groovy.getClassLoader();
     }
 
-    private final Map<Class<?>, ConfigTemplate<?>> configs = new ConcurrentHashMap<>(20);
+    private final Map<List<Object>, ConfigTemplate<?>> configs = new ConcurrentHashMap<>(20);
 
     private ConfigImplementationProvider implementationProvider;
 
@@ -130,18 +133,38 @@ public final class ConfigManager
     @SuppressWarnings("unchecked")
     public <T extends Config> ConfigTemplate<T> getConfigFile(Class<T> type)
     {
-        ConfigTemplate<T> configTemplate = (ConfigTemplate<T>) this.configs.get(type);
+        return getConfigFileVariant(type);
+    }
+
+    /**
+     * Get or create config file configuration for given config class and qualifiers, qualifiers can be used to create separate configs for different languages
+     * etc.
+     *
+     * @param type
+     *         type of config class.
+     * @param variantQualifiers
+     *         qualifiers of config variant, this same qualifiers in different order define different variant.
+     * @param <T>
+     *         type of config class.
+     *
+     * @return config file configuration for given config class.
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Config> ConfigTemplate<T> getConfigFileVariant(Class<T> type, Object... variantQualifiers)
+    {
+        List<Object> key = Arrays.asList(DioriteArrayUtils.prepend(variantQualifiers, type));
+        ConfigTemplate<T> configTemplate = (ConfigTemplate<T>) this.configs.get(key);
         if (configTemplate == null)
         {
             synchronized (this.configs)
             {
-                configTemplate = (ConfigTemplate<T>) this.configs.get(type);
+                configTemplate = (ConfigTemplate<T>) this.configs.get(key);
                 if (configTemplate != null)
                 {
                     return configTemplate;
                 }
                 configTemplate = new ConfigTemplateImpl<>(type, this.implementationProvider);
-                this.configs.put(type, configTemplate);
+                this.configs.put(key, configTemplate);
             }
         }
         return configTemplate;
