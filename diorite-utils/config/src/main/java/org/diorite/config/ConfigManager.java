@@ -27,8 +27,8 @@ package org.diorite.config;
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -88,7 +88,7 @@ public final class ConfigManager
         return this.groovy.getClassLoader();
     }
 
-    private final Map<Class<?>, ConfigTemplate<?>> configs = new HashMap<>(20);
+    private final Map<Class<?>, ConfigTemplate<?>> configs = new ConcurrentHashMap<>(20);
 
     private ConfigImplementationProvider implementationProvider;
 
