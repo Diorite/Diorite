@@ -33,6 +33,7 @@ import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.Validate;
@@ -40,7 +41,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.diorite.commons.arrays.DioriteArrayUtils;
 import org.diorite.commons.reflections.DioriteReflectionUtils;
-import org.diorite.commons.reflections.MethodInvoker;
 import org.diorite.config.Config;
 import org.diorite.config.ConfigPropertyTemplate;
 import org.diorite.config.ConfigPropertyValue;
@@ -68,13 +68,13 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
 {
     private final ConfigTemplate<?> template;
 
-    private final     Class<T>             rawType;
-    private final     Type                 genericType;
-    private final     String               originalName;
-    private final     String               name;
-    private           Function<Config, T>  defaultValueSupplier;
+    private final     Class<T>                     rawType;
+    private final     Type                         genericType;
+    private final     String                       originalName;
+    private final     String                       name;
+    private           Function<Config, T>          defaultValueSupplier;
     private @Nullable ValidatorFunction<Config, T> validator;
-    private final     AnnotatedElement     annotatedElement;
+    private final     AnnotatedElement             annotatedElement;
 
     @Nullable
     private BiConsumer<SerializationData, ConfigPropertyValue>   serializeFunc;
@@ -82,9 +82,9 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
     private BiConsumer<DeserializationData, ConfigPropertyValue> deserializeFunc;
 
     @Nullable
-    private MethodInvoker toKeyMapper;
+    private BiFunction<Config, String, T> toKeyMapper;
     @Nullable
-    private MethodInvoker toStringMapper;
+    private BiFunction<Config, T, String> toStringMapper;
 
     private boolean returnUnmodifiableCollections;
 
@@ -163,22 +163,14 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
         this.returnUnmodifiableCollections = this.annotatedElement.isAnnotationPresent(Unmodifiable.class);
     }
 
-    public void setToKeyMapper(@Nullable MethodInvoker toKeyMapper)
+    public void setToKeyMapper(@Nullable BiFunction<Config, String, T> toKeyMapper)
     {
         this.toKeyMapper = toKeyMapper;
-        if (toKeyMapper != null)
-        {
-            toKeyMapper.ensureAccessible();
-        }
     }
 
-    public void setToStringMapper(@Nullable MethodInvoker toStringMapper)
+    public void setToStringMapper(@Nullable BiFunction<Config, T, String> toStringMapper)
     {
         this.toStringMapper = toStringMapper;
-        if (toStringMapper != null)
-        {
-            toStringMapper.ensureAccessible();
-        }
     }
 
     private void initSerializeFunc(String key)
@@ -248,7 +240,7 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                     this.deserializeFunc = (data, val) ->
                     {
                         Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
-                        data.getMap(key, s -> this.toKeyMapper.invoke(val.getDeclaringConfig(), s), valueType);
+                        data.getMap(key, s -> this.toKeyMapper.apply(val.getDeclaringConfig(), s), valueType);
                         val.setPropertyValue(collection);
                     };
                 }
@@ -271,11 +263,11 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                                                     this.template.getConfigType());
                 }
                 this.serializeFunc = (data, val) -> data.addMap(key, ((Map) val.getPropertyValue()), valueType,
-                                                                s -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), s)));
+                                                                s -> String.valueOf(this.toStringMapper.apply(val.getDeclaringConfig(), (T) s)));
                 this.deserializeFunc = (data, val) ->
                 {
                     Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
-                    data.getMap(key, s -> this.toKeyMapper.invoke(val.getDeclaringConfig(), s), valueType);
+                    data.getMap(key, s -> this.toKeyMapper.apply(val.getDeclaringConfig(), s), valueType);
                     val.setPropertyValue(collection);
                 };
             }
@@ -294,7 +286,7 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                 this.deserializeFunc = (data, val) ->
                 {
                     Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);
-                    data.getAsMap(key, valueType, s -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), s)), (Map) collection);
+                    data.getAsMap(key, valueType, s -> String.valueOf(this.toStringMapper.apply(val.getDeclaringConfig(), (T) s)), (Map) collection);
                     val.setPropertyValue(collection);
                 };
             }
@@ -334,7 +326,7 @@ public class ConfigPropertyTemplateImpl<T> implements ConfigPropertyTemplate<T>
                                                 this.template.getConfigType());
             }
             this.serializeFunc = (data, val) -> data.addMappedList(key, collectionType, (Collection) val.getPropertyValue(),
-                                                                   o -> String.valueOf(this.toStringMapper.invoke(val.getDeclaringConfig(), o)));
+                                                                   o -> String.valueOf(this.toStringMapper.apply(val.getDeclaringConfig(), (T) o)));
             this.deserializeFunc = (data, val) ->
             {
                 Object collection = YamlCollectionCreator.createCollection(this.rawType, 10);

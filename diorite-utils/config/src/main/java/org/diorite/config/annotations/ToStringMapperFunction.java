@@ -30,6 +30,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.intellij.lang.annotations.Language;
+
 /**
  * Used with {@link Mapped} to mark list properties in config interfaces that are saved as maps. <br>
  * {@link Mapped} Annotation needs to be placed on property get method, and <br>
@@ -44,9 +46,18 @@ import java.lang.annotation.Target;
 public @interface ToStringMapperFunction
 {
     /**
-     * Returns property name that use this mapping function.
+     * Returns groovy script that will be used to map object to string.
+     *
+     * @return groovy script that will be used to map object to string.
+     */
+    @Language(value = "groovy", prefix = "String toString(def x, Config config) {", suffix = "}")
+    String value() default "";
+
+    /**
+     * Returns property name that use this mapping function. <br>
+     * Optional if annotation is over property with value filled with groovy mapper.
      *
      * @return property name that use this mapping function.
      */
-    String property();
+    String property() default "";
 }

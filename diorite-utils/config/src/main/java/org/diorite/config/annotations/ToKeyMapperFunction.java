@@ -30,6 +30,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.intellij.lang.annotations.Language;
+
 /**
  * {@link ToKeyMapperFunction} is used to annotate method that change strings to map keys for given property.<br>
  * {@link ToStringMapperFunction} should be also used to annotate method that change map key objects to strings.
@@ -40,9 +42,18 @@ import java.lang.annotation.Target;
 public @interface ToKeyMapperFunction
 {
     /**
-     * Returns property name that use this mapping function.
+     * Returns groovy script that will be used to map string to object.
+     *
+     * @return groovy script that will be used to map string to object.
+     */
+    @Language(value = "groovy", prefix = "Object fromString(String x, Config config) {", suffix = "}")
+    String value() default "";
+
+    /**
+     * Returns property name that use this mapping function. <br>
+     * Optional if annotation is over property with value filled with groovy mapper.
      *
      * @return property name that use this mapping function.
      */
-    String property();
+    String property() default "";
 }

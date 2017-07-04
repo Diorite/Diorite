@@ -134,6 +134,9 @@ public class ConfigTest
         Assert.assertEquals(snowflake, someConfig.removeFromEvenMoreSpecialData(randomUUID));
         Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
 
+        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
+
 
         // check if all data is still valid after reload of config.
         StringBuilderWriter writer = new StringBuilderWriter(500);

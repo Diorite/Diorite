@@ -49,6 +49,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -119,8 +120,8 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         for (Method method : type.getDeclaredMethods())
         {
             MethodInvoker methodInvoker = new MethodInvoker(method);
-            if (methodInvoker.isPrivate() && (methodInvoker.getParameterCount() == 0) && (methodInvoker.getReturnType() != void.class) &&
-                methodInvoker.isAnnotationPresent(Property.class))
+            if ((methodInvoker.isPrivate() || methodInvoker.isDefault()) && (methodInvoker.getParameterCount() == 0) &&
+                (methodInvoker.getReturnType() != void.class) && methodInvoker.isAnnotationPresent(Property.class))
             {
                 methods.add(methodInvoker);
                 continue;
@@ -174,33 +175,182 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                                         "        static T validateNickname(ConfigType config, T nickname){...} (any order)");
     }
 
-    private void scanStringMapper(MethodInvoker methodInvoker, Map<String, MethodInvoker> toStringMappers)
+    private IllegalStateException throwInvalidStringMapperMethodException(MethodInvoker methodInvoker)
     {
-        if ((methodInvoker.getParameterCount() != 1) || (methodInvoker.getReturnType() != String.class))
+        throw new IllegalStateException("This isn't valid to string mapper function (" + methodInvoker + "), valid function must have signature matching: \n" +
+                                        "- 'String anyName(KeyType)'\n" +
+                                        "- 'static String anyName(KeyType)'\n" +
+                                        "- 'static String anyName(Config, KeyType)'\n" +
+                                        "- 'static String anyName(KeyType, Config)`");
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void scanStringMapper(MethodInvoker methodInvoker, Map<String, BiFunction<Config, Object, String>> toStringMappers)
+    {
+        if (methodInvoker.getReturnType() != String.class)
         {
-            throw new IllegalStateException("This isn't valid to string mapper function, valid function must have signature matching: 'String " +
-                                            "anyName(KeyType)'");
+            throw throwInvalidStringMapperMethodException(methodInvoker);
         }
-        String property = methodInvoker.getAnnotation(ToStringMapperFunction.class).property();
-        if (toStringMappers.put(property, methodInvoker) != null)
+        BiFunction func;
+        if (methodInvoker.getParameterCount() == 1)
+        {
+            if (methodInvoker.isStatic())
+            {
+                func = (cfg, obj) -> methodInvoker.invokeWith(obj);
+            }
+            else
+            {
+                func = (cfg, obj) -> methodInvoker.invokeWith(cfg, obj);
+            }
+        }
+        else
+        {
+            if ((methodInvoker.getParameterCount() != 2) || ! methodInvoker.isStatic())
+            {
+                throw throwInvalidStringMapperMethodException(methodInvoker);
+            }
+            Class<?>[] parameterTypes = methodInvoker.getParameterTypes();
+            if (parameterTypes[0].isAssignableFrom(this.type))
+            {
+                func = (cfg, obj) -> methodInvoker.invokeWith(cfg, obj);
+            }
+            else if (parameterTypes[1].isAssignableFrom(this.type))
+            {
+                func = (cfg, obj) -> methodInvoker.invokeWith(obj, cfg);
+            }
+            else
+            {
+                throw throwInvalidStringMapperMethodException(methodInvoker);
+            }
+        }
+        methodInvoker.ensureAccessible();
+        ToStringMapperFunction annotation = methodInvoker.getAnnotation(ToStringMapperFunction.class);
+        String property = annotation.property();
+        if (property.isEmpty())
+        {
+            throw new IllegalStateException("Found " + ToStringMapperFunction.class.getSimpleName() + " as `" + methodInvoker +
+                                            "` bur property name is missing!");
+        }
+        if (! annotation.value().isEmpty())
+        {
+            throw new IllegalStateException("Found " + ToStringMapperFunction.class.getSimpleName() + " as `" + methodInvoker + "` for '" + property +
+                                            "' but annotation already contains mapping code: `" + annotation.value() + "`");
+        }
+        if (toStringMappers.put(property, func) != null)
         {
             throw new IllegalStateException("Duplicated " + ToStringMapperFunction.class.getSimpleName() + " for '" + property + "' in: " + this.type);
         }
     }
 
-    private void scanKeyMapper(MethodInvoker methodInvoker, Map<String, MethodInvoker> toKeyMappers)
+    private IllegalStateException throwInvalidKeyMapperMethodException(MethodInvoker methodInvoker)
     {
+        throw new IllegalStateException("This isn't valid to key mapper function (" + methodInvoker + "), valid function must have signature matching: \n" +
+                                        "- 'KeyType anyName(String)'\n" +
+                                        "- 'static KeyType anyName(String)'\n" +
+                                        "- 'static KeyType anyName(Config, String)'\n" +
+                                        "- 'static KeyType anyName(String, Config)'");
+    }
 
-        if ((methodInvoker.getParameterCount() != 0) || (methodInvoker.getParameterTypes()[0] != String.class) ||
-            (methodInvoker.getReturnType() == void.class))
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void scanKeyMapper(MethodInvoker methodInvoker, Map<String, BiFunction<Config, String, Object>> toKeyMappers)
+    {
+        if (methodInvoker.getReturnType() == void.class)
         {
-            throw new IllegalStateException("This isn't valid to key mapper function, valid function must have signature matching: 'KeyType " +
-                                            "anyName(String)'");
+            throw throwInvalidKeyMapperMethodException(methodInvoker);
         }
+        Class<?>[] parameterTypes = methodInvoker.getParameterTypes();
+        BiFunction func;
+        if (! methodInvoker.isStatic())
+        {
+            if (parameterTypes.length != 1)
+            {
+                throw throwInvalidKeyMapperMethodException(methodInvoker);
+            }
+            func = (cfg, str) -> methodInvoker.invokeWith(cfg, str);
+        }
+        else
+        {
+            if (parameterTypes.length == 1)
+            {
+                func = (cfg, str) -> methodInvoker.invokeWith(str);
+            }
+            else if (parameterTypes.length == 2)
+            {
+                if (parameterTypes[0].isAssignableFrom(this.type))
+                {
+                    func = (cfg, str) -> methodInvoker.invokeWith(cfg, str);
+                }
+                else if (parameterTypes[1].isAssignableFrom(this.type))
+                {
+                    func = (cfg, str) -> methodInvoker.invokeWith(str, cfg);
+                }
+                else
+                {
+                    throw throwInvalidKeyMapperMethodException(methodInvoker);
+                }
+            }
+            else
+            {
+                throw throwInvalidKeyMapperMethodException(methodInvoker);
+            }
+        }
+        ToKeyMapperFunction annotation = methodInvoker.getAnnotation(ToKeyMapperFunction.class);
         String property = methodInvoker.getAnnotation(ToKeyMapperFunction.class).property();
-        if (toKeyMappers.put(property, methodInvoker) != null)
+        if (property.isEmpty())
+        {
+            throw new IllegalStateException("Found " + ToKeyMapperFunction.class.getSimpleName() + " as `" + methodInvoker +
+                                            "` bur property name is missing!");
+        }
+        if (! annotation.value().isEmpty())
+        {
+            throw new IllegalStateException("Found " + ToKeyMapperFunction.class.getSimpleName() + " as `" + methodInvoker + "` for '" + property +
+                                            "' but annotation already contains mapping code: `" + annotation.value() + "`");
+        }
+        if (toKeyMappers.put(property, func) != null)
         {
             throw new IllegalStateException("Duplicated " + ToKeyMapperFunction.class.getSimpleName() + " for '" + property + "' in: " + this.type);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <X> void processGroovyMappers(MethodInvoker methodInvoker, ConfigPropertyTemplateImpl<X> template)
+    {
+        if (! methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class) && ! methodInvoker.isAnnotationPresent(ToStringMapperFunction.class))
+        {
+            return;
+        }
+        GroovyScriptEngineImpl groovy = (GroovyScriptEngineImpl) ConfigManager.get().getGroovy();
+        if (methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class))
+        {
+            ToKeyMapperFunction ann = methodInvoker.getAnnotation(ToKeyMapperFunction.class);
+            String source = "java.util.function.BiFunction<Config, String, Object> func = { Config config, String x -> " + ann.value() + "}\nreturn func;";
+            try
+            {
+                BiFunction<Config, String, X> validatorFunction = (BiFunction<Config, String, X>) groovy.eval(source);
+                template.setToKeyMapper(validatorFunction);
+            }
+            catch (ScriptException e)
+            {
+                throw new RuntimeException("Can't compile toKeyMapperFunctionScript (" + methodInvoker + ") script for: " + template.getName() + " in " +
+                                           this.type.getCanonicalName() + "\n\n" +
+                                           source + "\n====================", e);
+            }
+        }
+        if (methodInvoker.isAnnotationPresent(ToStringMapperFunction.class))
+        {
+            ToStringMapperFunction ann = methodInvoker.getAnnotation(ToStringMapperFunction.class);
+            String source = "java.util.function.BiFunction<Config, Object, String> func = { Config config, Object x -> " + ann.value() + "}\nreturn func;";
+            try
+            {
+                BiFunction<Config, X, String> validatorFunction = (BiFunction<Config, X, String>) groovy.eval(source);
+                template.setToStringMapper(validatorFunction);
+            }
+            catch (ScriptException e)
+            {
+                throw new RuntimeException("Can't compile toStringMapperFunctionScript (" + methodInvoker + ") script for: " + template.getName() + " in " +
+                                           this.type.getCanonicalName() + "\n\n" +
+                                           source + "\n====================", e);
+            }
         }
     }
 
@@ -347,8 +497,9 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void scanMethods(LinkedList<MethodInvoker> methods, Map<String, MethodInvoker> toKeyMappers,
-                             Map<String, MethodInvoker> toStringMappers, Set<Entry<String, MethodInvoker>> processedValidators, Set<String> knownProperties)
+    private void scanMethods(LinkedList<MethodInvoker> methods, Map<String, BiFunction<Config, String, Object>> toKeyMappers,
+                             Map<String, BiFunction<Config, Object, String>> toStringMappers, Set<Entry<String, MethodInvoker>> processedValidators,
+                             Set<String> knownProperties)
     {
         int sizeBefore = methods.size();
         for (Iterator<MethodInvoker> iterator = methods.iterator(); iterator.hasNext(); )
@@ -370,7 +521,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 }
                 continue;
             }
-            if (methodInvoker.isPrivate())
+            if (methodInvoker.isPrivate() || methodInvoker.isStatic())
             {
                 if (methodInvoker.isAnnotationPresent(ToKeyMapperFunction.class))
                 {
@@ -384,6 +535,9 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                     iterator.remove();
                     continue;
                 }
+            }
+            if (methodInvoker.isAnnotationPresent(Property.class) && (methodInvoker.isPrivate() || methodInvoker.isDefault()))
+            {
                 name = this.extractName(methodInvoker);
 
                 methodInvoker.ensureAccessible();
@@ -443,6 +597,7 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 if (propertyAction.getActionName().equals("set") || propertyAction.getActionName().equals("get"))
                 {
                     this.processGroovyValidators(methodInvoker.getAnnotationsByType(GroovyValidator.class), template);
+                    this.processGroovyMappers(methodInvoker, template);
                 }
                 MethodSignature methodSignature = new MethodSignature(method);
                 PropertyActionKey propertyActionKey = new PropertyActionKey(propertyAction, methodSignature);
@@ -497,27 +652,29 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
         LinkedList<MethodInvoker> methods = new LinkedList<>();
         this.scanInterface(this.type, methods);
 
-        Map<String, MethodInvoker> toKeyMappers = new HashMap<>(methods.size());
-        Map<String, MethodInvoker> toStringMappers = new HashMap<>(methods.size());
+        Map<String, BiFunction<Config, String, Object>> toKeyMappers = new HashMap<>(methods.size());
+        Map<String, BiFunction<Config, Object, String>> toStringMappers = new HashMap<>(methods.size());
         this.scanMethods(new LinkedList<>(methods), toKeyMappers, toStringMappers, new HashSet<>(10), new HashSet<>(10));
 
-        for (Entry<String, MethodInvoker> entry : toKeyMappers.entrySet())
+        for (Entry<String, BiFunction<Config, String, Object>> entry : toKeyMappers.entrySet())
         {
             ConfigPropertyTemplateImpl<?> propertyTemplate = this.mutableProperties.get(entry.getKey());
             if (propertyTemplate == null)
             {
                 throw new IllegalStateException("Unknown property: " + entry.getKey());
             }
-            propertyTemplate.setToKeyMapper(entry.getValue());
+            //noinspection unchecked
+            propertyTemplate.setToKeyMapper((BiFunction) entry.getValue());
         }
-        for (Entry<String, MethodInvoker> entry : toStringMappers.entrySet())
+        for (Entry<String, BiFunction<Config, Object, String>> entry : toStringMappers.entrySet())
         {
             ConfigPropertyTemplateImpl<?> propertyTemplate = this.mutableProperties.get(entry.getKey());
             if (propertyTemplate == null)
             {
                 throw new IllegalStateException("Unknown property: " + entry.getKey());
             }
-            propertyTemplate.setToStringMapper(entry.getValue());
+            //noinspection unchecked
+            propertyTemplate.setToStringMapper((BiFunction) entry.getValue());
         }
 
         List<ConfigPropertyTemplateImpl<?>> templates = new ArrayList<>(this.mutableProperties.size());

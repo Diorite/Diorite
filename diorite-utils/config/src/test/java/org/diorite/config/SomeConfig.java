@@ -24,6 +24,8 @@
 
 package org.diorite.config;
 
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -86,9 +88,14 @@ public interface SomeConfig extends Config
     EntityStorage getStorage();
     void setStorage(EntityStorage storage);
 
+    @Nullable
     @Validator // second way to create validators, here you can modify result too.
-    private EntityStorage storageValidator(EntityStorage storage)
+    private EntityStorage storageValidator(@Nullable EntityStorage storage)
     {
+        if (storage == null)
+        {
+            return null;
+        }
         if (storage.getEntityData().size() > 100)
         {
             throw new RuntimeException("Too big");
@@ -104,6 +111,7 @@ public interface SomeConfig extends Config
     @Unmodifiable
     @Comment("Just some special comment!")
     @Mapped
+//    @ToStringMapperFunction("x.name") //-> simpler version
     Collection<? extends MetaObject> getSpecialData();
     void putInSpecialData(MetaObject metaObject);
     boolean removeFromSpecialData(MetaObject metaObject);

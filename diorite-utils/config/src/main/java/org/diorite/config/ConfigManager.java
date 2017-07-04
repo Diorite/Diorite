@@ -54,7 +54,7 @@ public final class ConfigManager
     {
         CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
         ImportCustomizer importCustomizer = new ImportCustomizer();
-        importCustomizer.addStarImports("org.diorite.config", "org.diorite", "org.diorite.config.exceptions");
+        importCustomizer.addStarImports("org.diorite.config", "org.diorite.config.serialization", "org.diorite", "org.diorite.config.exceptions");
         compilerConfiguration.addCompilationCustomizers(importCustomizer);
         GroovyClassLoader groovyClassLoader = new GroovyClassLoader(this.getClass().getClassLoader(), compilerConfiguration);
         this.groovy = new GroovyScriptEngineImpl(groovyClassLoader);

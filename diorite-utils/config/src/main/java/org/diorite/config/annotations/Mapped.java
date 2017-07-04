@@ -33,7 +33,8 @@ import java.lang.annotation.Target;
 /**
  * Used with {@link Mapped} to mark list properties in config interfaces that are saved as maps. <br>
  * {@link Mapped} Annotation needs to be placed on property get method, and <br>
- * {@link ToStringMapperFunction} on private mapping function, function that take list element and returns String - key of value in map.
+ * {@link ToStringMapperFunction} on private mapping function that take list element and returns String - key of value in map. (or on this same method as this
+ * annotation)
  */
 @Documented
 @Target({ElementType.METHOD})
