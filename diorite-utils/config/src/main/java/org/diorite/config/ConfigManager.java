@@ -133,8 +133,16 @@ public final class ConfigManager
         ConfigTemplate<T> configTemplate = (ConfigTemplate<T>) this.configs.get(type);
         if (configTemplate == null)
         {
-            configTemplate = new ConfigTemplateImpl<>(type, this.implementationProvider);
-            this.configs.put(type, configTemplate);
+            synchronized (this.configs)
+            {
+                configTemplate = (ConfigTemplate<T>) this.configs.get(type);
+                if (configTemplate != null)
+                {
+                    return configTemplate;
+                }
+                configTemplate = new ConfigTemplateImpl<>(type, this.implementationProvider);
+                this.configs.put(type, configTemplate);
+            }
         }
         return configTemplate;
     }
