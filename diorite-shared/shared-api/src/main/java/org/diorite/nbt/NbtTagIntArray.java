@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.Validate;
 
-import org.diorite.commons.arrays.DioriteArrayUtils;
+import org.diorite.commons.arrays.fastutil.FastutilArrayUtils;
 
 import it.unimi.dsi.fastutil.ints.IntBidirectionalIterator;
 
@@ -171,7 +171,7 @@ public final class NbtTagIntArray extends NbtAbstractTag implements Iterable<Int
     @Override
     public IntBidirectionalIterator iterator()
     {
-        return DioriteArrayUtils.iteratorOf(this.value);
+        return FastutilArrayUtils.iteratorOf(this.value);
     }
 
     @Override

@@ -24,9 +24,13 @@
 
 package org.diorite.commons;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import org.diorite.commons.function.supplier.Supplier;
+import org.diorite.commons.reflections.DioriteReflectionUtils;
+
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 
 /**
@@ -35,11 +39,26 @@ import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
  */
 public final class SpammyError
 {
-    private static final Object2LongMap<Object> errors = new Object2LongOpenHashMap<>(10, 0.1f);
+    // fastutil should be as optional as possible
+    private static final Map<Object, Long> errors;
 
     static
     {
-        errors.defaultReturnValue(0);
+        Supplier<Map<Object, Long>> mapSupplier;
+        Class<?> fastUtilsClass = DioriteReflectionUtils.tryGetCanonicalClass("it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap");
+        if (fastUtilsClass != null)
+        {
+            mapSupplier = () -> {
+                Object2LongOpenHashMap<Object> map = new Object2LongOpenHashMap<>(10, 0.1f);
+                map.defaultReturnValue(0);
+                return map;
+            };
+        }
+        else
+        {
+            mapSupplier = () -> new HashMap<>(10);
+        }
+        errors = mapSupplier.get();
     }
 
     private SpammyError()
@@ -59,7 +78,7 @@ public final class SpammyError
     public static void err(String message, int secondsBetweenLogs, Object key)
     {
         long currentTime = System.currentTimeMillis();
-        long nextTime = errors.getLong(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
+        long nextTime = errors.getOrDefault(key, 0L) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
         if (currentTime >= nextTime)
         {
             System.err.println(message);
@@ -80,7 +99,7 @@ public final class SpammyError
     public static void out(String message, int secondsBetweenLogs, Object key)
     {
         long currentTime = System.currentTimeMillis();
-        long nextTime = errors.getLong(key) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
+        long nextTime = errors.getOrDefault(key, 0L) + TimeUnit.SECONDS.toMillis(secondsBetweenLogs);
         if (currentTime >= nextTime)
         {
             System.out.println(message);

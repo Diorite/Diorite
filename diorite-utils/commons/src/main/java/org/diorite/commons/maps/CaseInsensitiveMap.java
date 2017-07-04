@@ -35,6 +35,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 /**
  * Case Insensitive string map.
  *
+ * NOTE: requires fastutil library.
+ *
  * @param <V>
  *         type of values.
  */
@@ -134,7 +136,7 @@ public class CaseInsensitiveMap<V> extends Object2ObjectOpenCustomHashMap<String
      * @param f
      *         the load factor.
      *
-     * @throws IllegalArgumentException
+     * @exception IllegalArgumentException
      *         if <code>k</code> and <code>v</code> have different lengths.
      */
     public CaseInsensitiveMap(String[] k, V[] v, float f)
@@ -150,7 +152,7 @@ public class CaseInsensitiveMap<V> extends Object2ObjectOpenCustomHashMap<String
      * @param v
      *         the array of corresponding values in the new hash map.
      *
-     * @throws IllegalArgumentException
+     * @exception IllegalArgumentException
      *         if <code>k</code> and <code>v</code> have different lengths.
      */
     public CaseInsensitiveMap(String[] k, V[] v)

@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.arrays;
+package org.diorite.commons.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import it.unimi.dsi.fastutil.bytes.AbstractByteBidirectionalIterator;
+import it.unimi.dsi.fastutil.longs.AbstractLongBidirectionalIterator;
 
-class ByteIterator extends AbstractByteBidirectionalIterator
+class LongIterator extends AbstractLongBidirectionalIterator
 {
-    private final byte[] array;
+    private final long[] array;
     private int pos = 0;
 
-    ByteIterator(byte[] primitiveArray)
+    LongIterator(long[] primitiveArray)
     {
         this.array = primitiveArray;
     }
@@ -51,7 +51,7 @@ class ByteIterator extends AbstractByteBidirectionalIterator
     }
 
     @Override
-    public byte nextByte()
+    public long nextLong()
     {
         if (! this.hasNext())
         {
@@ -61,7 +61,7 @@ class ByteIterator extends AbstractByteBidirectionalIterator
     }
 
     @Override
-    public byte previousByte()
+    public long previousLong()
     {
         if (! this.hasPrevious())
         {

@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.arrays;
+package org.diorite.commons.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import it.unimi.dsi.fastutil.booleans.AbstractBooleanBidirectionalIterator;
+import it.unimi.dsi.fastutil.doubles.AbstractDoubleBidirectionalIterator;
 
-class BooleanIterator extends AbstractBooleanBidirectionalIterator
+class DoubleIterator extends AbstractDoubleBidirectionalIterator
 {
-    private final boolean[] array;
+    private final double[] array;
     private int pos = 0;
 
-    BooleanIterator(boolean[] primitiveArray)
+    DoubleIterator(double[] primitiveArray)
     {
         this.array = primitiveArray;
     }
@@ -51,7 +51,7 @@ class BooleanIterator extends AbstractBooleanBidirectionalIterator
     }
 
     @Override
-    public boolean nextBoolean()
+    public double nextDouble()
     {
         if (! this.hasNext())
         {
@@ -61,7 +61,7 @@ class BooleanIterator extends AbstractBooleanBidirectionalIterator
     }
 
     @Override
-    public boolean previousBoolean()
+    public double previousDouble()
     {
         if (! this.hasPrevious())
         {

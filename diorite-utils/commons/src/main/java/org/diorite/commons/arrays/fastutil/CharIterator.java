@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package org.diorite.commons.arrays;
+package org.diorite.commons.arrays.fastutil;
 
 import java.util.NoSuchElementException;
 
-import it.unimi.dsi.fastutil.shorts.AbstractShortBidirectionalIterator;
+import it.unimi.dsi.fastutil.chars.AbstractCharBidirectionalIterator;
 
-class ShortIterator extends AbstractShortBidirectionalIterator
+class CharIterator extends AbstractCharBidirectionalIterator
 {
-    private final short[] array;
+    private final char[] array;
     private int pos = 0;
 
-    ShortIterator(short[] primitiveArray)
+    CharIterator(char[] primitiveArray)
     {
         this.array = primitiveArray;
     }
@@ -51,7 +51,7 @@ class ShortIterator extends AbstractShortBidirectionalIterator
     }
 
     @Override
-    public short nextShort()
+    public char nextChar()
     {
         if (! this.hasNext())
         {
@@ -61,7 +61,7 @@ class ShortIterator extends AbstractShortBidirectionalIterator
     }
 
     @Override
-    public short previousShort()
+    public char previousChar()
     {
         if (! this.hasPrevious())
         {
