@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import org.diorite.config.exceptions.ConfigLoadException;
 import org.diorite.config.exceptions.ConfigSaveException;
@@ -341,7 +342,7 @@ public interface Config
      * @param encoder
      *         new encoder.
      */
-    void encoder(CharsetEncoder encoder);
+    void encoder(Supplier<CharsetEncoder> encoder);
 
     /**
      * Returns decoder used by this config file.
@@ -356,7 +357,7 @@ public interface Config
      * @param decoder
      *         new decoder.
      */
-    void decoder(CharsetDecoder decoder);
+    void decoder(Supplier<CharsetDecoder> decoder);
 
     /**
      * Select charset for loading this config file.
@@ -366,8 +367,8 @@ public interface Config
      */
     default void encoding(Charset charset)
     {
-        this.encoder(charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT));
-        this.decoder(charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT));
+        this.encoder(() -> charset.newEncoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT));
+        this.decoder(() -> charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT));
     }
 
     /**

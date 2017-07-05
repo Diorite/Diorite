@@ -45,6 +45,7 @@ import javax.annotation.WillNotClose
 import java.nio.charset.CharsetDecoder
 import java.nio.charset.CharsetEncoder
 import java.nio.charset.StandardCharsets
+import java.util.function.Supplier
 
 class GroovyConfigInit
 {
@@ -59,8 +60,8 @@ abstract class AbstractConfigGroovyImpl extends AbstractConfigGroovy implements 
 {
     protected final    ConfigTemplate<? extends Config> template
     protected final    Map<String, Object>              dynamicValues = Collections.<String, Object> synchronizedMap(new LinkedHashMap<>(10))
-    protected volatile CharsetEncoder                   charsetEncoder
-    protected volatile CharsetDecoder                   charsetDecoder
+    protected volatile Supplier<CharsetEncoder>         charsetEncoder
+    protected volatile Supplier<CharsetDecoder>         charsetDecoder
     protected volatile File                             bindFile
 
     protected final Map<String, Object> metadata = Collections.<String, Object> synchronizedMap(new HashMap<>(3))
@@ -360,12 +361,12 @@ abstract class AbstractConfigGroovyImpl extends AbstractConfigGroovy implements 
     @CompileStatic
     CharsetEncoder encoder()
     {
-        return this.@charsetEncoder
+        return this.@charsetEncoder.get()
     }
 
     @Override
     @CompileStatic
-    void encoder(CharsetEncoder encoder)
+    void encoder(Supplier<CharsetEncoder> encoder)
     {
         this.@charsetEncoder = encoder
     }
@@ -374,12 +375,12 @@ abstract class AbstractConfigGroovyImpl extends AbstractConfigGroovy implements 
     @CompileStatic
     CharsetDecoder decoder()
     {
-        return this.@charsetDecoder
+        return this.@charsetDecoder.get()
     }
 
     @Override
     @CompileStatic
-    void decoder(CharsetDecoder decoder)
+    void decoder(Supplier<CharsetDecoder> decoder)
     {
         this.@charsetDecoder = decoder
     }
@@ -424,7 +425,7 @@ abstract class AbstractConfigGroovyImpl extends AbstractConfigGroovy implements 
         {
             throw new ConfigLoadException(this.@template, null, "Config isn't bound to file!")
         }
-        super.load(bindFile)
+        this.load(bindFile)
     }
 
     @Override
