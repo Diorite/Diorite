@@ -562,7 +562,10 @@ public class ConfigTemplateImpl<T extends Config> implements ConfigTemplate<T>
                 Pair<ConfigPropertyAction, ActionMatcherResult> resultPair = ActionsRegistry.findMethod(method, knownProperties::contains);
                 if (resultPair == null)
                 {
-                    iterator.remove();
+                    if (methodInvoker.isDefault() || methodInvoker.isPrivate())
+                    {
+                        iterator.remove();
+                    }
                     continue;
                 }
                 ConfigPropertyAction propertyAction = resultPair.getLeft();
