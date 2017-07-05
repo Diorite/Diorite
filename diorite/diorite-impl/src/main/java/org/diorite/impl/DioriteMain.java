@@ -36,6 +36,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
+import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,10 +53,11 @@ import org.diorite.impl.log.LoggerOutputStream;
 import org.diorite.Diorite;
 import org.diorite.DioriteConfig;
 import org.diorite.DioriteConfig.HostConfiguration;
-import org.diorite.DioriteConfig.OnlineMode;
 import org.diorite.DioriteConfig.ProtocolSettings;
 import org.diorite.commons.function.supplier.Supplier;
 import org.diorite.commons.math.DioriteMathUtils;
+import org.diorite.commons.reflections.DioriteReflectionUtils;
+import org.diorite.commons.reflections.FieldAccessor;
 import org.diorite.config.ConfigManager;
 import org.diorite.config.ConfigTemplate;
 import org.diorite.inject.Controller;
@@ -183,11 +185,20 @@ public final class DioriteMain
                 throw new RuntimeException("Can't create config file: " + configFile.getAbsolutePath(), e);
             }
         }
+        dirtyFlagHack();
         //addBindings(dioriteConfig); //TODO
 
         DioriteServer dioriteServer = new DioriteServer(dioriteConfig);
         printDioriteHello(dioriteServer, args);
         dioriteServer.start();
+    }
+
+    private static void dirtyFlagHack()
+    {
+        FieldAccessor<Properties> savedPropsField = DioriteReflectionUtils.getField("jdk.internal.misc.VM", "savedProps", Properties.class);
+        Properties properties = savedPropsField.get(null);
+        assert properties != null;
+        properties.put("jdk.attach.allowAttachSelf", "oracle sucks");
     }
 
     private static void addBindings(DioriteConfig config)
