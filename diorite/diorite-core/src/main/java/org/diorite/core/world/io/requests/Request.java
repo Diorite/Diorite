@@ -1,0 +1,145 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package org.diorite.core.world.io.requests;
+
+import javax.annotation.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.core.world.io.ChunkIO;
+
+public abstract class Request<OUT> implements Comparable<Request<?>>
+{
+    protected final CountDownLatch latch = new CountDownLatch(1);
+
+    private volatile @Nullable OUT                         result;
+    private volatile           boolean                     finished;
+    private final              int                         priority;
+    private @Nullable          Set<Consumer<Request<OUT>>> onEnd;
+
+    protected Request(int priority)
+    {
+        this.priority = priority;
+    }
+
+    public void setResult(@Nullable OUT result)
+    {
+        this.result = result;
+        this.finished = true;
+        if (this.onEnd != null)
+        {
+            this.onEnd.forEach(r -> r.accept(this));
+        }
+        this.latch.countDown();
+    }
+
+    public synchronized void addOnEnd(Consumer<Request<OUT>> onEnd)
+    {
+        if (this.onEnd == null)
+        {
+            this.onEnd = new HashSet<>(3);
+        }
+        this.onEnd.add(onEnd);
+    }
+
+    public abstract void run(ChunkIO io);
+
+    public abstract int getX();
+
+    public abstract int getZ();
+
+    @Nullable
+    public OUT await()
+    {
+        if (! this.finished)
+        {
+            try
+            {
+                this.latch.await();
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        if (! this.finished)
+        {
+            throw new IllegalStateException("Not finished after unlock! " + this);
+        }
+        return this.result;
+    }
+
+    @Nullable
+    public OUT get()
+    {
+        if (! this.finished)
+        {
+            throw new IllegalStateException("Request wasn't yet processed.");
+        }
+        return this.result;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (! (o instanceof Request))
+        {
+            return false;
+        }
+
+        Request<?> request = (Request<?>) o;
+
+        return this.priority == request.priority;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.priority;
+    }
+
+    @Override
+    public int compareTo(Request<?> o)
+    {
+        return Integer.compare(o.priority, this.priority);
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("result", this.result)
+                                                                          .append("finished", this.finished).toString();
+    }
+}

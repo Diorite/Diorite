@@ -1,0 +1,117 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package org.diorite.core.world.io;
+
+import java.io.File;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import org.diorite.commons.math.endian.BigEndianUtils;
+
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap.Entry;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
+public abstract class ChunkRegionCache
+{
+    protected final Long2ObjectMap<Reference<ChunkRegion>> cache = new Long2ObjectOpenHashMap<>(100);
+
+    protected final String extension;
+    protected final File   regionDir;
+    protected final int    maxCacheSize;
+
+    public ChunkRegionCache(File basePath, String extension, int maxCacheSize)
+    {
+        this.extension = extension;
+        this.regionDir = new File(basePath, "region");
+        this.maxCacheSize = maxCacheSize;
+    }
+
+    public File getRegionDir()
+    {
+        return this.regionDir;
+    }
+
+    public ChunkRegion getChunkRegion(int regionX, int regionZ)
+    {
+        long key = BigEndianUtils.toLong(regionX, regionZ);
+        File file = new File(this.regionDir, "r." + regionX + "." + regionZ + this.extension);
+
+        Reference<ChunkRegion> ref = this.cache.get(key);
+
+        if (ref != null)
+        {
+            ChunkRegion chunkRegion = ref.get();
+            if (chunkRegion != null)
+            {
+                return chunkRegion;
+            }
+        }
+
+        if (! this.regionDir.isDirectory() && ! this.regionDir.mkdirs())
+        {
+            System.err.println("[WorldIO] Failed to create directory: " + this.regionDir);
+        }
+
+        if (this.cache.size() >= this.maxCacheSize)
+        {
+            this.clear();
+        }
+
+        ChunkRegion reg = this.createNewRegion(file, regionX, regionZ);
+        synchronized (this.cache)
+        {
+            this.cache.put(key, new SoftReference<>(reg));
+        }
+        return reg;
+    }
+
+    public abstract ChunkRegion createNewRegion(File file, int regionX, int regionZ);
+
+    public synchronized void clear()
+    {
+        synchronized (this.cache)
+        {
+            for (Entry<Reference<ChunkRegion>> entry : this.cache.long2ObjectEntrySet())
+            {
+                ChunkRegion value = entry.getValue().get();
+                if (value != null)
+                {
+                    value.close();
+                }
+            }
+            this.cache.clear();
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).appendSuper(super.toString()).append("extension", this.extension).append("regionDir", this.regionDir).toString();
+    }
+}

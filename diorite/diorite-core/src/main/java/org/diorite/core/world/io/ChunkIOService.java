@@ -1,0 +1,147 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017. Diorite (by Bartłomiej Mazur (aka GotoFinal))
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package org.diorite.core.world.io;
+
+import javax.annotation.Nullable;
+
+import java.io.File;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+
+import org.diorite.core.world.WorldImpl;
+import org.diorite.core.world.chunk.ChunkImpl;
+import org.diorite.core.world.io.requests.ChunkDeleteRequest;
+import org.diorite.core.world.io.requests.ChunkLoadRequest;
+import org.diorite.core.world.io.requests.ChunkSaveRequest;
+import org.diorite.core.world.io.requests.Request;
+
+public interface ChunkIOService
+{
+    int DEFAULT_REST_TIMER = 2000;
+    int LOW_PRIORITY       = 1_000_000;
+    int MEDIUM_PRIORITY    = 5_000_000;
+    int HIGH_PRIORITY      = 10_000_000;
+    int INSTANT_PRIORITY   = Integer.MAX_VALUE;
+
+    default ChunkLoadRequest queueChunkLoad(ChunkImpl chunk, int priority)
+    {
+        return this.queue(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
+    }
+
+    default ChunkLoadRequest queueChunkLoadAndAwait(ChunkImpl chunk, int priority)
+    {
+        return this.queueAndAwait(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
+    }
+
+    @Nullable
+    default ChunkImpl queueChunkLoadAndGet(ChunkImpl chunk, int priority)
+    {
+        return this.queueAndGet(new ChunkLoadRequest(priority, chunk, chunk.getX(), chunk.getZ()));
+    }
+
+    default ChunkSaveRequest queueChunkSave(ChunkImpl chunk, int priority)
+    {
+        return this.queue(new ChunkSaveRequest(priority, chunk));
+    }
+
+    default ChunkSaveRequest queueChunkSaveAndAwait(ChunkImpl chunk, int priority)
+    {
+        return this.queueAndAwait(new ChunkSaveRequest(priority, chunk));
+    }
+
+    default ChunkDeleteRequest queueChunkDelete(int chunkX, int chunkZ, int priority)
+    {
+        return this.queue(new ChunkDeleteRequest(priority, chunkX, chunkZ));
+    }
+
+    default ChunkDeleteRequest queueChunkDeleteAndAwait(int chunkX, int chunkZ, int priority)
+    {
+        return this.queueAndAwait(new ChunkDeleteRequest(priority, chunkX, chunkZ));
+    }
+
+    default ChunkDeleteRequest queueChunkDelete(ChunkImpl chunk, int priority)
+    {
+        return this.queue(new ChunkDeleteRequest(priority, chunk.getX(), chunk.getZ()));
+    }
+
+    default ChunkDeleteRequest queueChunkDeleteAndAwait(ChunkImpl chunk, int priority)
+    {
+        return this.queueAndAwait(new ChunkDeleteRequest(priority, chunk.getX(), chunk.getZ()));
+    }
+
+    default boolean queueChunkDeleteAndGet(ChunkImpl chunk, int priority)
+    {
+        Boolean result = this.queueAndGet(new ChunkDeleteRequest(priority, chunk.getX(), chunk.getZ()));
+        assert result != null;
+        return result;
+    }
+
+    default <OUT, T extends Request<OUT>> T queueAndAwait(T request)
+    {
+        request = this.queue(request);
+        request.await();
+        return request;
+    }
+
+    @Nullable
+    default <OUT, T extends Request<OUT>> OUT queueAndGet(T request)
+    {
+        request = this.queue(request);
+        return request.await();
+    }
+
+    void start(WorldImpl world);
+
+    default <OUT, T extends Request<OUT>> T queue(T request)
+    {
+        return this.queue(request, null);
+    }
+
+    <OUT, T extends Request<OUT>> T queue(T request, @Nullable Consumer<Request<OUT>> callback);
+
+    default void await()
+    {
+        this.await(null);
+    }
+
+    default void await(@Nullable IntConsumer rest)
+    {
+        this.await(rest, DEFAULT_REST_TIMER);
+    }
+
+    /**
+     * Await for all requests.
+     *
+     * @param rest
+     *         invoked every few seconds with current amount of left requests.
+     * @param timer
+     *         delay between rest consumer runs.
+     */
+    void await(@Nullable IntConsumer rest, int timer);
+
+    File getWorldDataFolder();
+
+    void close(IntConsumer rest);
+}
