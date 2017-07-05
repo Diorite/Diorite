@@ -22,12 +22,27 @@
  * SOFTWARE.
  */
 
-/**
- * Annotations that can be used to configure command arguments if default resolved configuration isn't enough. <br>
- * Note that annotations aren't the only way to configure arguments, so they should not be used to read properties of argument, especially that there might be
- * more than one annotation allowing to configure given option.
- */
-@NonnullByDefault
 package org.diorite.command.annotation.arguments;
 
-import org.diorite.annotations.NonnullByDefault;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.intellij.lang.annotations.Language;
+
+/**
+ * Used to provide default value for argument as groovy expression.
+ */
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Default
+{
+    /**
+     * Default value of argument as groovy expression.
+     *
+     * @return default value of argument as groovy expression.
+     */
+    @Language("groovy")
+    String value();
+}

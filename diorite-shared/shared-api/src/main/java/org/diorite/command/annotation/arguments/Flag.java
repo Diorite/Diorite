@@ -22,12 +22,24 @@
  * SOFTWARE.
  */
 
-/**
- * Annotations that can be used to configure command arguments if default resolved configuration isn't enough. <br>
- * Note that annotations aren't the only way to configure arguments, so they should not be used to read properties of argument, especially that there might be
- * more than one annotation allowing to configure given option.
- */
-@NonnullByDefault
 package org.diorite.command.annotation.arguments;
 
-import org.diorite.annotations.NonnullByDefault;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Used to mark this argument as flag.
+ */
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Flag
+{
+    /**
+     * Name of flag, if empty name of parameter or parameter type will be used.
+     *
+     * @return name of argument, if empty name of parameter or parameter type will be used.
+     */
+    String value() default "";
+}

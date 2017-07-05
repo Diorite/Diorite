@@ -29,6 +29,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.intellij.lang.annotations.Language;
+
 /**
  * Represents argument parameters.
  */
@@ -90,4 +92,12 @@ public @interface Arg
      * @return separator used to split name from value.
      */
     char[] nameSeparator() default {'=', ':'};
+
+    /**
+     * Default value of argument as groovy expression.
+     *
+     * @return default value of argument as groovy expression.
+     */
+    @Language("groovy")
+    String def() default "";
 }
