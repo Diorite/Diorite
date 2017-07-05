@@ -22,10 +22,42 @@
  * SOFTWARE.
  */
 
-/**
- * Default actions implemented by diorite configs.
- */
-@NonnullByDefault
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.script;
 
-import org.diorite.annotations.NonnullByDefault;
+import org.diorite.plugin.Plugin;
+
+/**
+ * Represent factory of script engines for given language.
+ */
+public interface ScriptEngineFactory
+{
+    /**
+     * Returns plugin providing this factory.
+     *
+     * @return plugin providing this factory.
+     */
+    Plugin getPlugin();
+
+    /**
+     * Returns language of script engines created by this factory.
+     *
+     * @return language of script engines created by this factory.
+     */
+    String getLanguage();
+
+    /**
+     * Create new script engine.
+     *
+     * @return created script engine.
+     */
+    ScriptEngine create();
+
+    /**
+     * Returns priority of this factory. <br>
+     * When using {@link ScriptManager#getFactoryFor(String)} and there is more than one factory for given language, highest
+     * priority one will be returned, if more than one factory have this same priority, first registered will be selected.
+     *
+     * @return priority of this factory.
+     */
+    int priority();
+}

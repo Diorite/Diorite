@@ -22,24 +22,14 @@
  * SOFTWARE.
  */
 
-package org.diorite.config.impl.actions.numeric;
+package org.diorite.script;
 
-import java.lang.reflect.Method;
-
-import org.diorite.config.ConfigPropertyActionInstance;
-import org.diorite.config.ConfigPropertyTemplate;
-
-@SuppressWarnings({"rawtypes"})
-public class SubtractNumericPropertyAction extends NumericPropertyAction
+public class MissingLanguageException extends RuntimeException
 {
-    public SubtractNumericPropertyAction()
-    {
-        super("subtract", "(?:subtract(?:From)?(?<property>[A-Z0-9].*))", "(?:decrement(?<property>[A-Z0-9].*?)(?:By)?)");
-    }
+    private static final long serialVersionUID = 0;
 
-    @Override
-    protected String getGroovyImplementation0(Method method, ConfigPropertyTemplate<?> propertyTemplate, ConfigPropertyActionInstance actionInstance)
+    public MissingLanguageException(String language)
     {
-        return "this.$property - var1";
+        super("`" + language + "` is not supported.");
     }
 }
