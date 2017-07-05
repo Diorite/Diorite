@@ -44,9 +44,9 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.util.TraceClassVisitor;
 
-import net.bytebuddy.description.annotation.AnnotationSource;
 import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.annotation.AnnotationList;
+import net.bytebuddy.description.annotation.AnnotationSource;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeDescription.ForLoadedType;
 
@@ -288,26 +288,43 @@ public final class AsmUtils implements Opcodes
     {
         switch (i)
         {
+            case - 1:
+                mv.visitInsn(Opcodes.ICONST_M1);
+                break;
             case 0:
-                mv.visitInsn(ICONST_0);
+                mv.visitInsn(Opcodes.ICONST_0);
                 break;
             case 1:
-                mv.visitInsn(ICONST_1);
+                mv.visitInsn(Opcodes.ICONST_1);
                 break;
             case 2:
-                mv.visitInsn(ICONST_2);
+                mv.visitInsn(Opcodes.ICONST_2);
                 break;
             case 3:
-                mv.visitInsn(ICONST_3);
+                mv.visitInsn(Opcodes.ICONST_3);
                 break;
             case 4:
-                mv.visitInsn(ICONST_4);
+                mv.visitInsn(Opcodes.ICONST_4);
+                break;
+            case 5:
+                mv.visitInsn(Opcodes.ICONST_5);
                 break;
             default:
-                mv.visitIntInsn(BIPUSH, i);
-                break;
+            {
+                if ((i >= Byte.MIN_VALUE) && (i <= Byte.MAX_VALUE))
+                {
+                    mv.visitIntInsn(Opcodes.BIPUSH, i);
+                }
+                else if ((i >= Short.MIN_VALUE) && (i <= Short.MAX_VALUE))
+                {
+                    mv.visitIntInsn(Opcodes.SIPUSH, i);
+                }
+                else
+                {
+                    mv.visitLdcInsn(i);
+                }
+            }
         }
-
     }
 
     /**
