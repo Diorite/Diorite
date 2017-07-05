@@ -56,6 +56,16 @@ public interface CustomArgumentBuilder<K, T> extends Builder<CustomArgumentParse
     CustomArgumentBuilder<K, T> withFactorName(String name);
 
     /**
+     * Sets own parser for this custom argument.
+     *
+     * @param parser
+     *         parser for this custom argument.
+     *
+     * @return this same builder for method chain.
+     */
+    CustomArgumentBuilder<K, T> withParser(TypeParser<T> parser);
+
+    /**
      * Sets supplier of all available elements.
      *
      * @param elements
