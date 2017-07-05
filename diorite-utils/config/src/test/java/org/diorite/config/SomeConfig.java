@@ -31,7 +31,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.diorite.config.annotations.AsList;
@@ -122,6 +124,8 @@ public interface SomeConfig extends Config
     Map<UUID, ? extends MetaObject> getEvenMoreSpecialData();
     void putInEvenMoreSpecialData(UUID uuid, MetaObject metaObject);
     MetaObject removeFromEvenMoreSpecialData(UUID uuid);
+    boolean removeFromEvenMoreSpecialDataIf(BiPredicate<UUID, MetaObject> predicate);
+    boolean removeFromEvenMoreSpecialDataIf(Predicate<Entry<UUID, MetaObject>> predicate);
 
     @ToStringMapperFunction(property = "specialData")
     private String metaToKey(MetaObject metaObject)

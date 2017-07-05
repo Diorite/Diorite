@@ -24,8 +24,11 @@
 
 package org.diorite.config;
 
+import java.io.File;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,7 +81,16 @@ public class ConfigTest
         // check if all data is still valid after reload of config.
         StringBuilderWriter writer = new StringBuilderWriter(500);
         cfg.save(writer);
-        Assert.assertEquals(cfg, configTemplate.load(new StringReader(writer.toString())));
+        Files.write(new File("target/yaml-test-file.yml").toPath(), writer.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        TypeTestConfig cfgCopy = configTemplate.create();
+        cfg.forEach(cfgCopy::set);
+        cfgCopy.bindFile(new File("target/yaml-test-file.yml"));
+        cfgCopy.save();
+        cfgCopy.load();
+        cfgCopy.save();
+        cfgCopy.load();
+        cfgCopy.bindFile(null);
+        Assert.assertEquals(cfg, cfgCopy);
     }
 
     @Test
@@ -133,6 +145,23 @@ public class ConfigTest
 
         Assert.assertEquals(snowflake, someConfig.removeFromEvenMoreSpecialData(randomUUID));
         Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
+        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
+
+        Assert.assertTrue(someConfig.removeFromEvenMoreSpecialDataIf((key, value) -> key.equals(randomUUID)));
+        Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
+        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
+
+        Assert.assertTrue(someConfig.removeFromEvenMoreSpecialDataIf((key, value) -> value.equals(snowflake)));
+        Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
+        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
+
+        Assert.assertTrue(someConfig.removeFromEvenMoreSpecialDataIf((entry) -> entry.getValue().equals(snowflake)));
+        Assert.assertTrue(someConfig.getEvenMoreSpecialData().isEmpty());
+        someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
+        Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
 
         someConfig.putInEvenMoreSpecialData(randomUUID, snowflake);
         Assert.assertEquals(1, someConfig.getEvenMoreSpecialData().size());
