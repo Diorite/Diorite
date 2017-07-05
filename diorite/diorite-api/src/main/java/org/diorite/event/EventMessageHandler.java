@@ -24,33 +24,50 @@
 
 package org.diorite.event;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Nonnull;
 
-import net.engio.mbassy.bus.MBassador;
-import net.engio.mbassy.bus.config.BusConfiguration;
-import net.engio.mbassy.bus.config.Feature.AsynchronousHandlerInvocation;
-import net.engio.mbassy.bus.config.Feature.AsynchronousMessageDispatch;
-import net.engio.mbassy.bus.config.IBusConfiguration;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class DioriteEventBus extends MBassador<Event>
+import net.engio.mbassy.listener.MessageHandler;
+
+class EventMessageHandler extends MessageHandler
 {
-    private static final Logger logger = LoggerFactory.getLogger("[event-bus]");
+    private final AtomicBoolean registered = new AtomicBoolean(true);
 
-    private DioriteEventBus(IBusConfiguration configuration)
+    EventMessageHandler(Map<String, Object> properties)
     {
-        super(configuration);
+        super(properties);
     }
 
-    public static DioriteEventBus create()
+    public boolean isRegistered()
     {
-        IBusConfiguration configuration =
-                new BusConfiguration()
-                        .addFeature(AsynchronousMessageDispatch.Default())
-                        .addFeature(AsynchronousHandlerInvocation.Default())
-                        .addPublicationErrorHandler(error -> logger.error(
-                                "Error publishing event: " + error.getPublishedMessage() + " to: " + error.getHandler() + " from listener: " +
-                                error.getListener() + ", error: " + error.getMessage(), error.getCause()));
-        return new DioriteEventBus(configuration);
+        return this.registered.get();
+    }
+
+    public void unregister()
+    {
+        this.registered.set(false);
+    }
+
+    public void register()
+    {
+        this.registered.set(true);
+    }
+
+    @Override
+    public boolean handlesMessage(@Nonnull Class<?> messageType)
+    {
+        if (! this.isRegistered())
+        {
+            return false;
+        }
+        boolean acceptsSubtypes = this.acceptsSubtypes();
+        Class<?> handledMessages = this.getHandledMessage();
+        if (handledMessages.equals(messageType))
+        {
+            return true;
+        }
+        return acceptsSubtypes && handledMessages.isAssignableFrom(messageType);
     }
 }

@@ -54,26 +54,6 @@ public interface EventManager
     void registerListener(Plugin plugin, Listener listener);
 
     /**
-     * Unregister given event listener from given listener.
-     *
-     * @param listener
-     *         listener of event.
-     * @param eventType
-     *         event type to unregister.
-     */
-    void unregisterListener(Listener listener, Class<? extends Event> eventType);
-
-    /**
-     * Register previously unregistered event listener from given listener.
-     *
-     * @param listener
-     *         listener of event.
-     * @param eventType
-     *         event type to register.
-     */
-    void reRegisterListener(Listener listener, Class<? extends Event> eventType);
-
-    /**
      * Unregister given listener.
      *
      * @param listener

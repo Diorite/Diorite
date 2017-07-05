@@ -22,33 +22,7 @@
  * SOFTWARE.
  */
 
+@NonnullByDefault
 package org.diorite.event;
 
-import org.diorite.commons.objects.Cancellable;
-
-import net.engio.mbassy.listener.IMessageFilter;
-import net.engio.mbassy.listener.MessageHandler;
-import net.engio.mbassy.subscription.SubscriptionContext;
-
-/**
- * Ignore cancelled events if handlers use {@link EventHandler#ignoreCancelled()}
- */
-class EventSystemMessageFilter implements IMessageFilter<Event>
-{
-    @Override
-    public boolean accepts(Event message, SubscriptionContext context)
-    {
-        MessageHandler handler = context.getHandler();
-        EventHandler annotation = handler.getAnnotation(EventHandler.class);
-        if (annotation == null)
-        {
-            return false;
-        }
-        if ((handler instanceof EventMessageHandler) && ! ((EventMessageHandler) handler).isRegistered())
-        {
-            return false;
-        }
-
-        return ! (annotation.ignoreCancelled() && (message instanceof Cancellable) && ((Cancellable) message).isCancelled());
-    }
-}
+import org.diorite.annotations.NonnullByDefault;

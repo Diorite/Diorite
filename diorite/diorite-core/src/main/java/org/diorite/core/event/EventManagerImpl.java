@@ -56,10 +56,6 @@ public class EventManagerImpl implements EventManager
     @Override
     public void callEvent(Event event)
     {
-        if (this.dioriteEventBus.isDeadType(event.getClass()))
-        {
-            return;
-        }
         this.dioriteEventBus.publish(event);
     }
 
@@ -73,22 +69,6 @@ public class EventManagerImpl implements EventManager
         this.dioriteEventBus.subscribe(listener);
         this.pluginListeners.put(plugin, listener);
         this.listenerPluginMap.put(listener, plugin);
-
-        this.dioriteEventBus.clearCache();
-    }
-
-    @Override
-    public void unregisterListener(Listener listener, Class<? extends Event> eventType)
-    {
-        this.dioriteEventBus.unregisterTypeListener(listener, eventType);
-    }
-
-    @Override
-    public void reRegisterListener(Listener listener, Class<? extends Event> eventType)
-    {
-        this.dioriteEventBus.reRegisterTypeListener(listener, eventType);
-
-        this.dioriteEventBus.clearCache();
     }
 
     @Override
@@ -157,8 +137,6 @@ public class EventManagerImpl implements EventManager
     {
         this.dioriteListeners.add(listener);
         this.dioriteEventBus.subscribe(listener);
-
-        this.dioriteEventBus.clearCache();
     }
 
     public void unregisterDioriteListener(Listener listener)
