@@ -50,7 +50,7 @@ public @interface GroovyValidator
      *
      * @return script used to validate property.
      */
-    @Language(value = "groovy", prefix = "def validate(def x){ if (", suffix = ") return object;throw new Exception()}")
+    @Language(value = "groovy", prefix = "def validate(def x, Config cfg){ if (", suffix = ") return object;throw new Exception()}")
     String isTrue();
 
     /**
@@ -59,6 +59,6 @@ public @interface GroovyValidator
      *
      * @return error message.
      */
-    @Language(value = "groovy", prefix = "def validate(def x){ return \"\"\"", suffix = "\"\"\";}")
+    @Language(value = "groovy", prefix = "def validate(def x, Config cfg){ return \"\"\"", suffix = "\"\"\";}")
     String elseThrow();
 }
