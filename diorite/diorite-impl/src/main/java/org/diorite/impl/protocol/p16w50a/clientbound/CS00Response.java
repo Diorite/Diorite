@@ -99,7 +99,7 @@ public class CS00Response extends ClientboundPacket
         {
             JsonParser parser = new JsonParser();
 //            String parse = new Parser("s&2*/hi/*", null).parse();
-            String parse = new Parser("*Test* _T&ao ~je&bst~ /*sformatowane* &dd MOTD/!!_ _I_ po /formatowaniu/. &5%nah%  [&4Even [Mo&3re](links.com)](diorite.org) dfd", null).parse();
+            String parse = new Parser("*Test* _Th&ais ~i&bs~ /*formatted* &dd MOTD/!!_ _And_ more /stuff/. &5%nah%  [&4Even [Mo&3re](links.com)](diorite.org) dfd", null).parse();
 //            String parse = new Parser("hi &6diorite.org lel &8https://diorite.org&r lel", null).parse()
 
             JsonWriter jsonWriter = new JsonWriter(new OutputStreamWriter(System.out));
