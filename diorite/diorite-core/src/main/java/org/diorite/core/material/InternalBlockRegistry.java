@@ -24,9 +24,41 @@
 
 package org.diorite.core.material;
 
+import javax.annotation.Nullable;
+
 import org.diorite.material.BlockRegistry;
 import org.diorite.registry.AbstractRegistry;
+import org.diorite.registry.GameId;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
+@SuppressWarnings("MagicNumber")
 public class InternalBlockRegistry extends AbstractRegistry<SimpleBlockType> implements BlockRegistry<SimpleBlockType>
 {
+    private final Int2ObjectMap<SimpleBlockType> minecraftMappings = new Int2ObjectOpenHashMap<>(200);
+
+    public int getInternalSize()
+    {
+        return this.minecraftMappings.size();
+    }
+
+    @Nullable
+    public InternalBlockType getByMinecraftIdAndData(int id)
+    {
+        return this.minecraftMappings.get(id);
+    }
+
+    @Nullable
+    public InternalBlockType getByMinecraftIdAndData(int id, int data)
+    {
+        return this.getByMinecraftIdAndData((id << 4) | data);
+    }
+
+    @Override
+    protected void onRegister(GameId key, SimpleBlockType value)
+    {
+        // TODO: register subtypes
+        this.minecraftMappings.put(value.getMinecraftIdAndData(), value);
+    }
 }

@@ -29,7 +29,7 @@ import org.diorite.material.BlockType;
 /**
  * Each block type must be represented as internal block type.
  */
-public interface InternalBlockType extends BlockType
+public interface InternalBlockType extends BlockType, InternalType
 {
     int getMinecraftIdAndData(); // (id << 4) | data
 }

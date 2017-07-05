@@ -127,10 +127,13 @@ public abstract class AbstractRegistry<V extends HasGameId> implements Registry<
             {
                 this.data.put(key.toUnknownNamespace(), value);
             }
+            this.onRegister(key, value);
             this.cache.clear();
             this.namespaceCache.remove(key.getNamespace());
         }
     }
+
+    protected void onRegister(GameId key, V value) {}
 
     @Override
     public Set<? extends V> values()

@@ -29,6 +29,6 @@ import org.diorite.material.ItemType;
 /**
  * Each item type must be represented as internal item type.
  */
-public interface InternalItemType extends ItemType
+public interface InternalItemType extends ItemType, InternalType
 {
 }
