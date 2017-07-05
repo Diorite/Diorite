@@ -26,12 +26,13 @@ package org.diorite.config.impl.actions.collections;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.diorite.commons.reflections.MethodInvoker;
+import org.diorite.config.AbstractPropertyAction;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
-import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
@@ -53,7 +54,7 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
             return false;
         }
         Class<?> parameter = parameters[0];
-        if (! Predicate.class.isAssignableFrom(parameter))
+        if (! Predicate.class.isAssignableFrom(parameter) && ! BiPredicate.class.isAssignableFrom(parameter))
         {
             return false;
         }
@@ -68,25 +69,49 @@ public class RemoveFromCollectionIfPropertyAction extends AbstractPropertyAction
         // language=groovy
         methodBuilder.append("def v = $rawValue\n")
                      .append("if (v == null) $returnOrNothing false\n");
+
+        Class<?> parameter = method.getParameterTypes()[0];
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
+            if (BiPredicate.class.isAssignableFrom(parameter))
+            {
+                throw new IllegalStateException("BiPredicate can be only used on maps, not on: " + propertyTemplate.getGenericType());
+            }
             // language=groovy
             methodBuilder.append("$returnOrNothing v.removeIf(var1)\n");
         }
         else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            // language=groovy
-            methodBuilder.append("boolean any = false \n" +
-                                 "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
-                                 "{\n" +
-                                 "    Map.Entry entry = iterator.next() \n" +
-                                 "    if (predicate.test(entry))\n" +
-                                 "    {\n" +
-                                 "        iterator.remove() \n" +
-                                 "        any = true \n" +
-                                 "    }\n" +
-                                 "}\n" +
-                                 "$returnOrNothing any");
+            if (Predicate.class.isAssignableFrom(parameter))
+            {
+                // language=groovy
+                methodBuilder.append("boolean any = false \n" +
+                                     "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
+                                     "{\n" +
+                                     "    Map.Entry entry = iterator.next() \n" +
+                                     "    if (var1.test(entry))\n" +
+                                     "    {\n" +
+                                     "        iterator.remove() \n" +
+                                     "        any = true \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "$returnOrNothing any");
+            }
+            else
+            {
+                // language=groovy
+                methodBuilder.append("boolean any = false \n" +
+                                     "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
+                                     "{\n" +
+                                     "    Map.Entry entry = iterator.next() \n" +
+                                     "    if (var1.test(entry.getKey(), entry.getValue()))\n" +
+                                     "    {\n" +
+                                     "        iterator.remove() \n" +
+                                     "        any = true \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "$returnOrNothing any");
+            }
         }
         else
         {

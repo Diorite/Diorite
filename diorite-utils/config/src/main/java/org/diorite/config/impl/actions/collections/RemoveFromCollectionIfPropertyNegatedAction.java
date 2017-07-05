@@ -26,12 +26,13 @@ package org.diorite.config.impl.actions.collections;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import org.diorite.commons.reflections.MethodInvoker;
+import org.diorite.config.AbstractPropertyAction;
 import org.diorite.config.ConfigPropertyActionInstance;
 import org.diorite.config.ConfigPropertyTemplate;
-import org.diorite.config.AbstractPropertyAction;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RemoveFromCollectionIfPropertyNegatedAction extends AbstractPropertyAction
@@ -69,24 +70,47 @@ public class RemoveFromCollectionIfPropertyNegatedAction extends AbstractPropert
         methodBuilder.append("def v = $rawValue\n")
                      .append("if (v == null) $returnOrNothing false\n")
                      .append("var1 = var1.negate()\n");
+
+        Class<?> parameter = method.getParameterTypes()[0];
         // language=groovy
         if (Collection.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
+            if (BiPredicate.class.isAssignableFrom(parameter))
+            {
+                throw new IllegalStateException("BiPredicate can be only used on maps, not on: " + propertyTemplate.getGenericType());
+            }
             methodBuilder.append("$returnOrNothing v.removeIf(var1)\n");
         }
         else if (Map.class.isAssignableFrom(propertyTemplate.getRawType()))
         {
-            methodBuilder.append("boolean any = false \n" +
-                                 "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
-                                 "{\n" +
-                                 "    Map.Entry entry = iterator.next() \n" +
-                                 "    if (predicate.test(entry))\n" +
-                                 "    {\n" +
-                                 "        iterator.remove() \n" +
-                                 "        any = true \n" +
-                                 "    }\n" +
-                                 "}\n" +
-                                 "$returnOrNothing any");
+            if (Predicate.class.isAssignableFrom(parameter))
+            {
+                methodBuilder.append("boolean any = false \n" +
+                                     "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
+                                     "{\n" +
+                                     "    Map.Entry entry = iterator.next() \n" +
+                                     "    if (var1.test(entry))\n" +
+                                     "    {\n" +
+                                     "        iterator.remove() \n" +
+                                     "        any = true \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "$returnOrNothing any");
+            }
+            else
+            {
+                methodBuilder.append("boolean any = false \n" +
+                                     "for (Iterator<Map.Entry> iterator = v.entrySet().iterator(); iterator.hasNext(); )\n" +
+                                     "{\n" +
+                                     "    Map.Entry entry = iterator.next() \n" +
+                                     "    if (var1.test(entry.getKey(), entry.getValue()))\n" +
+                                     "    {\n" +
+                                     "        iterator.remove() \n" +
+                                     "        any = true \n" +
+                                     "    }\n" +
+                                     "}\n" +
+                                     "$returnOrNothing any");
+            }
         }
         else
         {
