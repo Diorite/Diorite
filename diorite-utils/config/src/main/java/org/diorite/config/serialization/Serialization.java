@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -541,14 +542,29 @@ public final class Serialization
         {
             if (this.canBeSerialized(type))
             {
-                if (serializationType == SerializationType.YAML)
+                if (Collection.class.isAssignableFrom(type))
                 {
-                    return this.fromYaml(this.toYaml(object), Map.class);
+                    if (serializationType == SerializationType.YAML)
+                    {
+                        return this.fromYaml(this.toYaml(object), List.class);
+                    }
+                    else
+                    {
+                        TypeAdapter<T> typeAdapter = this.gson().getAdapter(type);
+                        return this.fromJson(typeAdapter.toJsonTree(object), List.class);
+                    }
                 }
                 else
                 {
-                    TypeAdapter<T> typeAdapter = this.gson().getAdapter(type);
-                    return this.fromJson(typeAdapter.toJsonTree(object), Map.class);
+                    if (serializationType == SerializationType.YAML)
+                    {
+                        return this.fromYaml(this.toYaml(object), Map.class);
+                    }
+                    else
+                    {
+                        TypeAdapter<T> typeAdapter = this.gson().getAdapter(type);
+                        return this.fromJson(typeAdapter.toJsonTree(object), Map.class);
+                    }
                 }
             }
             throw new IllegalArgumentException("Given object isn't serializable: (" + type.getName() + ") -> " + object);

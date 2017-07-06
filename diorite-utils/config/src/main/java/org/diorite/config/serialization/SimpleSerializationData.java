@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import org.diorite.commons.enums.DynamicEnum;
@@ -298,7 +297,14 @@ class SimpleSerializationData implements SerializationData
             }
             else
             {
-                this.dataMap.put(key, this.toString(value, type));
+                if (Object.class.equals(type))
+                {
+                    this.dataMap.put(key, value);
+                }
+                else
+                {
+                    this.dataMap.put(key, this.toString(value, type));
+                }
             }
             return;
         }
@@ -355,7 +361,14 @@ class SimpleSerializationData implements SerializationData
 
             if (Serialization.isSimple(t))
             {
-                valueMap.put(key, this.toString(t, type));
+                if (Object.class.equals(type))
+                {
+                    valueMap.put(key, t);
+                }
+                else
+                {
+                    valueMap.put(key, this.toString(t, type));
+                }
                 continue;
             }
             valueMap.put(mapper.apply(t), this.serialize(type, t, comments));
@@ -396,7 +409,14 @@ class SimpleSerializationData implements SerializationData
 
             if (Serialization.isSimple(t))
             {
-                result.add(this.toString(t, type));
+                if (Object.class.equals(type))
+                {
+                    result.add(t);
+                }
+                else
+                {
+                    result.add(this.toString(t, type));
+                }
                 continue;
             }
 
@@ -445,7 +465,14 @@ class SimpleSerializationData implements SerializationData
 
             if (Serialization.isSimple(entryValue))
             {
-                result.add(this.toString(entryValue, type));
+                if (Object.class.equals(type))
+                {
+                    result.add(entryValue);
+                }
+                else
+                {
+                    result.add(this.toString(entryValue, type));
+                }
                 continue;
             }
             result.add(this.serialize(type, entryValue, comments));
@@ -580,7 +607,14 @@ class SimpleSerializationData implements SerializationData
             {
                 if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entryValue, type));
+                    if (Object.class.equals(type))
+                    {
+                        resultMap.put(entryKey, entryValue);
+                    }
+                    else
+                    {
+                        resultMap.put(entryKey, this.toString(entryValue, type));
+                    }
                     continue;
                 }
                 resultMap.put(entryKey, this.serialize(type, entryValue, comments));
@@ -638,7 +672,14 @@ class SimpleSerializationData implements SerializationData
             {
                 if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entryValue, type));
+                    if (Object.class.equals(type))
+                    {
+                        resultMap.put(entryKey, entryValue);
+                    }
+                    else
+                    {
+                        resultMap.put(entryKey, this.toString(entryValue, type));
+                    }
                     continue;
                 }
                 resultMap.put(entryKey, this.serialize(type, entryValue, comments));
@@ -695,7 +736,14 @@ class SimpleSerializationData implements SerializationData
             {
                 if (Serialization.isSimple(entryValue))
                 {
-                    resultMap.put(entryKey, this.toString(entryValue, type));
+                    if (Object.class.equals(type))
+                    {
+                        resultMap.put(entryKey, entryValue);
+                    }
+                    else
+                    {
+                        resultMap.put(entryKey, this.toString(entryValue, type));
+                    }
                     continue;
                 }
                 resultMap.put(entryKey, this.serialize(type, entryValue, comments));
