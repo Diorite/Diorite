@@ -22,33 +22,15 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
-
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
+package org.diorite.command.argument;
 
 /**
- *
+ * Interface for handling annotations for arguments.
  */
-public interface ParsersManager
+public interface AnnotationHandler<T>
 {
     /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
+     * @return the argument
      */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    Argument<T> getArg();
 }

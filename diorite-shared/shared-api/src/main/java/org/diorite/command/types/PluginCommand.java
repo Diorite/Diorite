@@ -22,33 +22,50 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command.types;
 
-import java.util.Collection;
+import java.util.List;
 
-import org.diorite.command.argument.Argument;
+import org.diorite.command.CommandContext;
+import org.diorite.command.CommandExecutor;
+import org.diorite.command.CommandObject;
+import org.diorite.plugin.Plugin;
 
-/**
- *
- */
-public interface ParsersManager
+public class PluginCommand extends CommandObject
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    private CommandExecutor executor;
+    private Plugin plugin;
+
+    public PluginCommand(String name, Plugin plugin)
+    {
+        super(name);
+        this.plugin = plugin;
+    }
+
+    public PluginCommand(String name, String description, String use, List<String> aliases, Plugin plugin)
+    {
+        super(name, description, use, aliases);
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean invoke(CommandContext context)
+    {
+        return executor != null && executor.execute(context);
+    }
+
+    public CommandExecutor getExecutor()
+    {
+        return executor;
+    }
+
+    public void setExecutor(CommandExecutor executor)
+    {
+        this.executor = executor;
+    }
+
+    public Plugin getPlugin()
+    {
+        return plugin;
+    }
 }

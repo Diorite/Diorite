@@ -22,33 +22,48 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command;
 
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
+import org.diorite.command.parser.ParserResult;
+import org.diorite.sender.CommandSender;
 
 /**
- *
+ * Context in which a command is called
  */
-public interface ParsersManager
+public class CommandContext
 {
+    private ParserResult parserResult;
+    private CommandSender sender;
+    private String name;
+
+    public CommandContext(ParserResult parserResult, CommandSender sender, String name)
+    {
+        this.parserResult = parserResult;
+        this.sender = sender;
+        this.name = name;
+    }
+
     /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
+     * @return parser result
      */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    public ParserResult getParserResult()
+    {
+        return parserResult;
+    }
+
+    /**
+     * @return command sender
+     */
+    public CommandSender getCommandSender()
+    {
+        return sender;
+    }
+
+    /**
+     * @return the name or alias of the command used
+     */
+    public String commandName()
+    {
+        return name;
+    }
 }

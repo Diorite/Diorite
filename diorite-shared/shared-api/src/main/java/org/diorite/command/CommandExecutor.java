@@ -22,33 +22,25 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command;
 
-import java.util.Collection;
+import org.diorite.command.parser.UnparsedArguments;
+import org.diorite.sender.CommandSender;
 
-import org.diorite.command.argument.Argument;
-
-/**
- *
- */
-public interface ParsersManager
+public interface CommandExecutor
 {
     /**
-     * Create context for given input data and collection of requested arguments.
      *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
+     * @param sender
+     *          The command sender
+     * @param command
+     *          The command called
+     * @param alias
+     *          The alias the command was called under.
+     *          Null if no alias was used.
+     * @param args
+     *          The raw arguments for the command
+     * @return command success
      */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    public boolean execute(CommandSender sender, CommandObject command, String alias, UnparsedArguments args);
 }

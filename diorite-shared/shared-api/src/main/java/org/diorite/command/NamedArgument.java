@@ -26,6 +26,8 @@ package org.diorite.command;
 
 import java.util.Collection;
 
+import org.diorite.command.argument.Argument;
+
 /**
  * Represent argument with name. Named arguments of command can be used in any order, named arguments are optional too, like:
  * <pre>

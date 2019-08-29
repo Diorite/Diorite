@@ -22,33 +22,20 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
-
-import java.util.Collection;
-
-import org.diorite.command.argument.Argument;
+package org.diorite.command.argument;
 
 /**
- *
+ * Class for building arguments from annotations
  */
-public interface ParsersManager
+public final class ArgumentBuilder
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    //TODO ...
+    public ArgumentBuilder() { }
+    //TODO ...
+    public <T extends Argument> T get()
+    {
+        return null;
+    }
+    //TODO ...
+    public void apply(AnnotationHandler handler) { }
 }

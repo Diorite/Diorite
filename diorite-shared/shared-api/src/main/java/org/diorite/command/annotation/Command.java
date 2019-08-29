@@ -50,4 +50,14 @@ public @interface Command
      * @return name of subCommand.
      */
     String subCommandOf() default "";
+
+    /**
+     * @return description of command
+     */
+    String description() default "";
+
+    /**
+     * @return usage of command
+     */
+    String usage() default "";
 }

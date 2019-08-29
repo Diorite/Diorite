@@ -22,33 +22,21 @@
  * SOFTWARE.
  */
 
-package org.diorite.command.parser;
+package org.diorite.command.types;
 
-import java.util.Collection;
+import java.util.List;
 
-import org.diorite.command.argument.Argument;
+import org.diorite.command.CommandObject;
 
-/**
- *
- */
-public interface ParsersManager
+public abstract class VanillaCommand extends CommandObject
 {
-    /**
-     * Create context for given input data and collection of requested arguments.
-     *
-     * @param data
-     *         raw string input.
-     * @param arguments
-     *         collection of requested arguments.
-     *
-     * @return created parser context.
-     */
-    CommandParserContext createContext(String data, Collection<? extends Argument<?>> arguments);
-//
-//    default <E> CustomArgumentBuilder<String, E> createParser(String name, Class<E> to)
-//    {
-//        return this.createParser(this.getParser(StringParser.class), to, parser);
-//    }
-//
-//    <T, E> CustomArgumentBuilder<T, E> createParser(TypeParser<T> from, Class<E> to, Function<T, E> parser);
+    protected VanillaCommand(String name)
+    {
+        super(name);
+    }
+
+    protected VanillaCommand(String name, String description, String use, List<String> aliases)
+    {
+        super(name, description, use, aliases);
+    }
 }

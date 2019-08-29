@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.diorite.command.Argument;
+import org.diorite.command.argument.Argument;
 import org.diorite.commons.ParserContext;
 import org.diorite.commons.arrays.DioriteArrayUtils;
 

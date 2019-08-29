@@ -22,29 +22,19 @@
  * SOFTWARE.
  */
 
-package org.diorite.command;
+package org.diorite.impl.command.argument.types;
 
+import org.diorite.command.argument.Argument;
 import org.diorite.command.parser.ArgumentParseResult;
 import org.diorite.command.parser.CommandParserContext;
 import org.diorite.commons.function.consumer.Consumer;
 
-/**
- * Represent argument of command.
- *
- * @param <T>
- *         Type of argument.
- */
-public interface Argument<T>
+public final class StringArgument implements Argument<String>
 {
-    /**
-     * Method that tries parse given argument.
-     *
-     * @param context
-     *         context of parser, char sequence.
-     * @param endConsumer
-     *         consumer invoked for parsed argument (only on success).
-     *
-     * @return parse result.
-     */
-    ArgumentParseResult<T> tryParse(CommandParserContext context, Consumer<T> endConsumer);
+    @Override
+    public ArgumentParseResult<String> tryParse(CommandParserContext context, Consumer<String> endConsumer)
+    {
+        //TODO actually parse things
+        return null;
+    }
 }
